@@ -166,20 +166,6 @@ mqtt:
   username: !secret mqtt_username
   password: !secret mqtt_password
 
-### Apple TVs ###
-apple_tv:
-  - host: !secret apple_tv_living_room_ip
-    login_id: !secret apple_tv_living_room_login_id
-    name: Living Room Apple TV
-#    credentials: 
-    start_off: true
-
-  - host: !secret apple_tv_master_bedroom_ip
-    login_id: !secret apple_tv_master_bedroom_login_id
-    name: Master Bedroom Apple TV
-#    credentials: 
-    start_off: true
-
 # Envisalink
 envisalink:
   host: 10.0.1.77
@@ -227,18 +213,6 @@ splunk:
 # IFTTT
 ifttt:
   key: !secret ifttt_key
-
-# Ring
-ring:
-  username: !secret ring_username
-  password: !secret ring_password
-
-# Hue
-hue:
-  bridges:
-    - host: !secret hue_bridge_ip
-      allow_hue_groups: false
-      allow_unreachable: true
 
 # HomeKit
 homekit:
