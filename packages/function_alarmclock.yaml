@@ -171,3 +171,29 @@ script:
           command:
             - select
 ################################################################################
+
+sensor:
+################################################################################
+# Alarm Clock
+################################################################################
+  - platform: template
+    sensors:
+      wakeup_alarm_time:
+        friendly_name: 'Alarm Time'
+        value_template: >
+          {{ states.input_datetime.wakeup_time.attributes.timestamp | timestamp_custom('%H:%M',False) }}
+  
+  - platform: template
+    sensors:
+      wakeup_start_time:
+        friendly_name: 'Wakeup Start Time'
+        value_template: >
+          {{ ((states.input_datetime.wakeup_time.attributes.timestamp | int) - (states.input_number.wakeup_duration.state | int * 60)) | timestamp_custom('%H:%M',False) }}
+  
+  - platform: template
+    sensors:
+      wakeup_duration:
+        friendly_name: 'Wakeup Duration'
+        value_template: '{{ states.input_number.wakeup_duration.state | int }}'
+        unit_of_measurement: 'min'
+################################################################################

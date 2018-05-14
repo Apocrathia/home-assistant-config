@@ -19,25 +19,3 @@ annoying_lights:
         effect: colorloop
         brightness_pct: 100
 ################################################################################
-
-################################################################################
-test_apple_tv:
-  alias: 'Test - Apple TV'
-  sequence:
-    - service: remote.send_command
-      data:
-        entity_id: remote.master_bedroom
-        command:
-          - top_menu
-          - top_menu
-          - select
-          - select
-          - down
-          - right
-          - right
-          - right
-          - right
-          - right
-          - select
-          - select
-################################################################################

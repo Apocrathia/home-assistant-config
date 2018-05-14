@@ -5,7 +5,5 @@
   country: US
   province: AL
 
-# Ring (Binary)
-- platform: ring
-  entity_namespace: ring
+
 
