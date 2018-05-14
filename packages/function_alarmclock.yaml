@@ -1,0 +1,181 @@
+input_datetime:
+  wakeup_time:
+    name: Wakeup Time
+    has_date: false
+    has_time: true
+    initial: 05:00
+
+input_number:
+  wakeup_duration:
+    name: Wakeup duration
+    icon: mdi:clock-in
+    initial: 30
+    min: 5
+    max: 60
+    step: 5
+
+input_boolean:
+  wakeup_boolean:
+    name: 'Wakeup Automations'
+    icon: mdi:power
+    initial: on
+
+  wakeup_weekends:
+    name: 'Wakeup Weekends'
+    icon: mdi:power
+    initial: off
+
+  bedtime_boolean:
+    name: 'Bedtime Automations'
+    icon: mdi:power
+    initial: on
+
+  wakeup_lights:
+    name: 'Wakeup Lights'
+    icon: mdi:lightbulb
+    initial: on
+
+  wakeup_apple_tv:
+    name: 'Wakeup Apple TV'
+    icon: mdi:apple
+    initial: on
+
+automation:
+################################################################################
+  wakeup_apple_tv:
+    alias: 'Wakeup - Apple TV'
+    trigger:
+    - platform: template
+      value_template: '{{ states.sensor.time.state == states.sensor.wakeup_start_time.state }}'
+  #    value_template: >
+  #      {{ states('sensor.time') == (((states.input_datetime.wakeup_time.attributes.timestamp | int) - (states.input_number.wakeup_duration.state | int * 60)) | timestamp_custom('%H:%M',False)) }}
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: input_boolean.wakeup_boolean
+          state: 'on'
+        - condition: state
+          entity_id: input_boolean.wakeup_apple_tv
+          state: 'on'
+        - condition: or
+          conditions:
+            - condition: state
+              entity_id: input_boolean.wakeup_weekends
+              state: 'on'
+            - condition: state
+              entity_id: binary_sensor.workday_sensor
+              state: 'on'
+    action:
+      service: script.wakeup_apple_tv
+################################################################################
+  
+################################################################################
+  wakeup_light_bedroom:
+    alias: 'Wakeup - Bedroom Light'
+    trigger:
+    - platform: template
+      value_template: '{{ states.sensor.time.state == states.sensor.wakeup_start_time.state }}'
+  #    value_template: >
+  #      {{ states('sensor.time') == (((states.input_datetime.wakeup_time.attributes.timestamp | int) - (states.input_number.wakeup_duration.state | int * 60)) | timestamp_custom('%H:%M',False)) }}
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: input_boolean.wakeup_boolean
+          state: 'on'
+        - condition: state
+          entity_id: input_boolean.wakeup_lights
+          state: 'on'
+        - condition: or
+          conditions:
+            - condition: state
+              entity_id: input_boolean.wakeup_weekends
+              state: 'on'
+            - condition: state
+              entity_id: binary_sensor.workday_sensor
+              state: 'on'
+    action:
+      service: script.wakeup_lights
+################################################################################
+
+script:
+################################################################################
+  wakeup_lights:
+    alias: 'Wakeup - Bedroom Lights'
+    sequence:
+    - service: light.turn_on
+      data:
+        entity_id: light.master_bedroom_lights
+        profile: energize
+      data_template:
+        transition: '{{ states.input_number.wakeup_duration.state | multiply(60) | float }}'
+################################################################################
+
+################################################################################
+  wakeup_apple_tv:
+    alias: 'Wakeup - Apple TV'
+    sequence:
+  # Turn on the TV
+      - service: media_player.turn_on
+        data:
+          entity_id: media_player.master_bedroom
+      - service: remote.send_command
+        data:
+          entity_id: remote.master_bedroom
+          command:
+            - menu
+      - delay:
+          seconds: 15
+  # Go to the home menu
+      - service: remote.send_command
+        data:
+          entity_id: remote.master_bedroom
+          command:
+            - top_menu
+      - delay:
+          seconds: 1
+  # Go to the first menu item (Plex)
+      - service: remote.send_command
+        data:
+          entity_id: remote.master_bedroom
+          command:
+            - top_menu
+  # Open Plex
+      - service: remote.send_command
+        data:
+          entity_id: remote.master_bedroom
+          command:
+            - select
+      - delay:
+          seconds: 15
+  # Select Apocrathia user account
+      - service: remote.send_command
+        data:
+          entity_id: remote.master_bedroom
+          command:
+            - select
+      - delay:
+          seconds: 5
+  # Go to news
+      - service: remote.send_command
+        data:
+          entity_id: remote.master_bedroom
+          command:
+            - down
+            - right
+            - right
+            - right
+            - right
+            - right
+            - right
+            - select
+      - delay:
+          seconds: 15
+  # Fullscreen
+      - service: remote.send_command
+        data:
+          entity_id: remote.master_bedroom
+          command:
+            - select
+################################################################################
