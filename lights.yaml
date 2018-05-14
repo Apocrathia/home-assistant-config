@@ -5,10 +5,6 @@
   entity_namespace: hue
   allow_hue_groups: false
 
-# Wink
-- platform: wink
-  entity_namespace: wink
-
 # Groups
 - platform: group
   name: Front Porch Lights

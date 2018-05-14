@@ -1,0 +1,33 @@
+## Wink ##
+
+wink:
+#  email: !secret wink_email
+#  password: !secret wink_password
+#  client_id: !secret wink_client_id
+#  client_secret: !secret wink_client_secret
+  local_control: True
+
+# Binary Sensors
+binary_sensor:
+- platform: wink
+  entity_namespace: wink
+
+# Climate
+climate:
+- platform: wink
+  entity_namespace: wink
+
+# Lights
+light:
+- platform: wink
+  entity_namespace: wink
+
+# Sensors
+sensor:
+- platform: wink
+  entity_namespace: wink
+
+# Switch
+switch:
+- platform: wink
+  entity_namespace: wink

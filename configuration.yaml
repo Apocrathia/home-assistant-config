@@ -236,13 +236,6 @@ apple_tv:
 #    credentials: 
     start_off: true
 
-wink:
-#  email: !secret wink_email
-#  password: !secret wink_password
-#  client_id: !secret wink_client_id
-#  client_secret: !secret wink_client_secret
-  local_control: True
-
 # Envisalink
 envisalink:
   host: 10.0.1.77
@@ -295,11 +288,6 @@ ifttt:
 ring:
   username: !secret ring_username
   password: !secret ring_password
-  
-# Nest
-nest:
-  client_id: !secret nest_client_id
-  client_secret: !secret nest_client_secret
 
 # Hue
 hue:
