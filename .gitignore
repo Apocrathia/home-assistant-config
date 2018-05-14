@@ -1,0 +1,38 @@
+# By default, ignore all files
+*
+# Eventually I will change this, but for now, I'll write in what I want to be shared.
+
+# Share this file
+!.gitignore
+
+# Share Markdown files & images
+!*.md
+!images/*.png
+
+# Explicitly allow YAML files
+!*.yaml
+
+# Any scripts that I may write
+!*.sh
+
+# Cloud9 Configuration
+!project.settings
+
+# Travis Configuration
+!.travis/travis.*
+!.travis.yml
+
+# Allow the following subfolders
+!automations
+!custom_components
+!docs
+!images
+!packages
+!scenes
+!scripts
+!themes
+
+# Ignore Sensitive Files
+secrets.yaml
+known_devices.yaml
+entity_registry.yaml

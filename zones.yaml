@@ -1,0 +1,49 @@
+# Zoning information
+
+- name: Home
+  latitude: !secret home_lat
+  longitude: !secret home_long
+  radius: 100
+  icon: mdi:home
+
+- name: !secret ian_work_name
+  latitude: !secret ian_work_lat
+  longitude: !secret ian_work_long
+  radius: 150
+  icon: mdi:briefcase
+
+- name: Gym
+  latitude: !secret gym_lat
+  longitude: !secret gym_long
+  radius: 100
+  icon: mdi:weight
+
+- name: !secret school_name
+  latitude: !secret school_lat
+  longitude: !secret school_long
+  radius: 300
+  icon: mdi:school
+
+- name: !secret richard_work_name
+  latitude: !secret richard_work_lat
+  longitude: !secret richard_work_long
+  radius: 150
+  icon: mdi:briefcase
+
+- name: !secret aimee_work_name
+  latitude: !secret aimee_work_lat
+  longitude: !secret aimee_work_long
+  radius: 250
+  icon: mdi:rocket
+
+- name: Aldi
+  latitude: !secret aldi_lat
+  longitude: !secret aldi_long
+  radius: 100
+  icon: mdi:cart
+
+- name: Walmart
+  latitude: !secret walmart_lat
+  longitude: !secret walmart_long
+  radius: 100
+  icon: mdi:cart

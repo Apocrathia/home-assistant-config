@@ -1,0 +1,123 @@
+################################################################################
+party_lights:
+  alias: 'Party Lights'
+  sequence:
+    - service: light.turn_on
+      data:
+        entity_id: light.front_porch_lights
+        effect: colorloop
+        brightness_pct: 100
+################################################################################
+
+################################################################################
+annoying_lights:
+  alias: 'Annoy Aimee'
+  sequence:
+    - service: light.turn_on
+      data:
+        entity_id: light.master_bedroom_lights
+        effect: colorloop
+        brightness_pct: 100
+################################################################################
+
+################################################################################
+wakeup_lights:
+  alias: 'Wakeup - Bedroom Lights'
+  sequence:
+  - service: light.turn_on
+    data:
+      entity_id: light.master_bedroom_lights
+      profile: energize
+    data_template:
+      transition: '{{ states.input_number.wakeup_duration.state | multiply(60) | float }}'
+################################################################################
+
+################################################################################
+wakeup_apple_tv:
+  alias: 'Wakeup - Apple TV'
+  sequence:
+# Turn on the TV
+    - service: media_player.turn_on
+      data:
+        entity_id: media_player.master_bedroom
+    - service: remote.send_command
+      data:
+        entity_id: remote.master_bedroom
+        command:
+          - menu
+    - delay:
+        seconds: 15
+# Go to the home menu
+    - service: remote.send_command
+      data:
+        entity_id: remote.master_bedroom
+        command:
+          - top_menu
+    - delay:
+        seconds: 1
+# Go to the first menu item (Plex)
+    - service: remote.send_command
+      data:
+        entity_id: remote.master_bedroom
+        command:
+          - top_menu
+# Open Plex
+    - service: remote.send_command
+      data:
+        entity_id: remote.master_bedroom
+        command:
+          - select
+    - delay:
+        seconds: 15
+# Select Apocrathia user account
+    - service: remote.send_command
+      data:
+        entity_id: remote.master_bedroom
+        command:
+          - select
+    - delay:
+        seconds: 5
+# Go to news
+    - service: remote.send_command
+      data:
+        entity_id: remote.master_bedroom
+        command:
+          - down
+          - right
+          - right
+          - right
+          - right
+          - right
+          - right
+          - select
+    - delay:
+        seconds: 15
+# Fullscreen
+    - service: remote.send_command
+      data:
+        entity_id: remote.master_bedroom
+        command:
+          - select
+################################################################################
+
+################################################################################
+test_apple_tv:
+  alias: 'Test - Apple TV'
+  sequence:
+    - service: remote.send_command
+      data:
+        entity_id: remote.master_bedroom
+        command:
+          - top_menu
+          - top_menu
+          - select
+          - select
+          - down
+          - right
+          - right
+          - right
+          - right
+          - right
+          - select
+          - select
+################################################################################

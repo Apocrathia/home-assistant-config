@@ -1,0 +1,4 @@
+### Weather ###
+
+- platform: yweather
+  woeid: !secret yweather_woeid

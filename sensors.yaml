@@ -1,0 +1,116 @@
+### Sensors ###
+
+# Weather prediction
+- platform: yr
+
+- platform: moon
+
+- platform: wunderground
+  entity_namespace: weather
+  api_key: !secret wunderground_api_key
+  monitored_conditions:
+    - temp_high_record_c
+    - temp_high_1d_c
+    - temp_c
+    - temp_low_1d_c
+    - temp_low_record_c
+    - precip_1d
+    - precip_1d_mm
+    - wind_kph
+    - wind_1d_kph
+    - alerts
+
+# Time & Date
+- platform: time_date
+  display_options:
+    - 'time'
+    - 'date'
+
+# Weather forecast
+- platform: darksky
+  api_key: !secret darksky_api_key
+  monitored_conditions:
+    - summary
+
+# Plex Activity Monitor
+- platform: plex
+  host: !secret plex_host
+  port: !secret plex_port
+  name: Plex
+  username: !secret plex_username
+  password: !secret plex_password
+  server: !secret plex_server
+  token: !secret plex_token
+
+# Steam
+- platform: steam_online
+#    entity_namespace: steam
+  api_key: !secret steam_api_key
+
+# Ring
+- platform: ring
+#    entity_namespace: ring
+  monitored_conditions:
+    - last_activity
+    - last_ding
+    - last_motion
+    - volume
+
+# Wink
+- platform: wink
+  entity_namespace: wink
+
+# Nest
+- platform: nest
+  entity_namespace: nest
+
+################################################################################
+# Alarm Clock
+################################################################################
+- platform: template
+  sensors:
+    wakeup_alarm_time:
+      friendly_name: 'Alarm Time'
+      value_template: "{{ states.input_datetime.wakeup_time.attributes.timestamp | timestamp_custom('%H:%M',False) }}"  
+
+- platform: template
+  sensors:
+    wakeup_start_time:
+      friendly_name: 'Wakeup Start Time'
+      value_template: >
+        {{ ((states.input_datetime.wakeup_time.attributes.timestamp | int) - (states.input_number.wakeup_duration.state | int * 60)) | timestamp_custom('%H:%M',False) }}
+
+- platform: template
+  sensors:
+    wakeup_duration:
+      friendly_name: 'Wakeup Duration'
+      value_template: '{{ states.input_number.wakeup_duration.state | int }}'
+      unit_of_measurement: 'min'
+################################################################################
+
+################################################################################
+# Presence
+################################################################################
+- platform: template
+  sensors:
+    ian_location:
+      friendly_name: 'Ian'
+      value_template: >
+        {% set lat = states.device_tracker.ians_iphone.attributes.latitude %}
+        {% set long = states.device_tracker.ians_iphone.attributes.longitude %}
+        {% set attributes = {"longitude": long, "latitude": lat} %}
+
+- platform: template
+  sensors:
+    aimee_location:
+      friendly_name: 'Aimee'
+      value_template: >
+        {{ states.device_tracker.aimees_iphone.state }}
+
+- platform: template
+  sensors:
+    richard_location:
+      friendly_name: 'Richard'
+      value_template: >
+        {{ states.device_tracker.richards_iphone.state }}
+################################################################################

@@ -1,0 +1,11 @@
+language: python
+python:
+  - "3.5"
+before_install:
+  - mv .travis/travis.fake_secrets.yaml secrets.yaml
+  - mv .travis/travis.fake_ssl_crt ssl.crt
+  - mv .travis/travis.fake_ssl_key ssl.key
+install:
+  - pip3 install homeassistant
+script:
+  - hass -c . --script check_config

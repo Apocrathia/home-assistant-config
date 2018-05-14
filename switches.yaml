@@ -1,0 +1,5 @@
+### Switch ###
+
+# Wink
+- platform: wink
+  entity_namespace: wink

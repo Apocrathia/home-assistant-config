@@ -1,0 +1,9 @@
+### Climate ###
+
+# Nest
+- platform: nest
+  entity_namespace: nest
+
+# Wink
+- platform: wink
+  entity_namespace: wink

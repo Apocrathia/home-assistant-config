@@ -1,0 +1,329 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: !secret hass_name
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret latitude
+  longitude: !secret longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: !secret elevation
+  # metric for Metric, imperial for Imperial
+  unit_system: imperial
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: !secret timezone
+  # external files
+  customize: !include customize.yaml
+  customize_domain: !include customize_domain.yaml
+  customize_glob: !include customize_glob.yaml
+  packages: !include_dir_named packages
+
+# Show links to resources in log and frontend
+#introduction:
+
+# Enables the frontend
+frontend: 
+
+# Tack this on the end to load a frontend file
+#!include frontend.yaml
+
+# Enable iOS frontend
+ios:
+
+# Enables configuration UI
+config:
+
+http:
+  api_password: !secret http_password
+  ssl_certificate: !secret http_certificate
+  ssl_key: !secret http_key
+  trusted_networks: !secret trusted_networks
+  ip_ban_enabled: True
+  login_attempts_threshold: 5
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  include_used_components: true
+
+# Discover some devices automatically
+discovery:
+
+# Use MariaDB Add-on for Database
+recorder:
+  db_url: !secret mysql_uri
+
+# Enable logging
+logger:
+  default: warn
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+# Enables a map showing the location of tracked devices
+map:
+
+# Track the sun
+sun:
+
+# Text to speech
+tts:
+  - platform: google
+
+# Home Assistant Cloud
+cloud:
+
+weblink:
+  entities:
+    - name: Home Assistant Webpage
+      url: https://home-assistant.io/
+    - name: Home Assistant Forum
+      url: https://community.home-assistant.io/
+    - name: Home Assistant Chat
+      url: https://discordapp.com/channels/330944238910963714/330944238910963714
+
+################################################################################
+# Core Components
+################################################################################
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+zone: !include zones.yaml
+sensor: !include sensors.yaml
+binary_sensor: !include binary_sensors.yaml
+device_tracker: !include device_tracker.yaml
+light: !include lights.yaml
+climate: !include climate.yaml
+media_player: !include media_players.yaml
+switch: !include switches.yaml
+#weather: !include weather.yaml
+
+################################################################################
+# Inputs
+################################################################################
+input_datetime:
+  wakeup_time:
+    name: Wakeup Time
+    has_date: false
+    has_time: true
+    initial: 05:00
+
+  bed_time:
+    name: Bedtime
+    has_date: false
+    has_time: true
+    initial: 21:00
+
+input_number:
+  wakeup_hour:
+    name: Hour
+    icon: mdi:clock-in
+    initial: 5
+    min: 0
+    max: 23
+    step: 1
+
+  wakeup_minutes:
+    name: Minutes
+    icon: mdi:clock-in
+    initial: 00
+    min: 0
+    max: 55
+    step: 5
+
+  wakeup_duration:
+    name: Wakeup duration
+    icon: mdi:clock-in
+    initial: 30
+    min: 5
+    max: 60
+    step: 5
+
+input_boolean:
+  wakeup_boolean:
+    name: 'Wakeup Automations'
+    icon: mdi:power
+    initial: on
+
+  wakeup_weekends:
+    name: 'Wakeup Weekends'
+    icon: mdi:power
+    initial: off
+
+  bedtime_boolean:
+    name: 'Bedtime Automations'
+    icon: mdi:power
+    initial: on
+
+  wakeup_lights:
+    name: 'Wakeup Lights'
+    icon: mdi:lightbulb
+    initial: on
+
+  wakeup_apple_tv:
+    name: 'Wakeup Apple TV'
+    icon: mdi:apple
+    initial: on
+
+input_select:
+  ian_status_dropdown:
+    name: Ian
+    options:
+      - Home
+      - Just Arrived
+      - Just Left
+      - Work
+      - School
+      - Away
+      - Extended Away
+    initial: Home
+
+  aimee_status_dropdown:
+    name: Aimee
+    options:
+      - Home
+      - Just Arrived
+      - Just Left
+      - Work
+      - School
+      - Away
+      - Extended Away
+    initial: Home
+
+  richard_status_dropdown:
+    name: Richard
+    options:
+      - Home
+      - Just Arrived
+      - Just Left
+      - Work
+      - School
+      - Away
+      - Extended Away
+    initial: Home
+################################################################################
+
+#############################
+### Additional Components ###
+#############################
+
+### MQTT ###
+mqtt:
+  broker: core-mosquitto
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+
+### Apple TVs ###
+apple_tv:
+  - host: !secret apple_tv_living_room_ip
+    login_id: !secret apple_tv_living_room_login_id
+    name: Living Room Apple TV
+#    credentials: 
+    start_off: true
+
+  - host: !secret apple_tv_master_bedroom_ip
+    login_id: !secret apple_tv_master_bedroom_login_id
+    name: Master Bedroom Apple TV
+#    credentials: 
+    start_off: true
+
+wink:
+#  email: !secret wink_email
+#  password: !secret wink_password
+#  client_id: !secret wink_client_id
+#  client_secret: !secret wink_client_secret
+  local_control: True
+
+# Envisalink
+envisalink:
+  host: 10.0.1.77
+  panel_type: HONEYWELL
+  user_name: user
+  password: !secret envisalink_password
+  code: !secret alarm_code
+  port: 4025
+  evl_version: 4
+  keepalive_interval: 60
+  zonedump_interval: 30
+  panic_type: Police
+  zones:
+    9:
+      name: 'Front Door'
+      type: 'opening'
+    10:
+      name: 'Living Room Motion'
+      type: 'motion'
+    19:
+      name: 'Garage Door'
+      type: 'opening'
+    26:
+      name: 'Back Door'
+      type: 'opening'
+  partitions:
+    1:
+      name: 'Home'
+
+# Pushover
+notify:
+  - name: Pushover
+    platform: pushover
+    api_key: !secret pushover_api_key
+    user_key: !secret pushover_user_key
+
+# Splunk
+splunk:
+  host: !secret splunk_host
+  token: !secret splunk_token
+  port: 8088
+  ssl: false
+  name: HomeAssistant
+  
+# IFTTT
+ifttt:
+  key: !secret ifttt_key
+
+# Ring
+ring:
+  username: !secret ring_username
+  password: !secret ring_password
+  
+# Nest
+nest:
+  client_id: !secret nest_client_id
+  client_secret: !secret nest_client_secret
+
+# Hue
+hue:
+  bridges:
+    - host: !secret hue_bridge_ip
+      allow_hue_groups: false
+      allow_unreachable: true
+
+# HomeKit
+homekit:
+  pincode: !secret homekit_pin
+  port: 51827
+  filter:
+    include_entities:
+      - switch.wink_ceiling_fan
+      - switch.wink_overhead_light
+      - binary_sensor.back_door
+      - binary_sensor.front_door
+      - binary_sensor.garage_door
+      - binary_sensor.living_room_motion
+      - binary_sensor.ring_front_door_ding
+      - binary_sensor.ring_front_door_motion
+      - lock.front_door
+      - lock.garage_door
+      - alarm_control_panel.home
+      - sensor.wink_master_relay_temperature
+      - climate.downstairs

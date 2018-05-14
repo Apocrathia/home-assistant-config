@@ -1,0 +1,23 @@
+### Lights ###
+
+# Philips Hue
+- platform: hue
+  entity_namespace: hue
+  allow_hue_groups: false
+
+# Wink
+- platform: wink
+  entity_namespace: wink
+
+# Groups
+- platform: group
+  name: Front Porch Lights
+  entities:
+    - light.front_porch_left
+    - light.front_porch_right
+
+- platform: group
+  name: Master Bedroom Lights
+  entities:
+    - light.floor_lamp_left
+    - light.floor_lamp_right

@@ -1,0 +1,69 @@
+sensor.home_keypad:
+  friendly_name: Alarm Keypad
+  icon: mdi:calculator
+binary_sensor.front_door:
+  icon: mdi:door
+binary_sensor.back_door:
+  icon: mdi:door
+binary_sensor.garage_door:
+  icon: mdi:door
+switch.wink_overhead_light:
+  icon: mdi:ceiling-light
+switch.wink_ceiling_fan:
+  icon: mdi:fan
+sensor.wink_master_relay_temperature:
+  friendly_name: Master Relay Temperature
+binary_sensor.ring_front_door_motion:
+  hidden: true
+binary_sensor.ring_front_door_ding:
+  hidden: true
+binary_sensor.wink_gang:
+  hidden: true
+binary_sensor.wink_front_door_button_pressed:
+  hidden: true
+binary_sensor.wink_front_door_motion:
+  hidden: true
+climate.wink_percivale_downstairs_thermostat:
+  hidden: true
+group.all_automations:
+  hidden: false
+  friendly_name: All Automations
+group.all_devices:
+  hidden: false
+  friendly_name: All Devices
+group.all_lights:
+  hidden: false
+  friendly_name: All Lights
+group.all_locks:
+  hidden: false
+  friendly_name: All Locks
+group.all_remotes:
+  hidden: false
+  friendly_name: All Remotes
+group.all_scripts:
+  hidden: false
+  friendly_name: All Scripts
+group.all_switches:
+  hidden: false
+  friendly_name: All Switches
+group.all_sensors:
+  hidden: false
+  friendly_name: All Sensors
+sensor.wink_master_relay_humidity:
+  friendly_name: Master Relay Humidity
+binary_sensor.wink_master_relay_presence:
+  friendly_name: Master Relay Presence
+sensor.wink_master_relay_proximity:
+  friendly_name: Master Relay Proximity
+alarm_control_panel.home:
+  friendly_name: Alarm System
+  icon: mdi:security-home
+sensor.dark_sky_summary:
+  friendly_name: Weather
+device_tracker.2018_ford_escape:
+  friendly_name: Ian's Car
+  icon: mdi:car
+group.front_porch_lights:
+  icon: mdi:lightbulb
+group.master_bedroom_lights:
+  icon: mdi:lightbulb
