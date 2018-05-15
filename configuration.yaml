@@ -12,8 +12,6 @@ homeassistant:
   time_zone: !secret timezone
   # external files
   customize: !include customize.yaml
-  customize_domain: !include customize_domain.yaml
-  customize_glob: !include customize_glob.yaml
   packages: !include_dir_named packages
 
 # Show links to resources in log and frontend
@@ -102,9 +100,6 @@ sensor: !include sensors.yaml
 binary_sensor: !include binary_sensors.yaml
 device_tracker: !include device_tracker.yaml
 light: !include lights.yaml
-#climate: !include climate.yaml
-#media_player: !include media_players.yaml
-#switch: !include switches.yaml
 #scene: !include scenes.yaml
 #weather: !include weather.yaml
 
