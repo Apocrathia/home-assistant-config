@@ -6,8 +6,8 @@ ring:
   password: !secret ring_password
 
 # From binary_sensors.yaml
-# Ring (Binary)
 binary_sensor:
+# Ring
   - platform: ring
     entity_namespace: ring
 
