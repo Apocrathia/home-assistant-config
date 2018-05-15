@@ -32,16 +32,6 @@
   monitored_conditions:
     - summary
 
-# Plex Activity Monitor
-- platform: plex
-  host: !secret plex_host
-  port: !secret plex_port
-  name: Plex
-  username: !secret plex_username
-  password: !secret plex_password
-  server: !secret plex_server
-  token: !secret plex_token
-
 # Steam
 - platform: steam_online
 #    entity_namespace: steam

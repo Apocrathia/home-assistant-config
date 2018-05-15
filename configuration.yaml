@@ -103,7 +103,7 @@ binary_sensor: !include binary_sensors.yaml
 device_tracker: !include device_tracker.yaml
 light: !include lights.yaml
 #climate: !include climate.yaml
-media_player: !include media_players.yaml
+#media_player: !include media_players.yaml
 #switch: !include switches.yaml
 #scene: !include scenes.yaml
 #weather: !include weather.yaml
