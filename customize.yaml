@@ -1,12 +1,4 @@
-sensor.home_keypad:
-  friendly_name: Alarm Keypad
-  icon: mdi:calculator
-binary_sensor.front_door:
-  icon: mdi:door
-binary_sensor.back_door:
-  icon: mdi:door
-binary_sensor.garage_door:
-  icon: mdi:door
+
 group.all_automations:
   hidden: false
   friendly_name: All Automations
@@ -31,9 +23,6 @@ group.all_switches:
 group.all_sensors:
   hidden: false
   friendly_name: All Sensors
-alarm_control_panel.home:
-  friendly_name: Alarm System
-  icon: mdi:security-home
 sensor.dark_sky_summary:
   friendly_name: Weather
 device_tracker.2018_ford_escape:

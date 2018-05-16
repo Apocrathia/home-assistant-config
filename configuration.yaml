@@ -167,35 +167,6 @@ mqtt:
   username: !secret mqtt_username
   password: !secret mqtt_password
 
-# Envisalink
-envisalink:
-  host: 10.0.1.77
-  panel_type: HONEYWELL
-  user_name: user
-  password: !secret envisalink_password
-  code: !secret alarm_code
-  port: 4025
-  evl_version: 4
-  keepalive_interval: 60
-  zonedump_interval: 30
-  panic_type: Police
-  zones:
-    9:
-      name: 'Front Door'
-      type: 'opening'
-    10:
-      name: 'Living Room Motion'
-      type: 'motion'
-    19:
-      name: 'Garage Door'
-      type: 'opening'
-    26:
-      name: 'Back Door'
-      type: 'opening'
-  partitions:
-    1:
-      name: 'Home'
-
 # Pushover
 notify:
   - name: Pushover
@@ -214,23 +185,3 @@ splunk:
 # IFTTT
 ifttt:
   key: !secret ifttt_key
-
-# HomeKit
-homekit:
-  pincode: !secret homekit_pin
-  port: 51827
-  filter:
-    include_entities:
-      - switch.wink_ceiling_fan
-      - switch.wink_overhead_light
-      - binary_sensor.back_door
-      - binary_sensor.front_door
-      - binary_sensor.garage_door
-      - binary_sensor.living_room_motion
-      - binary_sensor.ring_front_door_ding
-      - binary_sensor.ring_front_door_motion
-      - lock.front_door
-      - lock.garage_door
-      - alarm_control_panel.home
-      - sensor.wink_master_relay_temperature
-      - climate.downstairs

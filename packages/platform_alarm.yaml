@@ -1,0 +1,45 @@
+### Alarm System ###
+homeassistant:
+  customize:
+    alarm_control_panel.home:
+      friendly_name: Alarm System
+      icon: mdi:security-home
+    sensor.home_keypad:
+      friendly_name: Alarm Keypad
+      icon: mdi:calculator
+    binary_sensor.front_door:
+      icon: mdi:door
+    binary_sensor.back_door:
+      icon: mdi:door
+    binary_sensor.garage_door:
+      icon: mdi:door
+# From configuration.yaml
+
+# Envisalink
+envisalink:
+  host: !secret envisalink_ip
+  panel_type: HONEYWELL
+  user_name: user
+  password: !secret envisalink_password
+  code: !secret alarm_code
+  port: !secret envisalink_port
+  evl_version: 4
+  keepalive_interval: 60
+  zonedump_interval: 30
+  panic_type: Police
+  zones:
+    9:
+      name: 'Front Door'
+      type: 'opening'
+    10:
+      name: 'Living Room Motion'
+      type: 'motion'
+    19:
+      name: 'Garage Door'
+      type: 'opening'
+    26:
+      name: 'Back Door'
+      type: 'opening'
+  partitions:
+    1:
+      name: 'Home'
