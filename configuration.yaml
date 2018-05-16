@@ -88,6 +88,12 @@ weblink:
     - name: Home Assistant Chat
       url: https://discordapp.com/channels/330944238910963714/330944238910963714
 
+panel_iframe:
+  configurator:
+    title: Configurator
+    icon: mdi:wrench
+    url: http://hassio.local:3218
+
 ################################################################################
 # Core Components
 ################################################################################
