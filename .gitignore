@@ -7,7 +7,8 @@
 
 # Share Markdown files & images
 !*.md
-!images/*.png
+!docs/images/*.png
+!docs/images/*.jpg
 
 # Explicitly allow YAML files
 !*.yaml
@@ -16,9 +17,10 @@
 !*.sh
 
 # Cloud9 Configuration
-!project.settings
+!.c9/project.settings
 
 # Travis Configuration
+!.travis
 !.travis/travis.*
 !.travis.yml
 

@@ -4,15 +4,3 @@
 - platform: workday
   country: US
   province: AL
-
-# Ring (Binary)
-- platform: ring
-  entity_namespace: ring
-
-# Wink
-- platform: wink
-  entity_namespace: wink
-
-# Nest
-- platform: nest
-  entity_namespace: nest

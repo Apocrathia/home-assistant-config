@@ -1,6 +1,0 @@
-### Media Players ###
-
-# Plex Media Server
-- platform: plex
-  entity_namespace: plex
-  show_all_controls: true

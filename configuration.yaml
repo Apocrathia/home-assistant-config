@@ -12,8 +12,6 @@ homeassistant:
   time_zone: !secret timezone
   # external files
   customize: !include customize.yaml
-  customize_domain: !include customize_domain.yaml
-  customize_glob: !include customize_glob.yaml
   packages: !include_dir_named packages
 
 # Show links to resources in log and frontend
@@ -90,6 +88,12 @@ weblink:
     - name: Home Assistant Chat
       url: https://discordapp.com/channels/330944238910963714/330944238910963714
 
+panel_iframe:
+  configurator:
+    title: Configurator
+    icon: mdi:wrench
+    url: http://hassio.local:3218
+
 ################################################################################
 # Core Components
 ################################################################################
@@ -102,77 +106,18 @@ sensor: !include sensors.yaml
 binary_sensor: !include binary_sensors.yaml
 device_tracker: !include device_tracker.yaml
 light: !include lights.yaml
-climate: !include climate.yaml
-media_player: !include media_players.yaml
-switch: !include switches.yaml
+#scene: !include scenes.yaml
 #weather: !include weather.yaml
 
 ################################################################################
 # Inputs
 ################################################################################
 input_datetime:
-  wakeup_time:
-    name: Wakeup Time
-    has_date: false
-    has_time: true
-    initial: 05:00
-
   bed_time:
     name: Bedtime
     has_date: false
     has_time: true
     initial: 21:00
-
-input_number:
-  wakeup_hour:
-    name: Hour
-    icon: mdi:clock-in
-    initial: 5
-    min: 0
-    max: 23
-    step: 1
-
-  wakeup_minutes:
-    name: Minutes
-    icon: mdi:clock-in
-    initial: 00
-    min: 0
-    max: 55
-    step: 5
-
-  wakeup_duration:
-    name: Wakeup duration
-    icon: mdi:clock-in
-    initial: 30
-    min: 5
-    max: 60
-    step: 5
-
-input_boolean:
-  wakeup_boolean:
-    name: 'Wakeup Automations'
-    icon: mdi:power
-    initial: on
-
-  wakeup_weekends:
-    name: 'Wakeup Weekends'
-    icon: mdi:power
-    initial: off
-
-  bedtime_boolean:
-    name: 'Bedtime Automations'
-    icon: mdi:power
-    initial: on
-
-  wakeup_lights:
-    name: 'Wakeup Lights'
-    icon: mdi:lightbulb
-    initial: on
-
-  wakeup_apple_tv:
-    name: 'Wakeup Apple TV'
-    icon: mdi:apple
-    initial: on
 
 input_select:
   ian_status_dropdown:
@@ -222,56 +167,6 @@ mqtt:
   username: !secret mqtt_username
   password: !secret mqtt_password
 
-### Apple TVs ###
-apple_tv:
-  - host: !secret apple_tv_living_room_ip
-    login_id: !secret apple_tv_living_room_login_id
-    name: Living Room Apple TV
-#    credentials: 
-    start_off: true
-
-  - host: !secret apple_tv_master_bedroom_ip
-    login_id: !secret apple_tv_master_bedroom_login_id
-    name: Master Bedroom Apple TV
-#    credentials: 
-    start_off: true
-
-wink:
-#  email: !secret wink_email
-#  password: !secret wink_password
-#  client_id: !secret wink_client_id
-#  client_secret: !secret wink_client_secret
-  local_control: True
-
-# Envisalink
-envisalink:
-  host: 10.0.1.77
-  panel_type: HONEYWELL
-  user_name: user
-  password: !secret envisalink_password
-  code: !secret alarm_code
-  port: 4025
-  evl_version: 4
-  keepalive_interval: 60
-  zonedump_interval: 30
-  panic_type: Police
-  zones:
-    9:
-      name: 'Front Door'
-      type: 'opening'
-    10:
-      name: 'Living Room Motion'
-      type: 'motion'
-    19:
-      name: 'Garage Door'
-      type: 'opening'
-    26:
-      name: 'Back Door'
-      type: 'opening'
-  partitions:
-    1:
-      name: 'Home'
-
 # Pushover
 notify:
   - name: Pushover
@@ -290,40 +185,3 @@ splunk:
 # IFTTT
 ifttt:
   key: !secret ifttt_key
-
-# Ring
-ring:
-  username: !secret ring_username
-  password: !secret ring_password
-  
-# Nest
-nest:
-  client_id: !secret nest_client_id
-  client_secret: !secret nest_client_secret
-
-# Hue
-hue:
-  bridges:
-    - host: !secret hue_bridge_ip
-      allow_hue_groups: false
-      allow_unreachable: true
-
-# HomeKit
-homekit:
-  pincode: !secret homekit_pin
-  port: 51827
-  filter:
-    include_entities:
-      - switch.wink_ceiling_fan
-      - switch.wink_overhead_light
-      - binary_sensor.back_door
-      - binary_sensor.front_door
-      - binary_sensor.garage_door
-      - binary_sensor.living_room_motion
-      - binary_sensor.ring_front_door_ding
-      - binary_sensor.ring_front_door_motion
-      - lock.front_door
-      - lock.garage_door
-      - alarm_control_panel.home
-      - sensor.wink_master_relay_temperature
-      - climate.downstairs

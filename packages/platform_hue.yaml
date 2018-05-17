@@ -1,0 +1,9 @@
+### Hue ###
+
+# From configuration.yaml
+# Hue
+hue:
+  bridges:
+    - host: !secret hue_bridge_ip
+      allow_hue_groups: false
+      allow_unreachable: true
