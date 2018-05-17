@@ -5,8 +5,7 @@ goals, and projects. From there, I will create issues on GitHub and try to
 tackle them one by one. Not a great method, but I have no idea what I'm doing.
 ## Tasks
 ### Short Term
-- Compatmentalize configuration by migrating majority of configurations to packages
-- Push development :arrow_right: master
+- Migrate automations to Node-RED & link repo
 ### Long Term
 - Migrate automation routines to Node-Red
 ## Goals
