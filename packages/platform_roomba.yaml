@@ -9,7 +9,7 @@ homeassistant:
 # Upstairs Roomba
     switch.roomba_upstairs:
       friendly_name: "Upstairs Roomba"
-      icon: mdi:roomba
+      icon: mdi:robot-vacuum
     sensor.roomba_upstairs_battery:
       friendly_name: "Upstairs Roomba Battery"
     sensor.roomba_upstairs_status:
@@ -18,7 +18,7 @@ homeassistant:
 # Downstairs Roomba
     switch.roomba_downstairs:
       friendly_name: "Downstairs Roomba"
-      icon: mdi:roomba
+      icon: mdi:robot-vacuum
     sensor.roomba_downstairs_battery:
       friendly_name: "Downstairs Roomba Battery"
     sensor.roomba_downstairs_status:
