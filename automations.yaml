@@ -1,5 +1,5 @@
 ################################################################################
-- id: front_porch_lights_nighttime
+front_porch_lights_nighttime:
   alias: 'Front Porch - Nighttime Lighting'
   trigger:
     - platform: state
@@ -25,7 +25,7 @@
 ################################################################################
 
 ################################################################################
-- id: front_porch_lights_daytime
+front_porch_lights_daytime:
   alias: 'Front Porch - Daytime Lighting'
   trigger:
     - platform: state
@@ -40,7 +40,7 @@
 ################################################################################
 
 ################################################################################
-- id: front_door_nighttime_motion_initial
+front_door_nighttime_motion_initial:
   alias: 'Front Porch - Nighttime Motion'
   trigger:
     - platform: state
@@ -61,7 +61,7 @@
 ################################################################################
 
 ################################################################################
-- id: front_door_nighttime_motion_idle
+front_door_nighttime_motion_idle:
   alias: 'Front Porch - Nighttime Motion Idle'
   trigger:
     - platform: state
@@ -85,7 +85,7 @@
 ################################################################################
 
 ################################################################################
-- id: location_home
+location_home:
   alias: "Location - Home"
   trigger:
     - platform: state
@@ -120,7 +120,7 @@
 ################################################################################
 
 ################################################################################
-- id: location_away
+location_away:
   alias: "Location - Away"
   trigger:
     - platform: state
@@ -177,7 +177,7 @@
 ################################################################################
 
 ################################################################################
-- id: notification_update
+notification_update:
   alias: 'Notification - Update Available'
   trigger:
     platform: state
@@ -189,7 +189,7 @@
 ################################################################################
 
 ################################################################################
-- id: notification_new_device
+notification_new_device:
   alias: 'Notification - New Device'
   trigger:
     - platform: event
@@ -204,55 +204,7 @@
 ################################################################################
 
 ################################################################################
-  # IF: { sun.sun goes under horizon } THEN: { set theme to night mode }
-- alias: Automatic Theme Change
-  initial_state: 'off'
-  trigger:
-    - platform: homeassistant
-      event: start
-    - platform: state
-      entity_id: sun.sun
-      to: above_horizon
-    - platform: state
-      entity_id: sun.sun
-      to: below_horizon
-  action:
-    - service_template: frontend.set_theme
-      data_template:
-        name: >
-          {% if states.sun.sun.state == "above_horizon" %}
-            solarized_light
-          {% else %}
-            solarized_dark
-          {% endif %}
-################################################################################
-
-################################################################################
-- id: weekly_backup
-  alias: 'Weekly Backups'
-  initial_state: 'on'
-  trigger:
-    platform: time
-    at: '00:00:00'
-  condition:
-  - condition: time
-    weekday:
-      - mon
-  action:
-  - service: hassio.snapshot_full
-    data_template:
-      name: >
-        {{ now().strftime('%Y%m%d') }} Weekly Backup
-  - delay: '00:30'
-  - service: hassio.addon_stdin
-    data:
-      addon: "7be23ff5_dropbox_sync"
-      input:
-        command: "upload"
-################################################################################
-
-################################################################################
-- id: notification_battery_low
+notification_battery_low:
   alias: 'Notification - Battery Low'
   trigger:
     platform: numeric_state
@@ -280,3 +232,52 @@
 #   {%- endfor -%}
 #{%- endfor -%}
 #################################################################################
+
+################################################################################
+  # IF: { sun.sun goes under horizon } THEN: { set theme to night mode }
+theme_automatic:
+  alias: Automatic Theme Change
+  initial_state: 'off'
+  trigger:
+    - platform: homeassistant
+      event: start
+    - platform: state
+      entity_id: sun.sun
+      to: above_horizon
+    - platform: state
+      entity_id: sun.sun
+      to: below_horizon
+  action:
+    - service_template: frontend.set_theme
+      data_template:
+        name: >
+          {% if states.sun.sun.state == "above_horizon" %}
+            solarized_light
+          {% else %}
+            solarized_dark
+          {% endif %}
+################################################################################
+
+################################################################################
+weekly_backup:
+  alias: 'Weekly Backups'
+  initial_state: 'on'
+  trigger:
+    platform: time
+    at: '00:00:00'
+  condition:
+  - condition: time
+    weekday:
+      - mon
+  action:
+  - service: hassio.snapshot_full
+    data_template:
+      name: >
+        {{ now().strftime('%Y%m%d') }} Weekly Backup
+  - delay: '00:30'
+  - service: hassio.addon_stdin
+    data:
+      addon: "7be23ff5_dropbox_sync"
+      input:
+        command: "upload"
+################################################################################

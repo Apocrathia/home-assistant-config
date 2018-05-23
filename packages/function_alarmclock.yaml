@@ -42,65 +42,65 @@ input_boolean:
 
 automation:
 ################################################################################
-  id: wakeup_apple_tv
-  alias: 'Wakeup - Apple TV'
-  trigger:
-  - platform: template
-    value_template: >
-      '{{ states.sensor.time.state == states.sensor.wakeup_start_time.state }}'
-  condition:
-    condition: and
-    conditions:
-      - condition: state
-        entity_id: input_boolean.wakeup_boolean
-        state: 'on'
-      - condition: state
-        entity_id: input_boolean.wakeup_apple_tv
-        state: 'on'
-      - condition: or
-        conditions:
-          - condition: state
-            entity_id: input_boolean.wakeup_weekends
-            state: 'on'
-          - condition: state
-            entity_id: binary_sensor.workday_sensor
-            state: 'on'
-  action:
-    service: script.wakeup_apple_tv
+  wakeup_apple_tv:
+    alias: 'Wakeup - Apple TV'
+    trigger:
+    - platform: template
+      value_template: >
+        '{{ states.sensor.time.state == states.sensor.wakeup_start_time.state }}'
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: input_boolean.wakeup_boolean
+          state: 'on'
+        - condition: state
+          entity_id: input_boolean.wakeup_apple_tv
+          state: 'on'
+        - condition: or
+          conditions:
+            - condition: state
+              entity_id: input_boolean.wakeup_weekends
+              state: 'on'
+            - condition: state
+              entity_id: binary_sensor.workday_sensor
+              state: 'on'
+    action:
+      service: script.wakeup_apple_tv
 ################################################################################
   
 ################################################################################
-  id: wakeup_light_bedroom
-  alias: 'Wakeup - Bedroom Light'
-  trigger:
-  - platform: template
-    value_template: >
-      '{{ states.sensor.time.state == states.sensor.wakeup_start_time.state }}'
-  condition:
-    condition: and
-    conditions:
-      - condition: state
-        entity_id: input_boolean.wakeup_boolean
-        state: 'on'
-      - condition: state
-        entity_id: input_boolean.wakeup_lights
-        state: 'on'
-      - condition: or
-        conditions:
-          - condition: state
-            entity_id: input_boolean.wakeup_weekends
-            state: 'on'
-          - condition: state
-            entity_id: binary_sensor.workday_sensor
-            state: 'on'
-  action:
-    service: light.turn_on
-    data:
-      entity_id: light.master_bedroom_lights
-      profile: energize
-    data_template:
-      transition: >
-        '{{ states.input_number.wakeup_duration.state | multiply(60) | float }}'
+  wakeup_light_bedroom:
+    alias: 'Wakeup - Bedroom Light'
+    trigger:
+    - platform: template
+      value_template: >
+        '{{ states.sensor.time.state == states.sensor.wakeup_start_time.state }}'
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: input_boolean.wakeup_boolean
+          state: 'on'
+        - condition: state
+          entity_id: input_boolean.wakeup_lights
+          state: 'on'
+        - condition: or
+          conditions:
+            - condition: state
+              entity_id: input_boolean.wakeup_weekends
+              state: 'on'
+            - condition: state
+              entity_id: binary_sensor.workday_sensor
+              state: 'on'
+    action:
+      service: light.turn_on
+      data:
+        entity_id: light.master_bedroom_lights
+        profile: energize
+      data_template:
+        transition: >
+          '{{ states.input_number.wakeup_duration.state | multiply(60) | float }}'
 ################################################################################
 
 script:
