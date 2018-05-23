@@ -204,8 +204,39 @@
 ################################################################################
 
 ################################################################################
+- id: notification_battery_low
+  alias: 'Notification - Battery Low'
+  trigger:
+    platform: numeric_state
+    entity_id: 
+    - device_tracker.network_ians_iphone
+    - device_tracker.network_aimees_iphone
+    - device_tracker.network_richards_iphone
+    value_template: '{{ state.attributes.battery }}'
+    below: 25
+  action:
+    - service: notify.notify
+      data_template:
+        title: 'Low Battery'
+        message: >
+          Please check the battery for the following device:
+          {{trigger.event.data.entity_id}}
+# {{ trigger.to_state.attributes.friendly_name }}
+#{%- set threshold = 100 -%}
+#{%- set domains = ['light', 'switch', 'sensor', 'lock'] -%}
+#{%- for domain in domains -%}
+#   {%- for item in states[domain] %}
+#       {%- if ((item.attributes.battery_level is defined and item.attributes['battery_level'] | int < threshold) or ("battery" in item.name | lower and ((item.state | int < threshold and item.state|int != 0) or item.state | lower == "low" or item.state | lower == "unknown"))) -%}
+#           {{ item.attributes.friendly_name }}
+#       {% endif %}
+#   {%- endfor -%}
+#{%- endfor -%}
+#################################################################################
+
+################################################################################
   # IF: { sun.sun goes under horizon } THEN: { set theme to night mode }
-- alias: Automatic Theme Change
+- id: theme_automatic
+  alias: Automatic Theme Change
   initial_state: 'off'
   trigger:
     - platform: homeassistant
@@ -250,33 +281,3 @@
       input:
         command: "upload"
 ################################################################################
-
-################################################################################
-- id: notification_battery_low
-  alias: 'Notification - Battery Low'
-  trigger:
-    platform: numeric_state
-    entity_id: 
-    - device_tracker.network_ians_iphone
-    - device_tracker.network_aimees_iphone
-    - device_tracker.network_richards_iphone
-    value_template: '{{ state.attributes.battery }}'
-    below: 25
-  action:
-    - service: notify.notify
-      data_template:
-        title: 'Low Battery'
-        message: >
-          Please check the battery for the following device:
-          {{trigger.event.data.entity_id}}
-# {{ trigger.to_state.attributes.friendly_name }}
-#{%- set threshold = 100 -%}
-#{%- set domains = ['light', 'switch', 'sensor', 'lock'] -%}
-#{%- for domain in domains -%}
-#   {%- for item in states[domain] %}
-#       {%- if ((item.attributes.battery_level is defined and item.attributes['battery_level'] | int < threshold) or ("battery" in item.name | lower and ((item.state | int < threshold and item.state|int != 0) or item.state | lower == "low" or item.state | lower == "unknown"))) -%}
-#           {{ item.attributes.friendly_name }}
-#       {% endif %}
-#   {%- endfor -%}
-#{%- endfor -%}
-#################################################################################
