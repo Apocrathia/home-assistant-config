@@ -1,28 +1,33 @@
 ### Roomba ###
+
+# The majority of this has come from TheHookUp's YouTube channel
+# https://www.youtube.com/watch?v=t2NgA8qYcFI
+
+# HomeAssistant
 homeassistant:
   customize:
 # Upstairs Roomba
     switch.roomba_upstairs:
       friendly_name: "Upstairs Roomba"
       icon: mdi:roomba
-    sensor.roomba:
+    sensor.roomba_upstairs:
       friendly_name: "Upstairs Roomba"
       icon: mdi:roomba
-    sensor.roomba_battery:
+    sensor.roomba_upstairs_battery:
       friendly_name: "Upstairs Roomba Battery"
-    sensor.roomba_status:
+    sensor.roomba_upstairs_status:
       friendly_name: "Upstairs Roomba Status"
       icon: mdi:format-list-bulleted
 # Downstairs Roomba
-    switch.roomba:
+    switch.roomba_downstairs:
       friendly_name: "Downstairs Roomba"
       icon: mdi:roomba
-    sensor.roomba:
+    sensor.roomba_downstairs:
       friendly_name: "Downstairs Roomba"
       icon: mdi:roomba
-    sensor.roomba_battery:
+    sensor.roomba_downstairs_battery:
       friendly_name: "Downstairs Roomba Battery"
-    sensor.roomba_status:
+    sensor.roomba_downstairs_status:
       friendly_name: "Downstairs Roomba Status"
       icon: mdi:format-list-bulleted
 
