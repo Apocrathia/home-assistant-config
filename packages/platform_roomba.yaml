@@ -1,0 +1,61 @@
+### Roomba ###
+homeassistant:
+  customize:
+# Upstairs Roomba
+    switch.roomba_upstairs:
+      friendly_name: "Upstairs Roomba"
+      icon: mdi:roomba
+    sensor.roomba:
+      friendly_name: "Upstairs Roomba"
+      icon: mdi:roomba
+    sensor.roomba_battery:
+      friendly_name: "Upstairs Roomba Battery"
+    sensor.roomba_status:
+      friendly_name: "Upstairs Roomba Status"
+      icon: mdi:format-list-bulleted
+# Downstairs Roomba
+    switch.roomba:
+      friendly_name: "Downstairs Roomba"
+      icon: mdi:roomba
+    sensor.roomba:
+      friendly_name: "Downstairs Roomba"
+      icon: mdi:roomba
+    sensor.roomba_battery:
+      friendly_name: "Downstairs Roomba Battery"
+    sensor.roomba_status:
+      friendly_name: "Downstairs Roomba Status"
+      icon: mdi:format-list-bulleted
+
+# Switch
+switch:
+# Upstairs Roomba
+  - platform: mqtt
+    name: roomba_upstairs
+    command_topic: "roomba/upstairs/commands"
+    payload_on: "start"
+    payload_off: "stop" 
+# Downstairs Roomba
+  - platform: mqtt
+    name: roomba_downstairs
+    command_topic: "roomba/downstairs/commands"
+    payload_on: "start"
+    payload_off: "stop" 
+
+# Sensor
+sensor:
+# Upstairs Roomba
+  - platform: mqtt
+    name: roomba_upstairs_status
+    state_topic: "roomba/upstairs/status"
+  - platform: mqtt
+    name: roomba_upstairs_battery
+    state_topic: "roomba/upstairs/battery"
+    device_class: battery
+# Downstairs Roomba
+  - platform: mqtt
+    name: roomba_downstairs_status
+    state_topic: "roomba/downstairs/status"
+  - platform: mqtt
+    name: roomba_downstairs_battery
+    state_topic: "roomba/downstairs/battery"
+    device_class: battery
