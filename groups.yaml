@@ -53,6 +53,8 @@ everything_view:
     - group.all_automations
     - group.all_scripts
     - group.weather_overview
+    - group.roomba_upstairs
+    - group.roomba_downstairs
 
 # Room Groups
 living_room:

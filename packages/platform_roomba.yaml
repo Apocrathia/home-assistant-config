@@ -10,9 +10,6 @@ homeassistant:
     switch.roomba_upstairs:
       friendly_name: "Upstairs Roomba"
       icon: mdi:roomba
-    sensor.roomba_upstairs:
-      friendly_name: "Upstairs Roomba"
-      icon: mdi:roomba
     sensor.roomba_upstairs_battery:
       friendly_name: "Upstairs Roomba Battery"
     sensor.roomba_upstairs_status:
@@ -20,9 +17,6 @@ homeassistant:
       icon: mdi:format-list-bulleted
 # Downstairs Roomba
     switch.roomba_downstairs:
-      friendly_name: "Downstairs Roomba"
-      icon: mdi:roomba
-    sensor.roomba_downstairs:
       friendly_name: "Downstairs Roomba"
       icon: mdi:roomba
     sensor.roomba_downstairs_battery:
@@ -64,3 +58,18 @@ sensor:
     name: roomba_downstairs_battery
     state_topic: "roomba/downstairs/battery"
     device_class: battery
+
+# Group
+group:
+  roomba_upstairs:
+    name: Upstairs Roomba
+    entities:
+      - switch.roomba_upstairs
+      - sensor.roomba_upstairs_status
+      - sensor.roomba_upstairs_battery
+  roomba_downstairs:
+    name: Downstairs Roomba
+    entities:
+      - switch.roomba_downstairs
+      - sensor.roomba_downstairs_status
+      - sensor.roomba_downstairs_battery
