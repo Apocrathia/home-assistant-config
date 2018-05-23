@@ -1,0 +1,9 @@
+### Neptune Apex ###
+
+sensor:
+  - platform: template
+    sensors:
+      apex_test:
+        friendly_name: Neptune Apex Test
+        value_template: >-
+          test
