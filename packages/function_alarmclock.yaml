@@ -42,7 +42,7 @@ input_boolean:
 
 automation:
 ################################################################################
-  wakeup_apple_tv:
+  - id: wakeup_apple_tv
     alias: 'Wakeup - Apple TV'
     trigger:
     - platform: template
@@ -70,7 +70,7 @@ automation:
 ################################################################################
   
 ################################################################################
-  wakeup_light_bedroom:
+  - id: wakeup_light_bedroom
     alias: 'Wakeup - Bedroom Light'
     trigger:
     - platform: template

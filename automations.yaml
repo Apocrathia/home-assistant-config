@@ -1,5 +1,5 @@
 ################################################################################
-front_porch_lights_nighttime:
+- id: front_porch_lights_nighttime
   alias: 'Front Porch - Nighttime Lighting'
   trigger:
     - platform: state
@@ -25,7 +25,7 @@ front_porch_lights_nighttime:
 ################################################################################
 
 ################################################################################
-front_porch_lights_daytime:
+- id: front_porch_lights_daytime
   alias: 'Front Porch - Daytime Lighting'
   trigger:
     - platform: state
@@ -40,7 +40,7 @@ front_porch_lights_daytime:
 ################################################################################
 
 ################################################################################
-front_door_nighttime_motion_initial:
+- id: front_door_nighttime_motion_initial
   alias: 'Front Porch - Nighttime Motion'
   trigger:
     - platform: state
@@ -61,7 +61,7 @@ front_door_nighttime_motion_initial:
 ################################################################################
 
 ################################################################################
-front_door_nighttime_motion_idle:
+- id: front_door_nighttime_motion_idle
   alias: 'Front Porch - Nighttime Motion Idle'
   trigger:
     - platform: state
@@ -85,7 +85,7 @@ front_door_nighttime_motion_idle:
 ################################################################################
 
 ################################################################################
-location_home:
+- id: location_home
   alias: "Location - Home"
   trigger:
     - platform: state
@@ -120,7 +120,7 @@ location_home:
 ################################################################################
 
 ################################################################################
-location_away:
+- id: location_away
   alias: "Location - Away"
   trigger:
     - platform: state
@@ -177,7 +177,7 @@ location_away:
 ################################################################################
 
 ################################################################################
-notification_update:
+- id: notification_update
   alias: 'Notification - Update Available'
   trigger:
     platform: state
@@ -189,7 +189,7 @@ notification_update:
 ################################################################################
 
 ################################################################################
-notification_new_device:
+- id: notification_new_device
   alias: 'Notification - New Device'
   trigger:
     - platform: event
@@ -204,7 +204,7 @@ notification_new_device:
 ################################################################################
 
 ################################################################################
-notification_battery_low:
+- id: notification_battery_low
   alias: 'Notification - Battery Low'
   trigger:
     platform: numeric_state
@@ -235,7 +235,7 @@ notification_battery_low:
 
 ################################################################################
   # IF: { sun.sun goes under horizon } THEN: { set theme to night mode }
-theme_automatic:
+- id: theme_automatic
   alias: Automatic Theme Change
   initial_state: 'off'
   trigger:
@@ -259,7 +259,7 @@ theme_automatic:
 ################################################################################
 
 ################################################################################
-weekly_backup:
+- id: weekly_backup
   alias: 'Weekly Backups'
   initial_state: 'on'
   trigger:
