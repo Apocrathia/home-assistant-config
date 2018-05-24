@@ -1,6 +1,6 @@
 ################################################################################
-# id: front_porch_lights_nighttime
-- alias: 'Front Porch - Nighttime Lighting'
+- id: front_porch_lights_nighttime
+  alias: 'Front Porch - Nighttime Lighting'
   trigger:
     - platform: state
       entity_id: sun.sun
@@ -25,8 +25,8 @@
 ################################################################################
 
 ################################################################################
-# id: front_porch_lights_daytime
-- alias: 'Front Porch - Daytime Lighting'
+- id: front_porch_lights_daytime
+  alias: 'Front Porch - Daytime Lighting'
   trigger:
     - platform: state
       entity_id: sun.sun
@@ -40,8 +40,8 @@
 ################################################################################
 
 ################################################################################
-# id: front_door_nighttime_motion_initial
-- alias: 'Front Porch - Nighttime Motion'
+- id: front_door_nighttime_motion_initial
+  alias: 'Front Porch - Nighttime Motion'
   trigger:
     - platform: state
       entity_id: binary_sensor.ring_front_door_motion
@@ -61,8 +61,8 @@
 ################################################################################
 
 ################################################################################
-#id: front_door_nighttime_motion_idle
-- alias: 'Front Porch - Nighttime Motion Idle'
+- id: front_door_nighttime_motion_idle
+  alias: 'Front Porch - Nighttime Motion Idle'
   trigger:
     - platform: state
       entity_id: binary_sensor.ring_front_door_motion
@@ -85,8 +85,8 @@
 ################################################################################
 
 ################################################################################
-# id: location_home
-- alias: "Location - Home"
+- id: location_home
+  alias: "Location - Home"
   trigger:
     - platform: state
       entity_id: 
@@ -120,8 +120,8 @@
 ################################################################################
 
 ################################################################################
-# id: location_away
-- alias: "Location - Away"
+- id: location_away
+  alias: "Location - Away"
   trigger:
     - platform: state
       entity_id: 
@@ -155,16 +155,16 @@
 ################################################################################
 
 ################################################################################
-# id: nighttime_mode
-#- alias: "Nighttime Mode"
+#- id: nighttime_mode
+#  alias: "Nighttime Mode"
 #  trigger:
 #    - platform: time
 #      at: '21:00:00'
 ################################################################################
 
 ################################################################################
-# id: living_room_motion
-#- alias: 'Living Room Motion'
+#- id: living_room_motion
+#  alias: 'Living Room Motion'
 #  trigger:
 #    - platform: state
 #      entity_id: binary_sensor.living_room_motion
