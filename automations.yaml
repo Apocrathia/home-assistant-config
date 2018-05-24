@@ -19,8 +19,8 @@
     - service: light.turn_on
       data:
         entity_id: light.front_porch_lights
-        profile: read
-        brightness_pct: 50
+        profile: relax
+        brightness_pct: 25
         transition: 900
 ################################################################################
 
