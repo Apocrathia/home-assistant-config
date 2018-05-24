@@ -105,8 +105,8 @@ automation:
 
 script:
 ################################################################################
-#  wakeup_apple_tv:
-  - alias: 'Wakeup - Apple TV'
+  wakeup_apple_tv:
+    alias: 'Wakeup - Apple TV'
     sequence:
   # Turn on the TV
       - service: media_player.turn_on
