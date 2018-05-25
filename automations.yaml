@@ -204,23 +204,24 @@
 ################################################################################
 
 ################################################################################
-- id: notification_battery_low
-  alias: 'Notification - Battery Low'
-  trigger:
-    platform: numeric_state
-    entity_id: 
-    - device_tracker.network_ians_iphone
-    - device_tracker.network_aimees_iphone
-    - device_tracker.network_richards_iphone
-    value_template: '{{ state.attributes.battery }}'
-    below: 25
-  action:
-    - service: notify.notify
-      data_template:
-        title: 'Low Battery'
-        message: >
-          Please check the battery for the following device:
-          {{trigger.event.data.entity_id}}
+#- id: notification_battery_low
+#  alias: 'Notification - Battery Low'
+#  trigger:
+#    platform: numeric_state
+#    entity_id: 
+#    - device_tracker.network_ians_iphone
+#    - device_tracker.network_aimees_iphone
+#    - device_tracker.network_richards_iphone
+#    value_template: >
+#      {{ state.attributes.battery | int }}
+#    below: 25
+#  action:
+#    - service: notify.notify
+#      data_template:
+#        title: 'Low Battery'
+#        message: >
+#          Please check the battery for the following device:
+#          {{trigger.event.data.entity_id}}
 # {{ trigger.to_state.attributes.friendly_name }}
 #{%- set threshold = 100 -%}
 #{%- set domains = ['light', 'switch', 'sensor', 'lock'] -%}
@@ -234,28 +235,28 @@
 #################################################################################
 
 ################################################################################
-  # IF: { sun.sun goes under horizon } THEN: { set theme to night mode }
-- id: theme_automatic
-  alias: Automatic Theme Change
-  initial_state: 'off'
-  trigger:
-    - platform: homeassistant
-      event: start
-    - platform: state
-      entity_id: sun.sun
-      to: above_horizon
-    - platform: state
-      entity_id: sun.sun
-      to: below_horizon
-  action:
-    - service_template: frontend.set_theme
-      data_template:
-        name: >
-          {% if states.sun.sun.state == "above_horizon" %}
-            solarized_light
-          {% else %}
-            solarized_dark
-          {% endif %}
+#  # IF: { sun.sun goes under horizon } THEN: { set theme to night mode }
+#- id: theme_automatic
+#  alias: Automatic Theme Change
+#  initial_state: 'off'
+#  trigger:
+#    - platform: homeassistant
+#      event: start
+#    - platform: state
+#      entity_id: sun.sun
+#      to: above_horizon
+#    - platform: state
+#      entity_id: sun.sun
+#      to: below_horizon
+#  action:
+#    - service_template: frontend.set_theme
+#      data_template:
+#        name: >
+#          {% if states.sun.sun.state == "above_horizon" %}
+#            solarized_light
+#          {% else %}
+#            solarized_dark
+#          {% endif %}
 ################################################################################
 
 ################################################################################

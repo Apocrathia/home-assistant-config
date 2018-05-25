@@ -47,7 +47,7 @@ automation:
     trigger:
     - platform: template
       value_template: >
-        '{{ states.sensor.time.state == states.sensor.wakeup_start_time.state }}'
+        {{ states.sensor.time.state == states.sensor.wakeup_start_time.state }}
     condition:
       condition: and
       conditions:
@@ -75,7 +75,7 @@ automation:
     trigger:
     - platform: template
       value_template: >
-        '{{ states.sensor.time.state == states.sensor.wakeup_start_time.state }}'
+        {{ states.sensor.time.state == states.sensor.wakeup_start_time.state }}
     condition:
       condition: and
       conditions:
@@ -100,7 +100,7 @@ automation:
         profile: energize
       data_template:
         transition: >
-          '{{ states.input_number.wakeup_duration.state | multiply(60) | float }}'
+          {{ states.sensor.wakeup_duration.state | multiply(60) | int }}
 ################################################################################
 
 script:
@@ -194,6 +194,7 @@ sensor:
     sensors:
       wakeup_duration:
         friendly_name: 'Wakeup Duration'
-        value_template: '{{ states.input_number.wakeup_duration.state | int }}'
+        value_template: >
+          {{ states.input_number.wakeup_duration.state | int }}
         unit_of_measurement: 'min'
 ################################################################################
