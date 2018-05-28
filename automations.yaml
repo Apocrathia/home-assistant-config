@@ -245,6 +245,18 @@
 ################################################################################
 
 ################################################################################
+- id: notification_restart
+  alias: 'Notification - Home Assistant Restart'
+  trigger:
+    platform: homeassistant
+    event: start
+  action:
+    service: notify.notify
+    data:
+      message: 'Home Assistant has restarted.'
+################################################################################
+
+################################################################################
 #- id: notification_battery_low
 #  alias: 'Notification - Battery Low'
 #  trigger:
