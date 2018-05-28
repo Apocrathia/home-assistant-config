@@ -85,6 +85,47 @@
 ################################################################################
 
 ################################################################################
+- id: living_room_lights_nighttime
+  alias: 'Living Room - Nighttime Lighting'
+  trigger:
+    - platform: state
+      entity_id: sun.sun
+      from: 'above_horizon'
+      to: 'below_horizon'
+  condition:
+    condition: and
+    conditions:
+    - condition: state
+      entity_id: sun.sun
+      state: 'below_horizon'
+    - condition: state
+      entity_id: light.floop_lamp
+      state: 'off'
+  action:
+    - service: light.turn_on
+      data:
+        entity_id: light.floop_lamp
+        profile: relax
+        brightness_pct: 25
+        transition: 900
+################################################################################
+
+################################################################################
+- id: living_room_lights_daytime
+  alias: 'Living Room - Daytime Lighting'
+  trigger:
+    - platform: state
+      entity_id: sun.sun
+      from: 'below_horizon'
+      to: 'above_horizon'
+  action:
+    - service: light.turn_off
+      data:
+        entity_id: light.floop_lamp
+        transition: 900
+################################################################################
+
+################################################################################
 - id: location_home
   alias: "Location - Home"
   trigger:
