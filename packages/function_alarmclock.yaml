@@ -1,3 +1,21 @@
+################################################################################
+# Alarm Clock
+################################################################################
+
+# Group
+group:
+################################################################################
+  alarmclock_settings:
+    name: Alarm Clock Settings
+    control: hidden
+    entities:
+      - automation.wakeup_light_bedroom
+      - automation.wakeup_apple_tv
+      - input_datetime.wakeup_time
+      - input_number.wakeup_duration
+################################################################################
+
+### Inputs ###
 input_datetime:
   wakeup_time:
     name: Wakeup Time
@@ -10,89 +28,22 @@ input_number:
     name: Wakeup duration
     icon: mdi:clock-in
     initial: 30
-    min: 5
+    min: 0
     max: 60
     step: 5
 
-input_boolean:
-  wakeup_boolean:
-    name: 'Wakeup Automations'
-    icon: mdi:power
-    initial: on
-
-  wakeup_weekends:
-    name: 'Wakeup Weekends'
-    icon: mdi:power
-    initial: off
-
-  bedtime_boolean:
-    name: 'Bedtime Automations'
-    icon: mdi:power
-    initial: on
-
-  wakeup_lights:
-    name: 'Wakeup Lights'
-    icon: mdi:lightbulb
-    initial: on
-
-  wakeup_apple_tv:
-    name: 'Wakeup Apple TV'
-    icon: mdi:apple
-    initial: on
-
 automation:
-################################################################################
-  - id: wakeup_apple_tv
-    alias: 'Wakeup - Apple TV'
-    trigger:
-    - platform: template
-      value_template: >
-        {{ states.sensor.time.state == states.sensor.wakeup_start_time.state }}
-    condition:
-      condition: and
-      conditions:
-        - condition: state
-          entity_id: input_boolean.wakeup_boolean
-          state: 'on'
-        - condition: state
-          entity_id: input_boolean.wakeup_apple_tv
-          state: 'on'
-        - condition: or
-          conditions:
-            - condition: state
-              entity_id: input_boolean.wakeup_weekends
-              state: 'on'
-            - condition: state
-              entity_id: binary_sensor.workday_sensor
-              state: 'on'
-    action:
-      service: script.wakeup_apple_tv
-################################################################################
-  
 ################################################################################
   - id: wakeup_light_bedroom
     alias: 'Wakeup - Bedroom Light'
     trigger:
     - platform: template
       value_template: >
-        {{ states.sensor.time.state == states.sensor.wakeup_start_time.state }}
+        {{ states.sensor.time.state == ((states.input_datetime.wakeup_time.attributes.timestamp | int) - (states.input_number.wakeup_duration.state | int * 60)) | timestamp_custom('%H:%M',False) }}
     condition:
-      condition: and
-      conditions:
-        - condition: state
-          entity_id: input_boolean.wakeup_boolean
-          state: 'on'
-        - condition: state
-          entity_id: input_boolean.wakeup_lights
-          state: 'on'
-        - condition: or
-          conditions:
-            - condition: state
-              entity_id: input_boolean.wakeup_weekends
-              state: 'on'
-            - condition: state
-              entity_id: binary_sensor.workday_sensor
-              state: 'on'
+      condition: state
+      entity_id: binary_sensor.workday_sensor
+      state: 'on'
     action:
       service: light.turn_on
       data:
@@ -100,9 +51,24 @@ automation:
         profile: energize
       data_template:
         transition: >
-          {{ states.sensor.wakeup_duration.state | multiply(60) | int }}
+          {{ states.input_number.wakeup_duration.state | int | multiply(60) }}
 ################################################################################
 
+################################################################################
+  - id: wakeup_apple_tv
+    alias: 'Wakeup - Apple TV'
+    trigger:
+    - platform: template
+      value_template: >
+        {{ states.sensor.time.state == ((states.input_datetime.wakeup_time.attributes.timestamp | int) - (states.input_number.wakeup_duration.state | int * 60)) | timestamp_custom('%H:%M',False) }}
+    condition:
+      condition: state
+      entity_id: binary_sensor.workday_sensor
+      state: 'on'
+    action:
+      service: script.wakeup_apple_tv
+################################################################################
+  
 script:
 ################################################################################
   wakeup_apple_tv:
@@ -170,31 +136,4 @@ script:
           entity_id: remote.master_bedroom
           command:
             - select
-################################################################################
-
-sensor:
-################################################################################
-# Alarm Clock
-################################################################################
-  - platform: template
-    sensors:
-      wakeup_alarm_time:
-        friendly_name: 'Alarm Time'
-        value_template: >
-          {{ states.input_datetime.wakeup_time.attributes.timestamp | timestamp_custom('%H:%M',False) }}
-  
-  - platform: template
-    sensors:
-      wakeup_start_time:
-        friendly_name: 'Wakeup Start Time'
-        value_template: >
-          {{ ((states.input_datetime.wakeup_time.attributes.timestamp | int) - (states.input_number.wakeup_duration.state | int * 60)) | timestamp_custom('%H:%M',False) }}
-  
-  - platform: template
-    sensors:
-      wakeup_duration:
-        friendly_name: 'Wakeup Duration'
-        value_template: >
-          {{ states.input_number.wakeup_duration.state | int }}
-        unit_of_measurement: 'min'
 ################################################################################
