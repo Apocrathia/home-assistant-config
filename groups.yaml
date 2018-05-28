@@ -38,7 +38,7 @@ settings_view:
   view: yes
   name: Settings
   entities:
-    - group.wakeup_settings
+    - group.alarmclock_settings
     
 everything_view:
   view: yes
@@ -143,24 +143,6 @@ security_system:
     - binary_sensor.front_door
     - binary_sensor.back_door
     - binary_sensor.garage_door
-
-wakeup_settings:
-  name: Wakeup Routines
-  control: hidden
-  entities:
-    - input_boolean.wakeup_boolean
-    - input_boolean.bedtime_boolean
-    - input_boolean.wakeup_weekends
-    - input_datetime.wakeup_time
-    - input_datetime.bed_time
-    - sensor.wakeup_alarm_time
-    - sensor.wakeup_start_time
-    - sensor.wakeup_fadein_duration
-    - input_number.wakeup_hour
-    - input_number.wakeup_minutes
-    - input_number.wakeup_duration
-    - input_boolean.wakeup_lights
-    - input_boolean.wakeup_apple_tv
 
 weather_overview:
   name: Weather overview
