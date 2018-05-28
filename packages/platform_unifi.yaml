@@ -1,0 +1,22 @@
+### UniFi ###
+
+# Customize
+homeassistant:
+  customize_glob:
+  "device_tracker.network_*":
+    
+
+# Device Tracker
+device_tracker:
+  - platform: unifi
+    entity_namespace: network
+    host: !secret unifi_host
+    port: !secret unifi_port
+    username: !secret unifi_username
+    password: !secret unifi_password
+    site_id: default
+    verify_ssl: false
+    consider_home: 180
+    new_device_defaults:
+      track_new_devices: true
+      hide_if_away: false
