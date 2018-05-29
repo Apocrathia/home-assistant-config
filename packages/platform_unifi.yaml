@@ -1,10 +1,11 @@
 ### UniFi ###
 
 # Customize
-homeassistant:
-  customize_glob:
-    "device_tracker.network_*":
-      icon: mdi:network
+#homeassistant:
+#  customize_glob:
+#    "device_tracker.network_*":
+#      icon: mdi:network
+
 
 # Device Traker
 device_tracker:
