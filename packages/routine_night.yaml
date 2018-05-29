@@ -1,0 +1,96 @@
+################################################################################
+- id: front_porch_lights_nighttime
+  alias: 'Front Porch - Nighttime Lighting'
+  trigger:
+    - platform: state
+      entity_id: sun.sun
+      from: 'above_horizon'
+      to: 'below_horizon'
+  condition:
+    condition: and
+    conditions:
+    - condition: state
+      entity_id: sun.sun
+      state: 'below_horizon'
+    - condition: state
+      entity_id: light.front_porch_lights
+      state: 'off'
+  action:
+    - service: light.turn_on
+      data:
+        entity_id: light.front_porch_lights
+        profile: relax
+        brightness_pct: 25
+        transition: 900
+################################################################################
+
+################################################################################
+- id: front_door_nighttime_motion_initial
+  alias: 'Front Porch - Nighttime Motion'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.ring_front_door_motion
+      from: 'off'
+      to: 'on'
+  condition:
+    condition: state
+    entity_id: sun.sun
+    state: 'below_horizon'
+  action:
+# Transition to this profile, even if on
+    - service: light.turn_on
+      data:
+        entity_id: light.front_porch_lights
+        profile: energize
+        transition: 1
+################################################################################
+
+################################################################################
+- id: front_door_nighttime_motion_idle
+  alias: 'Front Porch - Nighttime Motion Idle'
+  trigger:
+    - platform: state
+      entity_id: binary_sensor.ring_front_door_motion
+      from: 'on'
+      to: 'off'
+      for:
+        minutes: 5
+  condition:
+    condition: state
+    entity_id: sun.sun
+    state: 'below_horizon'
+  action:
+# Transition back to a preset profile/scene
+    - service: light.turn_on
+      data:
+        entity_id: light.front_porch_lights
+        profile: relax
+        brightness_pct: 25
+        transition: 5
+################################################################################
+
+################################################################################
+- id: living_room_lights_nighttime
+  alias: 'Living Room - Nighttime Lighting'
+  trigger:
+    - platform: state
+      entity_id: sun.sun
+      from: 'above_horizon'
+      to: 'below_horizon'
+  condition:
+    condition: and
+    conditions:
+    - condition: state
+      entity_id: sun.sun
+      state: 'below_horizon'
+    - condition: state
+      entity_id: light.floop_lamp
+      state: 'off'
+  action:
+    - service: light.turn_on
+      data:
+        entity_id: light.floop_lamp
+        profile: relax
+        brightness_pct: 25
+        transition: 900
+################################################################################
