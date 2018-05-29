@@ -90,7 +90,7 @@ automation:
     action:
       - service: light.turn_on
         data:
-          entity_id: light.floop_lamp
+          entity_id: light.floor_lamp
           profile: relax
           brightness_pct: 25
           transition: 900
