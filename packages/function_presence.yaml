@@ -1,5 +1,29 @@
 ### Presence Detection Functionality ###
 
+binary_sensor:
+################################################################################
+  - platform: bayesian
+    prior: 0.5
+    name: 'Vacant'
+    probability_threshold: 0.9
+    observations:
+      - entity_id: 'device_tracker.network_ians_iphone'
+        prob_given_true: 0.9
+        prob_given_false: 0.1
+        platform: 'state'
+        to_state: 'not_home'
+      - entity_id: 'device_tracker.network_aimees_iphone'
+        prob_given_true: 0.9
+        prob_given_false: 0.2
+        platform: 'state'
+        to_state: 'not_home'
+      - entity_id: 'device_tracker.network_richards_iphone'
+        prob_given_true: 0.9
+        prob_given_false: 0.4
+        platform: 'state'
+        to_state: 'not_home'
+################################################################################
+
 automation:
 ################################################################################
   - id: location_home
