@@ -99,7 +99,7 @@ zone: !include zones.yaml
 sensor: !include sensors.yaml
 binary_sensor: !include binary_sensors.yaml
 device_tracker: !include device_tracker.yaml
-light: !include lights.yaml
+#light: !include lights.yaml
 #scene: !include scenes.yaml
 #weather: !include weather.yaml
 
@@ -113,42 +113,42 @@ input_datetime:
     has_time: true
     initial: 21:00
 
-input_select:
-  ian_status_dropdown:
-    name: Ian
-    options:
-      - Home
-      - Just Arrived
-      - Just Left
-      - Work
-      - School
-      - Away
-      - Extended Away
-    initial: Home
-
-  aimee_status_dropdown:
-    name: Aimee
-    options:
-      - Home
-      - Just Arrived
-      - Just Left
-      - Work
-      - School
-      - Away
-      - Extended Away
-    initial: Home
-
-  richard_status_dropdown:
-    name: Richard
-    options:
-      - Home
-      - Just Arrived
-      - Just Left
-      - Work
-      - School
-      - Away
-      - Extended Away
-    initial: Home
+#input_select:
+#  ian_status_dropdown:
+#    name: Ian
+#    options:
+#      - Home
+#      - Just Arrived
+#      - Just Left
+#      - Work
+#      - School
+#      - Away
+#      - Extended Away
+#    initial: Home
+#
+#  aimee_status_dropdown:
+#    name: Aimee
+#    options:
+#      - Home
+#      - Just Arrived
+#      - Just Left
+#      - Work
+#      - School
+#      - Away
+#      - Extended Away
+#    initial: Home
+#
+#  richard_status_dropdown:
+#    name: Richard
+#    options:
+#      - Home
+#      - Just Arrived
+#      - Just Left
+#      - Work
+#      - School
+#      - Away
+#      - Extended Away
+#    initial: Home
 ################################################################################
 
 #############################
