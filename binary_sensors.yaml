@@ -3,4 +3,4 @@
 # Workday
 - platform: workday
   country: US
-  province: !secre state_abbreviation
+  province: !secret state_abbreviation
