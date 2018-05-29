@@ -108,3 +108,18 @@ automation:
           message: >
             Bayesian Vacancy Sensor Triggered: {{ trigger.event.data.state }}
 ################################################################################
+
+scene:
+################################################################################
+  - name: Home
+    entities:
+      alarm_control_panel.home: 'disarmed'
+      climate.downstairs: 'home'
+################################################################################
+
+################################################################################
+  - name: Away
+    entities:
+      alarm_control_panel.home: 'armed_away'
+      climate.downstairs: 'eco'
+################################################################################
