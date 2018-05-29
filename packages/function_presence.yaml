@@ -1,0 +1,72 @@
+### Presence Detection Functionality ###
+
+automation:
+################################################################################
+  - id: location_home
+    alias: "Location - Home"
+    trigger:
+      - platform: state
+        entity_id: 
+        - device_tracker.network_ians_iphone
+        - device_tracker.network_aimees_iphone
+        - device_tracker.network_richards_iphone
+        to: 'home'
+    condition:
+      condition: or
+      conditions:
+      - condition: state
+        entity_id: device_tracker.network_ians_iphone
+        state: 'not_home'
+      - condition: state
+        entity_id: device_tracker.network_aimees_iphone
+        state: 'not_home'
+      - condition: state
+        entity_id: device_tracker.network_richards_iphone
+        state: 'not_home'
+    action:
+  # Change this to a scene later on
+      - service: nest.set_mode
+        data:
+          home_mode: home
+          structure:
+            - Percivale
+      - service: alarm_control_panel.alarm_disarm
+        data:
+          entity_id: alarm_control_panel.home
+          code: !secret alarm_code
+################################################################################
+
+################################################################################
+  - id: location_away
+    alias: "Location - Away"
+    trigger:
+      - platform: state
+        entity_id: 
+        - device_tracker.network_ians_iphone
+        - device_tracker.network_aimees_iphone
+        - device_tracker.network_richards_iphone
+        to: 'not_home'
+    condition:
+      condition: and
+      conditions:
+      - condition: state
+        entity_id: device_tracker.network_ians_iphone
+        state: 'not_home'
+      - condition: state
+        entity_id: device_tracker.network_aimees_iphone
+        state: 'not_home'
+      - condition: state
+        entity_id: device_tracker.network_richards_iphone
+        state: 'not_home'
+    action:
+  # Change this to a scene later on
+      - service: nest.set_mode
+        data:
+          home_mode: away
+          structure:
+            - Percivale
+      - service: alarm_control_panel.alarm_arm_away
+        data:
+          entity_id: alarm_control_panel.home
+          code: !secret alarm_code
+################################################################################

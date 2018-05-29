@@ -1,0 +1,41 @@
+### Daytime Routines ###
+
+automation:
+################################################################################
+  - id: front_porch_lights_daytime
+    alias: 'Front Porch - Daytime Lighting'
+    trigger:
+      - platform: state
+        entity_id: sun.sun
+        from: 'below_horizon'
+        to: 'above_horizon'
+    action:
+      - service: light.turn_off
+        data:
+          entity_id: light.front_porch_lights
+          transition: 900
+################################################################################
+
+################################################################################
+  - id: living_room_lights_daytime
+    alias: 'Living Room - Daytime Lighting'
+    trigger:
+      - platform: state
+        entity_id: sun.sun
+        from: 'below_horizon'
+        to: 'above_horizon'
+    condition:
+      condition: and
+      conditions:
+      - condition: state
+        entity_id: sun.sun
+        state: 'above_horizon'
+      - condition: state
+        entity_id: light.floop_lamp
+        state: 'on'
+    action:
+      - service: light.turn_off
+        data:
+          entity_id: light.floor_lamp
+          transition: 900
+################################################################################

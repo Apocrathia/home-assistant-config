@@ -40,26 +40,24 @@
 ################################################################################
 # Presence
 ################################################################################
-- platform: template
-  sensors:
-    ian_location:
-      friendly_name: 'Ian'
-      value_template: >
-        {% set lat = states.device_tracker.ians_iphone.attributes.latitude %}
-        {% set long = states.device_tracker.ians_iphone.attributes.longitude %}
-        {% set attributes = {"longitude": long, "latitude": lat} %}
-
-- platform: template
-  sensors:
-    aimee_location:
-      friendly_name: 'Aimee'
-      value_template: >
-        {{ states.device_tracker.aimees_iphone.state }}
-
-- platform: template
-  sensors:
-    richard_location:
-      friendly_name: 'Richard'
-      value_template: >
-        {{ states.device_tracker.richards_iphone.state }}
+#- platform: template
+#  sensors:
+#    ian_location:
+#      friendly_name: 'Ian'
+#      value_template: >
+#        {{ states.device_tracker.network_ians_iphone.state }}
+#
+#- platform: template
+#  sensors:
+#    aimee_location:
+#      friendly_name: 'Aimee'
+#      value_template: >
+#        {{ states.device_tracker.network_aimees_iphone.state }}
+#
+#- platform: template
+#  sensors:
+#    richard_location:
+#      friendly_name: 'Richard'
+#      value_template: >
+#        {{ states.device_tracker.network_richards_iphone.state }}
 ################################################################################
