@@ -1,3 +1,5 @@
+### Daytime Routines ###
+
 automation:
 ################################################################################
   - id: front_porch_lights_daytime

@@ -1,3 +1,5 @@
+### Nighttime Routines ###
+
 automation:
 ################################################################################
   - id: front_porch_lights_nighttime
