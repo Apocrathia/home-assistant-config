@@ -1,10 +1,11 @@
 ### UniFi ###
 
 # Customize
-homeassistant:
-  customize_glob:
-    "device_tracker.network_*":
-      icon: mdi:network
+#homeassistant:
+#  customize_glob:
+#    "device_tracker.network_*":
+#      icon: mdi:network
+
 
 # Device Traker
 device_tracker:
@@ -20,6 +21,7 @@ device_tracker:
     new_device_defaults:
       track_new_devices: true
       hide_if_away: false
+    icon: mdi:network
 
 # Really need some sort of a value_template here to set statuses
 # to 'online' and 'offline'.
