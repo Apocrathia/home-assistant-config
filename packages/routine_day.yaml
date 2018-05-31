@@ -31,7 +31,7 @@ automation:
         entity_id: sun.sun
         state: 'above_horizon'
       - condition: state
-        entity_id: light.floop_lamp
+        entity_id: light.floor_lamp
         state: 'on'
     action:
       - service: light.turn_off
