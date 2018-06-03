@@ -111,6 +111,7 @@ outside:
     - light.front_porch_lights
     - binary_sensor.ring_front_door_motion
     - binary_sensor.ring_front_door_ding
+    - sensor.weather_pws_temp_c
     - sensor.dark_sky_summary
     - sun.sun
     - sensor.moon
