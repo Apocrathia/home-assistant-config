@@ -4,9 +4,9 @@ default_view:
   view: yes
   name: Home
   entities:
-#    - device_tracker.ians_iphone
-#    - device_tracker.aimees_iphone
-#    - device_tracker.richards_iphone
+    - device_tracker.network_ians_iphone
+    - device_tracker.network_aimees_iphone
+    - device_tracker.network_richards_iphone
 #    - sensor.time
     - group.living_room
     - group.foyer
