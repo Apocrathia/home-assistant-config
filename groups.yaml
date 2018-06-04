@@ -4,7 +4,7 @@ default_view:
   view: yes
   name: Home
   entities:
-    - sensor.vacant
+    - binary_sensor.vacancy
     - device_tracker.network_ians_iphone
     - device_tracker.network_aimees_iphone
     - device_tracker.network_richards_iphone

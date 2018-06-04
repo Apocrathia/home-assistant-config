@@ -4,7 +4,7 @@ binary_sensor:
 ################################################################################
   - platform: bayesian
     prior: 0.5
-    name: 'Vacant'
+    name: 'Vacancy'
     probability_threshold: 0.9
     observations:
       - entity_id: 'device_tracker.network_ians_iphone'
@@ -101,12 +101,12 @@ automation:
     trigger:
       - platform: state
         entity_id: 
-        - binary_sensor.vacant
+        - binary_sensor.vacancy
     action:
       - service: notify.notify
         data:
           message: >
-            Bayesian Vacancy Sensor Triggered: {{ trigger.event.data.state }}
+            Bayesian Vacancy Sensor Triggered: {{ states.binary_sensor.vacancy.state }}
 ################################################################################
 
 scene:
