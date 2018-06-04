@@ -3,4 +3,6 @@
 # Workday
 - platform: workday
   country: US
-  province: !secret state_abbreviation
+#  province: !secret state_abbreviation
+#  workdays: [mon, tue, wed, thu, fri]
+#  excludes: [sat, sun, holiday]
