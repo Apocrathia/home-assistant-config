@@ -2,74 +2,94 @@
 
 # The majority of this has come from TheHookUp's YouTube channel
 # https://www.youtube.com/watch?v=t2NgA8qYcFI
+# Upon further investigation, I've determined that the ESP01 board isn't going to be enough for this project.
+# Instead, I have opted for the ESP12E. The sole reasoning for this was due to the amount of memory available.
+# I want to be able to use Platform.IO in order to be able to perform OTA updates to the devices.
+# That way, if I need to make any sort of changes, I don't have to tear apart the Roomba.
+# The code in which I used is available here:
+# https://github.com/Apocrathia/esp-roomba-mqtt
+# Additionally, the full Roomba open interface spec can be found here:
+# https://www.irobot.lv/uploaded_files/File/iRobot_Roomba_500_Open_Interface_Spec.pdf
+
 
 # HomeAssistant
+################################################################################
 homeassistant:
   customize:
 # Upstairs Roomba
-    switch.roomba_upstairs:
+    vacuum.roomba_upstairs:
       friendly_name: "Upstairs Roomba"
       icon: mdi:robot-vacuum
-    sensor.roomba_upstairs_battery:
-      friendly_name: "Upstairs Roomba Battery"
-    sensor.roomba_upstairs_status:
-      friendly_name: "Upstairs Roomba Status"
-      icon: mdi:format-list-bulleted
 # Downstairs Roomba
-    switch.roomba_downstairs:
+    vacuum.roomba_downstairs:
       friendly_name: "Downstairs Roomba"
       icon: mdi:robot-vacuum
-    sensor.roomba_downstairs_battery:
-      friendly_name: "Downstairs Roomba Battery"
-    sensor.roomba_downstairs_status:
-      friendly_name: "Downstairs Roomba Status"
-      icon: mdi:format-list-bulleted
+################################################################################
 
-# Switch
-switch:
-# Upstairs Roomba
+################################################################################
+vacuum:
   - platform: mqtt
     name: roomba_upstairs
-    command_topic: "roomba/upstairs/commands"
-    payload_on: "start"
-    payload_off: "stop" 
-# Downstairs Roomba
+    supported_features:
+      - turn_on
+      - turn_off
+      - pause
+      - stop
+      - return_home
+      - battery
+      - status
+# The locate function is still a stub in the code.
+# https://github.com/Apocrathia/esp-roomba-mqtt/blob/master/src/main.cpp#L91
+#      - locate
+      - clean_spot
+      - send_command
+    command_topic: "vacuum/upstairs/command"
+    battery_level_topic: "vacuum/upstairs/state"
+    battery_level_template: ""
+    charging_topic: "vacuum/upstairs/state"
+    charging_template: ""
+    cleaning_topic: "vacuum/upstairs/state"
+    cleaning_template: ""
+    docked_topic: "vacuum/upstairs/state"
+    docked_template: ""
+    send_command_topic: 'vacuum/upstairs/send_command'
+################################################################################
   - platform: mqtt
     name: roomba_downstairs
-    command_topic: "roomba/downstairs/commands"
-    payload_on: "start"
-    payload_off: "stop" 
-
-# Sensor
-sensor:
-# Upstairs Roomba
-  - platform: mqtt
-    name: roomba_upstairs_status
-    state_topic: "roomba/upstairs/status"
-  - platform: mqtt
-    name: roomba_upstairs_battery
-    state_topic: "roomba/upstairs/battery"
-    device_class: battery
-# Downstairs Roomba
-  - platform: mqtt
-    name: roomba_downstairs_status
-    state_topic: "roomba/downstairs/status"
-  - platform: mqtt
-    name: roomba_downstairs_battery
-    state_topic: "roomba/downstairs/battery"
-    device_class: battery
+    supported_features:
+      - turn_on
+      - turn_off
+      - pause
+      - stop
+      - return_home
+      - battery
+      - status
+# The locate function is still a stub in the code.
+# https://github.com/Apocrathia/esp-roomba-mqtt/blob/master/src/main.cpp#L91
+#      - locate
+      - clean_spot
+      - send_command
+    command_topic: "vacuum/downstairs/command"
+    battery_level_topic: "vacuum/downstairs/state"
+    battery_level_template: ""
+    charging_topic: "vacuum/downstairs/state"
+    charging_template: ""
+    cleaning_topic: "vacuum/downstairs/state"
+    cleaning_template: ""
+    docked_topic: "vacuum/downstairs/state"
+    docked_template: ""
+    send_command_topic: 'vacuum/downstairs/send_command'
+################################################################################
 
 # Group
+################################################################################
 group:
   roomba_upstairs:
     name: Upstairs Roomba
     entities:
-      - switch.roomba_upstairs
-      - sensor.roomba_upstairs_status
-      - sensor.roomba_upstairs_battery
+      - vacuum.roomba_upstairs
   roomba_downstairs:
     name: Downstairs Roomba
     entities:
-      - switch.roomba_downstairs
-      - sensor.roomba_downstairs_status
-      - sensor.roomba_downstairs_battery
+      - vacuum.roomba_downstairs
+################################################################################

@@ -37,6 +37,11 @@
 #    entity_namespace: steam
   api_key: !secret steam_api_key
 
+# Certification Expiration
+- platform: cert_expiry
+  host: !secret hass_url
+  port: !secret hass_port
+
 ################################################################################
 # Presence
 ################################################################################
@@ -60,4 +65,10 @@
 #      friendly_name: 'Richard'
 #      value_template: >
 #        {{ states.device_tracker.network_richards_iphone.state }}
+- platform: template
+  sensors:
+    richard_location:
+      friendly_name: 'Serenity'
+      value_template: >
+        Catting
 ################################################################################
