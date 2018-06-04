@@ -4,6 +4,7 @@ automation:
 ################################################################################
   - id: front_porch_lights_daytime
     alias: 'Front Porch - Daytime Lighting'
+    initial_state: 'on'
     trigger:
       - platform: state
         entity_id: sun.sun
@@ -19,6 +20,7 @@ automation:
 ################################################################################
   - id: living_room_lights_daytime
     alias: 'Living Room - Daytime Lighting'
+    initial_state: 'on'
     trigger:
       - platform: state
         entity_id: sun.sun

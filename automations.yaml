@@ -3,6 +3,7 @@
 ################################################################################
 - id: notification_update
   alias: 'Notification - Update Available'
+  initial_state: 'on'
   trigger:
     platform: state
     entity_id: updater.updater
@@ -15,6 +16,7 @@
 ################################################################################
 - id: notification_new_device
   alias: 'Notification - New Device'
+  initial_state: 'on'
   trigger:
     - platform: event
       event_type: device_tracker_new_device
@@ -30,6 +32,7 @@
 ################################################################################
 - id: notification_restart
   alias: 'Notification - Home Assistant Restart'
+  initial_state: 'on'
   trigger:
     platform: homeassistant
     event: start

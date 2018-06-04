@@ -36,6 +36,7 @@ automation:
 ################################################################################
   - id: wakeup_light_bedroom
     alias: 'Wakeup - Bedroom Light'
+    initial_state: 'on'
     trigger:
     - platform: template
       value_template: >
@@ -51,12 +52,13 @@ automation:
         profile: energize
       data_template:
         transition: >
-          {{ states.input_number.wakeup_duration.state | int | multiply(60) }}
+          {{ states.input_number.wakeup_duration.state | multiply(60) | int }}
 ################################################################################
 
 ################################################################################
   - id: wakeup_apple_tv
     alias: 'Wakeup - Apple TV'
+    initial_state: 'on'
     trigger:
     - platform: template
       value_template: >
