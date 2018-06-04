@@ -51,7 +51,7 @@ automation:
         profile: energize
       data_template:
         transition: >
-          {{ states.input_number.wakeup_duration.state | int | multiply(60) }}
+          {{ states.input_number.wakeup_duration.state | multiply(60) | int }}
 ################################################################################
 
 ################################################################################
