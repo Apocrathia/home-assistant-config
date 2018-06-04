@@ -5,9 +5,9 @@ default_view:
   name: Home
   entities:
     - binary_sensor.vacancy
-    - device_tracker.network_ians_iphone
-    - device_tracker.network_aimees_iphone
-    - device_tracker.network_richards_iphone
+    - device_tracker.ios_ians_iphone
+    - device_tracker.ios_aimees_iphone
+    - device_tracker.ios_richards_iphone
 #    - sensor.time
     - group.living_room
     - group.foyer
