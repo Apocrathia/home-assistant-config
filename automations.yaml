@@ -43,6 +43,21 @@
 ################################################################################
 
 ################################################################################
+- id: notification_certification_expiration
+  alias: 'Notification - Home Assistant Certificate'
+  initial_state: 'on'
+  trigger:
+    platform: template
+    value_template: >
+      {{ states.sensor.ssl_certificate_expiry.state | int  <= 7 }}
+  action:
+    service: notify.notify
+    data_template:
+      message: >
+        Home Assistant's certificate expires in {{ states.sensor.ssl_certificate_expiry.state }} days.
+################################################################################
+
+################################################################################
 - id: weekly_backup
   alias: 'Weekly Backups'
   initial_state: 'on'
