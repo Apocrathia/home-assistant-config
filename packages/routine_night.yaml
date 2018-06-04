@@ -4,6 +4,7 @@ automation:
 ################################################################################
   - id: front_porch_lights_nighttime
     alias: 'Front Porch - Nighttime Lighting'
+    initial_state: 'on'
     trigger:
       - platform: state
         entity_id: sun.sun
@@ -30,6 +31,7 @@ automation:
 ################################################################################
   - id: front_door_nighttime_motion_initial
     alias: 'Front Porch - Nighttime Motion'
+    initial_state: 'on'
     trigger:
       - platform: state
         entity_id: binary_sensor.ring_front_door_motion
@@ -51,6 +53,7 @@ automation:
 ################################################################################
   - id: front_door_nighttime_motion_idle
     alias: 'Front Porch - Nighttime Motion Idle'
+    initial_state: 'on'
     trigger:
       - platform: state
         entity_id: binary_sensor.ring_front_door_motion
@@ -75,6 +78,7 @@ automation:
 ################################################################################
   - id: living_room_lights_nighttime
     alias: 'Living Room - Nighttime Lighting'
+    initial_state: 'on'
     trigger:
       - platform: state
         entity_id: sun.sun

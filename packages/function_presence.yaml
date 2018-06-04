@@ -28,6 +28,7 @@ automation:
 ################################################################################
   - id: location_home
     alias: "Location - Home"
+    initial_state: 'on'
     trigger:
       - platform: state
         entity_id: 
@@ -63,6 +64,7 @@ automation:
 ################################################################################
   - id: location_away
     alias: "Location - Away"
+    initial_state: 'on'
     trigger:
       - platform: state
         entity_id: 
@@ -98,6 +100,7 @@ automation:
 ################################################################################
   - id: test_vacancy
     alias: "Test - Bayesian Vacancy"
+    initial_state: 'on'
     trigger:
       - platform: state
         entity_id: 
