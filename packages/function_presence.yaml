@@ -49,7 +49,8 @@ automation:
         entity_id: device_tracker.network_richards_iphone
         state: 'not_home'
     action:
-  # Change this to a scene later on
+  # Change this to a script later on
+#      service: script.location_home
       - service: nest.set_mode
         data:
           home_mode: home
@@ -85,7 +86,8 @@ automation:
         entity_id: device_tracker.network_richards_iphone
         state: 'not_home'
     action:
-  # Change this to a scene later on
+  # Change this to a script later on
+#      service: script.location_away
       - service: nest.set_mode
         data:
           home_mode: away
@@ -125,4 +127,44 @@ scene:
     entities:
       alarm_control_panel.home: 'armed_away'
       climate.downstairs: 'eco'
+################################################################################
+
+# Scripts
+script:
+################################################################################
+  location_away:
+    alias: 'Location - Away'
+    sequence:
+      # Turn everything off (Call scene)
+      # Turn the thermostat off
+      - service: nest.set_mode
+        data:
+          home_mode: away
+          structure:
+            - Percivale
+      # Arm the alarm
+      - service: alarm_control_panel.alarm_arm_away
+        data:
+          entity_id: alarm_control_panel.home
+          code: !secret alarm_code
+      # Randomly turn on and off lights to simulate occupancy
+      # TODO
+################################################################################
+  location_home:
+    alias: 'Location - Home'
+    sequence:
+      # Turn everything off (Call scene)
+      # Turn the thermostat off
+      - service: nest.set_mode
+        data:
+          home_mode: home
+          structure:
+            - Percivale
+      # Arm the alarm
+      - service: alarm_control_panel.alarm_disarm
+        data:
+          entity_id: alarm_control_panel.home
+          code: !secret alarm_code
+      # Randomly turn on and off lights to simulate occupancy
+      # TODO
 ################################################################################
