@@ -1,25 +1,34 @@
 ### Presence Detection Functionality ###
 
+homeassistant:
+  customize:
+    binary_sensor.vacancy:
+      friendly_name: Empty House
+
+# The Bayesian sensor has been a real bitch to wrap my head around.
+# One extremely valuable resource has been robmarkcole's Jupityr notebook.
+# http://nbviewer.jupyter.org/github/robmarkcole/HASS-data-science/blob/master/Bayesian%20sensor%20tutorial.ipynb
+
 binary_sensor:
 ################################################################################
   - platform: bayesian
-    prior: 0.5
-    name: 'Vacancy'
+    prior: 0.50 # The initial probability that the house is empty
+    name: 'vacancy'
     probability_threshold: 0.9
     observations:
       - entity_id: 'device_tracker.network_ians_iphone'
-        prob_given_true: 0.9
+        prob_given_true: 0.9 
         prob_given_false: 0.1
         platform: 'state'
         to_state: 'not_home'
       - entity_id: 'device_tracker.network_aimees_iphone'
         prob_given_true: 0.9
-        prob_given_false: 0.2
+        prob_given_false: 0.1
         platform: 'state'
         to_state: 'not_home'
       - entity_id: 'device_tracker.network_richards_iphone'
         prob_given_true: 0.9
-        prob_given_false: 0.4
+        prob_given_false: 0.1
         platform: 'state'
         to_state: 'not_home'
 ################################################################################
