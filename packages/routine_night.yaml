@@ -1,5 +1,28 @@
 ### Nighttime Routines ###
 
+homeassistant:
+  customize:
+    binary_sensor.in_bed:
+      friendly_name: 'In Bed'
+
+binary_sensor:
+################################################################################
+  - platform: bayesian
+    prior: 0.25
+    name: 'in_bed'
+    probability_threshold: 0.95
+    observations:
+      - entity_id: 'binary_sensor.living_room_motion'
+        prob_given_true: 0.4
+        prob_given_false: 0.2
+        platform: 'state'
+        to_state: 'off'
+      - entity_id: 'sun.sun'
+        prob_given_true: 0.7
+        platform: 'state'
+        to_state: 'below_horizon'
+################################################################################
+
 automation:
 ################################################################################
   - id: front_porch_lights_nighttime
