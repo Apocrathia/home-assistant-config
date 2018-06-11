@@ -11,6 +11,8 @@
 # Additionally, the full Roomba open interface spec can be found here:
 # https://www.irobot.lv/uploaded_files/File/iRobot_Roomba_500_Open_Interface_Spec.pdf
 
+# Sample MQTT JSON Output
+# {"battery_level":"100","cleaning":false,"docked":true,"charging":"Trickle Charging","voltage":19454,"current":0,"charge":2696}
 
 # HomeAssistant
 ################################################################################
