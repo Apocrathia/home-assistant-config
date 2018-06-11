@@ -38,13 +38,18 @@ automation:
     alias: 'Wakeup - Bedroom Light'
     initial_state: 'on'
     trigger:
-    - platform: template
-      value_template: >
-        {{ states.sensor.time.state == ((states.input_datetime.wakeup_time.attributes.timestamp | int) - (states.input_number.wakeup_duration.state | int * 60)) | timestamp_custom('%H:%M',False) }}
+    - platform: time
+      minutes: '/30'
+      seconds: '0'
     condition:
-      condition: state
-      entity_id: binary_sensor.workday_sensor
-      state: 'on'
+      condition: and
+      conditions:
+      - condition: template
+        value_template: >
+          {{ states.sensor.time.state == ((states.input_datetime.wakeup_time.attributes.timestamp | int) - (states.input_number.wakeup_duration.state | int * 60)) | timestamp_custom('%H:%M',False) }}
+      - condition: state
+        entity_id: binary_sensor.workday_sensor
+        state: 'on'
     action:
       service: light.turn_on
       data:
@@ -60,13 +65,18 @@ automation:
     alias: 'Wakeup - Apple TV'
     initial_state: 'on'
     trigger:
-    - platform: template
-      value_template: >
-        {{ states.sensor.time.state == ((states.input_datetime.wakeup_time.attributes.timestamp | int) - (states.input_number.wakeup_duration.state | int * 60)) | timestamp_custom('%H:%M',False) }}
+    - platform: time
+      minutes: '/30'
+      seconds: '0'
     condition:
-      condition: state
-      entity_id: binary_sensor.workday_sensor
-      state: 'on'
+      condition: and
+      conditions:
+      - condition: template
+        value_template: >
+          {{ states.sensor.time.state == ((states.input_datetime.wakeup_time.attributes.timestamp | int) - (states.input_number.wakeup_duration.state | int * 60)) | timestamp_custom('%H:%M',False) }}
+      - condition: state
+        entity_id: binary_sensor.workday_sensor
+        state: 'on'
     action:
       service: script.wakeup_apple_tv
 ################################################################################
