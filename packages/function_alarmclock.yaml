@@ -32,6 +32,19 @@ input_number:
     max: 60
     step: 5
 
+### Sensors ###
+sensor:
+  - platform: template
+    sensors:
+      wakeup_time:
+        friendly_name: Wakeup Time
+        value_template: >
+          {{ states.input_datetime.wakeup_time.attributes.timestamp }}
+      wakeup_alarm_start_time:
+        friendly_name: Alarm Clock Start
+        value_template: >
+          {{ ((states.input_datetime.wakeup_time.attributes.timestamp | int) - (states.input_number.wakeup_duration.state | int * 60)) | timestamp_custom("%H:%M",False) }}
+
 automation:
 ################################################################################
   - id: wakeup_light_bedroom
