@@ -83,7 +83,26 @@ automation:
     action:
       service: script.wakeup_apple_tv
 ################################################################################
-  
+
+################################################################################
+  - id: test_wakeup
+    alias: 'Test - Wakeup'
+    initial_state: 'on'
+    trigger:
+    - platform: template
+      value_template: >
+        {{ states('sensor.time') == (((states.input_datetime.wakeup_time.attributes.timestamp | int) - (states.input_number.wakeup_duration.state | int * 60)) | timestamp_custom('%H:%M',False)) }}
+    condition:
+      condition: state
+      entity_id: binary_sensor.workday_sensor
+      state: 'on'
+    action:
+      service: notify.notify
+      data:
+      message: >
+        Alarm Clock Test Triggered: {{ states('sensor.time') }}
+################################################################################
+
 script:
 ################################################################################
   wakeup_apple_tv:
