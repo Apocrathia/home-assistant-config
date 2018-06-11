@@ -28,6 +28,16 @@ homeassistant:
       icon: mdi:robot-vacuum
 ################################################################################
 
+# Group
+################################################################################
+group:
+  roombas:
+    name: Roombas
+    entities:
+      - vacuum.roomba_upstairs
+      - vacuum.roomba_downstairs
+################################################################################
+
 ################################################################################
 vacuum:
   - platform: mqtt
@@ -81,17 +91,4 @@ vacuum:
     docked_topic: "vacuum/downstairs/state"
     docked_template: "{{ value_json['docked'] }}"
     send_command_topic: 'vacuum/downstairs/send_command'
-################################################################################
-
-# Group
-################################################################################
-group:
-  roomba_upstairs:
-    name: Upstairs Roomba
-    entities:
-      - vacuum.roomba_upstairs
-  roomba_downstairs:
-    name: Downstairs Roomba
-    entities:
-      - vacuum.roomba_downstairs
 ################################################################################
