@@ -45,13 +45,13 @@ vacuum:
       - send_command
     command_topic: "vacuum/upstairs/command"
     battery_level_topic: "vacuum/upstairs/state"
-    battery_level_template: ""
+    battery_level_template: '{{ value_json.battery_level }}'
     charging_topic: "vacuum/upstairs/state"
-    charging_template: ""
+    charging_template: '{{ value_json.charging }}'
     cleaning_topic: "vacuum/upstairs/state"
-    cleaning_template: ""
+    cleaning_template: '{{ value_json.cleaning }}'
     docked_topic: "vacuum/upstairs/state"
-    docked_template: ""
+    docked_template: '{{ value_json.docked }}'
     send_command_topic: 'vacuum/upstairs/send_command'
 ################################################################################
   - platform: mqtt
@@ -71,13 +71,13 @@ vacuum:
       - send_command
     command_topic: "vacuum/downstairs/command"
     battery_level_topic: "vacuum/downstairs/state"
-    battery_level_template: ""
+    battery_level_template: '{{ value_json.battery_level }}'
     charging_topic: "vacuum/downstairs/state"
-    charging_template: ""
+    charging_template: '{{ value_json.charging }}'
     cleaning_topic: "vacuum/downstairs/state"
-    cleaning_template: ""
+    cleaning_template: '{{ value_json.cleaning }}'
     docked_topic: "vacuum/downstairs/state"
-    docked_template: ""
+    docked_template: '{{ value_json.docked }}'
     send_command_topic: 'vacuum/downstairs/send_command'
 ################################################################################
 
