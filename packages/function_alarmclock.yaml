@@ -39,7 +39,7 @@ sensor:
       wakeup_time:
         friendly_name: Wakeup Time
         value_template: >
-          {{ states.input_datetime.wakeup_time.attributes.timestamp }}
+          {{ states.input_datetime.wakeup_time.state | timestamp_custom("%H:%M",False) }}
       wakeup_alarm_start_time:
         friendly_name: Alarm Clock Start
         value_template: >
@@ -51,18 +51,13 @@ automation:
     alias: 'Wakeup - Bedroom Light'
     initial_state: 'on'
     trigger:
-    - platform: time
-      minutes: '/30'
-      seconds: '0'
+    - platform: template
+      value_template: >
+        {{ states('sensor.time') == (((states.input_datetime.wakeup_time.attributes.timestamp | int) - (states.input_number.wakeup_duration.state | int * 60)) | timestamp_custom('%H:%M',False)) }}
     condition:
-      condition: and
-      conditions:
-      - condition: template
-        value_template: >
-          {{ states.sensor.time.state == ((states.input_datetime.wakeup_time.attributes.timestamp | int) - (states.input_number.wakeup_duration.state | int * 60)) | timestamp_custom('%H:%M',False) }}
-      - condition: state
-        entity_id: binary_sensor.workday_sensor
-        state: 'on'
+      condition: state
+      entity_id: binary_sensor.workday_sensor
+      state: 'on'
     action:
       service: light.turn_on
       data:
@@ -78,18 +73,13 @@ automation:
     alias: 'Wakeup - Apple TV'
     initial_state: 'on'
     trigger:
-    - platform: time
-      minutes: '/30'
-      seconds: '0'
+    - platform: template
+      value_template: >
+        {{ states('sensor.time') == (((states.input_datetime.wakeup_time.attributes.timestamp | int) - (states.input_number.wakeup_duration.state | int * 60)) | timestamp_custom('%H:%M',False)) }}
     condition:
-      condition: and
-      conditions:
-      - condition: template
-        value_template: >
-          {{ states.sensor.time.state == ((states.input_datetime.wakeup_time.attributes.timestamp | int) - (states.input_number.wakeup_duration.state | int * 60)) | timestamp_custom('%H:%M',False) }}
-      - condition: state
-        entity_id: binary_sensor.workday_sensor
-        state: 'on'
+      condition: state
+      entity_id: binary_sensor.workday_sensor
+      state: 'on'
     action:
       service: script.wakeup_apple_tv
 ################################################################################
