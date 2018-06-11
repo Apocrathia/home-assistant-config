@@ -2,6 +2,9 @@
 # Alarm Clock
 ################################################################################
 
+# A lot of this package has come from the following thread:
+# https://community.home-assistant.io/t/creating-a-alarm-clock/410/315
+
 # Group
 group:
 ################################################################################
@@ -39,7 +42,7 @@ sensor:
       wakeup_time:
         friendly_name: Wakeup Time
         value_template: >
-          {{ states.input_datetime.wakeup_time.state | timestamp_custom("%H:%M",False) }}
+          {{ states.input_datetime.wakeup_time.attributes.timestamp | int | timestamp_custom("%H:%M",False) }}
       wakeup_alarm_start_time:
         friendly_name: Alarm Clock Start
         value_template: >
@@ -53,7 +56,7 @@ automation:
     trigger:
     - platform: template
       value_template: >
-        {{ states('sensor.time') == (((states.input_datetime.wakeup_time.attributes.timestamp | int) - (states.input_number.wakeup_duration.state | int * 60)) | timestamp_custom('%H:%M',False)) }}
+        {{ states.sensor.time.state == states.sensor.wakeup_alarm_start_time.state }}
     condition:
       condition: state
       entity_id: binary_sensor.workday_sensor
@@ -75,7 +78,7 @@ automation:
     trigger:
     - platform: template
       value_template: >
-        {{ states('sensor.time') == (((states.input_datetime.wakeup_time.attributes.timestamp | int) - (states.input_number.wakeup_duration.state | int * 60)) | timestamp_custom('%H:%M',False)) }}
+        {{ states.sensor.time.state == states.sensor.wakeup_alarm_start_time.state }}
     condition:
       condition: state
       entity_id: binary_sensor.workday_sensor
@@ -91,7 +94,9 @@ automation:
     trigger:
     - platform: template
       value_template: >
-        {{ states('sensor.time') == (((states.input_datetime.wakeup_time.attributes.timestamp | int) - (states.input_number.wakeup_duration.state | int * 60)) | timestamp_custom('%H:%M',False)) }}
+        {{ states.sensor.time.state == states.sensor.wakeup_alarm_start_time.state }}
+    - platform: time
+      minutes: '/1'
     condition:
       condition: state
       entity_id: binary_sensor.workday_sensor
