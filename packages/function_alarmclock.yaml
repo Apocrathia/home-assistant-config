@@ -99,8 +99,8 @@ automation:
     action:
       service: notify.notify
       data:
-      message: >
-        Alarm Clock Test Triggered: {{ states('sensor.time') }}
+        message: >
+          Alarm Clock Test Triggered: {{ states('sensor.time') }}
 ################################################################################
 
 script:
