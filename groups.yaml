@@ -4,7 +4,7 @@ default_view:
   view: yes
   name: Home
   entities:
-    - binary_sensor.vacancy
+#    - binary_sensor.vacancy
     - device_tracker.ios_ians_iphone
     - device_tracker.ios_aimees_iphone
     - device_tracker.ios_richards_iphone
@@ -19,6 +19,7 @@ default_view:
     - group.richards_lair
     - group.workshop
     - group.outside
+    - group.roombas
 
 security:
   view: yes
@@ -54,8 +55,6 @@ everything_view:
     - group.all_automations
     - group.all_scripts
     - group.weather_overview
-    - group.roomba_upstairs
-    - group.roomba_downstairs
 
 # Room Groups
 living_room:
