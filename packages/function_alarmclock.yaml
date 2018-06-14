@@ -97,10 +97,10 @@ automation:
 #        {{ states.sensor.time.state == states.sensor.wakeup_alarm_start_time.state }}
     - platform: time
       minutes: '/1'
-    condition:
-      condition: state
-      entity_id: binary_sensor.workday_sensor
-      state: 'on'
+#    condition:
+#      condition: state
+#      entity_id: binary_sensor.workday_sensor
+#      state: 'on'
     action:
       service: notify.notify
       data:
