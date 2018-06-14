@@ -59,7 +59,7 @@ automation:
         {{ states.sensor.time.state == states.sensor.wakeup_alarm_start_time.state }}
     condition:
       condition: state
-      entity_id: binary_sensor.workday_sensor
+      entity_id: binary_sensor.workday
       state: 'on'
     action:
       service: light.turn_on
@@ -81,7 +81,7 @@ automation:
         {{ states.sensor.time.state == states.sensor.wakeup_alarm_start_time.state }}
     condition:
       condition: state
-      entity_id: binary_sensor.workday_sensor
+      entity_id: binary_sensor.workday
       state: 'on'
     action:
       service: script.wakeup_apple_tv
@@ -90,17 +90,15 @@ automation:
 ################################################################################
   - id: test_wakeup
     alias: 'Test - Wakeup'
-    initial_state: 'on'
+    initial_state: 'off'
     trigger:
     - platform: template
       value_template: >
         {{ states.sensor.time.state == states.sensor.wakeup_alarm_start_time.state }}
-#    - platform: time
-#      minutes: '/1'
-#    condition:
-#      condition: state
-#      entity_id: binary_sensor.workday_sensor
-#      state: 'on'
+    condition:
+      condition: state
+      entity_id: binary_sensor.workday
+      state: 'on'
     action:
       service: notify.notify
       data:
