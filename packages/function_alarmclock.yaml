@@ -92,9 +92,9 @@ automation:
     alias: 'Test - Wakeup'
     initial_state: 'on'
     trigger:
-    - platform: template
-      value_template: >
-        {{ states.sensor.time.state == states.sensor.wakeup_alarm_start_time.state }}
+#    - platform: template
+#      value_template: >
+#        {{ states.sensor.time.state == states.sensor.wakeup_alarm_start_time.state }}
     - platform: time
       minutes: '/1'
     condition:
