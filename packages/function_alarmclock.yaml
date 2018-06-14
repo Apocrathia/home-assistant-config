@@ -130,6 +130,14 @@ script:
             - top_menu
       - delay:
           seconds: 1
+  # Go to the home menu (again, just in case the first one didn't work.)
+      - service: remote.send_command
+        data:
+          entity_id: remote.master_bedroom
+          command:
+            - top_menu
+      - delay:
+          seconds: 1
   # Go to the first menu item (Plex)
       - service: remote.send_command
         data:
