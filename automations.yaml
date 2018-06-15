@@ -50,6 +50,10 @@
     platform: template
     value_template: >
       {{ states.sensor.ssl_certificate_expiry.state | int  <= 7 }}
+  condition:
+    platform: template
+    value_template: >
+      {{ states.sensor.ssl_certificate_expiry.state != "unknown" }}
   action:
     service: notify.notify
     data_template:

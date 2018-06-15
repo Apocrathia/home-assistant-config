@@ -39,7 +39,8 @@
 
 # Certification Expiration
 - platform: cert_expiry
-  host: !secret hass_url
+#  host: !secret hass_url
+  host: localhost
   port: !secret hass_port
 
 ################################################################################
