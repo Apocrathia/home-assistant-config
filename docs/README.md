@@ -18,7 +18,11 @@ I am running Home Assistant within Hass.io on an Ubuntu virtual machine
 which is running within VMware ESXi on an Intel NUC. For the most part, 
 I have attempted to abstract as much hardware from the equation as possible.
 
-## More Information
-(Coming soon!)
+## General Information
+This configuration controls a couple of significant features in my smart home.
+* Alarm Clock using my bedroom lights and TV
+* Turning the outside lights on at night
+* Arming the alarm system when nobody is home
+* Security lighting when motion is detected at my front door
 
 **Note: Private information is stored in secrets.yaml (not uploaded)**
