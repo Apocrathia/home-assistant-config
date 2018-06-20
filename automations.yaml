@@ -32,7 +32,7 @@
 ################################################################################
 - id: notification_restart
   alias: 'Notification - Home Assistant Restart'
-  initial_state: 'off'
+  initial_state: 'on'
   trigger:
     platform: homeassistant
     event: start
