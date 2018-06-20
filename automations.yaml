@@ -49,7 +49,7 @@
   trigger:
     platform: template
     value_template: >
-      {{ states.sensor.ssl_certificate_expiry.state | int  <= 7 }}
+      {{ states.sensor.ssl_certificate_expiry.state | int  <= 14 }}
   condition:
     condition: template
     value_template: >
