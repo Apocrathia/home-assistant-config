@@ -14,7 +14,7 @@ and restart itself.
 ![My Home Assistant Default View](images/default_view.png)
 
 ## Hardware
-I am running Home Assistant within Hass.io on a VMware Photon Virtual machine 
+I am running Home Assistant within Hass.io on an Ubuntu virtual machine 
 which is running within VMware ESXi on an Intel NUC. For the most part, 
 I have attempted to abstract as much hardware from the equation as possible.
 
