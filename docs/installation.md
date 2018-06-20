@@ -1,25 +1,23 @@
 # Installation
-Since I run my hass.io install on a [VMware Photon](https://vmware.github.io/photon/) host, the installation process is slightly different than usual. However, for the most part, all of the heavy lifting is done by the [hass.io install script](https://github.com/home-assistant/hassio-build/tree/master/install#install-hassio).
+Since I run my hass.io install on an Ubuntu host, the installation process is pretty standard. For the most part, all of the heavy lifting is done by the [hass.io install script](https://github.com/home-assistant/hassio-build/tree/master/install#install-hassio).
 
 ## Host Configuration
 
-VMware Photon is a Fedora based OS, and uses the ```tdnf``` package manager. In order to properly run the hass.io installation script, the following packages are required:
+In order to properly run the hass.io installation script, the following packages are required:
 ```
-docker.ce
-bash
-socat
-jq
-curl
+apparmor-utils
+apt-transport-https
 avahi-daemon
-dbus-daemon
+ca-certificates
+curl
+dbus
+docker.io
+jq
+network-manager
+socat
+software-properties-common
 ```
-Out of the box, Photon already has Docker. The rest, we need to install.
-
-```
-TODO: Add the tdnf command to install everything.
-```
-
-Once that is done, we're ready to install hass.io!
+Once these packages are installed, we're ready to install hass.io!
 
 ## Hass.io Installation
 
