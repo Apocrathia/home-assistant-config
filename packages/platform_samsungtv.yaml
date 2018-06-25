@@ -1,0 +1,9 @@
+### Samsung TVs ###
+
+media_player:
+  - platform: samsungtv
+    name: Basement TV
+    host: !secret basement_tv_ip
+  - platform: samsungtv
+    name: Living Room TV
+    host: !secret living_room_tv_ip
