@@ -1,5 +1,31 @@
-name: My Awesome Home
+name: !secret hass_name
 views:
+  - name: Home
+    cards:
+      - type: entities
+        title: Living Room
+        entities:
+          - light.floor_lamp
+          - binary_sensor.living_room_motion
+          - binary_sensor.back_door
+#      - type: weather-forecast
+#        title: Forecast
+#        entities:
+#          - group.weather_overview
+      - type: glance
+        title: Glance
+        entities:
+          - sensor.home_keypad
+          - alarm_control_panel.home
+          - lock.front_door
+          - climate.downstairs
+          - binary_sensor.front_door
+      - type: media-control
+        entity: media_player.living_room
+      - type: media-control
+        entity: media_player.master_bedroom
+
+
     # The name of a view will be used as tab title.
     # Might be used for other things in the future.
   - name: Example
