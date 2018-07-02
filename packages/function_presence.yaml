@@ -14,7 +14,30 @@ binary_sensor:
   - platform: bayesian
     prior: 0.50 # The initial probability that the house is empty
     name: 'vacancy'
-    probability_threshold: 0.9
+    probability_threshold: 0.75
+    observations:
+      - entity_id: 'device_tracker.network_ians_iphone'
+        prob_given_true: 0.5
+        prob_given_false: 0.5
+        platform: 'state'
+        to_state: 'not_home'
+      - entity_id: 'device_tracker.network_aimees_iphone'
+        prob_given_true: 0.5
+        prob_given_false: 0.5
+        platform: 'state'
+        to_state: 'not_home'
+      - entity_id: 'device_tracker.network_richards_iphone'
+        prob_given_true: 0.5
+        prob_given_false: 0.5
+        platform: 'state'
+        to_state: 'not_home'
+################################################################################
+
+################################################################################
+  - platform: bayesian
+    prior: 0.50 # The initial probability that the house is full
+    name: 'occupancy'
+    probability_threshold: 0.75
     observations:
       - entity_id: 'device_tracker.network_ians_iphone'
         prob_given_true: 0.9 
@@ -31,9 +54,25 @@ binary_sensor:
         prob_given_false: 0.1
         platform: 'state'
         to_state: 'not_home'
+      - entity_id: 'input_boolean.vacation_ian'
+        prob_given_true: 0.9
+        prob_given_false: 0.1
+        platform: 'state'
+        to_state: 'on'
+      - entity_id: 'input_boolean.vacation_aimee'
+        prob_given_true: 0.9
+        prob_given_false: 0.1
+        platform: 'state'
+        to_state: 'on'
+      - entity_id: 'input_boolean.vacation_richard'
+        prob_given_true: 0.9
+        prob_given_false: 0.1
+        platform: 'state'
+        to_state: 'on'
 ################################################################################
 
 input_boolean:
+################################################################################
   vacation_ian:
     name: 'Vacation - Ian'
     initial: off
@@ -46,6 +85,7 @@ input_boolean:
     name: 'Vacation - Richard'
     initial: off
     icon: mdi:beach
+################################################################################
 
 automation:
 ################################################################################
