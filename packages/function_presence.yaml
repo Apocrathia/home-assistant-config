@@ -33,6 +33,20 @@ binary_sensor:
         to_state: 'not_home'
 ################################################################################
 
+input_boolean:
+  vacation_ian:
+    name: 'Vacation - Ian'
+    initial: off
+    icon: mdi:beach
+  vacation_aimee:
+    name: 'Vacation - Aimee'
+    initial: off
+    icon: mdi:beach
+  vacation_richard:
+    name: 'Vacation - Richard'
+    initial: off
+    icon: mdi:beach
+
 automation:
 ################################################################################
   - id: location_home
