@@ -10,11 +10,11 @@ binary_sensor:
   - platform: bayesian
     prior: 0.25
     name: 'in_bed'
-    probability_threshold: 0.95
+    probability_threshold: 0.75
     observations:
       - entity_id: 'binary_sensor.living_room_motion'
-        prob_given_true: 0.4
-        prob_given_false: 0.2
+        prob_given_true: 0.3
+        prob_given_false: 0.7
         platform: 'state'
         to_state: 'off'
       - entity_id: 'sun.sun'
