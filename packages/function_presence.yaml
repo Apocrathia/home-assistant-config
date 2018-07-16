@@ -5,6 +5,17 @@ homeassistant:
     binary_sensor.vacancy:
       friendly_name: Empty House
 
+group:
+################################################################################
+  vacation_settings:
+    name: Vacation
+    control: hidden
+    entities:
+      - input_boolean.vacation_ian
+      - input_boolean.vacation_aimee
+      - input_boolean.vacation_richard
+################################################################################
+
 # The Bayesian sensor has been a real bitch to wrap my head around.
 # One extremely valuable resource has been robmarkcole's Jupityr notebook.
 # http://nbviewer.jupyter.org/github/robmarkcole/HASS-data-science/blob/master/Bayesian%20sensor%20tutorial.ipynb
@@ -14,7 +25,7 @@ binary_sensor:
   - platform: bayesian
     prior: 0.50 # The initial probability that the house is empty
     name: 'vacancy'
-    probability_threshold: 0.75
+    probability_threshold: 0.50
     observations:
       - entity_id: 'device_tracker.network_ians_iphone'
         prob_given_true: 0.5
