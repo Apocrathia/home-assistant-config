@@ -156,71 +156,67 @@ views:
         title: All Devices
         show_header_toggle: true
         entities:
+          - device_tracker.ios_ians_iphone
+          - device_tracker.ios_aimees_iphone
+          - device_tracker.ios_richards_iphone
+          - device_tracker.2018_ford_escape
+          - device_tracker.network_ians_iphone
+          - device_tracker.network_aimees_iphone
+          - device_tracker.network_ians_ipad
+          - device_tracker.network_aimees_ipad
+          - device_tracker.network_ians_apple_watch
+          - device_tracker.network_aimees_apple_watch
+          - device_tracker.network_ians_macbook_pro
+          - device_tracker.network_aimees_macbook_pro
+          - device_tracker.network_studio_macbook_pro
+          - device_tracker.network_ians_mac_mini
+          - device_tracker.network_ians_macbook_pro_eth
+          - device_tracker.network_master_bedroom_apple_tv
+          - device_tracker.network_living_room_apple_tv
+          - device_tracker.network_kitchen_homepod
+          - device_tracker.network_ianyoungpc
+          - device_tracker.network_ps4
+          - device_tracker.network_playstation_vita
+          - device_tracker.network_ians_nintendo_switch
+          - device_tracker.network_aimees_nintendo_switch
+          - device_tracker.network_living_room_steam_link
+          - device_tracker.network_master_bedroom_steam_link
+          - device_tracker.network_unificloudkey
+          - device_tracker.network_esxi_01
+          - device_tracker.network_esxi_02
+          - device_tracker.network_diskstation
+          - device_tracker.network_home
+          - device_tracker.network_plex
+          - device_tracker.network_pirate
           - device_tracker.network_splunk
           - device_tracker.network_vcenter
+          - device_tracker.network_web
+          - device_tracker.network_neptune_apex
           - device_tracker.network_wink_hub_2
-          - device_tracker.network_richards_nas
-          - device_tracker.ubuntutemplate
-          - device_tracker.network_richards_tower
-          - device_tracker.network_ians_macbook_pro
-          - device_tracker.ios_ians_iphone
-          - device_tracker.network_studio_macbook_pro
-          - device_tracker.network_ians_ipad
-          - device_tracker.network_living_room_tv
-          - device_tracker.network_ringchime_basement_6a
           - device_tracker.network_phillips_hue_hub
           - device_tracker.network_nest_thermostat
           - device_tracker.network_withings_scale
-          - device_tracker.network_vic
-          - device_tracker.network_ians_iphone
-          - device_tracker.network_intel_nuc
-          - device_tracker.network_basement_tv
-          - device_tracker.network_neptune_apex
-          - device_tracker.network_esxi_02
-          - device_tracker.network_living_room_steam_link
-          - device_tracker.network_richards_ps4
-          - device_tracker.network_playstation_vita
-          - device_tracker.network_kaylas_iphone
-          - device_tracker.network_diskstation
-          - device_tracker.network_ringchime_basement_6b
-          - device_tracker.network_printer
-          - device_tracker.network_richards_ipad
-          - device_tracker.network_kitchen_homepod
-          - device_tracker.network_ring_doorbell_pro
-          - device_tracker.2018_ford_escape
-          - device_tracker.network_esxi_01
-          - device_tracker.ios_aimees_iphone
-          - device_tracker.network_aimees_ipad
-          - device_tracker.network_wink_relay
-          - device_tracker.network_garage_volumio
-          - device_tracker.ios_richards_iphone
-          - device_tracker.network_aimees_iphone
-          - device_tracker.network_ians_apple_watch
-          - device_tracker.network_master_bedroom_steam_link
-          - device_tracker.network_basement_av_receiver
-          - device_tracker.network_ians_mac_mini
-          - device_tracker.network_ians_macbook_pro_eth
-          - device_tracker.network_richards_nintendo_switch
-          - device_tracker.network_aimees_apple_watch
-          - device_tracker.network_plex
-          - device_tracker.network_living_room_apple_tv
-          - device_tracker.network_ps4
           - device_tracker.network_envisalink
-          - device_tracker.network_master_bedroom_apple_tv
-          - device_tracker.network_richards_old_iphone
-          - device_tracker.downstairs_roomba
-          - device_tracker.a898dde51040
-          - device_tracker.network_richards_apple_watch
-          - device_tracker.network_aimees_macbook_pro
-          - device_tracker.network_ians_nintendo_switch
-          - device_tracker.network_web
+          - device_tracker.network_printer
           - device_tracker.network_octopi
-          - device_tracker.network_aimees_nintendo_switch
-          - device_tracker.network_unificloudkey
+          - device_tracker.network_wink_relay
+          - device_tracker.network_basement_av_receiver
+          - device_tracker.network_ringchime_basement_6a
+          - device_tracker.network_ringchime_basement_6b
+          - device_tracker.network_ring_doorbell_pro
+          - device_tracker.network_garage_volumio
+          - device_tracker.network_living_room_tv
+          - device_tracker.network_basement_tv
+          - device_tracker.ubuntutemplate
           - device_tracker.network_richards_iphone
-          - device_tracker.network_pirate
-          - device_tracker.network_ianyoungpc
-          - device_tracker.network_home
+          - device_tracker.network_richards_apple_watch
+          - device_tracker.network_richards_tower
+          - device_tracker.network_richards_nas
+          - device_tracker.network_intel_nuc
+          - device_tracker.network_richards_ps4
+          - device_tracker.network_richards_ipad
+          - device_tracker.network_richards_nintendo_switch
+          - device_tracker.downstairs_roomba
       - type: entities
         title: All Automations
         show_header_toggle: true
