@@ -1,20 +1,5 @@
 ### Groups ###
 
-# Sidebar Items
-panel_iframe:
-  nodered:
-    title: Node-RED
-    icon: mdi:sitemap
-    url: !secret node-red_url
-  ide:
-    title: IDE
-    icon: mdi:code-braces
-    url: !secret ide_url
-  terminal:
-    title: Terminal
-    icon: mdi:console
-    url: !secret terminal_url
-
 # Views
 default_view:
   view: yes
