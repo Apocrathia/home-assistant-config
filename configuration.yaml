@@ -191,7 +191,7 @@ splunk:
   token: !secret splunk_token
   port: 8088
   ssl: false
-  name: HomeAssistant
+  name: Home Assistant
   
 # IFTTT
 ifttt:
