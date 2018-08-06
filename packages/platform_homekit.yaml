@@ -20,3 +20,5 @@ homekit:
       - alarm_control_panel.home
       - sensor.wink_master_relay_temperature
       - climate.downstairs
+      - vacuum.roomba_downstairs
+      - vacuum.roomba_upstairs
