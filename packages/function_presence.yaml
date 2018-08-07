@@ -227,18 +227,16 @@ script:
   location_home:
     alias: 'Location - Home'
     sequence:
-      # Turn everything off (Call scene)
-      # Turn the thermostat off
+      # Turn everything back on (Call scene)
+      # Turn the thermostat back on
       - service: nest.set_mode
         data:
           home_mode: home
           structure:
             - Percivale
-      # Arm the alarm
+      # Disarm the alarm
       - service: alarm_control_panel.alarm_disarm
         data:
           entity_id: alarm_control_panel.home
           code: !secret alarm_code
-      # Randomly turn on and off lights to simulate occupancy
-      # TODO
 ################################################################################
