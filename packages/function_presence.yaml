@@ -5,6 +5,17 @@ homeassistant:
     binary_sensor.vacancy:
       friendly_name: Empty House
 
+group:
+################################################################################
+  vacation_settings:
+    name: Vacation
+    control: hidden
+    entities:
+      - input_boolean.vacation_ian
+      - input_boolean.vacation_aimee
+      - input_boolean.vacation_richard
+################################################################################
+
 # The Bayesian sensor has been a real bitch to wrap my head around.
 # One extremely valuable resource has been robmarkcole's Jupityr notebook.
 # http://nbviewer.jupyter.org/github/robmarkcole/HASS-data-science/blob/master/Bayesian%20sensor%20tutorial.ipynb
@@ -14,7 +25,30 @@ binary_sensor:
   - platform: bayesian
     prior: 0.50 # The initial probability that the house is empty
     name: 'vacancy'
-    probability_threshold: 0.9
+    probability_threshold: 0.50
+    observations:
+      - entity_id: 'device_tracker.network_ians_iphone'
+        prob_given_true: 0.5
+        prob_given_false: 0.5
+        platform: 'state'
+        to_state: 'not_home'
+      - entity_id: 'device_tracker.network_aimees_iphone'
+        prob_given_true: 0.5
+        prob_given_false: 0.5
+        platform: 'state'
+        to_state: 'not_home'
+      - entity_id: 'device_tracker.network_richards_iphone'
+        prob_given_true: 0.5
+        prob_given_false: 0.5
+        platform: 'state'
+        to_state: 'not_home'
+################################################################################
+
+################################################################################
+  - platform: bayesian
+    prior: 0.50 # The initial probability that the house is full
+    name: 'occupancy'
+    probability_threshold: 0.75
     observations:
       - entity_id: 'device_tracker.network_ians_iphone'
         prob_given_true: 0.9 
@@ -31,6 +65,37 @@ binary_sensor:
         prob_given_false: 0.1
         platform: 'state'
         to_state: 'not_home'
+      - entity_id: 'input_boolean.vacation_ian'
+        prob_given_true: 0.9
+        prob_given_false: 0.1
+        platform: 'state'
+        to_state: 'on'
+      - entity_id: 'input_boolean.vacation_aimee'
+        prob_given_true: 0.9
+        prob_given_false: 0.1
+        platform: 'state'
+        to_state: 'on'
+      - entity_id: 'input_boolean.vacation_richard'
+        prob_given_true: 0.9
+        prob_given_false: 0.1
+        platform: 'state'
+        to_state: 'on'
+################################################################################
+
+input_boolean:
+################################################################################
+  vacation_ian:
+    name: 'Vacation - Ian'
+    initial: off
+    icon: mdi:beach
+  vacation_aimee:
+    name: 'Vacation - Aimee'
+    initial: off
+    icon: mdi:beach
+  vacation_richard:
+    name: 'Vacation - Richard'
+    initial: off
+    icon: mdi:beach
 ################################################################################
 
 automation:
@@ -162,18 +227,16 @@ script:
   location_home:
     alias: 'Location - Home'
     sequence:
-      # Turn everything off (Call scene)
-      # Turn the thermostat off
+      # Turn everything back on (Call scene)
+      # Turn the thermostat back on
       - service: nest.set_mode
         data:
           home_mode: home
           structure:
             - Percivale
-      # Arm the alarm
+      # Disarm the alarm
       - service: alarm_control_panel.alarm_disarm
         data:
           entity_id: alarm_control_panel.home
           code: !secret alarm_code
-      # Randomly turn on and off lights to simulate occupancy
-      # TODO
 ################################################################################

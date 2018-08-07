@@ -81,6 +81,21 @@ tts:
 # Home Assistant Cloud
 cloud:
 
+# Sidebar Items
+panel_iframe:
+  nodered:
+    title: Node-RED
+    icon: mdi:sitemap
+    url: !secret node-red_url
+  ide:
+    title: IDE
+    icon: mdi:code-braces
+    url: !secret ide_url
+  terminal:
+    title: Terminal
+    icon: mdi:console
+    url: !secret terminal_url
+
 weblink:
   entities:
     - name: Home Assistant Webpage
@@ -176,7 +191,7 @@ splunk:
   token: !secret splunk_token
   port: 8088
   ssl: false
-  name: HomeAssistant
+  name: Home Assistant
   
 # IFTTT
 ifttt:

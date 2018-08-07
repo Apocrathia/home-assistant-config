@@ -1,9 +1,43 @@
 ### Neptune Apex ###
 
-sensor:
-  - platform: template
-    sensors:
-      apex_test:
-        friendly_name: Neptune Apex Test
-        value_template: >-
-          test
+#################################################################################
+#sensor:
+#  - platform: template
+#    sensors:
+#      apex_test:
+#        friendly_name: Neptune Apex Test
+#        value_template: >-
+#          test
+#################################################################################
+#
+## ICMP Tracker
+#################################################################################
+#device_tracker:
+#  - platform: ping
+#    hosts:
+#      icmp_apex: apex.apocrathia.com
+#################################################################################
+#
+#################################################################################
+#automation:
+#  - id: notification_apex_offline
+#    alias: 'Notification - Apex Connection Monitor'
+#    initial_state: 'on'
+#    trigger:
+#      - platform: state
+#        entity_id: 
+#        - device_tracker.icmp_apex
+#    action:
+#      - service: notify.notify
+#        data:
+#          message: >
+#            {% set state = states.device_tracker.icmp_apex.state %}
+#            {% set delta = (as_timestamp(now()) - states.device_tracker.icmp_apex.attributes.last_seen) %}
+#            {% if state == 'home' %}
+#              Neptune Apex Connected
+#              It was offline for {{ delta | round }} seconds.
+#            {% elif state == 'not_home' %}
+#              Neptune Apex Connected
+#              It was online for {{ delta | round }} seconds.
+#            {% endif %}
+#################################################################################
