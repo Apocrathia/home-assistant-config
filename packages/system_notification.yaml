@@ -1,0 +1,119 @@
+### System Notifications ###
+
+automation:
+################################################################################
+- id: system_notification_update
+  alias: 'Notification - Update Available'
+  initial_state: 'on'
+  trigger:
+    platform: state
+    entity_id: updater.updater
+  action:
+    service: notify.notify
+    data:
+      message: 'An update for Home Assistant is available.'
+################################################################################
+
+################################################################################
+- id: system_notification_new_device
+  alias: 'Notification - New Device'
+  initial_state: 'on'
+  trigger:
+    - platform: event
+      event_type: device_tracker_new_device
+  action:
+    - service: notify.notify
+      data_template:
+        message: >
+          Home Assistant has discovered a new device:
+          {{trigger.event.data.entity_id}}
+        title: New Device
+################################################################################
+
+################################################################################
+- id: system_notification_restart
+  alias: 'Notification - Home Assistant Restart'
+  initial_state: 'on'
+  trigger:
+    platform: homeassistant
+    event: start
+  action:
+    service: notify.notify
+    data:
+      message: 'Home Assistant has restarted.'
+################################################################################
+
+################################################################################
+- id: system_notification_certification_expiration
+  alias: 'Notification - Home Assistant Certificate'
+  initial_state: 'on'
+  trigger:
+    platform: template
+    value_template: >
+      {{ states.sensor.ssl_certificate_expiry.state | int  <= 14 }}
+  condition:
+    condition: template
+    value_template: >
+      {{ states.sensor.ssl_certificate_expiry.state != "unknown" }}
+  action:
+    service: notify.notify
+    data_template:
+      message: >
+        Home Assistant's certificate expires in {{ states.sensor.ssl_certificate_expiry.state }} days.
+################################################################################
+
+################################################################################
+#- id: notification_battery_low
+#  alias: 'Notification - Battery Low'
+#  trigger:
+#    platform: numeric_state
+#    entity_id: 
+#    - device_tracker.network_ians_iphone
+#    - device_tracker.network_aimees_iphone
+#    - device_tracker.network_richards_iphone
+#    value_template: >
+#      {{ state.attributes.battery | int }}
+#    below: 25
+#  action:
+#    - service: notify.notify
+#      data_template:
+#        title: 'Low Battery'
+#        message: >
+#          Please check the battery for the following device:
+#          {{trigger.event.data.entity_id}}
+# {{ trigger.to_state.attributes.friendly_name }}
+#{%- set threshold = 100 -%}
+#{%- set domains = ['light', 'switch', 'sensor', 'lock'] -%}
+#{%- for domain in domains -%}
+#   {%- for item in states[domain] %}
+#       {%- if ((item.attributes.battery_level is defined and item.attributes['battery_level'] | int < threshold) or ("battery" in item.name | lower and ((item.state | int < threshold and item.state|int != 0) or item.state | lower == "low" or item.state | lower == "unknown"))) -%}
+#           {{ item.attributes.friendly_name }}
+#       {% endif %}
+#   {%- endfor -%}
+#{%- endfor -%}
+#################################################################################
+
+################################################################################
+#  # IF: { sun.sun goes under horizon } THEN: { set theme to night mode }
+#- id: theme_automatic
+#  alias: Automatic Theme Change
+#  initial_state: 'off'
+#  trigger:
+#    - platform: homeassistant
+#      event: start
+#    - platform: state
+#      entity_id: sun.sun
+#      to: above_horizon
+#    - platform: state
+#      entity_id: sun.sun
+#      to: below_horizon
+#  action:
+#    - service_template: frontend.set_theme
+#      data_template:
+#        name: >
+#          {% if states.sun.sun.state == "above_horizon" %}
+#            solarized_light
+#          {% else %}
+#            solarized_dark
+#          {% endif %}
+################################################################################

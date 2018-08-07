@@ -1,0 +1,26 @@
+### System Backups ###
+
+automation:
+################################################################################
+- id: system_backup_weekly
+  alias: 'Weekly Backups'
+  initial_state: 'on'
+  trigger:
+    platform: time
+    at: '00:00:00'
+  condition:
+  - condition: time
+    weekday:
+      - mon
+  action:
+  - service: hassio.snapshot_full
+    data_template:
+      name: >
+        {{ now().strftime('%Y%m%d') }} Weekly Backup
+  - delay: '00:30'
+  - service: hassio.addon_stdin
+    data:
+      addon: "7be23ff5_dropbox_sync"
+      input:
+        command: "upload"
+################################################################################
