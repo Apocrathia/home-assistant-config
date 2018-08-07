@@ -88,6 +88,28 @@ automation:
 ################################################################################
 
 ################################################################################
+  - id: function_wakeup_richard
+    alias: 'Function - Wakeup - Richard'
+    initial_state: 'on'
+    trigger:
+    - platform: template
+      value_template: >
+        {{ states.sensor.time.state == states.sensor.wakeup_alarm_start_time.state }}
+    condition:
+      condition: state
+      entity_id: binary_sensor.workday
+      state: 'on'
+    action:
+      service: light.turn_on
+      data:
+        entity_id: light.richards_lamp
+        profile: energize
+      data_template:
+        transition: >
+          {{ states.input_number.wakeup_duration.state | multiply(60) | int }}
+################################################################################
+
+################################################################################
   - id: test_wakeup
     alias: 'Test - Wakeup'
     initial_state: 'off'
