@@ -1,0 +1,44 @@
+### Morning Routines ###
+
+automation:
+################################################################################
+  - alias: "Morning - Master Bedroom Lights"
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: 
+        - device_tracker.network_ians_iphone
+        - device_tracker.network_aimees_iphone
+        to: 'not_home'
+    condition:
+      condition: and
+      conditions:
+      - condition: state
+        entity_id: device_tracker.network_ians_iphone
+        state: 'not_home'
+      - condition: state
+        entity_id: device_tracker.network_aimees_iphone
+        state: 'not_home'
+    action:
+      - service: light.turn_off
+        data:
+          entity_id: light.master_bedroom_lights
+################################################################################
+
+################################################################################
+  - alias: "Morning - Richard's Light"
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: 
+        - device_tracker.network_richards_iphone
+        to: 'not_home'
+    condition:
+      condition:  state
+      entity_id: device_tracker.network_richards_iphone
+      state: 'not_home'
+    action:
+      - service: light.turn_off
+        data:
+          entity_id:light.richards_lamp
+################################################################################
