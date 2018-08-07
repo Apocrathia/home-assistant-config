@@ -100,8 +100,8 @@ input_boolean:
 
 automation:
 ################################################################################
-  - id: location_home
-    alias: "Location - Home"
+  - id: function_presence_home
+    alias: "Function - Presence - Home"
     initial_state: 'on'
     trigger:
       - platform: state
@@ -137,8 +137,8 @@ automation:
 ################################################################################
 
 ################################################################################
-  - id: location_away
-    alias: "Location - Away"
+  - id: function_presence_away
+    alias: "Function - Presence - Away"
     initial_state: 'on'
     trigger:
       - platform: state
@@ -207,7 +207,7 @@ scene:
 script:
 ################################################################################
   location_away:
-    alias: 'Location - Away'
+    alias: 'Function - Presence - Away'
     sequence:
       # Turn everything off (Call scene)
       # Turn the thermostat off
@@ -225,7 +225,7 @@ script:
       # TODO
 ################################################################################
   location_home:
-    alias: 'Location - Home'
+    alias: 'Function - Presence - Home'
     sequence:
       # Turn everything back on (Call scene)
       # Turn the thermostat back on

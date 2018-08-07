@@ -25,8 +25,8 @@ binary_sensor:
 
 automation:
 ################################################################################
-  - id: front_porch_lights_nighttime
-    alias: 'Front Porch - Nighttime Lighting'
+  - id: routine_night_front_porch_lights
+    alias: 'Routine - Night - Front Porch Lights'
     initial_state: 'on'
     trigger:
       - platform: state
@@ -56,8 +56,8 @@ automation:
 ################################################################################
 
 ################################################################################
-  - id: front_door_nighttime_motion_initial
-    alias: 'Front Porch - Nighttime Motion'
+  - id: routine_night_front_door_motion_initial
+    alias: 'Routine - Night - Front Porch Motion (Initial)'
     initial_state: 'on'
     trigger:
       - platform: state
@@ -78,8 +78,8 @@ automation:
 ################################################################################
 
 ################################################################################
-  - id: front_door_nighttime_motion_idle
-    alias: 'Front Porch - Nighttime Motion Idle'
+  - id: routine_night_front_door_motion_idle
+    alias: 'Routine - Night - Front Porch Motion (Idle)'
     initial_state: 'on'
     trigger:
       - platform: state
@@ -103,8 +103,8 @@ automation:
 ################################################################################
 
 ################################################################################
-  - id: living_room_lights_nighttime
-    alias: 'Living Room - Nighttime Lighting'
+  - id: routine_night_living_room_lights
+    alias: 'Routine - Night - Living Room Lights'
     initial_state: 'on'
     trigger:
       - platform: state
@@ -130,8 +130,8 @@ automation:
 ################################################################################
 
 ################################################################################
-  - id: master_bedroom_lights_night
-    alias: 'Master Bedroom - Nighttime Lighting'
+  - id: routine_night_master_bedroom_lights
+    alias: 'Routine - Night - Master Bedroom Lights'
     initial_state: 'on'
     trigger:
       - platform: state

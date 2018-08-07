@@ -3,7 +3,7 @@
 automation:
 ################################################################################
   - id: master_bedroom_lights_morning
-    alias: "Morning - Master Bedroom Lights"
+    alias: "Routine - Morning - Master Bedroom Lights"
     initial_state: 'on'
     trigger:
       - platform: state
@@ -28,7 +28,7 @@ automation:
 
 ################################################################################
   - id: richards_lamp_morning
-    alias: "Morning - Richard's Light"
+    alias: "Routine - Morning - Richard's Light"
     initial_state: 'on'
     trigger:
       - platform: state

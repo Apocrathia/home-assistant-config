@@ -12,8 +12,8 @@ group:
     name: Alarm Clock Settings
     control: hidden
     entities:
-      - automation.wakeup_light_bedroom
-      - automation.wakeup_apple_tv
+      - automation.function_wakeup_light_bedroom
+      - automation.function_wakeup_apple_tv
       - input_datetime.wakeup_time
       - input_number.wakeup_duration
 ################################################################################
@@ -50,8 +50,8 @@ sensor:
 
 automation:
 ################################################################################
-  - id: wakeup_light_bedroom
-    alias: 'Wakeup - Bedroom Light'
+  - id: function_wakeup_bedroom_light
+    alias: 'Function - Wakeup - Bedroom Light'
     initial_state: 'on'
     trigger:
     - platform: template
@@ -72,8 +72,8 @@ automation:
 ################################################################################
 
 ################################################################################
-  - id: wakeup_apple_tv
-    alias: 'Wakeup - Apple TV'
+  - id: function_wakeup_apple_tv
+    alias: 'Function - Wakeup - Apple TV'
     initial_state: 'on'
     trigger:
     - platform: template
@@ -84,7 +84,7 @@ automation:
       entity_id: binary_sensor.workday
       state: 'on'
     action:
-      service: script.wakeup_apple_tv
+      service: script.function_wakeup_apple_tv
 ################################################################################
 
 ################################################################################
@@ -108,7 +108,7 @@ automation:
 
 script:
 ################################################################################
-  wakeup_apple_tv:
+  function_wakeup_apple_tv:
     alias: 'Wakeup - Apple TV'
     sequence:
   # Turn on the TV

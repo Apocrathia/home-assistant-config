@@ -3,7 +3,7 @@
 automation:
 ################################################################################
 - id: system_notification_update
-  alias: 'Notification - Update Available'
+  alias: 'System - Notification - Update Available'
   initial_state: 'on'
   trigger:
     platform: state
@@ -16,7 +16,7 @@ automation:
 
 ################################################################################
 - id: system_notification_new_device
-  alias: 'Notification - New Device'
+  alias: 'System - Notification - New Device'
   initial_state: 'on'
   trigger:
     - platform: event
@@ -32,7 +32,7 @@ automation:
 
 ################################################################################
 - id: system_notification_restart
-  alias: 'Notification - Home Assistant Restart'
+  alias: 'System - Notification - Home Assistant Restart'
   initial_state: 'on'
   trigger:
     platform: homeassistant
@@ -45,7 +45,7 @@ automation:
 
 ################################################################################
 - id: system_notification_certification_expiration
-  alias: 'Notification - Home Assistant Certificate'
+  alias: 'System Notification - Home Assistant Certificate'
   initial_state: 'on'
   trigger:
     platform: template

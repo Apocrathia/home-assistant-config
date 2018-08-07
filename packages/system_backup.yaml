@@ -3,7 +3,7 @@
 automation:
 ################################################################################
 - id: system_backup_weekly
-  alias: 'Weekly Backups'
+  alias: 'System - Backup - Weekly'
   initial_state: 'on'
   trigger:
     platform: time

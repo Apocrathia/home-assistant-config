@@ -2,8 +2,8 @@
 
 automation:
 ################################################################################
-  - id: front_porch_lights_daytime
-    alias: 'Front Porch - Daytime Lighting'
+  - id: routine_day_front_porch_lights
+    alias: 'Routine - Front Porch Lights'
     initial_state: 'on'
     trigger:
       - platform: state
@@ -18,8 +18,8 @@ automation:
 ################################################################################
 
 ################################################################################
-  - id: living_room_lights_daytime
-    alias: 'Living Room - Daytime Lighting'
+  - id: routine_day_living_room_lights
+    alias: 'Routine - Day - Living Room Lights'
     initial_state: 'on'
     trigger:
       - platform: state
