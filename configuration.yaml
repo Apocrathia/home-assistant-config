@@ -110,7 +110,7 @@ weblink:
 ################################################################################
 
 group: !include groups.yaml
-#automation: !include automations.yaml
+automation: !include automations.yaml
 script: !include scripts.yaml
 zone: !include zones.yaml
 sensor: !include sensors.yaml
