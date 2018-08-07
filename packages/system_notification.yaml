@@ -45,7 +45,7 @@ automation:
 
 ################################################################################
 - id: system_notification_certification_expiration
-  alias: 'System Notification - Home Assistant Certificate'
+  alias: 'System - Notification - Home Assistant Certificate'
   initial_state: 'on'
   trigger:
     platform: template
