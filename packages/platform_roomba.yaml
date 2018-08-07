@@ -38,6 +38,14 @@ group:
       - vacuum.roomba_downstairs
 ################################################################################
 
+# Automations
+################################################################################
+# There are 2 primary automations I want here:
+# 1) Automatically run the roombas when everyone leaves, and send them back to
+#     their docks when we get home.
+# 2) When the battery gets < 50%, return to base, charge, then keep cleaning.
+################################################################################
+
 ################################################################################
 vacuum:
   - platform: mqtt
