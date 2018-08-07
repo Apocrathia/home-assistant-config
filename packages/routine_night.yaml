@@ -130,7 +130,8 @@ automation:
 ################################################################################
 
 ################################################################################
-  - alias: 'Master Bedroom - Nighttime Lighting'
+  - id: master_bedroom_lights_night
+    alias: 'Master Bedroom - Nighttime Lighting'
     initial_state: 'on'
     trigger:
       - platform: state

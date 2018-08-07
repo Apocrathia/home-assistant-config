@@ -2,7 +2,8 @@
 
 automation:
 ################################################################################
-  - alias: "Morning - Master Bedroom Lights"
+  - id: master_bedroom_lights_morning
+    alias: "Morning - Master Bedroom Lights"
     initial_state: 'on'
     trigger:
       - platform: state
@@ -26,19 +27,19 @@ automation:
 ################################################################################
 
 ################################################################################
-  - alias: "Morning - Richard's Light"
+  - id: richards_lamp_morning
+    alias: "Morning - Richard's Light"
     initial_state: 'on'
     trigger:
       - platform: state
-        entity_id: 
-        - device_tracker.network_richards_iphone
+        entity_id: device_tracker.network_richards_iphone
         to: 'not_home'
     condition:
-      condition:  state
+      condition: state
       entity_id: device_tracker.network_richards_iphone
       state: 'not_home'
     action:
       - service: light.turn_off
         data:
-          entity_id:light.richards_lamp
+          entity_id: light.richards_lamp
 ################################################################################
