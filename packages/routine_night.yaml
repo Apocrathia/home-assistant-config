@@ -145,7 +145,7 @@ automation:
         entity_id: binary_sensor.worknight
         state: 'on'
       - condition: state
-        entity_id: light.floor_lamps
+        entity_id: light.master_bedroom_lights
         state: 'off'
     action:
       - service: light.turn_on
