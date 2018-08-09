@@ -1,0 +1,13 @@
+### Owntracks ###
+
+# Currently, the majority of presence information is determined by
+# the UniFi component. The primary disadvantage is that the time to
+# update statuses is a bit longer than I would like, and has resulted
+# in situations where the alarm system has not disarmed because one of
+# our phones has not yet joined the network, or UniFi has not reported
+# the update yet. Testing Owntracks to see if this will be a more
+# accurate location tracking solution.
+
+device_tracker:
+  - platform: owntracks
+    mqtt_topic: "owntracks/#"
