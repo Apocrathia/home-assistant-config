@@ -44,6 +44,8 @@ group:
 # 1) Automatically run the roombas when everyone leaves, and send them back to
 #     their docks when we get home.
 # 2) When the battery gets < 50%, return to base, charge, then keep cleaning.
+# 3) Adding another one: Send a notification if the Roomba is dead somewhere.
+# NOTE: As of right now, I am accomplishing these functions in Node-RED.
 ################################################################################
 
 ################################################################################
