@@ -1,13 +1,13 @@
 - id: '1533651116446'
-  alias: New Automation
+  alias: Test - Downstairs Roomba Notification
   trigger:
   - entity_id: vacuum.roomba_downstairs
-    from: 'off'
+    from: 'on'
     platform: state
-    to: 'on'
+    to: 'off'
   condition: []
   action:
   - alias: ''
     data:
-      message: Roomba Test Notification
-    service: notify.notify
+      message: The Downstairs Roomba has stopped.
+    service: notify.ios_ios_ians_iphone
