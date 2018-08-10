@@ -10,6 +10,10 @@ homekit:
       - switch.wink_ceiling_fan
       - switch.wink_overhead_light
       - light.wink_dining_room
+      - light.floor_lamp
+      - light.master_bedroom_lights
+      - light.front_porch_lights
+      - light.richards_lamp
       - binary_sensor.back_door
       - binary_sensor.front_door
       - binary_sensor.garage_door
