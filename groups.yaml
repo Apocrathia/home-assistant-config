@@ -78,6 +78,8 @@ foyer:
 dining_room:
   name: Dining Room
   control: hidden
+  entities:
+    - light.wink_dining_room
 kitchen:
   name: Kitchen
   control: hidden

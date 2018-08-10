@@ -14,6 +14,8 @@ homeassistant:
       icon: mdi:ceiling-light
     switch.wink_ceiling_fan:
       icon: mdi:fan
+    light.wink_dining_room:
+      icon: mdi:ceiling-light
     # Duplicate objects
     binary_sensor.ring_front_door_motion:
       hidden: true

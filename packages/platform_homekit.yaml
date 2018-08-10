@@ -9,6 +9,7 @@ homekit:
     include_entities:
       - switch.wink_ceiling_fan
       - switch.wink_overhead_light
+      - light.wink_dining_room
       - binary_sensor.back_door
       - binary_sensor.front_door
       - binary_sensor.garage_door
