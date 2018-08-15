@@ -43,7 +43,6 @@ settings_view:
   entities:
     - group.alarmclock_settings
     - group.vacation_settings
-    - group.richards_settings
 
 everything_view:
   view: yes

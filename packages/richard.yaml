@@ -24,7 +24,7 @@ input_datetime:
 
 input_number:
   richard_wakeup_duration:
-    name: Richard's Wakeup duration
+    name: Richard's Wakeup Duration
     icon: mdi:clock-in
     initial: 30
     min: 0
