@@ -1,0 +1,91 @@
+### Richard's Configurations ###
+
+### Groups ###
+group:
+################################################################################
+  richards_settings: # Linked to in ../groups.yaml
+    name: Richard's Settings
+    control: hidden
+    entities:
+      - automation.richard_function_wakeup
+      - automation.richard_routine_lamp_shutoff
+      - input_datetime.richard_wakeup_time
+      - input_number.richard_wakeup_duration
+################################################################################
+
+### Inputs ###
+################################################################################
+input_datetime:
+  richard_wakeup_time:
+    name: Richard's Wakeup Time
+    has_date: false
+    has_time: true
+    initial: 05:00
+
+input_number:
+  richard_wakeup_duration:
+    name: Richard's Wakeup duration
+    icon: mdi:clock-in
+    initial: 30
+    min: 0
+    max: 60
+    step: 5
+################################################################################
+
+### Sensors ###
+sensor:
+################################################################################
+  - platform: template
+    sensors:
+      richard_wakeup_time:
+        friendly_name: Wakeup Time
+        value_template: >
+          {{ states.input_datetime.richard_wakeup_time.attributes.timestamp | int | timestamp_custom("%H:%M",False) }}
+      richard_wakeup_alarm_start_time:
+        friendly_name: Alarm Clock Start
+        value_template: >
+          {{ ((states.input_datetime.richard_wakeup_time.attributes.timestamp | int) - (states.input_number.richard_wakeup_duration.state | int * 60)) | timestamp_custom("%H:%M",False) }}
+################################################################################
+
+### Automations ###
+automation:
+################################################################################
+  - id: richard_function_wakeup
+    alias: 'Richard - Function - Wakeup'
+    initial_state: 'on'
+    trigger:
+    - platform: template
+      value_template: >
+        {{ states.sensor.time.state == states.sensor.richard_wakeup_alarm_start_time.state }}
+    condition:
+      condition: state
+      entity_id: binary_sensor.workday
+      state: 'on'
+    action:
+      service: light.turn_on
+      data:
+        entity_id: light.richards_lamp
+        profile: energize
+      data_template:
+        transition: >
+          {{ states.input_number.richard_wakeup_duration.state | multiply(60) | int }}
+################################################################################
+
+################################################################################
+  - id: richard_routine_lamp_shutoff
+    alias: "Richard - Routine - Lamp Shutoff"
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: device_tracker.network_richards_iphone
+        from: 'home'
+        to: 'not_home'
+    condition:
+      condition: state
+      entity_id: device_tracker.network_richards_iphone
+      state: 'not_home'
+    action:
+      - service: light.turn_off
+        data:
+          entity_id: light.richards_lamp
+################################################################################
