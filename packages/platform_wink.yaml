@@ -39,7 +39,7 @@ wink:
 #  password: !secret wink_password
 #  client_id: !secret wink_client_id
 #  client_secret: !secret wink_client_secret
-  local_control: True
+  local_control: false
 
 # Binary Sensors
 binary_sensor:
