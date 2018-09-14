@@ -1,0 +1,25 @@
+################################################################################
+# Function - Lighting
+################################################################################
+
+# This is to fix some of the wierd lighting issues. 
+
+automation
+################################################################################
+  - id: function_lighting_dining_room
+    alias: "Function - Lighting - Dining Room"
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: light.wink_dining_room
+        to: 'on'
+    condition:
+      - below: '15'
+        condition: numeric_state
+        entity_id: light.wink_dining_room
+    action:
+    - data:
+        brightness_pct: '20'
+        entity_id: light.wink_dining_room
+      service: light.turn_on
+################################################################################
