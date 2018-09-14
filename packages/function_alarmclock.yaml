@@ -171,7 +171,6 @@ script:
             - right
             - right
             - right
-            - right
             - select
       - delay:
           seconds: 15
