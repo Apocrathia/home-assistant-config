@@ -4,7 +4,7 @@
 
 # This is to fix some of the wierd lighting issues. 
 
-automation
+automation:
 ################################################################################
   - id: function_lighting_dining_room
     alias: "Function - Lighting - Dining Room"
