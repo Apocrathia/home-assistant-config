@@ -20,7 +20,8 @@ automation:
         state: 'on'
       - condition: numeric_state
         entity_id: light.wink_dining_room
-        below: '15'
+        value_template: "{{ state.attributes.brightness }}"
+        below: 38.25
     action:
     - data:
         brightness_pct: '20'
