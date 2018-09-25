@@ -12,11 +12,15 @@ automation:
     trigger:
       - platform: state
         entity_id: light.wink_dining_room
-        to: 'on'
     condition:
-      - below: '15'
-        condition: numeric_state
+      condition: 'and'
+      conditions:
+      - condition: state
         entity_id: light.wink_dining_room
+        state: 'on'
+      - condition: numeric_state
+        entity_id: light.wink_dining_room
+        below: '15'
     action:
     - data:
         brightness_pct: '20'
