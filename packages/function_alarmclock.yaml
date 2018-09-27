@@ -112,9 +112,9 @@ script:
     alias: 'Wakeup - Apple TV'
     sequence:
   # Turn on the TV
-      - service: media_player.turn_on
-        data:
-          entity_id: media_player.master_bedroom
+#      - service: media_player.turn_on
+#        data:
+#          entity_id: media_player.master_bedroom
       - service: remote.send_command
         data:
           entity_id: remote.master_bedroom
