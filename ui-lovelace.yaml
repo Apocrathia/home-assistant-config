@@ -10,7 +10,6 @@ views:
         entities:
           - device_tracker.ios_ians_iphone
           - device_tracker.ios_aimees_iphone
-          - device_tracker.ios_richards_iphone
       - type: entities
         title: Living Room
         show_header_toggle: false
@@ -42,10 +41,10 @@ views:
           - switch.wink_ceiling_fan
           - sensor.wink_master_relay_temperature
       - type: entities
-        title: Richard's Lair
+        title: Studio
         show_header_toggle: false
         entities:
-          - light.richards_lamp
+          - light.studio_floor_lamp
       - type: entities
         title: Outside
         show_header_toggle: false
@@ -139,7 +138,7 @@ views:
           - light.wink_master_bedroom
           - light.master_bedroom_lights
           - light.wink_richards_lamp
-          - light.richards_lamp
+          - light.studio_floor_lamp
       - type: entities
         title: All Locks
         show_header_toggle: true
@@ -158,7 +157,6 @@ views:
         entities:
           - device_tracker.ios_ians_iphone
           - device_tracker.ios_aimees_iphone
-          - device_tracker.ios_richards_iphone
           - device_tracker.2018_ford_escape
           - device_tracker.network_ians_iphone
           - device_tracker.network_aimees_iphone
@@ -207,15 +205,6 @@ views:
           - device_tracker.network_garage_volumio
           - device_tracker.network_living_room_tv
           - device_tracker.network_basement_tv
-          - device_tracker.ubuntutemplate
-          - device_tracker.network_richards_iphone
-          - device_tracker.network_richards_apple_watch
-          - device_tracker.network_richards_tower
-          - device_tracker.network_richards_nas
-          - device_tracker.network_intel_nuc
-          - device_tracker.network_richards_ps4
-          - device_tracker.network_richards_ipad
-          - device_tracker.network_richards_nintendo_switch
           - device_tracker.downstairs_roomba
       - type: entities
         title: All Automations

@@ -150,18 +150,6 @@ input_datetime:
 #      - Away
 #      - Extended Away
 #    initial: Home
-#
-#  richard_status_dropdown:
-#    name: Richard
-#    options:
-#      - Home
-#      - Just Arrived
-#      - Just Left
-#      - Work
-#      - School
-#      - Away
-#      - Extended Away
-#    initial: Home
 ################################################################################
 
 #############################

@@ -70,7 +70,6 @@ automation:
 #    entity_id: 
 #    - device_tracker.network_ians_iphone
 #    - device_tracker.network_aimees_iphone
-#    - device_tracker.network_richards_iphone
 #    value_template: >
 #      {{ state.attributes.battery | int }}
 #    below: 25

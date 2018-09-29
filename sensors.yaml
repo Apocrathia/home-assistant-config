@@ -59,12 +59,6 @@
 #      value_template: >
 #        {{ states.device_tracker.network_aimees_iphone.state }}
 #
-#- platform: template
-#  sensors:
-#    richard_location:
-#      friendly_name: 'Richard'
-#      value_template: >
-#        {{ states.device_tracker.network_richards_iphone.state }}
 - platform: template
   sensors:
     richard_location:

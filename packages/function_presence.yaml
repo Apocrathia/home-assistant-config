@@ -13,7 +13,6 @@ group:
     entities:
       - input_boolean.vacation_ian
       - input_boolean.vacation_aimee
-      - input_boolean.vacation_richard
 ################################################################################
 
 # The Bayesian sensor has been a real bitch to wrap my head around.
@@ -37,11 +36,6 @@ binary_sensor:
         prob_given_false: 0.5
         platform: 'state'
         to_state: 'not_home'
-      - entity_id: 'device_tracker.network_richards_iphone'
-        prob_given_true: 0.5
-        prob_given_false: 0.5
-        platform: 'state'
-        to_state: 'not_home'
 ################################################################################
 
 ################################################################################
@@ -60,22 +54,12 @@ binary_sensor:
         prob_given_false: 0.1
         platform: 'state'
         to_state: 'not_home'
-      - entity_id: 'device_tracker.network_richards_iphone'
-        prob_given_true: 0.9
-        prob_given_false: 0.1
-        platform: 'state'
-        to_state: 'not_home'
       - entity_id: 'input_boolean.vacation_ian'
         prob_given_true: 0.9
         prob_given_false: 0.1
         platform: 'state'
         to_state: 'on'
       - entity_id: 'input_boolean.vacation_aimee'
-        prob_given_true: 0.9
-        prob_given_false: 0.1
-        platform: 'state'
-        to_state: 'on'
-      - entity_id: 'input_boolean.vacation_richard'
         prob_given_true: 0.9
         prob_given_false: 0.1
         platform: 'state'
@@ -92,10 +76,6 @@ input_boolean:
     name: 'Vacation - Aimee'
     initial: off
     icon: mdi:beach
-  vacation_richard:
-    name: 'Vacation - Richard'
-    initial: off
-    icon: mdi:beach
 ################################################################################
 
 automation:
@@ -108,7 +88,6 @@ automation:
         entity_id: 
         - device_tracker.network_ians_iphone
         - device_tracker.network_aimees_iphone
-        - device_tracker.network_richards_iphone
         to: 'home'
     condition:
       condition: or
@@ -118,9 +97,6 @@ automation:
         state: 'not_home'
       - condition: state
         entity_id: device_tracker.network_aimees_iphone
-        state: 'not_home'
-      - condition: state
-        entity_id: device_tracker.network_richards_iphone
         state: 'not_home'
     action:
   # Change this to a script later on
@@ -145,7 +121,6 @@ automation:
         entity_id: 
         - device_tracker.network_ians_iphone
         - device_tracker.network_aimees_iphone
-        - device_tracker.network_richards_iphone
         to: 'not_home'
     condition:
       condition: and
@@ -155,9 +130,6 @@ automation:
         state: 'not_home'
       - condition: state
         entity_id: device_tracker.network_aimees_iphone
-        state: 'not_home'
-      - condition: state
-        entity_id: device_tracker.network_richards_iphone
         state: 'not_home'
     action:
   # Change this to a script later on

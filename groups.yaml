@@ -8,7 +8,6 @@ default_view:
 #    - binary_sensor.vacancy
     - device_tracker.ios_ians_iphone
     - device_tracker.ios_aimees_iphone
-    - device_tracker.ios_richards_iphone
 #    - sensor.time
     - group.living_room
     - group.foyer
@@ -17,7 +16,7 @@ default_view:
     - group.basement
     - group.garage
     - group.master_bedroom
-    - group.richards_lair
+    - group.studio
     - group.workshop
     - group.outside
     - group.roombas
@@ -100,11 +99,11 @@ master_bedroom:
     - switch.wink_overhead_light
     - switch.wink_ceiling_fan
     - sensor.wink_master_relay_temperature
-richards_lair:
-  name: Richard's Lair
+studio:
+  name: Studio
   control: hidden
   entities:
-    - light.richards_lamp
+    - light.studio_floor_lamp
 workshop:
   name: Workshop
   control: hidden
