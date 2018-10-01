@@ -5,15 +5,48 @@ homeassistant:
     binary_sensor.in_bed:
       friendly_name: 'In Bed'
 
+group:
+################################################################################
+  nighttime_settings:
+    name: Night Time Settings
+    control: hidden
+    entities:
+      - input_datetime.bedtime
+      - input_number.nighttime_delay
+################################################################################
+
 ################################################################################
 # Inputs
 ################################################################################
 input_datetime:
-  bed_time:
+  bedtime:
     name: Bedtime
     has_date: false
     has_time: true
     initial: 21:00
+
+input_number:
+  nighttime_delay:
+    name: Night Time Delay
+    icon: mdi:clock-in
+    initial: 60
+    min: 0
+    max: 120
+    step: 15
+################################################################################
+
+sensor:
+################################################################################
+  - platform: template
+    sensors:
+      bed_time:
+        friendly_name: Bedtime
+        value_template: >
+          {{ states.input_datetime.bedtime.attributes.timestamp | int | timestamp_custom("%H:%M",False) }}
+      night_time_start:
+        friendly_name: Night Time Start
+        value_template: >
+          {{ ((states.input_datetime.bedtime.attributes.timestamp | int) - (states.input_number.nighttime_delay.state | int * 60)) | timestamp_custom("%H:%M",False) }}
 ################################################################################
 
 binary_sensor:
