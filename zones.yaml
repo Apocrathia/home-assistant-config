@@ -24,12 +24,6 @@
   radius: 300
   icon: mdi:school
 
-- name: !secret richard_work_name
-  latitude: !secret richard_work_lat
-  longitude: !secret richard_work_long
-  radius: 150
-  icon: mdi:briefcase
-
 - name: !secret aimee_work_name
   latitude: !secret aimee_work_lat
   longitude: !secret aimee_work_long
