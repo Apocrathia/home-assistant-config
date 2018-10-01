@@ -119,13 +119,6 @@ device_tracker: !include device_tracker.yaml
 ################################################################################
 # Inputs
 ################################################################################
-input_datetime:
-  bed_time:
-    name: Bedtime
-    has_date: false
-    has_time: true
-    initial: 21:00
-
 #input_select:
 #  ian_status_dropdown:
 #    name: Ian
