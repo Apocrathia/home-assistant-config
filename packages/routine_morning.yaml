@@ -25,3 +25,22 @@ automation:
         data:
           entity_id: light.master_bedroom_lights
 ################################################################################
+
+################################################################################
+  - id: routine_morning_alarm_disarm
+    alias: 'Routine - Morning - Alarm Disarm'
+    initial_state: 'on'
+    trigger:
+    - platform: template
+      value_template: >
+        {{ states.sensor.time.state == states.sensor.wakeup_alarm_start_time.state }}
+    condition:
+      condition: state
+      entity_id: binary_sensor.workday
+      state: 'on'
+    action:
+      service: alarm_control_panel.alarm_disarm
+      data:
+        entity_id: alarm_control_panel.home
+        code: !secret alarm_code
+################################################################################

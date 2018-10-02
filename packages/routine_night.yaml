@@ -199,3 +199,22 @@ automation:
           brightness_pct: 50
           transition: 900
 ################################################################################
+
+################################################################################
+  - id: routine_night_alarm_arm
+    alias: 'Routine - Night - Alarm Arm'
+    initial_state: 'on'
+    trigger:
+    - platform: template
+      value_template: >
+        {{ states.sensor.time.state == states.sensor.night_time_start.state }}
+    condition:
+      condition: state
+      entity_id: binary_sensor.worknight
+      state: 'on'
+    action:
+      service: alarm_control_panel.alarm_arm_night
+      data:
+        entity_id: alarm_control_panel.home
+        code: !secret alarm_code
+################################################################################
