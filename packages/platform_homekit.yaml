@@ -10,7 +10,7 @@ homekit:
       - switch.wink_ceiling_fan
       - switch.wink_overhead_light
       - light.wink_dining_room
-      - light.floor_lamp
+      - light.living_room_floor_lamp
       - light.master_bedroom_lights
       - light.front_porch_lights
       - light.studio_floor_lamp

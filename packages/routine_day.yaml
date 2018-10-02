@@ -33,11 +33,11 @@ automation:
         entity_id: sun.sun
         state: 'above_horizon'
       - condition: state
-        entity_id: light.floor_lamp
+        entity_id: light.living_room_floor_lamp
         state: 'on'
     action:
       - service: light.turn_off
         data:
-          entity_id: light.floor_lamp
+          entity_id: light.living_room_floor_lamp
           transition: 900
 ################################################################################

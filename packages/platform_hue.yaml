@@ -27,4 +27,4 @@ light:
     name: Master Bedroom Lights
     entities:
       - light.floor_lamp_left
-      - light.floor_lamp_right  
+      - light.floor_lamp_right

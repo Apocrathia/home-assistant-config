@@ -14,7 +14,7 @@ views:
         title: Living Room
         show_header_toggle: false
         entities:
-          - light.floor_lamp
+          - light.living_room_floor_lamp
           - binary_sensor.living_room_motion
           - binary_sensor.back_door
       - type: entities
@@ -123,7 +123,7 @@ views:
         show_header_toggle: true
         entities:
           - light.wink_floor_lamp
-          - light.floor_lamp
+          - light.living_room_floor_lamp
           - light.wink_floor_lamp_left
           - light.floor_lamp_left
           - light.wink_floor_lamp_right

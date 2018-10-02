@@ -63,7 +63,7 @@ living_room:
   name: Living Room
   control: hidden
   entities:
-    - light.floor_lamp
+    - light.living_room_floor_lamp
     - binary_sensor.living_room_motion
     - binary_sensor.back_door
 foyer:

@@ -162,12 +162,12 @@ automation:
         entity_id: sun.sun
         state: 'below_horizon'
       - condition: state
-        entity_id: light.floor_lamp
+        entity_id: light.living_room_floor_lamp
         state: 'off'
     action:
       - service: light.turn_on
         data:
-          entity_id: light.floor_lamp
+          entity_id: light.living_room_floor_lamp
           profile: relax
           brightness_pct: 25
           transition: 900
