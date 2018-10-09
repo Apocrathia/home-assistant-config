@@ -28,3 +28,50 @@ automation:
         entity_id: light.wink_dining_room
       service: light.turn_on
 ################################################################################
+
+################################################################################
+  - id: routine_night_front_door_motion_initial
+    alias: 'Routine - Night - Front Porch Motion (Initial)'
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.ring_front_door_motion
+        from: 'off'
+        to: 'on'
+    condition:
+      condition: state
+      entity_id: sun.sun
+      state: 'below_horizon'
+    action:
+  # Transition to this profile, even if on
+      - service: light.turn_on
+        data:
+          entity_id: light.front_porch_lights
+          profile: energize
+          transition: 1
+################################################################################
+
+################################################################################
+  - id: routine_night_front_door_motion_idle
+    alias: 'Routine - Night - Front Porch Motion (Idle)'
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.ring_front_door_motion
+        from: 'on'
+        to: 'off'
+        for:
+          minutes: 5
+    condition:
+      condition: state
+      entity_id: sun.sun
+      state: 'below_horizon'
+    action:
+  # Transition back to a preset profile/scene
+    - service: light.turn_on
+      data:
+        entity_id: light.front_porch_lights
+        profile: relax
+        brightness_pct: 25
+        transition: 5
+################################################################################
