@@ -30,7 +30,7 @@ ios:
 config:
 
 http:
-  api_password: !secret http_password
+#  api_password: !secret http_password
   ssl_certificate: !secret http_certificate
   ssl_key: !secret http_key
   trusted_networks: !secret trusted_networks
