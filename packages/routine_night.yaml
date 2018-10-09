@@ -181,6 +181,24 @@ automation:
 ################################################################################
 
 ################################################################################
+  - id: routine_night_bedtime
+    alias: 'Routine - Night - Bedtime'
+    initial_state: 'on'
+    trigger:
+    - platform: template
+      value_template: >
+        {{ states.sensor.time.state == states.sensor.night_time_start.state }}
+    condition:
+      condition: state
+      entity_id: binary_sensor.worknight
+      state: 'on'
+    action:
+      - service: light.turn_off
+        data:
+          entity_id: light.studio_floor_lamp, light.wink_dining_room
+################################################################################
+
+################################################################################
   - id: routine_night_alarm_arm
     alias: 'Routine - Night - Alarm Arm'
     initial_state: 'on'

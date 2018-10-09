@@ -23,10 +23,10 @@ automation:
         value_template: "{{ state.attributes.brightness }}"
         below: 38.25
     action:
-    - data:
-        brightness_pct: '20'
+    - service: light.turn_on
+      data:
         entity_id: light.wink_dining_room
-      service: light.turn_on
+        brightness_pct: '20'
 ################################################################################
 
 ################################################################################
