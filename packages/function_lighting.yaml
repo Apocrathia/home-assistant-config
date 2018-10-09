@@ -61,7 +61,7 @@ automation:
         from: 'on'
         to: 'off'
         for:
-          minutes: 5
+          seconds: 150
     condition:
       condition: state
       entity_id: sun.sun
