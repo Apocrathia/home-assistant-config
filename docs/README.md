@@ -1,6 +1,7 @@
 # Apocrathia's Home Assistant Configuration Files 
 [![Build Status](https://travis-ci.org/Apocrathia/home-assistant-config.svg?branch=master)](https://travis-ci.org/Apocrathia/home-assistant-config)
 [![Black Duck Security Risk](https://copilot.blackducksoftware.com/github/repos/Apocrathia/home-assistant-config/branches/master/badge-risk.svg)](https://copilot.blackducksoftware.com/github/repos/Apocrathia/home-assistant-config/branches/master)
+[![Coverage Status](https://coveralls.io/repos/github/Apocrathia/home-assistant-config/badge.svg?branch=master)](https://coveralls.io/github/Apocrathia/home-assistant-config?branch=master)
 
 This is something that I've been meaning to get setup for a while now.
 I am referencing 
