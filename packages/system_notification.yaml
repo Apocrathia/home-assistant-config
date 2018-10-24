@@ -62,9 +62,12 @@ automation:
         Home Assistant's certificate expires in {{ states.sensor.ssl_certificate_expiry.state }} days.
 ################################################################################
 
+
+# Credit to notoriousBDG on his work with this one
+# https://github.com/notoriousbdg/Home-AssistantConfig/blob/master/packages/battery_alert.yaml
 ################################################################################
-#- id: notification_battery_low
-#  alias: 'Notification - Battery Low'
+#- id: notification_low_battery
+#  alias: 'System - Notification - Low Battery'
 #  trigger:
 #    platform: numeric_state
 #    entity_id: 
