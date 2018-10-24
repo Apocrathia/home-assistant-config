@@ -13,20 +13,21 @@ group:
     entities:
       - input_datetime.bedtime
       - input_number.nighttime_delay
+      - sensor.nighttime_start
 ################################################################################
 
 ################################################################################
 # Inputs
 ################################################################################
 input_datetime:
-  bed_time:
+  bedtime:
     name: Bedtime
     has_date: false
     has_time: true
     initial: '21:00'
 
 input_number:
-  nigh_ttime_delay:
+  nighttime_delay:
     name: Night Time Delay
     icon: mdi:clock-in
     initial: 60
@@ -39,14 +40,14 @@ sensor:
 ################################################################################
   - platform: template
     sensors:
-      bed_time:
+      bedtime:
         friendly_name: Bedtime
         value_template: >
-          {{ states.input_datetime.bed_time.attributes.timestamp | int | timestamp_custom("%H:%M",False) }}
-      night_time_start:
+          {{ states.input_datetime.bedtime.attributes.timestamp | int | timestamp_custom("%H:%M",False) }}
+      nighttime_start:
         friendly_name: Night Time Start
         value_template: >
-          {{ ((states.input_datetime.bed_time.attributes.timestamp | int) - (states.input_number.night_time_delay.state | int * 60)) | timestamp_custom("%H:%M",False) }}
+          {{ ((states.input_datetime.bedtime.attributes.timestamp | int) + (states.input_number.nighttime_delay.state | int * 60)) | timestamp_custom("%H:%M",False) }}
 ################################################################################
 
 binary_sensor:
@@ -187,7 +188,7 @@ automation:
     trigger:
     - platform: template
       value_template: >
-        {{ states.sensor.time.state == states.sensor.night_time_start.state }}
+        {{ states.sensor.time.state == states.sensor.nighttime_start.state }}
     condition:
       condition: state
       entity_id: binary_sensor.worknight
@@ -205,7 +206,7 @@ automation:
     trigger:
     - platform: template
       value_template: >
-        {{ states.sensor.time.state == states.sensor.night_time_start.state }}
+        {{ states.sensor.time.state == states.sensor.nighttime_start.state }}
     condition:
       condition: state
       entity_id: binary_sensor.worknight

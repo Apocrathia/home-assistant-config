@@ -1,5 +1,50 @@
 ### Morning Routines ###
 
+group:
+################################################################################
+  morning_settings:
+    name: Morning Settings
+    control: hidden
+    entities:
+      - input_datetime.morning
+      - input_number.morning_advance
+      - sensor.morning_start
+################################################################################
+
+################################################################################
+# Inputs
+################################################################################
+input_datetime:
+  morning:
+    name: Morning
+    has_date: false
+    has_time: true
+    initial: '05:00'
+
+input_number:
+  morning_advance:
+    name: Morning Advance
+    icon: mdi:clock-in
+    initial: 60
+    min: 0
+    max: 120
+    step: 15
+################################################################################
+
+sensor:
+################################################################################
+  - platform: template
+    sensors:
+      morning:
+        friendly_name: Morning
+        value_template: >
+          {{ states.input_datetime.morning.attributes.timestamp | int | timestamp_custom("%H:%M",False) }}
+      morning_start:
+        friendly_name: Morning Start
+        value_template: >
+          {{ ((states.input_datetime.morning.attributes.timestamp | int) - (states.input_number.morning_advance.state | int * 60)) | timestamp_custom("%H:%M",False) }}
+################################################################################
+
 automation:
 ################################################################################
   - id: master_bedroom_lights_morning
