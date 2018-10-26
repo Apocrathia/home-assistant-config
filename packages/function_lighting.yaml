@@ -2,10 +2,10 @@
 # Function - Lighting
 ################################################################################
 
-# This is to fix some of the wierd lighting issues. 
-
 automation:
 ################################################################################
+# This fixes the dining room light, where the switch doesn't turn off
+# when it reaches a low enough level that the light is actually off.
   - id: function_lighting_dining_room
     alias: "Function - Lighting - Dining Room"
     initial_state: 'on'
@@ -21,17 +21,17 @@ automation:
       - condition: numeric_state
         entity_id: light.wink_dining_room
         value_template: "{{ state.attributes.brightness }}"
-        below: 38.25
+        below: 50
     action:
     - service: light.turn_on
       data:
         entity_id: light.wink_dining_room
-        brightness_pct: '20'
+        brightness: 50
 ################################################################################
 
 ################################################################################
-  - id: routine_night_front_door_motion_initial
-    alias: 'Routine - Night - Front Porch Motion (Initial)'
+  - id: function_lighting_front_door_motion_initial
+    alias: 'Function - Lighting - Front Porch Motion (Initial)'
     initial_state: 'on'
     trigger:
       - platform: state
@@ -52,8 +52,8 @@ automation:
 ################################################################################
 
 ################################################################################
-  - id: routine_night_front_door_motion_idle
-    alias: 'Routine - Night - Front Porch Motion (Idle)'
+  - id: function_lighting_front_door_motion_idle
+    alias: 'Function - Lighting - Front Porch Motion (Idle)'
     initial_state: 'on'
     trigger:
       - platform: state
