@@ -212,7 +212,7 @@ automation:
       entity_id: binary_sensor.worknight
       state: 'on'
     action:
-      service: alarm_control_panel.alarm_arm_night
+      service: alarm_control_panel.alarm_arm_home
       data:
         entity_id: alarm_control_panel.home
         code: !secret alarm_code
