@@ -25,6 +25,7 @@
 !.travis.yml
 
 # Allow the following subfolders
+!appdaemon
 !automations
 !custom_components
 !docs
@@ -39,3 +40,6 @@ secrets.yaml
 known_devices.yaml
 entity_registry.yaml
 ip_bans.yaml
+
+# AppDaemon
+appdaemon/__pycache__
