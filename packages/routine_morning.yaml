@@ -37,10 +37,12 @@ sensor:
     sensors:
       morning:
         friendly_name: Morning
+        entity_id: input_datetime.morning
         value_template: >
           {{ states.input_datetime.morning.attributes.timestamp | int | timestamp_custom("%H:%M",False) }}
       morning_start:
         friendly_name: Morning Start
+        entity_id: input_datetime.morning, input_number.morning_advance
         value_template: >
           {{ ((states.input_datetime.morning.attributes.timestamp | int) - (states.input_number.morning_advance.state | int * 60)) | timestamp_custom("%H:%M",False) }}
 ################################################################################

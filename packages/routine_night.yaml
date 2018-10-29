@@ -42,10 +42,12 @@ sensor:
     sensors:
       bedtime:
         friendly_name: Bedtime
+        entity_id: input_datetime.bedtime
         value_template: >
           {{ states.input_datetime.bedtime.attributes.timestamp | int | timestamp_custom("%H:%M",False) }}
       nighttime_start:
         friendly_name: Night Time Start
+        entity_id: input_datetime.bedtime, input_number.nighttime_delay
         value_template: >
           {{ ((states.input_datetime.bedtime.attributes.timestamp | int) + (states.input_number.nighttime_delay.state | int * 60)) | timestamp_custom("%H:%M",False) }}
 ################################################################################

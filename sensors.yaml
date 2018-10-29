@@ -61,7 +61,7 @@
 #
 - platform: template
   sensors:
-    richard_location:
+    serenity:
       friendly_name: 'Serenity'
       value_template: >
         Catting
