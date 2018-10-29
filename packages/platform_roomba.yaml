@@ -14,6 +14,9 @@
 # Sample MQTT JSON Output
 # {"battery_level":"100","cleaning":false,"docked":true,"charging":"Trickle Charging","voltage":19454,"current":0,"charge":2696}
 
+# Another useful resource:
+# https://github.com/isabellaalstrom/HomeAssistantConfiguration/blob/master/packages/roomba.yaml
+
 # HomeAssistant
 ################################################################################
 homeassistant:
@@ -47,6 +50,44 @@ group:
 # 3) Adding another one: Send a notification if the Roomba is dead somewhere.
 # NOTE: As of right now, I am accomplishing these functions in Node-RED.
 ################################################################################
+
+switch:
+  - platform: template
+    switches:
+      roomba_upstairs:
+        friendly_name: "Upstairs Roomba"
+        value_template: "{{ is_state('vacuum.roomba_upstairs', 'on') }}"
+        turn_on: 
+          service: 'vacuum.turn_on'
+          data:
+            entity_id: 'vacuum.roomba_upstairs'
+        turn_off: 
+          service: 'vacuum.turn_off'
+          data:
+            entity_id: 'vacuum.roomba_upstairs'
+        icon_template: >-
+          {% if is_state('vacuum.roomba_upstairs', 'on') %}
+            mdi:broom
+          {% else %}
+            mdi:robot-vacuum
+          {% endif %}
+      roomba_downstairs:
+        friendly_name: "downstairs Roomba"
+        value_template: "{{ is_state('vacuum.roomba_downstairs', 'on') }}"
+        turn_on: 
+          service: 'vacuum.turn_on'
+          data:
+            entity_id: 'vacuum.roomba_downstairs'
+        turn_off: 
+          service: 'vacuum.turn_off'
+          data:
+            entity_id: 'vacuum.roomba_downstairs'
+        icon_template: >-
+          {% if is_state('vacuum.roomba_downstairs', 'on') %}
+            mdi:broom
+          {% else %}
+            mdi:robot-vacuum
+          {% endif %}
 
 ################################################################################
 vacuum:
