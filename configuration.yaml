@@ -173,3 +173,11 @@ splunk:
 # IFTTT
 ifttt:
   key: !secret ifttt_key
+
+# Octoprint
+octoprint:
+  - host: !secret octoprint_host
+    api_key: !secret octoprint_api_key
+    name: !secret octoprint_name
+    number_of_tools: 2
+    bed: true
