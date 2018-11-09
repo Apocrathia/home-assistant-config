@@ -1,5 +1,6 @@
 - id: '1533651116446'
   alias: Test - Downstairs Roomba Notification
+  initial_state: 'off'
   trigger:
   - entity_id: vacuum.roomba_downstairs
     from: 'on'
