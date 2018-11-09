@@ -24,16 +24,16 @@ binary_sensor:
   - platform: bayesian
     prior: 0.50 # The initial probability that the house is empty
     name: 'vacancy'
-    probability_threshold: 0.50
+    probability_threshold: 0.75
     observations:
       - entity_id: 'device_tracker.network_ians_iphone'
         prob_given_true: 0.5
-        prob_given_false: 0.5
+        prob_given_false: 0.1
         platform: 'state'
         to_state: 'not_home'
       - entity_id: 'device_tracker.network_aimees_iphone'
         prob_given_true: 0.5
-        prob_given_false: 0.5
+        prob_given_false: 0.1
         platform: 'state'
         to_state: 'not_home'
 ################################################################################
@@ -48,12 +48,12 @@ binary_sensor:
         prob_given_true: 0.9 
         prob_given_false: 0.1
         platform: 'state'
-        to_state: 'not_home'
+        to_state: 'home'
       - entity_id: 'device_tracker.network_aimees_iphone'
         prob_given_true: 0.9
         prob_given_false: 0.1
         platform: 'state'
-        to_state: 'not_home'
+        to_state: 'home'
       - entity_id: 'input_boolean.vacation_ian'
         prob_given_true: 0.9
         prob_given_false: 0.1
@@ -148,16 +148,17 @@ automation:
 ################################################################################
   - id: test_vacancy
     alias: "Test - Bayesian Vacancy"
-    initial_state: 'off'
+    initial_state: 'on'
     trigger:
       - platform: state
         entity_id: 
         - binary_sensor.vacancy
+        - binary_sensor.occupancy
     action:
       - service: notify.notify
         data:
           message: >
-            Bayesian Vacancy Sensor Triggered: {{ states.binary_sensor.vacancy.state }}
+            Bayesian Sensor Triggered: {{ trigger.entity_id }}
 ################################################################################
 
 scene:

@@ -10,4 +10,4 @@
   - alias: ''
     data:
       message: The Downstairs Roomba has stopped.
-    service: notify.ios_ios_ians_iphone
+    service: notify.ios_ians_iphone

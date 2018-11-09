@@ -17,9 +17,8 @@
 # Another useful resource:
 # https://github.com/isabellaalstrom/HomeAssistantConfiguration/blob/master/packages/roomba.yaml
 
-# HomeAssistant
-################################################################################
 homeassistant:
+################################################################################
   customize:
 # Upstairs Roomba
     vacuum.roomba_upstairs:
@@ -31,9 +30,8 @@ homeassistant:
       icon: mdi:robot-vacuum
 ################################################################################
 
-# Group
-################################################################################
 group:
+################################################################################
   roombas:
     name: Roombas
     entities:
@@ -41,28 +39,67 @@ group:
       - vacuum.roomba_downstairs
 ################################################################################
 
-# Automations
+#automation:
 ################################################################################
 # There are 2 primary automations I want here:
 # 1) Automatically run the roombas when everyone leaves, and send them back to
-#     their docks when we get home.
+#     their docks when we get home. Check for vacation switch.
+#  - id: platform_roomba_clean
+#    alias: 'Platform - Roomba - Clean'
+#    initial_state: 'on'
+#    trigger:
+#      - platform: template
+#        value_template: >
+#          {{ is_state('binary_sensor.vacancy', 'on') }}
+#    condition:
+#      condition: template
+#      value_template: >
+#        {{ is_state('group.vacation_settings', 'off') }}
+#    action:
+#      - service: 'vacuum.turn_on'
+#        data_template: >
+#          {% for state in states.vacuum %}
+#            {{ state.entity_id }}
+#          {% endfor %}
 # 2) When the battery gets < 50%, return to base, charge, then keep cleaning.
-# 3) Adding another one: Send a notification if the Roomba is dead somewhere.
+#  - id: platform_roomba_return
+#    alias: 'Platform - Roomba - Return'
+#    initial_state: 'on'
+#        trigger:
+#      - platform: template
+#        value_template: >
+#          {{ is_state('binary_sensor.vacancy', 'on') }}
+#    condition:
+#      condition: template
+#      value_template: >
+#        {{ is_state('group.vacation_settings', 'off') }}
+#    action:
+#      - service: 'vacuum.turn_on'
+#        data_template: >
+#          {% for state in states.vacuum %}
+#            {{ state.entity_id }}
+#          {% endfor %}
+# 3) Adding another one: Send a notification if the Roomba is stuck somewhere.
+#  - id: platform_roomba_dead
+#    alias: 'Platform - Roomba - Stuck'
+#    initial_state: 'on'
 # NOTE: As of right now, I am accomplishing these functions in Node-RED.
 ################################################################################
 
 switch:
+################################################################################
   - platform: template
     switches:
+# Upstairs Roomba
       roomba_upstairs:
         friendly_name: "Upstairs Roomba"
         value_template: "{{ is_state('vacuum.roomba_upstairs', 'on') }}"
         turn_on: 
-          service: 'vacuum.turn_on'
+          service: 'vacuum.start_pause'
           data:
             entity_id: 'vacuum.roomba_upstairs'
         turn_off: 
-          service: 'vacuum.turn_off'
+          service: 'vacuum.stop'
           data:
             entity_id: 'vacuum.roomba_upstairs'
         icon_template: >-
@@ -71,15 +108,16 @@ switch:
           {% else %}
             mdi:robot-vacuum
           {% endif %}
+# Downstairs Roomba
       roomba_downstairs:
-        friendly_name: "downstairs Roomba"
+        friendly_name: "Downstairs Roomba"
         value_template: "{{ is_state('vacuum.roomba_downstairs', 'on') }}"
-        turn_on: 
-          service: 'vacuum.turn_on'
+        turn_on:
+          service: 'vacuum.start_pause'
           data:
             entity_id: 'vacuum.roomba_downstairs'
         turn_off: 
-          service: 'vacuum.turn_off'
+          service: 'vacuum.stop'
           data:
             entity_id: 'vacuum.roomba_downstairs'
         icon_template: >-
@@ -88,9 +126,10 @@ switch:
           {% else %}
             mdi:robot-vacuum
           {% endif %}
-
 ################################################################################
+
 vacuum:
+################################################################################
   - platform: mqtt
     name: roomba_upstairs
     supported_features:
@@ -116,6 +155,8 @@ vacuum:
     docked_topic: "vacuum/upstairs/state"
     docked_template: "{{ value_json['docked'] }}"
     send_command_topic: 'vacuum/upstairs/send_command'
+################################################################################
+
 ################################################################################
   - platform: mqtt
     name: roomba_downstairs

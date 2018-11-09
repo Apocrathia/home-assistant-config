@@ -8,8 +8,7 @@ appdaemon:
   plugins:
     HASS:
       type: hass
-      ha_url: !secret appdaemon_ha_url
-      ha_key: !secret appdaemon_ha_key
+      ha_url: appdaemon_ha_url
 hadashboard:
-  dash_url: !secret appdaemon_dash_url
+  dash_url: appdaemon_dash_url
   dash_dir: /config/appdaemon/dashboards
