@@ -8,6 +8,7 @@
 # the update yet. Testing Owntracks to see if this will be a more
 # accurate location tracking solution.
 
-device_tracker:
-  - platform: owntracks
-    mqtt_topic: "owntracks/#"
+#device_tracker:
+#  - platform: owntracks
+owntracks:
+  mqtt_topic: "owntracks/#"

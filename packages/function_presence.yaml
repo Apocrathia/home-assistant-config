@@ -101,7 +101,7 @@ automation:
     action:
   # Change this to a script later on
 #      service: script.location_home
-      - service: nest.set_mode
+      - service: nest.set_away_mode
         data:
           home_mode: home
           structure:
@@ -134,7 +134,7 @@ automation:
     action:
   # Change this to a script later on
 #      service: script.location_away
-      - service: nest.set_mode
+      - service: nest.set_away_mode
         data:
           home_mode: away
           structure:
@@ -184,7 +184,7 @@ script:
     sequence:
       # Turn everything off (Call scene)
       # Turn the thermostat off
-      - service: nest.set_mode
+      - service: nest.set_away_mode
         data:
           home_mode: away
           structure:
@@ -202,7 +202,7 @@ script:
     sequence:
       # Turn everything back on (Call scene)
       # Turn the thermostat back on
-      - service: nest.set_mode
+      - service: nest.set_away_mode
         data:
           home_mode: home
           structure:
