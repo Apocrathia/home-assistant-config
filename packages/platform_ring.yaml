@@ -21,3 +21,7 @@ sensor:
       - last_ding
       - last_motion
       - volume
+
+# From camera.yaml
+camera:
+  - platform: ring
