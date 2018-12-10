@@ -114,12 +114,12 @@ script:
     alias: 'Wakeup - Apple TV'
     sequence:
   # Turn on the TV
-#      - service: media_player.turn_on
-#        data:
-#          entity_id: media_player.master_bedroom
+      - service: media_player.turn_on
+        data:
+          entity_id: media_player.master_bedroom
       - service: remote.send_command
         data:
-          entity_id: remote.master_bedroom
+          entity_id: remote.master_bedroom_apple_tv
           command:
             - menu
       - delay:
@@ -127,7 +127,7 @@ script:
   # Go to the home menu
       - service: remote.send_command
         data:
-          entity_id: remote.master_bedroom
+          entity_id: remote.master_bedroom_apple_tv
           command:
             - top_menu
       - delay:
@@ -135,7 +135,7 @@ script:
   # Go to the home menu (again, just in case the first one didn't work.)
       - service: remote.send_command
         data:
-          entity_id: remote.master_bedroom
+          entity_id: remote.master_bedroom_apple_tv
           command:
             - top_menu
       - delay:
@@ -143,13 +143,13 @@ script:
   # Go to the first menu item (Plex)
       - service: remote.send_command
         data:
-          entity_id: remote.master_bedroom
+          entity_id: remote.master_bedroom_apple_tv
           command:
             - top_menu
   # Open Plex
       - service: remote.send_command
         data:
-          entity_id: remote.master_bedroom
+          entity_id: remote.master_bedroom_apple_tv
           command:
             - select
       - delay:
@@ -157,7 +157,7 @@ script:
   # Select Apocrathia user account
       - service: remote.send_command
         data:
-          entity_id: remote.master_bedroom
+          entity_id: remote.master_bedroom_apple_tv
           command:
             - select
       - delay:
@@ -165,7 +165,7 @@ script:
   # Go to news
       - service: remote.send_command
         data:
-          entity_id: remote.master_bedroom
+          entity_id: remote.master_bedroom_apple_tv
           command:
             - down
             - right
@@ -179,7 +179,7 @@ script:
   # Fullscreen
       - service: remote.send_command
         data:
-          entity_id: remote.master_bedroom
+          entity_id: remote.master_bedroom_apple_tv
           command:
             - select
 ################################################################################
