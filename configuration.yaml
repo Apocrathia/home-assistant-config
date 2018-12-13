@@ -121,7 +121,7 @@ device_tracker: !include device_tracker.yaml
 camera: !include camera.yaml
 #light: !include lights.yaml
 #scene: !include scenes.yaml
-#weather: !include weather.yaml
+weather: !include weather.yaml
 
 ################################################################################
 # Inputs

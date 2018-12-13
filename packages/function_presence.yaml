@@ -14,6 +14,12 @@ group:
       - input_boolean.vacation_ian
       - input_boolean.vacation_aimee
 ################################################################################
+  network_phones:
+    name: Phones
+    entities:
+      - device_tracker.network_aimees_iphone
+      - device_tracker.network_ians_iphone
+################################################################################
 
 # The Bayesian sensor has been a real bitch to wrap my head around.
 # One extremely valuable resource has been robmarkcole's Jupityr notebook.

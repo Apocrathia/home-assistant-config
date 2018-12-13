@@ -138,6 +138,7 @@ ring_doorbell:
     - sensor.ring_front_door_last_activity
     - sensor.ring_front_door_last_ding
     - sensor.ring_front_door_last_motion
+    - camera.ring_front_door
 
 security_system:
   name: Security System
