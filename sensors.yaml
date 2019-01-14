@@ -42,30 +42,13 @@
   host: !secret hass_url
   port: !secret hass_port
 
-################################################################################
-# Presence
-################################################################################
-#- platform: template
-#  sensors:
-#    ian_location:
-#      friendly_name: 'Ian'
-#      value_template: >
-#        {{ states.device_tracker.network_ians_iphone.state }}
-#
-#- platform: template
-#  sensors:
-#    aimee_location:
-#      friendly_name: 'Aimee'
-#      value_template: >
-#        {{ states.device_tracker.network_aimees_iphone.state }}
-#
+# Template
 - platform: template
   sensors:
     serenity:
       friendly_name: 'Serenity'
       value_template: >
         Catting
-################################################################################
 
 # Space Launch
 - platform: launch_library

@@ -1,3 +1,7 @@
+################################################################################
+# Home Assistant Configuration
+################################################################################
+
 homeassistant:
   # Name of the location where Home Assistant is running
   name: !secret hass_name
@@ -122,35 +126,6 @@ camera: !include camera.yaml
 #light: !include lights.yaml
 #scene: !include scenes.yaml
 weather: !include weather.yaml
-
-################################################################################
-# Inputs
-################################################################################
-#input_select:
-#  ian_status_dropdown:
-#    name: Ian
-#    options:
-#      - Home
-#      - Just Arrived
-#      - Just Left
-#      - Work
-#      - School
-#      - Away
-#      - Extended Away
-#    initial: Home
-#
-#  aimee_status_dropdown:
-#    name: Aimee
-#    options:
-#      - Home
-#      - Just Arrived
-#      - Just Left
-#      - Work
-#      - School
-#      - Away
-#      - Extended Away
-#    initial: Home
-################################################################################
 
 #############################
 ### Additional Components ###
