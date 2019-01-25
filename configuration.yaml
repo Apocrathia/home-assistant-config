@@ -135,42 +135,6 @@ weather: !include weather.yaml
 ### Additional Components ###
 #############################
 
-### MQTT ###
-mqtt:
-  broker: core-mosquitto
-  username: !secret mqtt_username
-  password: !secret mqtt_password
-mqtt_eventstream:
-  publish_topic: master
-  subscribe_topic: slave/#
-mqtt_statestream:
-  base_topic: homeassistant
-  publish_attributes: true
-  publish_timestamps: true
-
-# Pushover
-notify:
-  - name: Pushover
-    platform: pushover
-    api_key: !secret pushover_api_key
-    user_key: !secret pushover_user_key
-
-# Splunk
-#splunk:
-#  host: !secret splunk_host
-#  token: !secret splunk_token
-#  port: 8088
-#  ssl: false
-#  name: Home Assistant
-  
 # IFTTT
 ifttt:
   key: !secret ifttt_key
-
-# Octoprint
-octoprint:
-  - host: !secret octoprint_host
-    api_key: !secret octoprint_api_key
-    name: !secret octoprint_name
-    number_of_tools: 2
-    bed: true

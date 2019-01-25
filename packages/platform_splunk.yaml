@@ -1,0 +1,8 @@
+### Splunk ###
+
+splunk:
+  host: !secret splunk_host
+  token: !secret splunk_token
+  port: 8088
+  ssl: false
+  name: Home Assistant
