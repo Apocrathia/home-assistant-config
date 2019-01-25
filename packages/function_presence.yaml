@@ -105,17 +105,7 @@ automation:
         entity_id: device_tracker.network_aimees_iphone
         state: 'not_home'
     action:
-  # Change this to a script later on
-#      service: script.location_home
-      - service: nest.set_away_mode
-        data:
-          home_mode: home
-          structure:
-            - Percivale
-      - service: alarm_control_panel.alarm_disarm
-        data:
-          entity_id: alarm_control_panel.home
-          code: !secret alarm_code
+      service: script.location_home
 ################################################################################
 
 ################################################################################
@@ -138,17 +128,7 @@ automation:
         entity_id: device_tracker.network_aimees_iphone
         state: 'not_home'
     action:
-  # Change this to a script later on
-#      service: script.location_away
-      - service: nest.set_away_mode
-        data:
-          home_mode: away
-          structure:
-            - Percivale
-      - service: alarm_control_panel.alarm_arm_away
-        data:
-          entity_id: alarm_control_panel.home
-          code: !secret alarm_code
+      service: script.location_away
 ################################################################################
 
 ################################################################################
@@ -179,7 +159,7 @@ scene:
   - name: Away
     entities:
       alarm_control_panel.home: 'armed_away'
-      climate.downstairs: 'eco'
+      climate.downstairs: 'away'
 ################################################################################
 
 # Scripts
@@ -192,9 +172,7 @@ script:
       # Turn the thermostat off
       - service: nest.set_away_mode
         data:
-          home_mode: away
-          structure:
-            - Percivale
+          away_mode: away
       # Arm the alarm
       - service: alarm_control_panel.alarm_arm_away
         data:
@@ -210,9 +188,7 @@ script:
       # Turn the thermostat back on
       - service: nest.set_away_mode
         data:
-          home_mode: home
-          structure:
-            - Percivale
+          away_mode: home
       # Disarm the alarm
       - service: alarm_control_panel.alarm_disarm
         data:
