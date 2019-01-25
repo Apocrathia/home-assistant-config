@@ -95,6 +95,10 @@ panel_iframe:
     title: IDE
     icon: mdi:code-braces
     url: !secret ide_url
+  jupyter:
+    title: Jupyter
+    icon: mdi:flask
+    url: !secret jupyter_url
 
 weblink:
   entities:
