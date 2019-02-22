@@ -52,5 +52,5 @@
 
 # Space Launch
 - platform: launch_library
-  name: 'launch_library'
+#  name: 'launch_library'
   friendly_name: 'Upcoming Spaceflight Launches'
