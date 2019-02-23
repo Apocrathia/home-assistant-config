@@ -22,7 +22,7 @@ homeassistant:
 #introduction:
 
 # Enables the frontend
-frontend: 
+frontend:
 
 # Tack this on the end to load a frontend file
 #!include frontend.yaml
@@ -32,6 +32,12 @@ ios:
 
 # Enables configuration UI
 config:
+
+# Incorporate latest changes
+default_config:
+
+# Person component
+person:
 
 http:
 #  api_password: !secret http_password
