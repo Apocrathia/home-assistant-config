@@ -1,4 +1,3 @@
-
 group.all_automations:
   hidden: false
   friendly_name: All Automations
@@ -32,3 +31,7 @@ group.front_porch_lights:
   icon: mdi:lightbulb
 group.master_bedroom_lights:
   icon: mdi:lightbulb
+person.aimee:
+  entity_picture: https://i.imgur.com/EU3GKs4.png
+person.ian:
+  entity_picture: https://i.imgur.com/u33YvmU.jpg
