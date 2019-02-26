@@ -1,7 +1,7 @@
 ### Weather ###
 
-- platform: yweather
-  woeid: !secret yweather_woeid
+#- platform: yweather
+#  woeid: !secret yweather_woeid
 
 - platform: darksky
   api_key: !secret darksky_api_key
