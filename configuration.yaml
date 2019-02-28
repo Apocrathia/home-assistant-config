@@ -141,6 +141,3 @@ weather: !include weather.yaml
 ### Additional Components ###
 #############################
 
-# IFTTT
-ifttt:
-  key: !secret ifttt_key
