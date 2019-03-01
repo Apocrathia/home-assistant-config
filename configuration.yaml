@@ -17,24 +17,3 @@ homeassistant:
   # external files
   # customize: !include customize.yaml
   packages: !include_dir_named components
-
-################################################################################
-# Core Components
-################################################################################
-
-# group: !include groups.yaml
-# automation: !include automations.yaml
-# script: !include scripts.yaml
-# zone: !include zones.yaml
-# sensor: !include sensors.yaml
-# binary_sensor: !include binary_sensors.yaml
-# device_tracker: !include device_tracker.yaml
-# camera: !include camera.yaml
-# light: !include lights.yaml
-# scene: !include scenes.yaml
-# weather: !include weather.yaml
-
-#############################
-### Additional Components ###
-#############################
-
