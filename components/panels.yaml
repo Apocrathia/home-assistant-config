@@ -1,0 +1,16 @@
+# Sidebar Items
+---
+
+panel_iframe:
+  nodered:
+    title: Node-RED
+    icon: mdi:sitemap
+    url: !secret node-red_url
+  ide:
+    title: IDE
+    icon: mdi:code-braces
+    url: !secret ide_url
+  jupyter:
+    title: Jupyter
+    icon: mdi:flask
+    url: !secret jupyter_url

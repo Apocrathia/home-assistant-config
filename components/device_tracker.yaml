@@ -1,0 +1,12 @@
+### Device Trackers ###
+
+device_tracker:
+# Automatic (Car Service)
+  - platform: automatic
+    entity_namespace: obd
+    client_id: !secret automatic_client_id
+    secret: !secret automatic_secret
+    #  username: !secret automatic_username
+    #  password: !secret automatic_password
+    devices:
+      - 2018 Ford Escape

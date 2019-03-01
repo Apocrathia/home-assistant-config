@@ -1,0 +1,57 @@
+### Sensors ###
+
+sensor:
+  # Weather prediction
+  - platform: yr
+
+  - platform: moon
+
+  - platform: wunderground
+    entity_namespace: weather
+    api_key: !secret wunderground_api_key
+    monitored_conditions:
+      - temp_high_record_c
+      - temp_high_1d_c
+      - temp_c
+      - temp_low_1d_c
+      - temp_low_record_c
+      - precip_1d
+      - precip_1d_mm
+      - wind_kph
+      - wind_1d_kph
+      - alerts
+
+  # Time & Date
+  - platform: time_date
+    display_options:
+      - 'time'
+      - 'date'
+
+  # Weather forecast
+  - platform: darksky
+    api_key: !secret darksky_api_key
+    monitored_conditions:
+      - summary
+
+  # Steam
+  - platform: steam_online
+    # entity_namespace: steam
+    api_key: !secret steam_api_key
+
+  # Certification Expiration
+  - platform: cert_expiry
+    host: !secret hass_url
+    port: !secret hass_port
+
+  # Template
+  - platform: template
+    sensors:
+      serenity:
+        friendly_name: 'Serenity'
+        value_template: >-
+            Catting
+
+  # Space Launch
+  - platform: launch_library
+    name: 'launch_library'
+    #  friendly_name: 'Upcoming Spaceflight Launches'
