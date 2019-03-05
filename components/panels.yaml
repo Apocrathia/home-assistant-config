@@ -10,6 +10,10 @@ panel_iframe:
     title: IDE
     icon: mdi:code-braces
     url: !secret ide_url
+  esphome:
+    title: ESPHome
+    icon: mdi:chip
+    url: !secret esphome_url
   jupyter:
     title: Jupyter
     icon: mdi:flask
