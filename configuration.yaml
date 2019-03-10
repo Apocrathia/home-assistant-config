@@ -16,4 +16,4 @@ homeassistant:
   time_zone: !secret timezone
   # external files
   # customize: !include customize.yaml
-  packages: !include_dir_named components
+  packages: !include_dir_named packages
