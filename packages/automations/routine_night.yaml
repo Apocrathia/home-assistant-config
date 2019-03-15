@@ -1,0 +1,221 @@
+### Nighttime Routines ###
+
+homeassistant:
+  customize:
+    binary_sensor.in_bed:
+      friendly_name: 'In Bed'
+
+group:
+################################################################################
+  nighttime_settings:
+    name: Night Time Settings
+    control: hidden
+    entities:
+      - input_datetime.bedtime
+      - input_number.nighttime_delay
+      - sensor.nighttime_start
+################################################################################
+
+################################################################################
+# Inputs
+################################################################################
+input_datetime:
+  bedtime:
+    name: Bedtime
+    has_date: false
+    has_time: true
+    initial: '21:00'
+
+input_number:
+  nighttime_delay:
+    name: Night Time Delay
+    icon: mdi:clock-in
+    initial: 60
+    min: 0
+    max: 120
+    step: 15
+################################################################################
+
+sensor:
+################################################################################
+  - platform: template
+    sensors:
+      bedtime:
+        friendly_name: Bedtime
+        entity_id: input_datetime.bedtime
+        value_template: >
+          {{ states.input_datetime.bedtime.attributes.timestamp | int | timestamp_custom("%H:%M",False) }}
+      nighttime_start:
+        friendly_name: Night Time Start
+        entity_id: input_datetime.bedtime, input_number.nighttime_delay
+        value_template: >
+          {{ ((states.input_datetime.bedtime.attributes.timestamp | int) + (states.input_number.nighttime_delay.state | int * 60)) | timestamp_custom("%H:%M",False) }}
+################################################################################
+
+binary_sensor:
+################################################################################
+  - platform: bayesian
+    prior: 0.25
+    name: 'in_bed'
+    probability_threshold: 0.75
+    observations:
+      - entity_id: 'binary_sensor.living_room_motion'
+        prob_given_true: 0.3
+        prob_given_false: 0.7
+        platform: 'state'
+        to_state: 'off'
+      - entity_id: 'sun.sun'
+        prob_given_true: 0.7
+        platform: 'state'
+        to_state: 'below_horizon'
+################################################################################
+
+automation:
+################################################################################
+  - id: routine_night_front_porch_lights
+    alias: 'Routine - Night - Front Porch Lights'
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: sun.sun
+        from: 'above_horizon'
+        to: 'below_horizon'
+    condition:
+      condition: and
+      conditions:
+      # This first condition is slightly redundant. If the automation was
+      # triggered because the sun was below the horizon, then why do I need a
+      # condition for if the sun is below the horizon? I might remove this later
+      # but I'm too afraid of breaking stuff right now, so I'll leave this note.
+      - condition: state
+        entity_id: sun.sun
+        state: 'below_horizon'
+      - condition: state
+        entity_id: light.front_porch_lights
+        state: 'off'
+    action:
+      - service: light.turn_on
+        data:
+          entity_id: light.front_porch_lights
+          profile: relax
+          brightness_pct: 25
+          transition: 900
+################################################################################
+
+################################################################################
+  - id: routine_night_living_room_lights
+    alias: 'Routine - Night - Living Room Lights'
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: sun.sun
+        from: 'above_horizon'
+        to: 'below_horizon'
+    condition:
+      condition: and
+      conditions:
+      - condition: state
+        entity_id: sun.sun
+        state: 'below_horizon'
+      - condition: state
+        entity_id: light.living_room_floor_lamp
+        state: 'off'
+    action:
+      - service: light.turn_on
+        data:
+          entity_id: light.living_room_floor_lamp
+          profile: relax
+          brightness_pct: 25
+          transition: 900
+################################################################################
+
+################################################################################
+  - id: routine_night_master_bedroom_lights
+    alias: 'Routine - Night - Master Bedroom Lights'
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: sun.sun
+        from: 'above_horizon'
+        to: 'below_horizon'
+    condition:
+      condition: and
+      conditions:
+      - condition: state
+        entity_id: binary_sensor.worknight
+        state: 'on'
+      - condition: state
+        entity_id: light.master_bedroom_lights
+        state: 'off'
+    action:
+      - service: light.turn_on
+        data:
+          entity_id: light.master_bedroom_lights
+          profile: relax
+          brightness_pct: 50
+          transition: 900
+################################################################################
+
+################################################################################
+  - id: routine_night_studio_floor_lamp
+    alias: 'Routine - Night - Studio Floor Lamp'
+    initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id: sun.sun
+        from: 'above_horizon'
+        to: 'below_horizon'
+    condition:
+      condition: and
+      conditions:
+      - condition: state
+        entity_id: binary_sensor.worknight
+        state: 'on'
+      - condition: state
+        entity_id: light.studio_floor_lamp
+        state: 'off'
+    action:
+      - service: light.turn_on
+        data:
+          entity_id: light.studio_floor_lamp
+          profile: relax
+          brightness_pct: 50
+          transition: 900
+################################################################################
+
+################################################################################
+  - id: routine_night_bedtime
+    alias: 'Routine - Night - Bedtime'
+    initial_state: 'on'
+    trigger:
+    - platform: template
+      value_template: >
+        {{ states.sensor.time.state == states.sensor.nighttime_start.state }}
+    condition:
+      condition: state
+      entity_id: binary_sensor.worknight
+      state: 'on'
+    action:
+      - service: light.turn_off
+        data:
+          entity_id: light.studio_floor_lamp, light.wink_dining_room
+################################################################################
+
+################################################################################
+  - id: routine_night_alarm_arm
+    alias: 'Routine - Night - Alarm Arm'
+    initial_state: 'on'
+    trigger:
+    - platform: template
+      value_template: >
+        {{ states.sensor.time.state == states.sensor.nighttime_start.state }}
+    condition:
+      condition: state
+      entity_id: binary_sensor.worknight
+      state: 'on'
+    action:
+      service: alarm_control_panel.alarm_arm_home
+      data:
+        entity_id: alarm_control_panel.home
+        code: !secret alarm_code
+################################################################################

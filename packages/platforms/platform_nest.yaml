@@ -1,0 +1,25 @@
+## Nest Thermostat Configuration ##
+
+# From Configuration.yaml
+# Nest
+nest:
+  client_id: !secret nest_client_id
+  client_secret: !secret nest_client_secret
+
+# From binary_sensors.yaml
+binary_sensor:
+# Nest
+- platform: nest
+  entity_namespace: nest
+
+# From climate.yaml
+climate:
+# Nest
+- platform: nest
+  entity_namespace: nest
+
+# From sensors.yaml
+sensor:
+# Nest
+- platform: nest
+  entity_namespace: nest
