@@ -6,10 +6,10 @@ panel_iframe:
     title: Node-RED
     icon: mdi:sitemap
     url: !secret node-red_url
-  ide:
-    title: IDE
-    icon: mdi:code-braces
-    url: !secret ide_url
+  # ide:
+  #   title: IDE
+  #   icon: mdi:code-braces
+  #   url: !secret ide_url
   esphome:
     title: ESPHome
     icon: mdi:chip
