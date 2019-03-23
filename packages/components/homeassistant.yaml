@@ -23,6 +23,14 @@ http:
   ip_ban_enabled: True
   login_attempts_threshold: 5
 
+homeassistant:
+  auth_providers:
+    - type: homeassistant
+    - type: trusted_networks
+      trusted_networks: !secret trusted_networks
+  auth_mfa_modules:
+    - type: totp
+
 # Checks for available updates
 # Note: This component will send some information about your system to
 # the developers to assist with development of Home Assistant.
