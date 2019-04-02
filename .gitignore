@@ -44,3 +44,6 @@ ip_bans.yaml
 
 # AppDaemon
 appdaemon/__pycache__
+
+# Zwave Configurations
+zwave_device_config.yaml
