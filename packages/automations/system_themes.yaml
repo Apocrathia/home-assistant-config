@@ -4,42 +4,26 @@
 ################################################################################
 automation:
 ################################################################################
-# Set the theme at system start
-  - alias: 'System - Theme - Initialize'
-    initial_state: 'on'
-    trigger:
-     - platform: homeassistant
-       event: start
-    action:
-      - service: frontend.set_theme
-        data_template:
-          name: >
-            {% if states.sun.sun.state == 'above_horizon' %} day
-            {% elif states.sun.sun.state == 'below_horizon' %} night
-            {% else %} default # Something went wrong if this happens
-            {% endif %}          
-################################################################################
-  - alias: 'System - Theme - Day'
-    initial_state: true
-    trigger:
-      - platform: state
-        entity_id: sun.sun
-        from: 'below_horizon'
-        to: 'above_horizon'
-    action:
-      - service: frontend.set_theme
-        data:
-          name: day
-################################################################################
-  - alias: 'System - Theme - Night'
-    initial_state: true
-    trigger:
-      - platform: state
-        entity_id: sun.sun
-        from: 'above_horizon'
-        to: 'below_horizon'
-    action:
-      - service: frontend.set_theme
-        data:
-          name: night
+ # IF: { sun.sun goes under horizon } THEN: { set theme to night mode }
+- id: system_theme_
+  alias: System - Theme - Management
+  initial_state: 'on'
+  trigger:
+  - platform: homeassistant
+    event: start
+  - platform: state
+    entity_id: sun.sun
+    to: above_horizon
+  - platform: state
+    entity_id: sun.sun
+    to: below_horizon
+  action:
+    - service_template: frontend.set_theme
+      data_template:
+        name: >
+          {% if states.sun.sun.state == "above_horizon" %}
+            day
+          {% else %}
+            night
+          {% endif %}
 ################################################################################
