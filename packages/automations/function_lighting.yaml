@@ -11,22 +11,22 @@ automation:
     initial_state: 'on'
     trigger:
       - platform: state
-        entity_id: light.wink_dining_room
+        entity_id: light.ining_room
     condition:
       condition: 'and'
       conditions:
       - condition: state
-        entity_id: light.wink_dining_room
+        entity_id: light.dining_room
         state: 'on'
       - condition: numeric_state
-        entity_id: light.wink_dining_room
+        entity_id: light.ining_room
         value_template: "{{ state.attributes.brightness }}"
-        below: 50
+        below: 15
     action:
     - service: light.turn_on
       data:
-        entity_id: light.wink_dining_room
-        brightness: 50
+        entity_id: light.ining_room
+        brightness: 25
 ################################################################################
 
 ################################################################################
