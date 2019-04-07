@@ -3,12 +3,6 @@
 [![Black Duck Security Risk](https://copilot.blackducksoftware.com/github/repos/Apocrathia/home-assistant-config/branches/master/badge-risk.svg)](https://copilot.blackducksoftware.com/github/repos/Apocrathia/home-assistant-config/branches/master)
 [![Coverage Status](https://coveralls.io/repos/github/Apocrathia/home-assistant-config/badge.svg?branch=master)](https://coveralls.io/github/Apocrathia/home-assistant-config?branch=master)
 
-This is something that I've been meaning to get setup for a while now.
-I am referencing 
-[shortbloke](https://github.com/shortbloke/home_assistant_config)'s 
-repository for a lot of this, as I really appcreciate the organization that 
-he has come up with for all of this.
-
 ### Configuration File Status 
 Each commit triggers a build check by TravisCI. If this is successful, 
 my local HASS instance will automagically pull down the new configuration 

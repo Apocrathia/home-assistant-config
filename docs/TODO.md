@@ -20,6 +20,6 @@ tackle them one by one. Not a great method, but I have no idea what I'm doing.
 ### Short Term
 - STUB
 ### Long Term
-- Neptune Apex integration via custom component
-- RGB lighting system using LED strips
-- Roomba integration
+- [x] Neptune Apex integration via custom component
+- [x] RGB lighting system using LED strips
+- [x] Roomba integration
