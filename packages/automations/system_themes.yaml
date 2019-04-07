@@ -16,7 +16,8 @@ automation:
           name: >
             {% if states.sun.sun.state == 'above_horizon' %} day
             {% elif states.sun.sun.state == 'below_horizon' %} night
-            {% else %} default # Something went wrong if this happens          
+            {% else %} default # Something went wrong if this happens
+            {% endif %}          
 ################################################################################
   - alias: 'System - Theme - Day'
     initial_state: true
