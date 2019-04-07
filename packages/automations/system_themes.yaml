@@ -1,0 +1,46 @@
+### System Themes ###
+
+
+################################################################################
+automation:
+################################################################################
+# Set the theme to midnight if the sun is down. Otherwise, it should default
+# to the system-default theme
+  - alias: 'System - Theme - Initialize'
+    initial_state: 'on'
+    trigger:
+     - platform: homeassistant
+       event: start
+    condition: 
+      condition: state
+      entity_id: sun.sun
+      state: 'below_horizon'
+    action:
+      service: frontend.set_theme
+      data:
+        name: night
+################################################################################
+  - alias: 'System - Theme - Day'
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: sun.sun
+        from: 'below_horizon'
+        to: 'above_horizon'
+    action:
+      - service: frontend.set_theme
+        data:
+          name: sday
+################################################################################
+  - alias: 'System - Theme - Night'
+    initial_state: true
+    trigger:
+      - platform: state
+        entity_id: sun.sun
+        from: 'above_horizon'
+        to: 'below_horizon'
+    action:
+      - service: frontend.set_theme
+        data:
+          name: night
+################################################################################
