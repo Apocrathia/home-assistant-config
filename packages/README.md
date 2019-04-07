@@ -8,13 +8,14 @@ together.
 
 ## Naming Convention
 
-Because the ```package: !include_dir_named``` statement does not recursively
-search a direcctory, all of the relegant configuration files must be within
-that folder. To make my files organized, I have have prefixed them with a
+Although the ```package: !include_dir_named``` statement will now recursively
+search a direcctory, there is no indication withing HASS as to what folder it
+actually came from. To make my files organized, I have have prefixed them with a
 function idenfier. That way they are grouped together in a logical manner.
 
 Prefix | Description | Example
 --- | --- | ---
+component | Configurations specific to Home Assistant core functions | component_light
 platform | Everything to set up and configure a specific platform. | platform_nest
 routine | A collection of configurations to perform tasks which happen on a daily basis | routine_morning
 function | Specific functions that can be bundled together | function_presence
