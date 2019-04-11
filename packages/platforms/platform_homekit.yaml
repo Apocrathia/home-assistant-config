@@ -16,6 +16,7 @@ homekit:
       - light.master_bedroom_lights
       - light.front_porch_lights
       - light.studio_floor_lamp
+      - light.basement
       - binary_sensor.back_door
       - binary_sensor.front_door
       - binary_sensor.garage_door
@@ -30,6 +31,7 @@ homekit:
       - switch.roomba_downstairs
       - switch.roomba_upstairs
 
+# The following automation delays HomeKit while the Z-Wave network starts up.
 automation:
   - alias: 'HomeKit - Delayed Start'
     trigger:
