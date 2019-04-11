@@ -15,5 +15,5 @@ homeassistant:
   # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
   time_zone: !secret timezone
   # external files
-  # customize: !include customize.yaml
+  customize: !include customize.yaml
   packages: !include_dir_named packages
