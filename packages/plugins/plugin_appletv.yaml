@@ -1,0 +1,15 @@
+### Apple TVs ###
+
+# From configuration.yaml
+apple_tv:
+  - host: !secret apple_tv_living_room_ip
+    login_id: !secret apple_tv_living_room_login_id
+    name: Living Room Apple TV
+    credentials: !secret apple_tv_living_room_credentials
+    start_off: true
+
+  - host: !secret apple_tv_master_bedroom_ip
+    login_id: !secret apple_tv_master_bedroom_login_id
+    name: Master Bedroom Apple TV
+    credentials: !secret apple_tv_master_bedroom_credentials
+    start_off: true
