@@ -2,19 +2,19 @@
 
 # From configuration.yaml
 # Hue
-hue:
-  bridges:
-    - host: !secret hue_bridge_ip
-      allow_hue_groups: false
-      allow_unreachable: true
+# hue:
+#   bridges:
+#     - host: !secret hue_bridge_ip
+#       allow_unreachable: true
+#       allow_hue_groups: false
 
 # From lights.yaml
 light:
 ### Lights ###
   # Philips Hue
-  - platform: hue
-    entity_namespace: hue
-    allow_hue_groups: false
+  # - platform: hue
+  #   entity_namespace: hue
+  #   allow_hue_groups: false
   
   # Groups
   - platform: group
