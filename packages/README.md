@@ -16,10 +16,8 @@ function idenfier. That way they are grouped together in a logical manner.
 Prefix | Description | Example
 --- | --- | ---
 component | Configurations specific to Home Assistant core functions | component_light
-platform | Everything to set up and configure a specific platform. | platform_nest
+plugin | Everything to set up and configure a specific plugin. | plugin_nest
 routine | A collection of configurations to perform tasks which happen on a daily basis | routine_morning
 function | Specific functions that can be bundled together | function_presence
-system | Things that work specifically with  the management of Home Assistant | system_backup
+system | Things that work specifically with the management of Home Assistant | system_backup
 toy | Things that have no real use, but are just for fun. | toy_annoyaimee
-
-As I move through this, I am sure I will come up with more prefixes.
