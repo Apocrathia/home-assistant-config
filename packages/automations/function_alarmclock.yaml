@@ -113,10 +113,6 @@ script:
   function_wakeup_apple_tv:
     alias: 'Wakeup - Apple TV'
     sequence:
-  # Turn on the TV
-      - service: media_player.turn_on
-        data:
-          entity_id: media_player.master_bedroom
       - service: remote.send_command
         data:
           entity_id: remote.master_bedroom_apple_tv
@@ -178,14 +174,22 @@ script:
           entity_id: remote.master_bedroom_apple_tv
           command:
             - down
-            - right
-            - right
-            - right
-            - right
-            - right
+            - down
+            - down
+            - down
+            - down
+            - down
+            - select
             - select
       - delay:
-          seconds: 15
+          seconds: 5
+      - service: remote.send_command
+        data:
+          entity_id: remote.master_bedroom_apple_tv
+          command:
+            - select
+      - delay:
+          seconds: 5
   # Fullscreen
       - service: remote.send_command
         data:
