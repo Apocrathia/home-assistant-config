@@ -68,9 +68,5 @@ map:
 # Track the sun
 sun:
 
-# Text to speech
-tts:
-  - platform: google
-
 # Home Assistant Cloud
 cloud:
