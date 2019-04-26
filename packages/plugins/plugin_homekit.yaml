@@ -3,7 +3,7 @@
 # From configuration.yaml
 # HomeKit
 homekit:
-  auto_start: true
+  auto_start: false
   pincode: !secret homekit_pin
   port: 51827
   filter:
