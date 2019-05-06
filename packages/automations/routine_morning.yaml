@@ -80,7 +80,7 @@ automation:
     trigger:
     - platform: template
       value_template: >
-        {{ states.sensor.time.state == states.sensor.wakeup_alarm_start_time.state }}
+        {{ states.sensor.time.state == states.sensor.morning.state }}
     condition:
       condition: state
       entity_id: binary_sensor.workday
