@@ -24,7 +24,7 @@ input_datetime:
     name: Wakeup Time
     has_date: false
     has_time: true
-    initial: 05:00
+    initial: 05:30
 
 input_number:
   wakeup_duration:
