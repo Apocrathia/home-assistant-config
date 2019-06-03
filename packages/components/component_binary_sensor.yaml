@@ -18,7 +18,7 @@ binary_sensor:
 
 
   # International Space Station
-  - platform: iss
-    name: 'iss'
-  #  friendly_name: 'International Space Station'
-    show_on_map: false
+  # - platform: iss
+  #   name: 'iss'
+  #   friendly_name: 'International Space Station'
+  #   show_on_map: false
