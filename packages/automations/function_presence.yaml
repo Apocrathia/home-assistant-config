@@ -1,10 +1,5 @@
 ### Presence Detection Functionality ###
 
-homeassistant:
-  customize:
-    binary_sensor.vacancy:
-      friendly_name: Empty House
-
 group:
 ################################################################################
   vacation_settings:
@@ -20,6 +15,12 @@ group:
       - device_tracker.network_aimees_iphone
       - device_tracker.network_ians_iphone
 ################################################################################
+  people:
+    name: People
+    entities:
+      - person.ian
+      - person.aimee
+################################################################################
 
 # The Bayesian sensor has been a real bitch to wrap my head around.
 # One extremely valuable resource has been robmarkcole's Jupityr notebook.
@@ -28,48 +29,20 @@ group:
 binary_sensor:
 ################################################################################
   - platform: bayesian
-    prior: 0.50 # The initial probability that the house is empty
-    name: 'vacancy'
-    probability_threshold: 0.75
+    prior: 0.00 # The initial probability that the house is empty
+    name: 'Occupancy'
+    probability_threshold: 0.5
     observations:
-      - entity_id: 'device_tracker.network_ians_iphone'
-        prob_given_true: 0.5
-        prob_given_false: 0.1
-        platform: 'state'
-        to_state: 'not_home'
-      - entity_id: 'device_tracker.network_aimees_iphone'
-        prob_given_true: 0.5
-        prob_given_false: 0.1
-        platform: 'state'
-        to_state: 'not_home'
-################################################################################
-
-################################################################################
-  - platform: bayesian
-    prior: 0.50 # The initial probability that the house is full
-    name: 'occupancy'
-    probability_threshold: 0.75
-    observations:
-      - entity_id: 'device_tracker.network_ians_iphone'
-        prob_given_true: 0.9 
-        prob_given_false: 0.1
+      - entity_id: person.ian
+        prob_given_true: 1.0
+        prob_given_false: 0.0
         platform: 'state'
         to_state: 'home'
-      - entity_id: 'device_tracker.network_aimees_iphone'
-        prob_given_true: 0.9
-        prob_given_false: 0.1
+      - entity_id: person.aimee
+        prob_given_true: 1.0
+        prob_given_false: 0.0
         platform: 'state'
         to_state: 'home'
-      - entity_id: 'input_boolean.vacation_ian'
-        prob_given_true: 0.9
-        prob_given_false: 0.1
-        platform: 'state'
-        to_state: 'on'
-      - entity_id: 'input_boolean.vacation_aimee'
-        prob_given_true: 0.9
-        prob_given_false: 0.1
-        platform: 'state'
-        to_state: 'on'
 ################################################################################
 
 input_boolean:
@@ -86,55 +59,38 @@ input_boolean:
 
 automation:
 ################################################################################
-  - id: function_presence_home
-    alias: "Function - Presence - Home"
+  - id: function_presence_detection
+    alias: "Function - Presence Detection"
     initial_state: 'on'
     trigger:
       - platform: state
-        entity_id: 
-        - device_tracker.network_ians_iphone
-        - device_tracker.network_aimees_iphone
-        to: 'home'
-    condition:
-      condition: or
-      conditions:
-      - condition: state
-        entity_id: device_tracker.network_ians_iphone
-        state: 'not_home'
-      - condition: state
-        entity_id: device_tracker.network_aimees_iphone
-        state: 'not_home'
+        entity_id: group.people
     action:
-      service: script.location_home
+      service_template: >
+        {% if is_state('group.people', 'home') %}
+          script.location_home
+        {% elif is_state('group.people', 'not_home') %}
+          script.location_away
+        {% endif %}
 ################################################################################
-
-################################################################################
-  - id: function_presence_away
-    alias: "Function - Presence - Away"
-    initial_state: 'on'
+  - id: function_vacation_detection
+    alias: "Function - Vacation Detection"
+    initial_state: 'off'
     trigger:
       - platform: state
-        entity_id: 
-        - device_tracker.network_ians_iphone
-        - device_tracker.network_aimees_iphone
-        to: 'not_home'
-    condition:
-      condition: and
-      conditions:
-      - condition: state
-        entity_id: device_tracker.network_ians_iphone
-        state: 'not_home'
-      - condition: state
-        entity_id: device_tracker.network_aimees_iphone
-        state: 'not_home'
+        entity_id: group.people
     action:
-      service: script.location_away
-################################################################################
-
+      service_template: >
+        # TODO - If location > 100km from home, set vacation input_boolean
+        {% if is_state('group.people', 'home') %}
+          script.location_home
+        {% elif is_state('group.people', 'not_home') %}
+          script.location_away
+        {% endif %}
 ################################################################################
   - id: test_person
     alias: "Test - Person Component"
-    initial_state: 'on'
+    initial_state: 'off'
     trigger:
       - platform: state
         entity_id: 
