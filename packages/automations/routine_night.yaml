@@ -216,7 +216,7 @@ automation:
     action:
       - service: light.turn_off
         data:
-          entity_id: light.studio_floor_lamp, light.wink_dining_room
+          entity_id: light.studio_floor_lamp, light.dining_room, light.basement
 ################################################################################
 
 ################################################################################

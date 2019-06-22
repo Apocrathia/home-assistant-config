@@ -124,7 +124,10 @@ script:
   location_away:
     alias: 'Function - Presence - Away'
     sequence:
-      # Turn everything off (Call scene)
+      # Turn off all of the lights
+      - service: light.turn_off
+        data:
+          entity_id: group.indoor_lights
       # Turn the thermostat off
       - service: nest.set_away_mode
         data:

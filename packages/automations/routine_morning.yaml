@@ -51,7 +51,7 @@ automation:
 ################################################################################
   - id: master_bedroom_lights_morning
     alias: "Routine - Morning - Master Bedroom Lights"
-    initial_state: 'on'
+    initial_state: 'off'
     trigger:
       - platform: state
         entity_id: 

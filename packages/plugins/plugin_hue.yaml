@@ -28,3 +28,11 @@ light:
     entities:
       - light.floor_lamp_left
       - light.floor_lamp_right
+
+  - platform: group
+    name: Indoor Lights
+    entities:
+      - light.basement
+      - light.dining_room
+      - light.studio_floor_lamp
+      - light.master_bedroom_lights
