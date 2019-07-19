@@ -1,4 +1,4 @@
-#**Currently Frozen**
+# **Frozen**
 I am currently in the process of moving and my home assistant instance is offline. This configuration was last valid with v0.95. This repository will be updated within the next couple of months once I am in my new home.
 
 # Apocrathia's Home Assistant Configuration Files 
