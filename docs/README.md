@@ -1,3 +1,6 @@
+#**Currently Frozen**
+I am currently in the process of moving and my home assistant instance is offline. This configuration was last valid with v0.95. This repository will be updated within the next couple of months once I am in my new home.
+
 # Apocrathia's Home Assistant Configuration Files 
 [![Build Status](https://travis-ci.org/Apocrathia/home-assistant-config.svg?branch=master)](https://travis-ci.org/Apocrathia/home-assistant-config)
 [![Black Duck Security Risk](https://copilot.blackducksoftware.com/github/repos/Apocrathia/home-assistant-config/branches/master/badge-risk.svg)](https://copilot.blackducksoftware.com/github/repos/Apocrathia/home-assistant-config/branches/master)
