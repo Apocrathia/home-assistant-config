@@ -8,19 +8,19 @@
 
 
 # Device Traker
-device_tracker:
-  - platform: unifi
-    entity_namespace: network
-    host: !secret unifi_host
-    port: !secret unifi_port
-    username: !secret unifi_username
-    password: !secret unifi_password
-    site_id: default
-    verify_ssl: false
-    consider_home: 180
-    new_device_defaults:
-      track_new_devices: true
-      hide_if_away: false
+# device_tracker:
+#   - platform: unifi
+#     entity_namespace: network
+#     host: !secret unifi_host
+#     port: !secret unifi_port
+#     username: !secret unifi_username
+#     password: !secret unifi_password
+#     site_id: default
+#     verify_ssl: false
+#     consider_home: 180
+#     new_device_defaults:
+#       track_new_devices: true
+#       hide_if_away: false
 
 # Really need some sort of a value_template here to set statuses
 # to 'online' and 'offline'.
