@@ -10,3 +10,5 @@ device_tracker:
     #  password: !secret automatic_password
     devices:
       - 2018 Ford Escape
+      - 2013 Nissan Frontier
+      - 2016 Subaru Crosstrek

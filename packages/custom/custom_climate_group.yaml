@@ -1,0 +1,10 @@
+###############################################################################
+# Climate Group
+###############################################################################
+
+climate:
+  - platform: climate_group
+    name: 'Home Climate'
+    entities:
+    - climate.homekit_downstairs
+    - climate.homekit_upstairs

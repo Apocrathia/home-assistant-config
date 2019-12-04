@@ -4,35 +4,9 @@
 
 automation:
 ################################################################################
-# This fixes the dining room light, where the switch doesn't turn off
-# when it reaches a low enough level that the light is actually off.
-  - id: function_lighting_dining_room
-    alias: "Function - Lighting - Dining Room"
-    initial_state: 'on'
-    trigger:
-      - platform: state
-        entity_id: light.ining_room
-    condition:
-      condition: 'and'
-      conditions:
-      - condition: state
-        entity_id: light.dining_room
-        state: 'on'
-      - condition: numeric_state
-        entity_id: light.ining_room
-        value_template: "{{ state.attributes.brightness }}"
-        below: 15
-    action:
-    - service: light.turn_on
-      data:
-        entity_id: light.ining_room
-        brightness: 25
-################################################################################
-
-################################################################################
   - id: function_lighting_front_door_motion_initial
     alias: 'Function - Lighting - Front Porch Motion (Initial)'
-    initial_state: 'on'
+    initial_state: 'off'
     trigger:
       - platform: state
         entity_id: binary_sensor.ring_front_door_motion
@@ -54,7 +28,7 @@ automation:
 ################################################################################
   - id: function_lighting_front_door_motion_idle
     alias: 'Function - Lighting - Front Porch Motion (Idle)'
-    initial_state: 'on'
+    initial_state: 'off'
     trigger:
       - platform: state
         entity_id: binary_sensor.ring_front_door_motion

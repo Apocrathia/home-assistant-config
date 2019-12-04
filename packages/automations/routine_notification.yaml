@@ -9,8 +9,8 @@ automation:
     platform: template
     value_template: >
       {{ 
-        (now().weekday() == 0) and
-        (now().time().hour == 17) and
+        (now().weekday() == 1) and
+        (now().time().hour == 19) and
         (now().time().minute == 0) 
       }}
   action:

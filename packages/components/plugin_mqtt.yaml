@@ -1,9 +1,10 @@
 ### MQTT ###
 
 mqtt:
-  broker: core-mosquitto
+  broker: !secret mqtt_host
   username: !secret mqtt_username
   password: !secret mqtt_password
+  client_id: !secret mqtt_client_id
 mqtt_eventstream:
   # publish_topic: master
   subscribe_topic: slave/#

@@ -1,0 +1,34 @@
+### Light ###
+
+light:  
+  # Groups
+  - platform: group
+    name: Front Porch Lights
+    entities:
+      - light.front_porch_left
+      - light.front_porch_right
+
+  - platform: group
+    name: Outdoor Garage Lights
+    entities:
+      - light.outdoor_garage_left
+      - light.outdoor_garage_right
+
+  - platform: group
+    name: Outdoor Lights
+    entities:
+      - light.front_porch_lights
+      - light.outdoor_garage_lights
+  
+  - platform: group
+    name: Master Bedroom Lights
+    entities:
+      - light.master_bedroom_floor_lamp
+
+  - platform: group
+    name: Indoor Lights
+    entities:
+      - light.master_bedroom_floor_lamp
+      - light.sitting_room_floor_lamp
+      - light.dining_room_chandelier
+      - light.kitchen_chandelier

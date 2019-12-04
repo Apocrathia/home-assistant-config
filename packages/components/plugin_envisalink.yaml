@@ -3,7 +3,7 @@ homeassistant:
   customize:
     alarm_control_panel.home:
       friendly_name: Alarm System
-      icon: mdi:security-home
+      icon: mdi:shield-home
     sensor.home_keypad:
       friendly_name: Alarm Keypad
       icon: mdi:calculator
@@ -17,9 +17,9 @@ homeassistant:
 
 # Envisalink
 envisalink:
-  host: !secret envisalink_ip
+  host: !secret envisalink_host
   panel_type: HONEYWELL
-  user_name: user
+  user_name: !secret envisalink_username
   password: !secret envisalink_password
   code: !secret alarm_code
   port: !secret envisalink_port
@@ -28,18 +28,19 @@ envisalink:
   zonedump_interval: 30
   panic_type: Police
   zones:
-    9:
-      name: 'Front Door'
-      type: 'opening'
+    # 9:
+    #   name: 'Front Door'
+    #   type: 'opening'
     10:
       name: 'Living Room Motion'
       type: 'motion'
-    19:
-      name: 'Garage Door'
-      type: 'opening'
-    26:
-      name: 'Back Door'
-      type: 'opening'
+    # 19:
+    #   name: 'Garage Door'
+    #   type: 'opening'
+    # 26:
+    #   name: 'Back Door'
+    #   type: 'opening'
+## There's also a glassbreak sensor somewhere
   partitions:
     1:
       name: 'Home'
