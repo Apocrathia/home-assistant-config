@@ -1,6 +1,0 @@
-## Custom Updater ##
-# https://github.com/custom-components/custom_updater
-
-custom_updater:
-  card_urls:
-    - https://raw.githubusercontent.com/kalkih/mini-graph-card/master/tracker.json

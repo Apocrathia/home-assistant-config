@@ -4,7 +4,7 @@
 ################################################################################
 automation:
 ################################################################################
- # IF: { sun.sun goes under horizon } THEN: { set theme to night mode }
+# IF: { sun.sun goes under horizon } THEN: { set theme to night mode }
 - id: system_theme_
   alias: System - Theme - Management
   initial_state: 'on'

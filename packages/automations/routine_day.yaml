@@ -1,25 +1,89 @@
 ### Daytime Routines ###
 
+################################################################################
+# Inputs
+################################################################################
+input_datetime:
+  morning:
+    name: Morning
+    has_date: false
+    has_time: true
+    initial: '05:00'
+
+input_number:
+  morning_advance:
+    name: Morning Advance
+    icon: mdi:clock-in
+    initial: 60
+    min: 0
+    max: 120
+    step: 15
+    unit_of_measurement: Minutes
+
+  daytime_lighting_transition:
+    name: Day Time Lighting Transition
+    icon: mdi:clock-in
+    initial: 15
+    min: 0
+    max: 30
+    step: 5
+    unit_of_measurement: Minutes
+################################################################################
+
+sensor:
+################################################################################
+  - platform: template
+    sensors:
+      morning:
+        friendly_name: Morning
+        icon_template: mdi:clock-outline
+        entity_id: input_datetime.morning
+        value_template: >
+          {{ states.input_datetime.morning.attributes.timestamp | int | timestamp_custom("%H:%M",False) }}
+      morning_start:
+        friendly_name: Morning Start
+        icon_template: mdi:clock-outline
+        entity_id: input_datetime.morning, input_number.morning_advance
+        value_template: >
+          {{ ((states.input_datetime.morning.attributes.timestamp | int) - (states.input_number.morning_advance.state | int * 60)) | timestamp_custom("%H:%M",False) }}
+      daytime_lighting_transition:
+        friendly_name: Day Time Lighting Transition
+        icon_template: mdi:transition-masked
+        unit_of_measurement: 'Seconds'
+        entity_id: input_number.daytime_lighting_transition
+        value_template: >
+          {{ ((states.input_number.daytime_lighting_transition.state | int) * 60) }}
+      next_sunrise:
+        friendly_name: Next Sunrise
+        icon_template: mdi:weather-sunset-up
+        entity_id: sun.sun
+        value_template: >
+          {{ as_timestamp(states.sun.sun.attributes.next_dawn) | int | timestamp_custom("%H:%M", True) }}
+################################################################################
+
 automation:
 ################################################################################
-  - id: routine_day_front_porch_lights
-    alias: 'Routine - Front Porch Lights'
-    initial_state: 'on'
+  - id: routine_day_alarm_disarm
+    alias: 'Routine - Day Alarm Disarm'
+    initial_state: 'off'
     trigger:
-      - platform: state
-        entity_id: sun.sun
-        from: 'below_horizon'
-        to: 'above_horizon'
+    - platform: template
+      value_template: >
+        {{ states.sensor.time.state == states.sensor.morning.state }}
+    condition:
+      condition: state
+      entity_id: binary_sensor.workday
+      state: 'on'
     action:
-      - service: light.turn_off
-        data:
-          entity_id: light.front_porch_lights
-          transition: 900
+      service: alarm_control_panel.alarm_disarm
+      data:
+        entity_id: alarm_control_panel.home
+        code: !secret alarm_code
 ################################################################################
 
 ################################################################################
-  - id: routine_day_living_room_lights
-    alias: 'Routine - Day - Living Room Lights'
+  - id: routine_day_outdoor_lights
+    alias: 'Routine - Day - Outdoor Lights'
     initial_state: 'on'
     trigger:
       - platform: state
@@ -27,33 +91,71 @@ automation:
         from: 'below_horizon'
         to: 'above_horizon'
     condition:
-      condition: and
-      conditions:
       - condition: state
-        entity_id: sun.sun
-        state: 'above_horizon'
-      - condition: state
-        entity_id: light.living_room_floor_lamp
+        entity_id: light.outdoor_lights
         state: 'on'
     action:
       - service: light.turn_off
         data:
-          entity_id: light.living_room_floor_lamp
-          transition: 900
+          entity_id: light.outdoor_lights
+        data_template:
+          transition: >
+            {{ (states.sensor.daytime_lighting_transition.state | int) }}
+################################################################################
+
+################################################################################
+  - id: routine_day_indoor_lights
+    alias: 'Routine - Day - Indoor Lights'
+    initial_state: 'on'
+    trigger:
+      - platform: sun
+        event: sunrise
+    condition:
+      - condition: state
+        entity_id: light.sitting_room_floor_lamp
+        state: 'on'
+    action:
+      - service: light.turn_off
+        data:
+          entity_id: light.sitting_room_floor_lamp
+        data_template:
+          transition: >
+            {{ (states.sensor.daytime_lighting_transition.state | int) }}
 ################################################################################
 
 ################################################################################
   - id: routine_day_kitchen_cabinet_lights
     alias: 'Routine - Day - Kitchen Cabnet Lights'
-    initial_state: 'on'
+    initial_state: 'off'
     trigger:
-      - platform: state
-        entity_id: sun.sun
-        from: 'below_horizon'
-        to: 'above_horizon'
+      - platform: sun
+        event: sunrise
     action:
       - service: light.turn_off
         data:
           entity_id: light.kitchen_cabinet_lights
-          transition: 900
+        data_template:
+          transition: >
+            {{ (states.sensor.daytime_lighting_transition.state | int) }}
+################################################################################
+
+# I realize this automation will be a little redundant, but it's just in case I
+# forget to turn shit off, or another automation fails.
+################################################################################
+  - id: routine_day_lighting_off
+    alias: 'Routine - Day - Turn Off Lights After Sunrise'
+    initial_state: 'on'
+    trigger:
+      - platform: sun
+        event: sunrise
+        offset: "01:00:00"
+    action:
+      - service: light.turn_off
+        data:
+          entity_id: 
+            - light.indoor_lights
+            - light.outdoor_lights
+        data_template:
+          transition: >
+            {{ (states.sensor.daytime_lighting_transition.state | int) }}
 ################################################################################

@@ -36,11 +36,16 @@
 !themes
 !www
 
+# don't include the archive subfolder 
+# (As that's from my recent migration to HassOS)
+archive
+
 # Ignore Sensitive Files
 secrets.yaml
 known_devices.yaml
 entity_registry.yaml
 ip_bans.yaml
+customize.yaml
 
 # AppDaemon
 appdaemon/__pycache__

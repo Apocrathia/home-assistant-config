@@ -31,12 +31,12 @@ sensor:
   # Template
   - platform: template
     sensors:
+      # Because we love our pets
       serenity:
         friendly_name: 'Serenity'
         value_template: >-
             Catting
-
-  # # Space Launch
-  # - platform: launch_library
-  #   name: 'launch_library'
-  #   #  friendly_name: 'Upcoming Spaceflight Launches'
+      sagan:
+        friendly_name: 'Sagan'
+        value_template: >-
+            Good Girl

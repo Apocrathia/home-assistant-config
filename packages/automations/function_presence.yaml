@@ -26,24 +26,24 @@ group:
 # One extremely valuable resource has been robmarkcole's Jupityr notebook.
 # http://nbviewer.jupyter.org/github/robmarkcole/HASS-data-science/blob/master/Bayesian%20sensor%20tutorial.ipynb
 
-binary_sensor:
-################################################################################
-  - platform: bayesian
-    prior: 0.00 # The initial probability that the house is empty
-    name: 'Occupancy'
-    probability_threshold: 0.5
-    observations:
-      - entity_id: person.ian
-        prob_given_true: 1.0
-        prob_given_false: 0.0
-        platform: 'state'
-        to_state: 'home'
-      - entity_id: person.aimee
-        prob_given_true: 1.0
-        prob_given_false: 0.0
-        platform: 'state'
-        to_state: 'home'
-################################################################################
+# binary_sensor:
+# ################################################################################
+#   - platform: bayesian
+#     prior: 0.00 # The initial probability that the house is empty
+#     name: 'Occupancy'
+#     probability_threshold: 0.5
+#     observations:
+#       - entity_id: person.ian
+#         prob_given_true: 1.0
+#         prob_given_false: 0.0
+#         platform: 'state'
+#         to_state: 'home'
+#       - entity_id: person.aimee
+#         prob_given_true: 1.0
+#         prob_given_false: 0.0
+#         platform: 'state'
+#         to_state: 'home'
+# ################################################################################
 
 input_boolean:
 ################################################################################
@@ -55,10 +55,17 @@ input_boolean:
     name: 'Vacation - Aimee'
     initial: off
     icon: mdi:beach
+  away_mode:
+    name: Away Mode
+    initial: off
+    icon: mdi:walk
 ################################################################################
 
 automation:
 ################################################################################
+# I realize the input boolean seems redundant, but I wanted a simply switch that
+# I could hit in case I wanted to activate an Away Mode, as well as something
+# that could be accessed externally by Node-RED.
   - id: function_presence_detection
     alias: "Function - Presence Detection"
     initial_state: 'on'
@@ -68,54 +75,73 @@ automation:
     action:
       service_template: >
         {% if is_state('group.people', 'home') %}
-          script.location_home
+          input_boolean.turn_off
         {% elif is_state('group.people', 'not_home') %}
-          script.location_away
+          input_boolean.turn_on
         {% endif %}
+      entity_id: input_boolean.away_mode
 ################################################################################
-  - id: function_vacation_detection
-    alias: "Function - Vacation Detection"
-    initial_state: 'off'
+  - id: function_presence_scripts
+    alias: "Function - Presence Scripts"
+    initial_state: 'on'
     trigger:
       - platform: state
-        entity_id: group.people
+        entity_id: input_boolean.away_mode
     action:
       service_template: >
-        # TODO - If location > 100km from home, set vacation input_boolean
-        {% if is_state('group.people', 'home') %}
+        {% if is_state('input_boolean.away_mode', 'off') %}
           script.location_home
-        {% elif is_state('group.people', 'not_home') %}
+        {% elif is_state('input_boolean.away_mode', 'on') %}
           script.location_away
         {% endif %}
 ################################################################################
-  - id: test_person
-    alias: "Test - Person Component"
+  - id: function_vacation_departure
+    alias: "Function - Vacation - Departure"
     initial_state: 'off'
     trigger:
-      - platform: state
-        entity_id: 
-        - person.ian
-        - person.aimee
+      - platform: numeric_state
+        entity_id:
+          - person.aimee
+          - person.ian
+        value_template: >
+          {{ distance('zone.home', 'trigger.event.data') | round }} 
+        above: 100
+        for: "01:00:00"
     action:
-      - service: notify.notify
-        data:
-          message: >
-            Person Component Triggered: {{ trigger.entity_id }} 
+      service_template: >
+        {% if trigger.entity_id == 'person.aimee' %}
+          - service: input_boolean.turn_on
+            data:
+              entity_id: input_boolean.vacation_aimee
+        {% elif trigger.entity_id == 'person.ian' %}
+          - service: input_boolean.turn_on
+            data:
+              entity_id: input_boolean.vacation_ian
+        {% endif %}
 ################################################################################
-
-scene:
-################################################################################
-  - name: Home
-    entities:
-      alarm_control_panel.home: 'disarmed'
-      climate.downstairs: 'home'
-################################################################################
-
-################################################################################
-  - name: Away
-    entities:
-      alarm_control_panel.home: 'armed_away'
-      climate.downstairs: 'away'
+  - id: function_vacation_return
+    alias: "Function - Vacation - Return"
+    initial_state: 'off'
+    trigger:
+      - platform: numeric_state
+        entity_id:
+          - person.aimee
+          - person.ian
+        value_template: >
+          {{ distance('zone.home', 'trigger.event.data') | round }} 
+        below: 100
+        for: "01:00:00"
+    action:
+      service_template: >
+        {% if trigger.entity_id == 'person.aimee' %}
+          - service: input_boolean.turn_off
+            data:
+              entity_id: input_boolean.vacation_aimee
+        {% elif trigger.entity_id == 'person.ian' %}
+          - service: input_boolean.turn_off
+            data:
+              entity_id: input_boolean.vacation_ian
+        {% endif %}
 ################################################################################
 
 # Scripts
@@ -125,32 +151,49 @@ script:
     alias: 'Function - Presence - Away'
     sequence:
       # Turn off all of the lights
-      - service: light.turn_off
-        data:
-          entity_id: group.indoor_lights
-      # Turn the thermostat off
-      - service: nest.set_away_mode
-        data:
-          away_mode: away
+    - service: light.turn_off
+      data:
+        entity_id: group.indoor_lights
+      # Set the thermostats to away
+    - service: climate.set_preset_mode
+      data:
+        entity_id: 
+          - climate.ecobee_downstairs
+          - climate.ecobee_upstairs
+        preset_mode: 'away'
+      # Start the vacuum
+    - service: vacuum.start
+      data:
+        entity_id: 
+          - vacuum.downstairs_vacuum
+          #- vacuum.upstairs_vacuum
       # Arm the alarm
-      - service: alarm_control_panel.alarm_arm_away
-        data:
-          entity_id: alarm_control_panel.home
-          code: !secret alarm_code
+      # - service: alarm_control_panel.alarm_arm_away
+      #   data:
+      #     entity_id: alarm_control_panel.home
+      #     code: !secret alarm_code
       # Randomly turn on and off lights to simulate occupancy
       # TODO
 ################################################################################
   location_home:
     alias: 'Function - Presence - Home'
     sequence:
-      # Turn everything back on (Call scene)
-      # Turn the thermostat back on
-      - service: nest.set_away_mode
-        data:
-          away_mode: home
+      # Set the thermostat to home
+    - service: climate.set_preset_mode
+      data:
+        entity_id: 
+          - climate.ecobee_downstairs
+          - climate.ecobee_upstairs
+        preset_mode: 'home'
+      # Stop the vacuum
+    - service: vacuum.return_to_base
+      data:
+        entity_id: 
+          - vacuum.downstairs_vacuum
+          #- vacuum.upstairs_vacuum
       # Disarm the alarm
-      - service: alarm_control_panel.alarm_disarm
-        data:
-          entity_id: alarm_control_panel.home
-          code: !secret alarm_code
+      # - service: alarm_control_panel.alarm_disarm
+      #   data:
+      #     entity_id: alarm_control_panel.home
+      #     code: !secret alarm_code
 ################################################################################

@@ -4,7 +4,7 @@ frontend:
   themes:
     night:
       # Background image
-      background-image: 'center / cover no-repeat url("/local/night.jpg") fixed'
+      background-image: 'center / cover no-repeat url("/local/images/night.jpg") fixed'
 
       # Colors
       text-color: '#DADADB'                                                           # Grey text

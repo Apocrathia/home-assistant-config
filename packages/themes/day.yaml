@@ -4,7 +4,7 @@ frontend:
   themes:
     day:
       # Background image
-      background-image: 'center / cover no-repeat url("/local/day.jpg") fixed'
+      background-image: 'center / cover no-repeat url("/local/images/day.jpg") fixed'
 
       # Colors
       text-color: '#636B75'                                                           # Grey text
