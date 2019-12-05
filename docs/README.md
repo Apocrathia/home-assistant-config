@@ -4,17 +4,12 @@
 [![Coverage Status](https://coveralls.io/repos/github/Apocrathia/home-assistant-config/badge.svg?branch=master)](https://coveralls.io/github/Apocrathia/home-assistant-config?branch=master)
 
 ### Configuration File Status 
-Each commit triggers a build check by TravisCI. If this is successful, 
-my local HASS instance will automagically pull down the new configuration 
-and restart itself.
+Each commit triggers a build check by TravisCI. If this is successful, my local HASS instance will automagically pull down the new configuration and restart itself.
 
 ![My Home Assistant Default View](images/default_view.png)
 
 ## Hardware
-I am running Home Assistant within Hass.io on a HassOS virtual machine 
-which is running within VMware ESXi on an Intel NUC. For the most part, 
-I have attempted to abstract as much hardware from the equation as possible. However, I do have an [Aeotec Z-Stick](https://aeotec.com/z-wave-usb-stick/)
- passed through to the virtual machine for accessing the Z-Wave network.
+I am running Home Assistant via HassOS within VMware ESXi. For the most part, I have attempted to abstract as much hardware from the equation as possible. However, I do have an [Aeotec Z-Stick](https://aeotec.com/z-wave-usb-stick/) passed through to the virtual machine for accessing the Z-Wave network.
 
 ## General Information
 This configuration controls a couple of significant features in my smart home.
