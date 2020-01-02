@@ -14,7 +14,7 @@ switch:
 ################################################################################
   - platform: template
     switches:
-# Downstairs Vacuu,
+# Downstairs Vacuum
       vacuum_downstairs:
         friendly_name: "Downstairs Vacuum"
         value_template: "{{ is_state('vacuum.downstairs_vacuum', 'on') }}"
@@ -37,7 +37,7 @@ switch:
 automation:
 ################################################################################
 # keep the vacuum going if it complains that it's stuck.
-# We have fairly plush carpets, and the added resistance against the 
+# We have fairly high pile carpets, and the added resistance against the 
 # brush is typically percieved as something being caught in the brush.
 # To work around this, we just tell the vacuum to keep going.
   - id: function_vacuum_restart
@@ -47,15 +47,15 @@ automation:
       - platform: state
         entity_id:
           - vacuum.downstairs_vacuum
-          #- vacuum.upstairs_vacuum
+          - vacuum.upstairs_vacuum
         from: cleaning
         to: error
     action:
-      - delay:
-          seconds: 30
+      - delay: 0:30
       - service: 'vacuum.start'
         data:
           entity_id: "{{ trigger.entity_id }}"
+
 ################################################################################
 # While we're out of the house, keep sending the vacuum out as soon as it's
 # reached a full charge. This may or may not end well.
@@ -66,7 +66,7 @@ automation:
       - platform: numeric_state
         entity_id:
           - vacuum.downstairs_vacuum
-          #- vacuum.upstairs_vacuum
+          - vacuum.upstairs_vacuum
         value_template: "{{ state.attributes.battery }}"
         above: 99
     condition:
@@ -79,8 +79,7 @@ automation:
           entity_id: "{{ trigger.entity_id }}"
           state:  docked
     action:
-      - delay:
-          seconds: 30
+      - delay: 0:30
       - service: 'vacuum.start'
         data:
           entity_id: "{{ trigger.entity_id }}"
