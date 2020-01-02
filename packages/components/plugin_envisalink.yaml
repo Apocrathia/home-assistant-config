@@ -28,18 +28,21 @@ envisalink:
   zonedump_interval: 30
   panic_type: Police
   zones:
-    # 9:
-    #   name: 'Front Door'
-    #   type: 'opening'
+    1:
+      name: 'Front Door'
+      type: 'opening'
+    2:
+      name: 'Back Door'
+      type: 'opening'
+    3:
+      name: 'Garage Door'
+      type: 'opening'
+    4:
+      name: 'Glass Break'
+      type: 'problem'
     10:
-      name: 'Living Room Motion'
+      name: 'Living Room'
       type: 'motion'
-    # 19:
-    #   name: 'Garage Door'
-    #   type: 'opening'
-    # 26:
-    #   name: 'Back Door'
-    #   type: 'opening'
 ## There's also a glassbreak sensor somewhere
   partitions:
     1:

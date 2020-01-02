@@ -168,10 +168,10 @@ script:
           - vacuum.downstairs_vacuum
           #- vacuum.upstairs_vacuum
       # Arm the alarm
-      # - service: alarm_control_panel.alarm_arm_away
-      #   data:
-      #     entity_id: alarm_control_panel.home
-      #     code: !secret alarm_code
+    - service: alarm_control_panel.alarm_arm_away
+      data:
+        entity_id: alarm_control_panel.home
+        code: !secret alarm_code
       # Randomly turn on and off lights to simulate occupancy
       # TODO
 ################################################################################
@@ -192,8 +192,8 @@ script:
           - vacuum.downstairs_vacuum
           #- vacuum.upstairs_vacuum
       # Disarm the alarm
-      # - service: alarm_control_panel.alarm_disarm
-      #   data:
-      #     entity_id: alarm_control_panel.home
-      #     code: !secret alarm_code
+    - service: alarm_control_panel.alarm_disarm
+      data:
+        entity_id: alarm_control_panel.home
+        code: !secret alarm_code
 ################################################################################

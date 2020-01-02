@@ -110,8 +110,8 @@ automation:
 ################################################################################
 
 ################################################################################
-  - id: routine_night_indoor_lights
-    alias: 'Routine - Night - Indoor Lights'
+  - id: routine_night_night_lights
+    alias: 'Routine - Night - Night Lights'
     initial_state: 'on'
     trigger:
       - platform: sun
@@ -123,12 +123,12 @@ automation:
           entity_id: input_boolean.away_mode
           state: 'off'
         - condition: state
-          entity_id: light.indoor_lights
+          entity_id: light.night_lights
           state: 'off'
     action:
       - service: light.turn_on
         data:
-          entity_id: light.indoor_lights
+          entity_id: light.night_lights
           profile: relax
           brightness_pct: 25
         data_template:
@@ -204,7 +204,7 @@ automation:
 ################################################################################
   - id: routine_night_alarm_arm
     alias: 'Routine - Night - Alarm Arm'
-    initial_state: 'off'
+    initial_state: 'on'
     trigger:
     - platform: template
       value_template: >

@@ -65,7 +65,7 @@ automation:
 ################################################################################
   - id: routine_day_alarm_disarm
     alias: 'Routine - Day Alarm Disarm'
-    initial_state: 'off'
+    initial_state: 'on'
     trigger:
     - platform: template
       value_template: >
@@ -104,20 +104,20 @@ automation:
 ################################################################################
 
 ################################################################################
-  - id: routine_day_indoor_lights
-    alias: 'Routine - Day - Indoor Lights'
+  - id: routine_day_night_lights
+    alias: 'Routine - Day - Night Lights'
     initial_state: 'on'
     trigger:
       - platform: sun
         event: sunrise
     condition:
       - condition: state
-        entity_id: light.sitting_room_floor_lamp
+        entity_id: light.night_lights
         state: 'on'
     action:
       - service: light.turn_off
         data:
-          entity_id: light.sitting_room_floor_lamp
+          entity_id: light.night_lights
         data_template:
           transition: >
             {{ (states.sensor.daytime_lighting_transition.state | int) }}

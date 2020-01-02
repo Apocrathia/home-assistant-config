@@ -32,3 +32,8 @@ light:
       - light.sitting_room_floor_lamp
       - light.dining_room_chandelier
       - light.kitchen_chandelier
+
+  - platform: group
+    name: Night Lights
+    entities:
+      - light.sitting_room_floor_lamp
