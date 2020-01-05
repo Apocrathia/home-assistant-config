@@ -75,9 +75,8 @@ automation:
         - condition: state
           entity_id: input_boolean.away_mode
           state: 'on'
-        - condition: state
-          entity_id: "{{ trigger.entity_id }}"
-          state:  docked
+        - condition: template
+          value_template: "{{ trigger.entity_id }} = docked"
     action:
       - delay: 0:30
       - service: 'vacuum.start'
