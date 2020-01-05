@@ -3,23 +3,6 @@ This file will lay out a roadmap of how I plan on progressing my configuration
 as time goes on. I'm going to break this into some basic categories of tasks,
 goals, and projects. From there, I will create issues on GitHub and try to
 tackle them one by one. Not a great method, but I have no idea what I'm doing.
-## Tasks
-### Short Term
-- Migrate automations to Node-RED & link repo
-### Long Term
-- Migrate automation routines to Node-Red
-## Goals
-### Short Term
-- Develop home/away states
-  - Include lighting randomization for away
-- Develop day/night states
-  - Include lighting scenes for nighttime
-### Long Term
-- STUB
-## Projects
-### Short Term
-- STUB
-### Long Term
-- [x] Neptune Apex integration via custom component
-- [x] RGB lighting system using LED strips
-- [x] Roomba integration
+
+- Migrate instance to Ubuntu 20.04
+- Setup Xiaomi Aquara
