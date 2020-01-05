@@ -88,6 +88,30 @@ binary_sensor:
 
 automation:
 ################################################################################
+  - id: routine_night_alarm_arm
+    alias: 'Routine - Night - Alarm Arm'
+    initial_state: 'on'
+    trigger:
+    - platform: template
+      value_template: >
+        {{ states.sensor.time.state == states.sensor.nighttime_start.state }}
+    condition:
+      condition: and
+      conditions:
+      - condition: state
+        entity_id: binary_sensor.worknight
+        state: 'on'
+      - condition: state
+        entity_id: input_boolean.away_mode
+        state: 'off'
+    action:
+      service: alarm_control_panel.alarm_arm_home
+      data:
+        entity_id: alarm_control_panel.home
+        code: !secret alarm_code
+################################################################################
+
+################################################################################
   - id: routine_night_outdoor_lights
     alias: 'Routine - Night - Outdoor Lights'
     initial_state: 'on'
@@ -199,23 +223,4 @@ automation:
       - service: light.turn_off
         data:
           entity_id: light.studio_floor_lamp, light.dining_room, light.basement
-################################################################################
-
-################################################################################
-  - id: routine_night_alarm_arm
-    alias: 'Routine - Night - Alarm Arm'
-    initial_state: 'on'
-    trigger:
-    - platform: template
-      value_template: >
-        {{ states.sensor.time.state == states.sensor.nighttime_start.state }}
-    condition:
-      condition: state
-      entity_id: binary_sensor.worknight
-      state: 'on'
-    action:
-      service: alarm_control_panel.alarm_arm_home
-      data:
-        entity_id: alarm_control_panel.home
-        code: !secret alarm_code
 ################################################################################
