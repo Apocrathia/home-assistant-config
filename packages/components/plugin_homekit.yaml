@@ -19,28 +19,6 @@ homekit:
       - switch.vaccum_downstairs
       - light.dining_room_chandelier
       - light.kitchen_chandelier
-      # - switch.wink_ceiling_fan
-      # - switch.wink_overhead_light
-      # - light.dining_room
-      # - light.kitchen_cabinet_lights
-      # - light.living_room_floor_lamp
-      # - light.master_bedroom_lights
-      # - light.front_porch_lights
-      # - light.studio_floor_lamp
-      # - light.basement
-      # - binary_sensor.back_door
-      # - binary_sensor.front_door
-      # - binary_sensor.garage_door
-      # - binary_sensor.living_room_motion
-      # - binary_sensor.ring_front_door_ding
-      # - binary_sensor.ring_front_door_motion
-      # - lock.front_door
-      # - lock.garage_door
-      # - alarm_control_panel.home
-      # - sensor.wink_master_relay_temperature
-      # - climate.downstairs
-      # - switch.roomba_downstairs
-      # - switch.roomba_upstairs
 
 # The following automation delays HomeKit while the Z-Wave network starts up.
 automation:

@@ -11,14 +11,3 @@ binary_sensor:
     name: worknight
     country: US
     days_offset: 1
-
-  #  province: !secret state_abbreviation
-  #  workdays: [mon, tue, wed, thu, fri]
-  #  excludes: [sat, sun, holiday]
-
-
-  # International Space Station
-  # - platform: iss
-  #   name: 'iss'
-  #   friendly_name: 'International Space Station'
-  #   show_on_map: false

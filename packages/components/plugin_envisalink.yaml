@@ -43,7 +43,6 @@ envisalink:
     10:
       name: 'Living Room'
       type: 'motion'
-## There's also a glassbreak sensor somewhere
   partitions:
     1:
       name: 'Home'

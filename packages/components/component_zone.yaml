@@ -25,12 +25,6 @@ zone:
     radius: 750
     icon: mdi:school
 
-  # - name: !secret major_city_name
-  #   latitude: !secret major_city_lat
-  #   longitude: !secret major_city_long
-  #   radius: 20000
-  #   icon: mdi:city
-
   - name: Walmart
     latitude: !secret walmart_lat
     longitude: !secret walmart_long

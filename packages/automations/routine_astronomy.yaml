@@ -1,6 +1,7 @@
 ### Astronomy Automations ###
 
 automation:
+################################################################################
   ## Send a notification on new moon nights
   - id: routine_astronomy_dark_sky
     alias: 'Routine - Astronomy - Dark Sky'
@@ -23,6 +24,7 @@ automation:
       - service: notify.notify
         data:
           message: 'New moon tonight.'
+################################################################################
   ## Send a notification on full moon nights
   - id: routine_astronomy_lunar
     alias: 'Routine - Astronomy - Dark Sky'
@@ -45,3 +47,4 @@ automation:
       - service: notify.notify
         data:
           message: 'Full moon tonight.'
+################################################################################
