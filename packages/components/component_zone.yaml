@@ -10,7 +10,7 @@ zone:
   - name: !secret ian_work_name
     latitude: !secret ian_work_lat
     longitude: !secret ian_work_long
-    radius: 1000
+    radius: 250
     icon: mdi:briefcase
 
   - name: !secret aimee_work_name
