@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/Apocrathia/home-assistant-config/badge.svg?branch=master)](https://coveralls.io/github/Apocrathia/home-assistant-config?branch=master)
 
 ### Configuration File Status 
-Each commit triggers a build check by TravisCI. If this is successful, my local HASS instance will automagically pull down the new configuration and restart itself.
+TravisCI hasn't been sucessfully building the configuration in a while. Not sure what's going on there. I might have to switch to another CI system.
 
 ![My Home Assistant Default View](images/default_view.png)
 
