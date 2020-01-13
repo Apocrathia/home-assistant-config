@@ -74,7 +74,7 @@ automation:
       condition: and
       conditions:
       - condition: state
-        entity_id: binary_sensor.worknight
+        entity_id: binary_sensor.workday
         state: 'on'
       - condition: state
         entity_id: input_boolean.away_mode
