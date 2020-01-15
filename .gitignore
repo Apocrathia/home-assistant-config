@@ -5,6 +5,9 @@
 # Share this file
 !.gitignore
 
+# Git Modules
+!.gitmodules
+
 # Share Markdown files & images
 !*.md
 !docs/images/*.png
@@ -15,9 +18,6 @@
 
 # Any scripts that I may write
 !*.sh
-
-# Cloud9 Configuration
-!.c9/project.settings
 
 # Travis Configuration
 !.travis

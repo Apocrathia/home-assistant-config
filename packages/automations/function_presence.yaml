@@ -172,8 +172,16 @@ script:
       data:
         entity_id: alarm_control_panel.home
         code: !secret alarm_code
-      # Randomly turn on and off lights to simulate occupancy
-      # TODO
+      # Ensure the doors are locked
+    - service: lock.lock
+      data:
+        entity_id: group.all_locks
+      # Turn off the lights
+    - service: scene.turn_on
+      data:
+        entity_id: scene.away
+      # Lights will now be randomly turned on and off
+      # and is triggered by input_boolean.away_mode
 ################################################################################
   location_home:
     alias: 'Function - Presence - Home'
@@ -196,4 +204,32 @@ script:
       data:
         entity_id: alarm_control_panel.home
         code: !secret alarm_code
+      # Turn on some lights
+    - service: scene.turn_on
+      data:
+        entity_id: scene.home
 ################################################################################
+
+# Scenes
+scene:
+################################################################################
+  - name: Home
+    entities:
+      light.dining_room_chandelier:
+        state: on
+        brightness: 100
+      light.kitchen_chandelier:
+        state: on
+        brightness: 100
+      light.sitting_room_floor_lamp:
+        state: on
+        brightness: 100
+################################################################################
+  - name: Away
+    entities:
+      light.dining_room_chandelier:
+        state: off
+      light.kitchen_chandelier:
+        state: off
+      light.sitting_room_floor_lamp:
+        state: off

@@ -1,0 +1,3 @@
+[submodule "appdaemon/apps/occusim"]
+	path = appdaemon/apps/occusim
+	url = https://github.com/acockburn/occusim.git
