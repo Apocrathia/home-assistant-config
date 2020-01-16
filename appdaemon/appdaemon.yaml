@@ -41,6 +41,8 @@ Occupancy Simulator:
   random_activity_minduration: 00:01:00
   random_activity_maxduration: 00:30:00
   random_activity_number: 1
+  random_activity_on_master_bedroom: light.master_bedroom_floor_lamp
+  random_activity_off_master_bedroom: light.master_bedroom_floor_lamp
   random_activity_on_kitchen: light.kitchen_chandelier
   random_activity_off_kitchen: light.kitchen_chandelier
   random_activity_on_dining_room: light.kitchen_chandelier
