@@ -205,9 +205,9 @@ script:
         entity_id: alarm_control_panel.home
         code: !secret alarm_code
       # Turn on some lights
-    - service: scene.turn_on
-      data:
-        entity_id: scene.home
+    # - service: scene.turn_on
+    #   data:
+    #     entity_id: scene.home
 ################################################################################
 
 # Scenes
