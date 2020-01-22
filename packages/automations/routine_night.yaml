@@ -192,7 +192,7 @@ automation:
 ################################################################################
   - id: routine_night_kitchen_cabinet_lights
     alias: 'Routine - Night - Kitchen Cabinet Lights'
-    initial_state: 'off'
+    initial_state: 'on'
     trigger:
       - platform: sun
         event: sunset

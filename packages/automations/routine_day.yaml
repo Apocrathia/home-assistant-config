@@ -131,7 +131,7 @@ automation:
 ################################################################################
   - id: routine_day_kitchen_cabinet_lights
     alias: 'Routine - Day - Kitchen Cabnet Lights'
-    initial_state: 'off'
+    initial_state: 'on'
     trigger:
       - platform: sun
         event: sunrise
