@@ -1,0 +1,61 @@
+# Kitchen Cabinet Lights
+###############################################################################
+# The following configuration is for an LED strip that I have placed over
+# my kitchen cabinets to provide ambient lighting.
+# Parts Used:
+# - LED Controller:   https://www.aliexpress.com/item/32828275557.html
+# - LED Strip:        https://www.aliexpress.com/item/32853739171.html
+###############################################################################
+
+esphome:
+  name: kitchen_cabinet_lights
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: !secret esphome_wifi_ssid
+  password: !secret esphome_wifi_password
+  domain: !secret esphome_domain
+  fast_connect: !secret esphome_fast_connect
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: !secret esphome_kitchen_cabinet_lights_ssid
+    password: !secret esphome_kitchen_cabinet_lights_password
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: !secret esphome_api
+
+ota:
+  password: !secret esphome_ota
+
+# Magic Home Pin Configuration
+# GPIO05 - (PWM1) Red color on the LED strip, second pin from the GND
+# GPIO12 - (PWM2) Green color on the led strip, first pin from the GND
+# GPIO13 - (PWM3) Blue color on the LED strip, third pin from the GND
+
+# Configuration entry
+light:
+  - platform: rgb
+    name: "Kitchen Cabinet Lights"
+    red: output_red
+    green: output_green
+    blue: output_blue
+
+# Output entry
+output:
+  - platform: esp8266_pwm
+    id: output_red
+    pin: GPIO05
+  - platform: esp8266_pwm
+    id: output_green
+    pin: GPIO12
+  - platform: esp8266_pwm
+    id: output_blue
+    pin: GPIO13

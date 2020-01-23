@@ -208,6 +208,12 @@ script:
     # - service: scene.turn_on
     #   data:
     #     entity_id: scene.home
+      # Close the garage doors
+    - service: cover.close_cover
+      data:
+        entity_id:
+          - cover.garage_door_01
+          - cover.garage_door_02
 ################################################################################
 
 # Scenes
