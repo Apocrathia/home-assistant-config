@@ -5,3 +5,5 @@ mqtt:
   username: !secret mqtt_username
   password: !secret mqtt_password
   client_id: !secret mqtt_client_id
+  discovery: true
+  discovery_prefix: homeassistant
