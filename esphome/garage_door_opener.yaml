@@ -79,6 +79,18 @@ cover:
       } else {
         return COVER_OPEN;
       }
+    open_action:
+      - switch.turn_on: garage_door_01_switch
+      - delay: 0.5s
+      - switch.turn_off: garage_door_01_switch
+    close_action:
+      - switch.turn_on: garage_door_01_switch
+      - delay: 0.5s
+      - switch.turn_off: garage_door_01_switch
+    stop_action:
+      - switch.turn_on: garage_door_01_switch
+      - delay: 0.5s
+      - switch.turn_off: garage_door_01_switch
   - platform: template
     name: "Garage Door 02"
     id: garage_door_02
@@ -88,4 +100,16 @@ cover:
       } else {
         return COVER_OPEN;
       }
+    open_action:
+      - switch.turn_on: garage_door_02_switch
+      - delay: 0.5s
+      - switch.turn_off: garage_door_02_switch
+    close_action:
+      - switch.turn_on: garage_door_02_switch
+      - delay: 0.5s
+      - switch.turn_off: garage_door_02_switch
+    stop_action:
+      - switch.turn_on: garage_door_02_switch
+      - delay: 0.5s
+      - switch.turn_off: garage_door_02_switch
     
