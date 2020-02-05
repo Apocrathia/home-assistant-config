@@ -1,0 +1,25 @@
+################################################################################
+# Event Routines
+################################################################################
+
+# This configuration is mainly for automating things around the house for
+# specific events and days. A couple of ideas that I'm working with are:
+# - Party lights for game nights (monthly)
+# - Green lights for St. Patrick's Day
+
+automation:
+################################################################################
+  - id: routine_events_game_night
+    alias: 'Routine - Events - Game Night'
+    initial_state: 'off'
+    trigger:
+      - platform: time
+        at: 00:00 # STUB
+      # 1800, on every 4th saturday
+    condition:
+      condition: state
+      entity_id: group.people
+      state: home
+    action:
+      - service: script.party_lights
+################################################################################
