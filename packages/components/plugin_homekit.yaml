@@ -11,6 +11,7 @@ homekit:
       - climate.homekit_downstairs
       - climate.homekit_upstairs
       - light.master_bedroom_floor_lamp
+      - light.master_bedroom_table_lamps
       - light.sitting_room_floor_lamp
       - light.outdoor_lights
       - lock.front_door
