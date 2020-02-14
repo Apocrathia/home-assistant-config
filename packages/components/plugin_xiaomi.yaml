@@ -1,6 +1,7 @@
-# This configuration file will define multiple Xiaomi devices including
-# - Roborock Vacuums
-# - Aquara Devices
+# Roborock Vacuums
+
+# The vacuums are rooted and running Valetudo for granular local control and
+# separation from the Xiaomi cloud. Plus, I can get the maps in lovelace.
 
 vacuum:
   - platform: xiaomi_miio
@@ -8,6 +9,12 @@ vacuum:
     entity_id: downstairs_vacuum
     host: !secret downstairs_vacuum_host
     token: !secret downstairs_vacuum_token
+# Stubbing this out as I'm still waiting on the 2nd one to come in the mail.
+  # - platform: xiaomi_miio
+  #   name: Upstairs Vacuum
+  #   entity_id: upstairs_vacuum
+  #   host: !secret upstairs_vacuum_host
+  #   token: !secret upstairs_vacuum_token
 
 
 switch:
