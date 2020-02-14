@@ -66,10 +66,17 @@ automation:
       entity_id: binary_sensor.workday
       state: 'on'
     action:
-      service: light.turn_on
+    - service: light.turn_on
       data:
-        entity_id: light.master_bedroom_lights
+        entity_id: light.master_bedroom_floor_lamp
         profile: energize
+        brightness_pct: 100
+      data_template:
+        transition: >
+          {{ states.input_number.wakeup_duration.state | multiply(60) | int }}
+    - service: light.turn_on
+      data:
+        entity_id: light.master_bedroom_table_lamps
         brightness_pct: 100
       data_template:
         transition: >
