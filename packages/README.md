@@ -1,3 +1,10 @@
+# Pending Update
+
+I'm planning to update this information and the structure of the packages folder to more closely follow the current nomenclature used by the Home Assistant project. 
+
+https://www.home-assistant.io/docs/glossary/
+
+---
 # Packages
 
 In order to keep my configuration organized and easy to work with, I have opted 
