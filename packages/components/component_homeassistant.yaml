@@ -18,8 +18,8 @@ person:
 homeassistant:
   auth_providers:
     - type: homeassistant
-  #   - type: trusted_networks
-  #     trusted_networks: !secret trusted_networks
+    - type: trusted_networks
+      trusted_networks: !secret trusted_networks
   # auth_mfa_modules:
   #   - type: totp
 
