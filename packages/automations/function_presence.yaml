@@ -166,7 +166,7 @@ script:
       data:
         entity_id: 
           - vacuum.downstairs_vacuum
-          #- vacuum.upstairs_vacuum
+          - vacuum.upstairs_vacuum
       # Arm the alarm
     - service: alarm_control_panel.alarm_arm_away
       data:
@@ -176,6 +176,12 @@ script:
     - service: lock.lock
       data:
         entity_id: group.all_locks
+      # Close the garage doors
+    - service: cover.close_cover
+      data:
+        entity_id:
+          - cover.garage_door_01
+          - cover.garage_door_02
       # Turn off the lights
     - service: scene.turn_on
       data:
@@ -198,7 +204,7 @@ script:
       data:
         entity_id: 
           - vacuum.downstairs_vacuum
-          #- vacuum.upstairs_vacuum
+          - vacuum.upstairs_vacuum
       # Disarm the alarm
     - service: alarm_control_panel.alarm_disarm
       data:
@@ -208,12 +214,6 @@ script:
     # - service: scene.turn_on
     #   data:
     #     entity_id: scene.home
-      # Close the garage doors
-    - service: cover.close_cover
-      data:
-        entity_id:
-          - cover.garage_door_01
-          - cover.garage_door_02
 ################################################################################
 
 # Scenes
@@ -239,3 +239,6 @@ scene:
         state: off
       light.sitting_room_floor_lamp:
         state: off
+      light.master_bedroom_table_lamps:
+        state: off
+################################################################################
