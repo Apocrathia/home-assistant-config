@@ -1,7 +1,12 @@
 # Roborock Vacuums
 
-# The vacuums are rooted and running Valetudo for granular local control and
+# The vacuums are rooted and running Valetudo-RE for granular local control and
 # separation from the Xiaomi cloud. Plus, I can get the maps in lovelace.
+# I've used the mirobo tool to upload firmware built by vacuumz.info
+# mirobo --ip 192.168.8.1 --token $$$ update-firmware ~/Downloads/root_1886.pkg
+# Vacuumz.info - https://vacuumz.info/download/gen2/stock_root/
+# mirobo - https://github.com/rytilahti/python-miio
+# ValetudoRE - https://github.com/rand256/Valetudo/
 
 vacuum:
   - platform: xiaomi_miio
