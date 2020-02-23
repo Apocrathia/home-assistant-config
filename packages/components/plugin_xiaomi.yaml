@@ -21,6 +21,12 @@ vacuum:
     host: !secret upstairs_vacuum_host
     token: !secret upstairs_vacuum_token
 
+# Both of these devices are also being populated in Home Assistant
+# via MQTT auto-discovery, which I may or may not utilize in the future.
+# I like that the miio protocol does not rely on an MQTT broker.
+# The devices get populated as 'vacuum.downstairs' & 'vacuum.upstairs'
+# which is a little less redundant than 'vacuum.downstairs_vacuum' etc.
+# I don't know how I'll proceed. I'm just making notes for future me.
 
 switch:
 ################################################################################
