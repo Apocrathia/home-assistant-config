@@ -7,6 +7,12 @@
 # Vacuumz.info - https://vacuumz.info/download/gen2/stock_root/
 # mirobo - https://github.com/rytilahti/python-miio
 # ValetudoRE - https://github.com/rand256/Valetudo/
+# Eventually, I want to migrate to either using DustBuilder or zvldz's firmware
+# builder script directly. I'm still running 1886, and I'd like to update to
+# the new (currently 2008) version. Although, I don't know if there's a huge
+# benefit to doing this yet, other than the new room cleaning feature.
+# https://github.com/zvldz/vacuum
+# https://dustbuilder.xvm.mit.edu/
 
 vacuum:
   - platform: xiaomi_miio
@@ -27,6 +33,27 @@ vacuum:
 # The devices get populated as 'vacuum.downstairs' & 'vacuum.upstairs'
 # which is a little less redundant than 'vacuum.downstairs_vacuum' etc.
 # I don't know how I'll proceed. I'm just making notes for future me.
+
+# For drawing the map in Lovelace, I am using the Valetudo map card
+# https://github.com/TheLastProject/lovelace-valetudo-map-card
+# The following sensor configuration is required.
+sensor:
+  - platform: mqtt
+    state_topic: "vacuum/upstairs/state"
+    json_attributes_topic: "vacuum/upstairs/map_data_parsed"
+    name: Upstairs Vacuum Map
+    value_template: 'OK'
+    # scan_interval: 5
+  - platform: mqtt
+    state_topic: "vacuum/downstairs/state"
+    json_attributes_topic: "vacuum/downstairs/map_data_parsed"
+    name: Downstairs Vacuum Map
+    value_template: 'OK'
+    # scan_interval: 5
+
+# Alternatively, using the camera integration is another option and
+# simply pull the image from valetudo-mapper. I'll do that when I can finally
+# get valetudo-mapper to work... https://github.com/rand256/valetudo/issues/135
 
 switch:
 ################################################################################
