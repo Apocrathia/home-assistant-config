@@ -4,7 +4,6 @@ group:
 ################################################################################
   vacation_settings:
     name: Vacation
-    control: hidden
     entities:
       - input_boolean.vacation_ian
       - input_boolean.vacation_aimee
@@ -161,6 +160,13 @@ script:
           - climate.ecobee_downstairs
           - climate.ecobee_upstairs
         preset_mode: 'away'
+      # Set the vacuums to turbo
+    - service: vacuum.set_fan_speed
+      data:
+        entity_id:
+          - vacuum.downstairs_vacuum
+          - vacuum.upstairs_vacuum
+        fan_speed: turbo
       # Start the vacuum
     - service: vacuum.start
       data:
@@ -199,6 +205,13 @@ script:
           - climate.ecobee_downstairs
           - climate.ecobee_upstairs
         preset_mode: 'home'
+      # Set the vacuums to silent
+    - service: vacuum.set_fan_speed
+      data:
+        entity_id:
+          - vacuum.downstairs_vacuum
+          - vacuum.upstairs_vacuum
+        fan_speed: silent
       # Stop the vacuum
     - service: vacuum.return_to_base
       data:
