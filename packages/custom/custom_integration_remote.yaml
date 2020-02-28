@@ -1,0 +1,23 @@
+# Home Assistant Remote
+
+# This configuration is to link a remote Raspberry Pi running HA and connected
+# to various USB-based radios. This is because the production instance is
+# running on a VMware ESXi cluster in my basement, and the rack effectively
+# acts as a farraday cage.
+
+remote_homeassistant:
+  instances:
+  - host: !secret ha_remote_host
+    access_token: !secret ha_remote_token
+    exclude:
+      entities:
+      - sensor.hacs
+      - zone.home
+      - person.ian
+      - sun.sun
+      - binary_sensor.updater
+    subscribe_events:
+    - state_changed
+    - service_registered
+    - zwave.network_ready
+    - zwave.node_event
