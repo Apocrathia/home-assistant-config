@@ -1,10 +1,3 @@
-# Pending Update
-
-I'm planning to update this information and the structure of the packages folder to more closely follow the current nomenclature used by the Home Assistant project. 
-
-https://www.home-assistant.io/docs/glossary/
-
----
 # Packages
 
 In order to keep my configuration organized and easy to work with, I have opted 
@@ -15,16 +8,16 @@ together.
 
 ## Naming Convention
 
-Although the ```package: !include_dir_named``` statement will now recursively
+Although the ```package: !include_dir_named``` statement will recursively
 search a direcctory, there is no indication withing HASS as to what folder it
 actually came from. To make my files organized, I have have prefixed them with a
-function idenfier. That way they are grouped together in a logical manner.
+function idenfier. That way they are grouped together in a logical manner. Most
+of this follows the nomenclature outlined in the [Home Assistant Glossary](https://www.home-assistant.io/docs/glossary/).
 
 Prefix | Description | Example
 --- | --- | ---
-component | Configurations specific to Home Assistant core functions | component_light
-plugin | Everything to set up and configure a specific plugin. | plugin_ecobee
-routine | A collection of configurations to perform tasks which happen on a daily basis | routine_morning
-function | Specific functions that can be bundled together | function_presence
+integration | Configurations specific to core functionality of Home Assistant | integration_ecobee
+routine | Configurations to perform tasks which happen on a routine basis | routine_morning
+function | Configurations that can be bundled together to perform a specific function | function_presence
 system | Things that work specifically with the management of Home Assistant | system_backup
 toy | Things that have no real use, but are just for fun. | toy_annoyaimee

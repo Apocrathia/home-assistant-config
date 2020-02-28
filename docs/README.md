@@ -4,17 +4,31 @@
 [![Coverage Status](https://coveralls.io/repos/github/Apocrathia/home-assistant-config/badge.svg?branch=master)](https://coveralls.io/github/Apocrathia/home-assistant-config?branch=master)
 
 ### Configuration File Status 
-TravisCI hasn't been sucessfully building the configuration in a while. Not sure what's going on there. I might have to switch to another CI system.
+TravisCI hasn't been sucessfully building the configuration in a while due to the usage of custom components.
 
 ![My Home Assistant Default View](images/default_view.png)
 
 ## Architecture
 
-I am running Home Assistant via HassOS within VMware ESXi. For the most part, I have attempted to abstract as much hardware from the equation as possible. However, I do have an [Aeotec Z-Stick](https://aeotec.com/z-wave-usb-stick/) passed through to the virtual machine for accessing the Z-Wave network.
-
-Eventually, I would like to move this back over to an Ubuntu VM, and relocate the Z-Stick to a Raspberry Pi, where I can access it over [usbip](https://ubuntu.pkgs.org/16.04/ubuntu-universe-amd64/usbip_0.1.7-3_amd64.deb.html). Nothing against HassOS. It's a great lightweight implementation. It's just more suited for an embedded environment, rather than a virtual environment. I initially considered doing this with a second Home Assistant instance and use event/state streaming over MQTT, but it would have been a pain when I needed to update the Z-Wave network.
+The production instance of Home Assistant is running via the 
+[Home Assistant Operating System](https://github.com/home-assistant/operating-system)
+ on a virtual machine (VM) in a VMware vSphere cluster, with a remote instance 
+ running on a Raspberry Pi 4 which has multiple USB radios connected 
+ (Currently [Zigbee](https://www.home-assistant.io/integrations/zha/), 
+ [Z-Wave](https://www.home-assistant.io/integrations/zwave/), and an 
+ RTL-SDR dongle for [433mhz](https://github.com/james-fry/hassio-addons/tree/master/rtl4332mqtt)). 
+ This is done for multiple reasons.
+- Allow HA to communicate directly with wireless devices without the need for an external hub.
+- Prevent having to pass USB devices through to virtual michines.
+- Enable VMware Distributed Resource Scheduler (DRS) to migrate HA VM across hosts within the cluster based upon load.
+- Place radios in central location with far better reception. (The network rack is grounded and effectively acts as a faraday cage)
 
 ![My Home Assistant Architecture](images/conceptual_architecture.png)
+
+Instances are linked together using 
+[Lukas Hetzenecker's home-assistant-remote custom_component](https://github.com/lukas-hetzenecker/home-assistant-remote),
+ which allows for all configuration to be completed within Home Assistant,
+  without the need to worry about using USB/IP or socat to push the devices over the network.
 
 ## General Information
 This configuration controls a couple of significant features in my smart home.
