@@ -54,6 +54,7 @@ sensor:
 # Alternatively, using the camera integration is another option and
 # simply pull the image from valetudo-mapper. I'll do that when I can finally
 # get valetudo-mapper to work... https://github.com/rand256/valetudo/issues/135
+# https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card
 
 switch:
 ################################################################################
