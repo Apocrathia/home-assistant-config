@@ -5,6 +5,13 @@
 # running on a VMware ESXi cluster in my basement, and the rack effectively
 # acts as a farraday cage.
 
+# See the repository for more information
+# https://github.com/lukas-hetzenecker/home-assistant-remote
+# This was *almost* added as a core integration. Maybe some day...
+# https://github.com/home-assistant/home-assistant/pull/13876
+# Until then, this needs to be installed as a custom_copmponent (use HACS)
+
+# Home Assistant Remote
 remote_homeassistant:
   instances:
   - host: !secret ha_remote_host
