@@ -97,9 +97,16 @@ automation:
         from: cleaning
         to: error
     action:
+      #  This hasn't seemed to work, so let me make sure the template works
+      - service: notify.notify
+        data_template:
+          title: "{{ trigger.attributes.friendly_name }} has gotten stuck"
+          message: >
+            I'm going to tell it to get back to work.
+            You might want to check on it.
       - delay: 0:30
       - service: 'vacuum.start'
-        data:
+        data_template:
           entity_id: "{{ trigger.entity_id }}"
 
 ################################################################################
@@ -126,6 +133,6 @@ automation:
     action:
       - delay: 0:30
       - service: 'vacuum.start'
-        data:
+        data_template:
           entity_id: "{{ trigger.entity_id }}"
 ################################################################################
