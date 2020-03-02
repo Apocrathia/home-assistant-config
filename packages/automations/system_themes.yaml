@@ -22,8 +22,8 @@ automation:
       data_template:
         name: >
           {% if states.sun.sun.state == "above_horizon" %}
-            day
+            clear
           {% else %}
-            night
+            clear-dark
           {% endif %}
 ################################################################################
