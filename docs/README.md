@@ -1,6 +1,22 @@
 # Apocrathia's Home Assistant Configuration Files 
-[![Build Status](https://travis-ci.org/Apocrathia/home-assistant-config.svg?branch=master)](https://travis-ci.org/Apocrathia/home-assistant-config)
-[![Black Duck Security Risk](https://copilot.blackducksoftware.com/github/repos/Apocrathia/home-assistant-config/branches/master/badge-risk.svg)](https://copilot.blackducksoftware.com/github/repos/Apocrathia/home-assistant-config/branches/master)
+
+![Project Maintenance][maintenance-shield]
+[![License][license-shield]](docs/LICENSE.md)
+
+[![GitHub Activity][commits-shield]][commits]
+[![GitHub Last Commit][last-commit-shield]][commits]
+
+![GitHub Stars][stars-shield]
+![GitHub Watchers][watchers-shield]
+![GitHub Forks][forks-shield]
+
+[![Discord][discord-shield]][discord]
+[![Community Forum][forum-shield]][forum]
+
+![Build Status][travis]
+![Black Duck Security Risk][black-duck]
+
+---
 
 ![My Home Assistant Default View](images/default_view.png)
 
@@ -34,3 +50,22 @@ This configuration controls a couple of significant features in my smart home.
 - Security lighting when motion is detected at my front door
 
 **Note: Private information is stored in secrets.yaml (not uploaded)**
+
+[commits-shield]: https://img.shields.io/github/commit-activity/y/Apocrathia/home-assistant-config.svg
+[commits]: https://github.com/Apocrathia/home-assistant-config/commits/master
+[contributors]: https://github.com/Apocrathia/home-assistant-config/graphs/contributors
+[discord-shield]: https://img.shields.io/discord/330944238910963714.svg
+[discord]: https://discord.gg/c5DvZ4e
+[forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg
+[forum]: https://community.home-assistant.io/?u=Apocrathia
+[apocrathia]: https://github.com/Apocrathia
+[travis]: https://travis-ci.org/Apocrathia/home-assistant-config.svg?branch=master
+[home-assistant]: https://home-assistant.io
+[issue]: https://github.com/Apocrathia/home-assistant-config/issues
+[license-shield]: https://img.shields.io/github/license/Apocrathia/home-assistant-config.svg
+[maintenance-shield]: https://img.shields.io/maintenance/yes/2020.svg
+[last-commit-shield]: https://img.shields.io/github/last-commit/Apocrathia/home-assistant-config.svg
+[stars-shield]: https://img.shields.io/github/stars/Apocrathia/home-assistant-config.svg?style=social&label=Stars
+[forks-shield]: https://img.shields.io/github/forks/Apocrathia/home-assistant-config.svg?style=social&label=Forks
+[watchers-shield]: https://img.shields.io/github/watchers/Apocrathia/home-assistant-config.svg?style=social&label=Watchers
+[black-duck]: https://copilot.blackducksoftware.com/github/repos/Apocrathia/home-assistant-config/branches/master/badge-risk.svg

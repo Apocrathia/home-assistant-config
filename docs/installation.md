@@ -1,3 +1,5 @@
+### NOTE: This document is now deprecated
+
 # Installation
 Since I run my hass.io install on an Ubuntu host, the installation process is pretty standard. For the most part, all of the heavy lifting is done by the [hass.io install script](https://github.com/home-assistant/hassio-build/tree/master/install#install-hassio).
 
