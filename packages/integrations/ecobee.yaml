@@ -1,7 +1,8 @@
 ### Ecobee ###
 
-ecobee:
-  api_key: !secret ecobee_api_key
+# Using Homekit instead of the Ecobee cloud for local control.
+# ecobee:
+#   api_key: !secret ecobee_api_key
 #  entity_namespace: ecobee ### Not implemented ###
 
 sensor:
