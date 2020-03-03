@@ -6,15 +6,15 @@
 [![GitHub Activity][commits-shield]][commits]
 [![GitHub Last Commit][last-commit-shield]][commits]
 
+[![Build Status][travis-shield]][travis]
+[![Black Duck Security Risk][black-duck-shield]][black-duck]
+
 ![GitHub Stars][stars-shield]
 ![GitHub Watchers][watchers-shield]
 ![GitHub Forks][forks-shield]
 
 [![Discord][discord-shield]][discord]
 [![Community Forum][forum-shield]][forum]
-
-![Build Status][travis]
-![Black Duck Security Risk][black-duck]
 
 ---
 
@@ -59,7 +59,8 @@ This configuration controls a couple of significant features in my smart home.
 [forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg
 [forum]: https://community.home-assistant.io/?u=Apocrathia
 [apocrathia]: https://github.com/Apocrathia
-[travis]: https://travis-ci.org/Apocrathia/home-assistant-config.svg?branch=master
+[travis-shield]: https://travis-ci.org/Apocrathia/home-assistant-config.svg?branch=master
+[travis]: https://travis-ci.org/Apocrathia/home-assistant-config
 [home-assistant]: https://home-assistant.io
 [issue]: https://github.com/Apocrathia/home-assistant-config/issues
 [license-shield]: https://img.shields.io/github/license/Apocrathia/home-assistant-config.svg
@@ -68,4 +69,5 @@ This configuration controls a couple of significant features in my smart home.
 [stars-shield]: https://img.shields.io/github/stars/Apocrathia/home-assistant-config.svg?style=social&label=Stars
 [forks-shield]: https://img.shields.io/github/forks/Apocrathia/home-assistant-config.svg?style=social&label=Forks
 [watchers-shield]: https://img.shields.io/github/watchers/Apocrathia/home-assistant-config.svg?style=social&label=Watchers
-[black-duck]: https://copilot.blackducksoftware.com/github/repos/Apocrathia/home-assistant-config/branches/master/badge-risk.svg
+[black-duck-shield]: https://copilot.blackducksoftware.com/github/repos/Apocrathia/home-assistant-config/branches/master/badge-risk.svg
+[black-duck]: https://copilot.blackducksoftware.com/github/repos/Apocrathia/home-assistant-config/branches/master/
