@@ -1,20 +1,32 @@
 ### Plex ###
 
-# From media_players.yaml
-media_player:
-# Plex Media Server
-  - platform: plex
-    entity_namespace: plex
+# https://www.home-assistant.io/integrations/plex/
+plex:
+  host: !secret plex_host
+  port: !secret plex_port
+  token: !secret plex_token
+  ssl: true
+  verify_ssl: false
+  media_player:
+    use_episode_art: true
     show_all_controls: true
+    ignore_new_shared_users: false
 
-# From sensors.yaml
-sensor:
-# Plex Activity Monitor
-  - platform: plex
-    host: !secret plex_host
-    port: !secret plex_port
-    name: Plex
-    username: !secret plex_username
-    password: !secret plex_password
-    server: !secret plex_server
-    token: !secret plex_token
+# # From media_players.yaml
+# media_player:
+# # Plex Media Server
+#   - platform: plex
+#     entity_namespace: plex
+#     show_all_controls: true
+
+# # From sensors.yaml
+# sensor:
+# # Plex Activity Monitor
+#   - platform: plex
+#     host: !secret plex_host
+#     port: !secret plex_port
+#     name: Plex
+#     username: !secret plex_username
+#     password: !secret plex_password
+#     server: !secret plex_server
+#     token: !secret plex_token
