@@ -61,7 +61,7 @@ switch:
   - platform: template
     switches:
 # Downstairs Vacuum
-      vacuum_downstairs:
+      downstairs_vacuum:
         friendly_name: "Downstairs Vacuum"
         value_template: "{{ is_state('vacuum.downstairs_vacuum', 'on') }}"
         turn_on:
@@ -74,6 +74,25 @@ switch:
             entity_id: 'vacuum.downstairs_vacuum'
         icon_template: >-
           {% if is_state('vacuum.downstairs_vacuum', 'on') %}
+            mdi:broom
+          {% else %}
+            mdi:robot-vacuum
+          {% endif %}
+################################################################################
+# Upstairs Vacuum
+      upstairs_vacuum:
+        friendly_name: "Upstairs Vacuum"
+        value_template: "{{ is_state('vacuum.upstairs_vacuum', 'on') }}"
+        turn_on:
+          service: 'vacuum.start'
+          data:
+            entity_id: 'vacuum.upstairs_vacuum'
+        turn_off: 
+          service: 'vacuum.stop'
+          data:
+            entity_id: 'vacuum.upstairs_vacuum'
+        icon_template: >-
+          {% if is_state('vacuum.upstairs_vacuum', 'on') %}
             mdi:broom
           {% else %}
             mdi:robot-vacuum
@@ -108,7 +127,11 @@ automation:
       - service: 'vacuum.start'
         data_template:
           entity_id: "{{ trigger.entity_id }}"
-
+      # It seems to need a second nudge from time to time
+      - delay: 0:30
+      - service: 'vacuum.start'
+        data_template:
+          entity_id: "{{ trigger.entity_id }}"
 ################################################################################
 # While we're out of the house, keep sending the vacuum out as soon as it's
 # reached a full charge. This may or may not end well.

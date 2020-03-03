@@ -17,7 +17,8 @@ homekit:
       - lock.front_door
       - lock.back_door
       - alarm_control_panel.home
-      - switch.vaccum_downstairs
+      - switch.downstairs_vacuum
+      - switch.upstairs_vacuum
       - light.dining_room_chandelier
       - light.kitchen_chandelier
       - cover.garage_door_01
