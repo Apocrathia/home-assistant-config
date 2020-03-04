@@ -5,7 +5,7 @@
 automation:
 ################################################################################
 # IF: { sun.sun goes under horizon } THEN: { set theme to night mode }
-- id: system_theme_
+- id: system_theme_management
   alias: System - Theme - Management
   initial_state: 'on'
   trigger:
