@@ -4,7 +4,7 @@
 #introduction:
 
 # Enable iOS frontend
-# ios:
+ios:
 
 # Enables configuration UI
 config:
