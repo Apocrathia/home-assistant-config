@@ -73,20 +73,47 @@ binary_sensor:
     name: 'in_bed'
     probability_threshold: 0.75
     observations:
+      # No motion in the living room
       - entity_id: 'binary_sensor.living_room_motion'
-        prob_given_true: 0.3
-        prob_given_false: 0.7
+        prob_given_true: 0.1
+        prob_given_false: 0.4
         platform: 'state'
         to_state: 'off'
+      # The sun is down
       - entity_id: 'sun.sun'
-        prob_given_true: 0.7
+        prob_given_true: 0.3
         platform: 'state'
         to_state: 'below_horizon'
       # If both of the phones are plugged in
+      - entity_id: sensor.ians_iphone_battery_state
+        prob_given_true: 0.4
+        platform: 'state'
+        to_state: 'charging'
+      - entity_id: sensor.aimees_iphone_battery_state
+        prob_given_true: 0.4
+        platform: 'state'
+        to_state: 'charging'
       # If Away Mode is off (Meaning we're home)
+      - entity_id: input_boolean.away_mode
+        prob_given_true: 0.0
+        platform: 'state'
+        to_state: 'on'
+      # Eventually, the correct answer is to put pressure sensors under the bed.
 ################################################################################
 
 automation:
+################################################################################
+  - id: in_bed_bayesian_test
+    alias: In Bed Bayesian Sensor Test
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.in_bed
+        to: on
+    action:
+      - service: notify.notify
+        data:
+          title: Bayesian In-Bed Test
+          message: Hey, I think you're in bed right now, is that right?
 ################################################################################
   - id: routine_night_alarm_arm
     alias: 'Routine - Night - Alarm Arm'
@@ -190,21 +217,21 @@ automation:
 ################################################################################
 
 ################################################################################
-  - id: routine_night_kitchen_cabinet_lights
-    alias: 'Routine - Night - Kitchen Cabinet Lights'
-    initial_state: 'on'
-    trigger:
-      - platform: sun
-        event: sunset
-    action:
-      - service: light.turn_on
-        data:
-          entity_id: light.kitchen_cabinet_lights
-          rgb_color: [255,162,71]
-          brightness_pct: 50
-        data_template:
-          transition: >
-            {{ (states.sensor.nighttime_lighting_transition.state | int) }}
+  # - id: routine_night_kitchen_cabinet_lights
+  #   alias: 'Routine - Night - Kitchen Cabinet Lights'
+  #   initial_state: 'on'
+  #   trigger:
+  #     - platform: sun
+  #       event: sunset
+  #   action:
+  #     - service: light.turn_on
+  #       data:
+  #         entity_id: light.kitchen_cabinet_lights
+  #         rgb_color: [255,162,71]
+  #         brightness_pct: 50
+  #       data_template:
+  #         transition: >
+  #           {{ (states.sensor.nighttime_lighting_transition.state | int) }}
 ################################################################################
 
 ################################################################################

@@ -129,19 +129,19 @@ automation:
 ################################################################################
 
 ################################################################################
-  - id: routine_day_kitchen_cabinet_lights
-    alias: 'Routine - Day - Kitchen Cabnet Lights'
-    initial_state: 'on'
-    trigger:
-      - platform: sun
-        event: sunrise
-    action:
-      - service: light.turn_off
-        data:
-          entity_id: light.kitchen_cabinet_lights
-        data_template:
-          transition: >
-            {{ (states.sensor.daytime_lighting_transition.state | int) }}
+  # - id: routine_day_kitchen_cabinet_lights
+  #   alias: 'Routine - Day - Kitchen Cabnet Lights'
+  #   initial_state: 'on'
+  #   trigger:
+  #     - platform: sun
+  #       event: sunrise
+  #   action:
+  #     - service: light.turn_off
+  #       data:
+  #         entity_id: light.kitchen_cabinet_lights
+  #       data_template:
+  #         transition: >
+  #           {{ (states.sensor.daytime_lighting_transition.state | int) }}
 ################################################################################
 
 # I realize this automation will be a little redundant, but it's just in case I
