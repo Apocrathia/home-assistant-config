@@ -106,14 +106,14 @@ automation:
   - id: in_bed_bayesian_test
     alias: In Bed Bayesian Sensor Test
     trigger:
-      - platform: state
-        entity_id: binary_sensor.in_bed
-        to: on
+    - platform: state
+      entity_id: binary_sensor.in_bed
+      to: 'on'
     action:
-      - service: notify.notify
-        data:
-          title: Bayesian In-Bed Test
-          message: Hey, I think you're in bed right now, is that right?
+    - service: notify.notify
+      data:
+        title: Bayesian In-Bed Test
+        message: Hey, I think you're in bed right now, is that right?
 ################################################################################
   - id: routine_night_alarm_arm
     alias: 'Routine - Night - Alarm Arm'
