@@ -23,6 +23,9 @@ remote_homeassistant:
       - person.ian
       - sun.sun
       - binary_sensor.updater
+      domains:
+      - automation
+      - script
     subscribe_events:
     - state_changed
     - service_registered
