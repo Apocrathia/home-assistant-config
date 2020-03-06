@@ -3,13 +3,13 @@
 # Migrated to UI configured integration
 
 # # Broker configuration
-# mqtt:
+mqtt:
 #   broker: !secret mqtt_host
 #   username: !secret mqtt_username
 #   password: !secret mqtt_password
 #   client_id: !secret mqtt_client_id
 #   discovery: true
-#   discovery_prefix: discovery
+  discovery_prefix: discovery
 #   birth_message:
 #     topic: 'homeassistant/status'
 #     payload: 'online'
