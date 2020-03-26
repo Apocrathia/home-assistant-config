@@ -64,14 +64,18 @@ switch:
 # Sensor
 binary_sensor:
   - platform: gpio
-    pin: D2
+    pin: 
+      number: D2
+      mode: INPUT_PULLUP
+      inverted: true
     name: "Garage Door 01 Sensor"
     device_class: garage_door
     id: garage_door_01_sensor
-    filters:
-      - invert:
   - platform: gpio
-    pin: D1
+    pin: 
+      number: D1
+      mode: INPUT_PULLUP
+      inverted: true
     name: "Garage Door 02 Sensor"
     device_class: garage_door
     id: garage_door_02_sensor
