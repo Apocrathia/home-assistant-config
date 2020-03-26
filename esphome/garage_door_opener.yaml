@@ -50,10 +50,16 @@ switch:
     pin: D4
     name: "Garage Door 01 Switch"
     id: garage_door_01_switch
+    on_turn_on:
+      - delay: 0.1s
+      - switch.turn_off: garage_door_01_switch
   - platform: gpio
     pin: D3
     name: "Garage Door 02 Switch"
     id: garage_door_02_switch
+    on_turn_on:
+      - delay: 0.1s
+      - switch.turn_off: garage_door_02_switch
 
 # Sensor
 binary_sensor:
@@ -62,11 +68,15 @@ binary_sensor:
     name: "Garage Door 01 Sensor"
     device_class: garage_door
     id: garage_door_01_sensor
+    filters:
+      - invert:
   - platform: gpio
     pin: D1
     name: "Garage Door 02 Sensor"
     device_class: garage_door
     id: garage_door_02_sensor
+    filters:
+      - invert:
 
 # Cover
 cover:
@@ -81,16 +91,10 @@ cover:
       }
     open_action:
       - switch.turn_on: garage_door_01_switch
-      - delay: 0.5s
-      - switch.turn_off: garage_door_01_switch
     close_action:
       - switch.turn_on: garage_door_01_switch
-      - delay: 0.5s
-      - switch.turn_off: garage_door_01_switch
     stop_action:
       - switch.turn_on: garage_door_01_switch
-      - delay: 0.5s
-      - switch.turn_off: garage_door_01_switch
   - platform: template
     name: "Garage Door 02"
     id: garage_door_02
@@ -102,14 +106,8 @@ cover:
       }
     open_action:
       - switch.turn_on: garage_door_02_switch
-      - delay: 0.5s
-      - switch.turn_off: garage_door_02_switch
     close_action:
       - switch.turn_on: garage_door_02_switch
-      - delay: 0.5s
-      - switch.turn_off: garage_door_02_switch
     stop_action:
       - switch.turn_on: garage_door_02_switch
-      - delay: 0.5s
-      - switch.turn_off: garage_door_02_switch
     
