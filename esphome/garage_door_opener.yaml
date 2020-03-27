@@ -39,8 +39,8 @@ ota:
 # Begin Configuration
 
 # Pinout
-# D1 = Door 02 Sensor
-# D2 = Door 01 Sensor
+# D1 = Door 01 Sensor
+# D2 = Door 02 Sensor
 # D3 = Door 02 Relay
 # D4 = Door 01 Relay
 
@@ -65,22 +65,20 @@ switch:
 binary_sensor:
   - platform: gpio
     pin: 
-      number: D2
+      number: D1
       mode: INPUT_PULLUP
-      inverted: true
+      # inverted: true
     name: "Garage Door 01 Sensor"
     device_class: garage_door
     id: garage_door_01_sensor
   - platform: gpio
     pin: 
-      number: D1
+      number: D2
       mode: INPUT_PULLUP
-      inverted: true
+      # inverted: true
     name: "Garage Door 02 Sensor"
     device_class: garage_door
     id: garage_door_02_sensor
-    filters:
-      - invert:
 
 # Cover
 cover:
