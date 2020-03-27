@@ -8,13 +8,13 @@ input_datetime:
     name: Morning
     has_date: false
     has_time: true
-    initial: '05:00'
+    # initial: '05:00'
 
 input_number:
   morning_advance:
     name: Morning Advance
     icon: mdi:clock-in
-    initial: 60
+    # initial: 60
     min: 0
     max: 120
     step: 15
@@ -23,7 +23,7 @@ input_number:
   daytime_lighting_transition:
     name: Day Time Lighting Transition
     icon: mdi:clock-in
-    initial: 15
+    # initial: 15
     min: 0
     max: 30
     step: 5
@@ -65,7 +65,7 @@ automation:
 ################################################################################
   - id: routine_day_alarm_disarm
     alias: 'Routine - Day - Alarm Disarm'
-    initial_state: 'on'
+    # initial_state: 'on'
     trigger:
     - platform: template
       value_template: >
@@ -89,7 +89,7 @@ automation:
 ################################################################################
   - id: routine_day_outdoor_lights
     alias: 'Routine - Day - Outdoor Lights'
-    initial_state: 'on'
+    # initial_state: 'on'
     trigger:
       - platform: state
         entity_id: sun.sun
@@ -111,7 +111,7 @@ automation:
 ################################################################################
   - id: routine_day_night_lights
     alias: 'Routine - Day - Night Lights'
-    initial_state: 'on'
+    # initial_state: 'on'
     trigger:
       - platform: sun
         event: sunrise
@@ -131,7 +131,7 @@ automation:
 ################################################################################
   # - id: routine_day_kitchen_cabinet_lights
   #   alias: 'Routine - Day - Kitchen Cabnet Lights'
-  #   initial_state: 'on'
+  #   # initial_state: 'on'
   #   trigger:
   #     - platform: sun
   #       event: sunrise
@@ -149,7 +149,7 @@ automation:
 ################################################################################
   - id: routine_day_lighting_off
     alias: 'Routine - Day - Turn Off Lights After Sunrise'
-    initial_state: 'on'
+    # initial_state: 'on'
     trigger:
       - platform: sun
         event: sunrise

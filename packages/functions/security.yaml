@@ -10,7 +10,7 @@ automation:
 ################################################################################
   - id: function_security_front_porch_motion
     alias: 'Function - Security - Front Porch Motion'
-    initial_state: 'on'
+    # initial_state: 'on'
     trigger:
       - platform: state
         entity_id: binary_sensor.front_porch_motion

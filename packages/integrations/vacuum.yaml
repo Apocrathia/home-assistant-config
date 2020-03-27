@@ -107,7 +107,7 @@ automation:
 # To work around this, we just tell the vacuum to keep going.
   - id: function_vacuum_restart
     alias: "Function - Vacuum - Restart"
-    initial_state: 'on'
+    # initial_state: 'on'
     trigger:
       - platform: state
         entity_id:
@@ -137,7 +137,7 @@ automation:
 # reached a full charge. This may or may not end well.
   - id: function_vacuum_continue
     alias: "Function - Vacuum - Continue"
-    initial_state: 'on'
+    # initial_state: 'on'
     trigger:
       - platform: numeric_state
         entity_id:

@@ -48,15 +48,15 @@ input_boolean:
 ################################################################################
   vacation_ian:
     name: 'Vacation - Ian'
-    initial: off
+    # initial: off
     icon: mdi:beach
   vacation_aimee:
     name: 'Vacation - Aimee'
-    initial: off
+    # initial: off
     icon: mdi:beach
   away_mode:
     name: Away Mode
-    initial: off
+    # initial: off
     icon: mdi:walk
 ################################################################################
 
@@ -67,7 +67,7 @@ automation:
 # that could be accessed externally by Node-RED.
   - id: function_presence_detection
     alias: "Function - Presence Detection"
-    initial_state: 'on'
+    # initial_state: 'on'
     trigger:
       - platform: state
         entity_id: group.people
@@ -82,7 +82,7 @@ automation:
 ################################################################################
   - id: function_presence_scripts
     alias: "Function - Presence Scripts"
-    initial_state: 'on'
+    # initial_state: 'on'
     trigger:
       - platform: state
         entity_id: input_boolean.away_mode

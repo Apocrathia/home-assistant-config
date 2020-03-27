@@ -6,7 +6,7 @@ automation:
 ################################################################################
   - id: function_lighting_front_door_motion_initial
     alias: 'Function - Lighting - Front Porch Motion (Initial)'
-    initial_state: 'on'
+    # initial_state: 'on'
     trigger:
       - platform: state
         entity_id: binary_sensor.front_porch_motion
@@ -28,7 +28,7 @@ automation:
 ################################################################################
   - id: function_lighting_front_door_motion_idle
     alias: 'Function - Lighting - Front Porch Motion (Idle)'
-    initial_state: 'on'
+    # initial_state: 'on'
     trigger:
       - platform: state
         entity_id: binary_sensor.front_porch_motion

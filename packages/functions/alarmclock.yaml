@@ -11,13 +11,13 @@ input_datetime:
     name: Wakeup Time
     has_date: false
     has_time: true
-    initial: 05:00
+    # initial: 05:00
 
 input_number:
   wakeup_duration:
     name: Wakeup Duration
     icon: mdi:clock-in
-    initial: 30
+    # initial: 30
     min: 0
     max: 60
     step: 5
@@ -29,7 +29,7 @@ input_select:
     options:
       - Plex
       - Local News
-    initial: Plex
+    # initial: Plex
     icon: mdi:alarm
 
 ### Sensors ###
@@ -56,7 +56,7 @@ automation:
 ################################################################################
   - id: function_wakeup_bedroom_light
     alias: 'Function - Wakeup - Bedroom Light'
-    initial_state: 'on'
+    # initial_state: 'on'
     trigger:
     - platform: template
       value_template: >
@@ -86,7 +86,7 @@ automation:
 ################################################################################
   - id: function_wakeup_apple_tv
     alias: 'Function - Wakeup - Apple TV'
-    initial_state: 'on'
+    # initial_state: 'on'
     trigger:
     - platform: template
       value_template: >
@@ -108,7 +108,7 @@ automation:
 ################################################################################
   - id: function_wakeup_local_news
     alias: 'Function - Wakeup - Local News'
-    initial_state: 'on'
+    # initial_state: 'on'
     trigger:
     - platform: template
       value_template: >

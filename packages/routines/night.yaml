@@ -13,13 +13,13 @@ input_datetime:
     name: Bedtime
     has_date: false
     has_time: true
-    initial: '21:00'
+    # initial: '21:00'
 
 input_number:
   nighttime_delay:
     name: Night Time Delay
     icon: mdi:clock-in
-    initial: 60
+    # initial: 60
     min: 0
     max: 120
     step: 15
@@ -28,7 +28,7 @@ input_number:
   nighttime_lighting_transition:
     name: Night Time Lighting Transition
     icon: mdi:clock-in
-    initial: 15
+    # initial: 15
     min: 0
     max: 30
     step: 5
@@ -117,7 +117,7 @@ automation:
 ################################################################################
   - id: routine_night_alarm_arm
     alias: 'Routine - Night - Alarm Arm'
-    initial_state: 'on'
+    # initial_state: 'on'
     trigger:
     - platform: template
       value_template: >
@@ -141,7 +141,7 @@ automation:
 ################################################################################
   - id: routine_night_outdoor_lights
     alias: 'Routine - Night - Outdoor Lights'
-    initial_state: 'on'
+    # initial_state: 'on'
     trigger:
       - platform: sun
         event: sunset
@@ -163,7 +163,7 @@ automation:
 ################################################################################
   - id: routine_night_night_lights
     alias: 'Routine - Night - Night Lights'
-    initial_state: 'on'
+    # initial_state: 'on'
     trigger:
       - platform: sun
         event: sunset
@@ -190,7 +190,7 @@ automation:
 ################################################################################
   - id: routine_night_master_bedroom_lights
     alias: 'Routine - Night - Master Bedroom Lights'
-    initial_state: 'on'
+    # initial_state: 'on'
     trigger:
       - platform: sun
         event: sunset
@@ -219,7 +219,7 @@ automation:
 ################################################################################
   # - id: routine_night_kitchen_cabinet_lights
   #   alias: 'Routine - Night - Kitchen Cabinet Lights'
-  #   initial_state: 'on'
+  #   # initial_state: 'on'
   #   trigger:
   #     - platform: sun
   #       event: sunset
