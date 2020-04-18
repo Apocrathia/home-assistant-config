@@ -1,0 +1,3 @@
+zwave:
+  usb_path: /dev/serial/by-id/usb-0658_0200-if00
+  network_key: !secret zwave_network_key

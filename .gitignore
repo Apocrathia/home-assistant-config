@@ -1,0 +1,54 @@
+# By default, ignore all files
+*
+# Eventually I will change this, but for now, I'll write in what I want to be shared.
+
+# Share this file
+!.gitignore
+
+# Git Modules
+!.gitmodules
+
+# Share Markdown files & images
+!*.md
+!docs/images/*.png
+!docs/images/*.jpg
+
+# Explicitly allow YAML files
+!*.yaml
+
+# Any scripts that I may write
+!*.sh
+
+# Travis Configuration
+!.travis
+!.travis/travis.*
+!.travis.yml
+
+# Allow the following subfolders
+!appdaemon
+!automations
+!custom_components
+!docs
+!images
+!packages
+!scenes
+!scripts
+!themes
+!www
+
+# don't include the archive subfolder 
+# (As that's from my recent migration to HassOS)
+archive
+
+# Ignore Sensitive Files
+secrets.yaml
+known_devices.yaml
+entity_registry.yaml
+ip_bans.yaml
+customize.yaml
+
+# AppDaemon
+appdaemon/__pycache__
+
+# Zwave Configurations
+zwave_device_config.yaml

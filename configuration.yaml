@@ -1,0 +1,28 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+#default_config:
+# Disable this so that we can pull in individual components and limit
+# as much IO usage as possible. We just need the ability to configure
+# stuff.
+
+config:
+system_health:
+
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+# http:
+#   base_url: example.duckdns.org:8123
+
+# Text to speech
+tts:
+  - platform: google_translate
+
+frontend:
+  themes: !include_dir_merge_named themes
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+homeassistant:
+  packages: !include_dir_named packages

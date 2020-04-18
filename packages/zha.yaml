@@ -1,0 +1,5 @@
+zha:
+  radio_type: deconz
+  usb_path: /dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2137955-if00
+  baudrate: 38400
+  database_path: /config/zigbee.db
