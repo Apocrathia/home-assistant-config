@@ -198,6 +198,11 @@ script:
   location_home:
     alias: 'Function - Presence - Home'
     sequence:
+      # Disarm the alarm
+    - service: alarm_control_panel.alarm_disarm
+      data:
+        entity_id: alarm_control_panel.home
+        code: !secret alarm_code
       # Set the thermostat to home
     - service: climate.set_preset_mode
       data:
@@ -205,6 +210,13 @@ script:
           - climate.ecobee_downstairs
           - climate.ecobee_upstairs
         preset_mode: 'home'
+      # Set the vacuums to silent
+    - service: vacuum.set_fan_speed
+      data:
+        entity_id:
+          - vacuum.downstairs
+          - vacuum.upstairs
+        fan_speed: min
       # Stop the vacuums
     - service: vacuum.stop
       data:
@@ -214,27 +226,12 @@ script:
       # wait 2 seconds for command to take effect
     - delay:
         seconds: 2
-      # Set the vacuums to silent
-    - service: vacuum.set_fan_speed
-      data:
-        entity_id:
-          - vacuum.downstairs
-          - vacuum.upstairs
-        fan_speed: min
-      # wait 2 seconds for command to take effect
-    - delay:
-        seconds: 2
       # Return vacuums to dock
     - service: vacuum.return_to_base
       data:
         entity_id: 
           - vacuum.downstairs
           - vacuum.upstairs
-      # Disarm the alarm
-    - service: alarm_control_panel.alarm_disarm
-      data:
-        entity_id: alarm_control_panel.home
-        code: !secret alarm_code
       # Turn on some lights
     # - service: scene.turn_on
     #   data:
