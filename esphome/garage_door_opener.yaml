@@ -13,6 +13,17 @@ esphome:
   platform: ESP8266
   board: d1_mini
 
+  # The garage doors will go up on boot. Mitigation
+  # on_boot:
+  #   priority: -10
+  #   # ...
+  #   then:
+  #     - switch.turn_on: garage_door_01_switch
+  #     - switch.turn_on: garage_door_02_switch
+  #     - delay: 2s
+  #     - switch.turn_on: garage_door_01_switch
+  #     - switch.turn_on: garage_door_02_switch
+
 wifi:
   ssid: !secret esphome_wifi_ssid
   password: !secret esphome_wifi_password
@@ -23,6 +34,17 @@ wifi:
   ap:
     ssid: !secret esphome_garage_door_opener_ssid
     password: !secret esphome_garage_door_opener_password
+
+mqtt:
+  broker: !secret mqtt_broker
+  username: !secret mqtt_username
+  password: !secret mqtt_password
+  birth_message:
+    topic: esphome/garage_door_opener
+    payload: online
+  will_message:
+    topic: esphome/garage_door_opener
+    payload: offline
 
 captive_portal:
 
@@ -41,20 +63,20 @@ ota:
 # Pinout
 # D1 = Door 01 Sensor
 # D2 = Door 02 Sensor
-# D3 = Door 02 Relay
-# D4 = Door 01 Relay
+# D5 = Door 02 Relay
+# D6 = Door 01 Relay
 
 # Switch
 switch:
   - platform: gpio
-    pin: D4
+    pin: D6
     name: "Garage Door 01 Switch"
     id: garage_door_01_switch
     on_turn_on:
       - delay: 0.1s
       - switch.turn_off: garage_door_01_switch
   - platform: gpio
-    pin: D3
+    pin: D5
     name: "Garage Door 02 Switch"
     id: garage_door_02_switch
     on_turn_on:
@@ -112,4 +134,3 @@ cover:
       - switch.turn_on: garage_door_02_switch
     stop_action:
       - switch.turn_on: garage_door_02_switch
-    
