@@ -76,7 +76,7 @@ automation:
           {{ states.input_number.wakeup_duration.state | multiply(60) | int }}
     - delay:
         seconds: >
-          "{{ states.input_number.wakeup_duration.state | multiply(60) | int }}"
+          {{ states.input_number.wakeup_duration.state | multiply(60) | int }}
     - service: light.turn_on
       data:
         entity_id: light.master_bedroom_table_lamps
