@@ -44,6 +44,24 @@ group:
 #         to_state: 'home'
 # ################################################################################
 
+# This will eventually be used for the vacation status
+proximity:
+################################################################################
+  ian:
+    zone: home
+    devices:
+      - person.ian
+    tolerance: 50
+    unit_of_measurement: km
+################################################################################
+  aimee:
+    zone: home
+    devices:
+      - person.aimee
+    tolerance: 50
+    unit_of_measurement: km
+################################################################################
+
 input_boolean:
 ################################################################################
   vacation_ian:
@@ -52,6 +70,10 @@ input_boolean:
     icon: mdi:beach
   vacation_aimee:
     name: 'Vacation - Aimee'
+    # initial: off
+    icon: mdi:beach
+  vacation_mode:
+    name: 'Vacation Mode'
     # initial: off
     icon: mdi:beach
   away_mode:
@@ -66,7 +88,7 @@ automation:
 # I could hit in case I wanted to activate an Away Mode, as well as something
 # that could be accessed externally by Node-RED.
   - id: function_presence_detection
-    alias: "Function - Presence Detection"
+    alias: "Function - Presence - Detection"
     # initial_state: 'on'
     trigger:
       - platform: state
@@ -81,7 +103,7 @@ automation:
       entity_id: input_boolean.away_mode
 ################################################################################
   - id: function_presence_scripts
-    alias: "Function - Presence Scripts"
+    alias: "Function - Presence - Scripts"
     # initial_state: 'on'
     trigger:
       - platform: state
@@ -94,53 +116,104 @@ automation:
           script.location_away
         {% endif %}
 ################################################################################
-  - id: function_vacation_departure
-    alias: "Function - Vacation - Departure"
-    initial_state: 'off'
+  - id: function_vacation_away
+    alias: "Function - Vacation - Away"
     trigger:
       - platform: numeric_state
         entity_id:
-          - person.aimee
-          - person.ian
-        value_template: >
-          {{ distance('zone.home', 'trigger.event.data') | round }} 
+          - proximity.ian
+          - proximity.aimee
         above: 100
-        for: "01:00:00"
+        #for: 01:00:00
+    # contition:
     action:
       service_template: >
-        {% if trigger.entity_id == 'person.aimee' %}
-          - service: input_boolean.turn_on
-            data:
-              entity_id: input_boolean.vacation_aimee
-        {% elif trigger.entity_id == 'person.ian' %}
-          - service: input_boolean.turn_on
-            data:
-              entity_id: input_boolean.vacation_ian
+        # Going on vacation
+        {% if trigger.to_state > 100 %}
+          {% if trigger.entity_id == "proximity.ian" %}
+            - service: input_boolean.turn_on
+              data:
+                entity_id: input_boolean.vacation_aimee
+            - service: notify.notify
+              data_template:
+                title: "Vacation Mode Triggered"
+                message: >
+                  "{{ trigger.entity_id }} has turned {{ trigger.to_state }}."
+          {% elif trigger.entity_id == "proximity.aimee" %}
+            - service: input_boolean.turn_on
+              data:
+                entity_id: input_boolean.vacation_aimee
+            - service: notify.notify
+              data_template:
+                title: "Vacation Mode Triggered"
+                message: >
+                  "{{ trigger.entity_id }} has turned {{ trigger.to_state }}."
+          {% endif %}
         {% endif %}
 ################################################################################
-  - id: function_vacation_return
-    alias: "Function - Vacation - Return"
-    initial_state: 'off'
+  - id: test_vacation_nofitication
+    alias: "Test - Vacation - Notification"
     trigger:
-      - platform: numeric_state
+      - platform: state
         entity_id:
-          - person.aimee
-          - person.ian
-        value_template: >
-          {{ distance('zone.home', 'trigger.event.data') | round }} 
-        below: 100
-        for: "01:00:00"
+          - input_boolean.vacation_ian
+          - input_boolean.vacation_aimee
     action:
-      service_template: >
-        {% if trigger.entity_id == 'person.aimee' %}
-          - service: input_boolean.turn_off
-            data:
-              entity_id: input_boolean.vacation_aimee
-        {% elif trigger.entity_id == 'person.ian' %}
-          - service: input_boolean.turn_off
-            data:
-              entity_id: input_boolean.vacation_ian
-        {% endif %}
+      - service: notify.notify
+        data_template:
+          title: "Vacation Mode Triggered"
+          message: >
+            "{{ trigger.entity_id }} has turned {{ trigger.to_state }}."
+################################################################################
+# Deprecated
+################################################################################
+  # - id: function_vacation_departure
+  #   alias: "Function - Vacation - Departure"
+  #   initial_state: 'off'
+  #   trigger:
+  #     - platform: numeric_state
+  #       entity_id:
+  #         - person.aimee
+  #         - person.ian
+  #       value_template: >
+  #         {{ distance('zone.home', 'trigger.event.data') | round }} 
+  #       above: 100
+  #       for: "01:00:00"
+  #   action:
+  #     service_template: >
+  #       {% if trigger.entity_id == 'person.aimee' %}
+  #         - service: input_boolean.turn_on
+  #           data:
+  #             entity_id: input_boolean.vacation_aimee
+  #       {% elif trigger.entity_id == 'person.ian' %}
+  #         - service: input_boolean.turn_on
+  #           data:
+  #             entity_id: input_boolean.vacation_ian
+  #       {% endif %}
+################################################################################
+  # - id: function_vacation_return
+  #   alias: "Function - Vacation - Return"
+  #   initial_state: 'off'
+  #   trigger:
+  #     - platform: numeric_state
+  #       entity_id:
+  #         - person.aimee
+  #         - person.ian
+  #       value_template: >
+  #         {{ distance('zone.home', 'trigger.event.data') | round }} 
+  #       below: 100
+  #       for: "01:00:00"
+  #   action:
+  #     service_template: >
+  #       {% if trigger.entity_id == 'person.aimee' %}
+  #         - service: input_boolean.turn_off
+  #           data:
+  #             entity_id: input_boolean.vacation_aimee
+  #       {% elif trigger.entity_id == 'person.ian' %}
+  #         - service: input_boolean.turn_off
+  #           data:
+  #             entity_id: input_boolean.vacation_ian
+  #       {% endif %}
 ################################################################################
 
 # Scripts
