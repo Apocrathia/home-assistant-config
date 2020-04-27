@@ -1,0 +1,8 @@
+################################################################################
+# Power Outage
+################################################################################
+
+# The main Home Assistant system is on a UPS and can perform certain actions
+# in the event of a brief power outage.
+# Example:
+# - Garage door relays are triggered when the power is restored. Shut the doors.
