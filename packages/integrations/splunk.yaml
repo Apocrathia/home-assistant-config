@@ -3,6 +3,6 @@
 splunk:
   host: !secret splunk_host
   token: !secret splunk_token
-  port: 8088
-  ssl: false
+  port: !secret splunk_port
+  ssl: !secret splunk_ssl
   name: Home Assistant
