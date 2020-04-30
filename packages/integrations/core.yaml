@@ -39,7 +39,8 @@ discovery:
 recorder:
   db_url: !secret mysql_uri
   purge_keep_days: 7
-  purge_interval: 1
+  # Deprecated
+  # purge_interval: 1
 
 # Enable logging
 logger:
