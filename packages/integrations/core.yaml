@@ -63,3 +63,6 @@ sun:
 
 # Home Assistant Cloud
 cloud:
+
+# Universal Plug and Play
+upnp:
