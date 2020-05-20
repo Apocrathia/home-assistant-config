@@ -158,3 +158,22 @@ automation:
         data_template:
           entity_id: "{{ trigger.entity_id }}"
 ################################################################################
+# Every now and then the vacuums seem to get stuck or can't find the dock, and
+# they just give up really easily. Re-sending a go-to dock command usually works
+# So, we'll do that automatically if it's been sitting idle for 5 minutes.
+  - id: function_vacuum_idle
+    alias: "Function - Vacuum - Idle"
+    # initial_state: 'on'
+    trigger:
+      - platform: state
+        entity_id:
+          - vacuum.downstairs
+          - vacuum.upstairs
+        to: idle
+        for:
+          minutes: 5
+    action:
+      - service: 'vacuum.return_to_base'
+        data_template:
+          entity_id: "{{ trigger.entity_id }}"
+################################################################################
