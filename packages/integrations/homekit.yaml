@@ -21,8 +21,8 @@ homekit:
       - switch.upstairs_vacuum
       - light.dining_room_chandelier
       - light.kitchen_chandelier
-      - cover.garage_door_01
-      - cover.garage_door_02
+      - cover.main_garage_door
+      - cover.second_garage_door
 
 # The following automation delays HomeKit while the Z-Wave network starts up.
 automation:
