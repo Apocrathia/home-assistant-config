@@ -177,3 +177,21 @@ automation:
         data_template:
           entity_id: "{{ trigger.entity_id }}"
 ################################################################################
+# Because nobody is leaving the house thanks to the current pandemic, our vacuum
+# cleaners have barely run lately. This automation will check every morning to 
+# see if the vacuum has run within the last 24 hours. If not, send it out.
+  - id: function_vacuum_daily
+    alias: "Function - Vacuum - Daily"
+    trigger:
+      - platform: state
+        entity_id:
+          - vacuum.downstairs
+          - vacuum.upstairs
+        to: docked
+        for:
+          hours: 24
+    action:
+      - service: 'vacuum.return_to_base'
+        data_template:
+          entity_id: "{{ trigger.entity_id }}"
+################################################################################
