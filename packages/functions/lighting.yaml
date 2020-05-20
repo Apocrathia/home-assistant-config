@@ -24,8 +24,6 @@ automation:
           profile: energize
           transition: 1
 ################################################################################
-
-################################################################################
   - id: function_lighting_front_door_motion_idle
     alias: 'Function - Lighting - Front Porch Motion (Idle)'
     # initial_state: 'on'
