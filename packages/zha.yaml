@@ -1,5 +1,13 @@
-zha:
-  radio_type: deconz
-  usb_path: /dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2137955-if00
-  baudrate: 38400
-  database_path: /config/zigbee.db
+### ZHA ###
+
+# Deprecated as of 0.110
+# https://www.home-assistant.io/blog/2020/05/20/release-110/
+
+# zha:
+  # ConBee II
+  # usb_path: /dev/serial/by-id/usb-dresden_elektronik_ingenieurtechnik_GmbH_ConBee_II_DE2137955-if00
+  # radio_type: deconz
+  # Nortek HUSBZB-1
+  # usb_path: /dev/serial/by-id/usb-Silicon_Labs_HubZ_Smart_Home_Controller_81300F29-if01-port0
+  # baudrate: 57600
+  # database_path: /config/zigbee.db

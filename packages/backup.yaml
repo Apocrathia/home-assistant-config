@@ -24,8 +24,9 @@ automation:
       name: "Partial Backup: {{ now().strftime('%a, %-I:%M %p (%d/%m/%Y)') }}"
       addons:
         # It doesn't matter if you use the addon slug or name. Name is easier.
-        - core_mariadb 
-        - a0d7b954_mqtt
+        - core_ssh 
+        - local_rsync
+        - f3248fb7_rtl4332mqtt
       folders:
         - homeassistant
         - share
