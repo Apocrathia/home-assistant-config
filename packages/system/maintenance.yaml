@@ -1,0 +1,16 @@
+### System Maintenance ###
+
+automation:
+################################################################################
+# Automatically reboot Home Assistant once a week. Just in case.
+  - id: system_maintenance_reboot
+    alias: "System - Maintenance - Reboot"
+    trigger:
+      platform: time
+      at: "08:00:00"
+    condition:
+      condition: time
+      weekday: sun
+    action:
+      service: homeassistant.restart
+################################################################################
