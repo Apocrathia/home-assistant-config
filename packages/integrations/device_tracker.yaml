@@ -1,11 +1,11 @@
 ### Device Trackers ###
 
-device_tracker:
-# Automatic (Car Service)
-  - platform: automatic
-    entity_namespace: obd
-    client_id: !secret automatic_client_id
-    secret: !secret automatic_secret
-    devices:
-      - 2013 Nissan Frontier
-      - 2016 Subaru Crosstrek
+# device_tracker:
+# # Automatic (Car Service)
+#   - platform: automatic
+#     entity_namespace: obd
+#     client_id: !secret automatic_client_id
+#     secret: !secret automatic_secret
+#     devices:
+#       - 2013 Nissan Frontier
+#       - 2016 Subaru Crosstrek
