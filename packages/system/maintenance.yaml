@@ -2,7 +2,7 @@
 
 automation:
 ################################################################################
-# Automatically reboot Home Assistant once a week. Just in case.
+# Automatically reboot Home Assistant VM once a week. Just in case.
   - id: system_maintenance_reboot
     alias: "System - Maintenance - Reboot"
     trigger:
@@ -12,5 +12,5 @@ automation:
       condition: time
       weekday: sun
     action:
-      service: homeassistant.restart
+      service: hassio.host_reboot
 ################################################################################
