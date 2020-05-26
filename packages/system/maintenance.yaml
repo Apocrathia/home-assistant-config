@@ -14,3 +14,17 @@ automation:
     action:
       service: hassio.host_reboot
 ################################################################################
+# Check for certificate renewals weekly
+  - id: system_maintenance_certificate
+    alias: "System - Maintenance - Certificate"
+    trigger:
+      platform: time
+      at: "08:00:00"
+    condition:
+      condition: time
+      weekday: sat
+    action:
+      service: hassio.addon_start
+      data:
+        addon: core_letsencrypt
+################################################################################
