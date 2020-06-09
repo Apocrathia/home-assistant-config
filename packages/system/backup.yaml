@@ -25,7 +25,7 @@ automation:
       addons:
         # It doesn't matter if you use the addon slug or name. Name is easier.
         - core_mariadb 
-        - a0d7b954_mqtt
+        - core_mosquitto
       folders:
         - homeassistant
         - share
