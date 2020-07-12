@@ -38,7 +38,7 @@ sensor:
         icon_template: mdi:thermometer
         value_template: >-
             {{ 
-              ( float(states.weather.dark_sky.attributes.temperature) -
+              ( float(states.weather.kfly_hourly.attributes.temperature) -
               float(states.sensor.template_average_temperature.state) )
               | round(2)
             }}
