@@ -10,18 +10,18 @@
 # https://github.com/zvldz/vacuum
 # https://dustbuilder.xvm.mit.edu/
 
-vacuum:
-  - platform: xiaomi_miio
-    name: Downstairs Vacuum
-    entity_id: downstairs_miio # specify miio protocol
-    host: !secret downstairs_vacuum_host
-    token: !secret downstairs_vacuum_token
+# vacuum:
+#   - platform: xiaomi_miio
+#     name: Downstairs Vacuum
+#     entity_id: downstairs_miio # specify miio protocol
+#     host: !secret downstairs_vacuum_host
+#     token: !secret downstairs_vacuum_token
     
-  - platform: xiaomi_miio
-    name: Upstairs Vacuum
-    entity_id: upstairs_miio # specify miio protocol
-    host: !secret upstairs_vacuum_host
-    token: !secret upstairs_vacuum_token
+#   - platform: xiaomi_miio
+#     name: Upstairs Vacuum
+#     entity_id: upstairs_miio # specify miio protocol
+#     host: !secret upstairs_vacuum_host
+#     token: !secret upstairs_vacuum_token
 
 # Both of these devices are also being populated in Home Assistant
 # via MQTT auto-discovery, which I may or may not utilize in the future.
@@ -38,17 +38,26 @@ vacuum:
 # The following sensor configuration is required.
 # sensor:
 #   - platform: mqtt
+#     unique_id: upstairs_vacuum_map
 #     state_topic: "vacuum/upstairs/state"
 #     json_attributes_topic: "vacuum/upstairs/map_data_parsed"
 #     name: Upstairs Vacuum Map
 #     value_template: 'OK'
 #     # scan_interval: 5
 #   - platform: mqtt
+#     unique_id: downstairs_vacuum_map
 #     state_topic: "vacuum/downstairs/state"
 #     json_attributes_topic: "vacuum/downstairs/map_data_parsed"
 #     name: Downstairs Vacuum Map
 #     value_template: 'OK'
 #     # scan_interval: 5
+
+# Keep the database from getting out of control 
+# recorder:
+#   exclude:
+#     entities:
+#       - sensor.downstairs_vacuum_map
+#       - sensor.upstairs_vacuum.map
 
 # Alternatively, using the camera integration is another option and
 # simply pull the image from valetudo-mapper. I'll do that when I can finally
