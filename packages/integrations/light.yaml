@@ -2,17 +2,17 @@
 
 light:  
   # Groups
-  - platform: group
-    name: Front Porch Lights
-    entities:
-      - light.front_porch_left
-      - light.front_porch_right
+  # - platform: group
+  #   name: Front Porch Lights
+  #   entities:
+  #     - light.front_porch_left
+  #     - light.front_porch_right
 
-  - platform: group
-    name: Outdoor Garage Lights
-    entities:
-      - light.outdoor_garage_left
-      - light.outdoor_garage_right
+  # - platform: group
+  #   name: Outdoor Garage Lights
+  #   entities:
+  #     - light.outdoor_garage_left
+  #     - light.outdoor_garage_right
 
   - platform: group
     name: Outdoor Lights
