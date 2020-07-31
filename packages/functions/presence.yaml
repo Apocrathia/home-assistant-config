@@ -243,9 +243,9 @@ script:
           - cover.garage_door_01
           - cover.garage_door_02
       # Turn off the lights
-    - service: scene.turn_on
-      data:
-        entity_id: scene.away
+    # - service: scene.turn_on
+    #   data:
+    #     entity_id: scene.away
       # Lights will now be randomly turned on and off
       # and is triggered by input_boolean.away_mode
 ################################################################################
@@ -314,23 +314,23 @@ scene:
   - name: Home
     entities:
       light.dining_room_chandelier:
-        state: on
+        state: 'on'
         brightness: 100
       light.kitchen_chandelier:
-        state: on
+        state: 'on'
         brightness: 100
       light.sitting_room_floor_lamp:
-        state: on
+        state: 'on'
         brightness: 100
 ################################################################################
   - name: Away
     entities:
       light.dining_room_chandelier:
-        state: off
+        state: 'off'
       light.kitchen_chandelier:
-        state: off
+        state: 'off'
       light.sitting_room_floor_lamp:
-        state: off
+        state: 'off'
       light.master_bedroom_table_lamps:
-        state: off
+        state: 'off'
 ################################################################################
