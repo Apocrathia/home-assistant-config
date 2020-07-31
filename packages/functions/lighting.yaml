@@ -47,3 +47,21 @@ automation:
         brightness_pct: 50
         transition: 5
 ################################################################################
+  - id: function_lighting_kitchen_pantry
+    alias: "Function - Lighting - Kitchen Pantry"
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.kitchen_pantry_door
+    action:
+      service_template: >
+        {# Door is opened #}
+        {% if is_state('binary_sensor.kitchen_pantry_door', 'on') %}
+          light.turn_on
+        {# Door is closed #}
+        {% elif is_state('binary_sensor.kitchen_pantry_door', 'off') %}
+          light.turn_off
+        {% endif %}
+      entity_id: light.kitchen_pantry
+      data:
+        transition: 3
+################################################################################
