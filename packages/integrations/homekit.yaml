@@ -23,7 +23,6 @@ homekit:
       - light.kitchen_chandelier
       - cover.main_garage_door
       - cover.second_garage_door
-      - light.master_bedroom_ceiling_fan
       - light.living_room_ceiling_fan
       - fan.master_bedroom_ceiling_fan
       - fan.living_room_ceiling_fan
