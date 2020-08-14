@@ -115,29 +115,6 @@ automation:
         title: Bayesian In-Bed Test
         message: Hey, I think you're in bed right now, is that right?
 ################################################################################
-  - id: routine_night_alarm_arm
-    alias: 'Routine - Night - Alarm Arm'
-    trigger:
-    - platform: template
-      value_template: >
-        {{ states.sensor.time.state == states.sensor.nighttime_start.state }}
-    condition:
-      condition: and
-      conditions:
-      - condition: state
-        entity_id: binary_sensor.worknight
-        state: 'on'
-      - condition: state
-        entity_id: input_boolean.away_mode
-        state: 'off'
-    action:
-      service: alarm_control_panel.alarm_arm_home
-      data:
-        entity_id: alarm_control_panel.home
-        code: !secret alarm_code
-################################################################################
-
-################################################################################
   - id: routine_night_outdoor_lights
     alias: 'Routine - Night - Outdoor Lights'
     trigger:

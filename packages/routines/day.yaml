@@ -63,30 +63,6 @@ sensor:
 
 automation:
 ################################################################################
-  - id: routine_day_alarm_disarm
-    alias: 'Routine - Day - Alarm Disarm'
-    # initial_state: 'on'
-    trigger:
-    - platform: template
-      value_template: >
-        {{ states.sensor.time.state == states.sensor.morning.state }}
-    condition:
-      condition: and
-      conditions:
-      - condition: state
-        entity_id: binary_sensor.workday
-        state: 'on'
-      - condition: state
-        entity_id: input_boolean.away_mode
-        state: 'off'
-    action:
-      service: alarm_control_panel.alarm_disarm
-      data:
-        entity_id: alarm_control_panel.home
-        code: !secret alarm_code
-################################################################################
-
-################################################################################
   - id: routine_day_outdoor_lights
     alias: 'Routine - Day - Outdoor Lights'
     # initial_state: 'on'
