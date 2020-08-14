@@ -89,7 +89,6 @@ automation:
 # that could be accessed externally by Node-RED.
   - id: function_presence_detection
     alias: "Function - Presence - Detection"
-    # initial_state: 'on'
     trigger:
       - platform: state
         entity_id: group.people
@@ -104,7 +103,6 @@ automation:
 ################################################################################
   - id: function_presence_scripts
     alias: "Function - Presence - Scripts"
-    # initial_state: 'on'
     trigger:
       - platform: state
         entity_id: input_boolean.away_mode
@@ -170,7 +168,6 @@ automation:
 ################################################################################
   - id: function_vacation_detection
     alias: "Function - Vacation - Detection"
-    # initial_state: 'on'
     trigger:
       - platform: state
         entity_id: group.vacation

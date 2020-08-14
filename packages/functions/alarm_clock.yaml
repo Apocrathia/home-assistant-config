@@ -56,7 +56,6 @@ automation:
 ################################################################################
   - id: function_wakeup_bedroom_light
     alias: 'Function - Wakeup - Bedroom Light'
-    # initial_state: 'on'
     trigger:
     - platform: template
       value_template: >
@@ -86,7 +85,6 @@ automation:
 ################################################################################
   - id: function_wakeup_apple_tv
     alias: 'Function - Wakeup - Apple TV'
-    # initial_state: 'on'
     trigger:
     - platform: template
       value_template: >
@@ -108,7 +106,6 @@ automation:
 ################################################################################
   - id: function_wakeup_local_news
     alias: 'Function - Wakeup - Local News'
-    # initial_state: 'on'
     trigger:
     - platform: template
       value_template: >
