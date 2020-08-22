@@ -62,4 +62,5 @@ automation:
       entity_id: light.kitchen_pantry
       data:
         transition: 3
+        brightness_pct: 100
 ################################################################################
