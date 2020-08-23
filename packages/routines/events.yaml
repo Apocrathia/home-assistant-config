@@ -12,15 +12,18 @@ automation:
 ################################################################################
   - id: routine_events_game_night
     alias: 'Routine - Events - Game Night'
-    initial_state: 'off'
     trigger:
       - platform: time
-        at: 00:00 # STUB
-      # 1800, on every 4th saturday
+        at: 18:00:00
     condition:
-      condition: state
-      entity_id: group.people
-      state: home
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: group.people
+          state: home
+        - condition: template
+          # on the 4th saturday of the month
+          value_template: "{{ now().isocalendar()[2] == 6 and now().day >= 22 and now().day <= 28 }}"
     action:
       - service: script.party_lights
 ################################################################################
