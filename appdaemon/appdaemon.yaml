@@ -1,4 +1,5 @@
 ---
+---
 secrets: /config/secrets.yaml
 appdaemon:
   latitude: !secret latitude

@@ -1,3 +1,4 @@
+---
 # Text to speech
 tts:
   - platform: google_translate

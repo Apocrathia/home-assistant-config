@@ -1,3 +1,4 @@
+---
 http:
   base_url: !secret hass_url
   ssl_certificate: !secret http_certificate
