@@ -1,0 +1,10 @@
+### Lovelace
+
+automation:
+  # Credit to github.com/basnijholt/home-assistant-config
+  - alias: "System - Lovelace - Update"
+    trigger:
+      platform: state
+      entity_id: sensor.lovelace
+    action:
+      service: shell_command.convert_lovelace
