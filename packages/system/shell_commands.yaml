@@ -1,4 +1,4 @@
 ### Shell Commands
 shell_command:
   # Credit to github.com/basnijholt/home-assistant-config
-  convert_lovelace: "python /config/utils/json2yaml.py /config/.storage/lovelace /config/lovelace-ui.yaml"
+  convert_lovelace: "python /config/utilities/json2yaml.py /config/.storage/lovelace /config/lovelace-ui.yaml"
