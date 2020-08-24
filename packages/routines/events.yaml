@@ -14,7 +14,7 @@ automation:
     alias: 'Routine - Events - Game Night'
     trigger:
       - platform: time
-        at: 18:00:00
+        at: "18:00:00"
     condition:
       condition: and
       conditions:
