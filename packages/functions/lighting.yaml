@@ -57,9 +57,8 @@ automation:
       service: light.turn_on
       data:
         entity_id: light.kitchen_pantry
-        data:
-          transition: 3
-          brightness_pct: 100
+        transition: 3
+        brightness_pct: 100
 ################################################################################
   - id: function_lighting_kitchen_pantry_closed
     alias: "Function - Lighting - Kitchen Pantry (Closed)"
@@ -71,6 +70,5 @@ automation:
       service: light.turn_off
       data:
         entity_id: light.kitchen_pantry
-        data: 
-          transition: 1
+        transition: 1
 ################################################################################
