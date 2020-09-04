@@ -1,8 +1,14 @@
 ---
-### Lovelace
+### Lovelace ###
+
+  # Credit to github.com/basnijholt/home-assistant-config
+
+sensor:
+  - platform: filesize
+    file_paths:
+      - /config/.storage/lovelace
 
 automation:
-  # Credit to github.com/basnijholt/home-assistant-config
   - alias: "System - Lovelace - Update"
     trigger:
       platform: state
