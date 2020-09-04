@@ -37,28 +37,28 @@
 # For drawing the map in Lovelace, I am using the Valetudo map card
 # https://github.com/TheLastProject/lovelace-valetudo-map-card
 # The following sensor configuration is required.
-# sensor:
-#   - platform: mqtt
-#     unique_id: upstairs_vacuum_map
-#     state_topic: "vacuum/upstairs/state"
-#     json_attributes_topic: "vacuum/upstairs/map_data_parsed"
-#     name: Upstairs Vacuum Map
-#     value_template: 'OK'
-#     # scan_interval: 5
-#   - platform: mqtt
-#     unique_id: downstairs_vacuum_map
-#     state_topic: "vacuum/downstairs/state"
-#     json_attributes_topic: "vacuum/downstairs/map_data_parsed"
-#     name: Downstairs Vacuum Map
-#     value_template: 'OK'
-#     # scan_interval: 5
+sensor:
+  - platform: mqtt
+    unique_id: upstairs_vacuum_map
+    state_topic: "vacuum/upstairs/state"
+    json_attributes_topic: "vacuum/upstairs/map_data_parsed"
+    name: Upstairs Vacuum Map
+    value_template: 'OK'
+    # scan_interval: 5
+  - platform: mqtt
+    unique_id: downstairs_vacuum_map
+    state_topic: "vacuum/downstairs/state"
+    json_attributes_topic: "vacuum/downstairs/map_data_parsed"
+    name: Downstairs Vacuum Map
+    value_template: 'OK'
+    # scan_interval: 5
 
 # Keep the database from getting out of control 
-# recorder:
-#   exclude:
-#     entities:
-#       - sensor.downstairs_vacuum_map
-#       - sensor.upstairs_vacuum.map
+recorder:
+  exclude:
+    entities:
+      - sensor.downstairs_vacuum_map
+      - sensor.upstairs_vacuum_map
 
 # Alternatively, using the camera integration is another option and
 # simply pull the image from valetudo-mapper. I'll do that when I can finally

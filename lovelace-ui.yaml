@@ -1,4 +1,3 @@
----
 title: Home
 views:
 - badges:
@@ -91,7 +90,7 @@ views:
     show_header_toggle: false
     title: Fans
     type: entities
-  icon: ''
+  icon: mdi:home
   panel: false
   path: home
   title: Home
@@ -136,6 +135,7 @@ views:
     name: Sagan's Crate
     show_state: false
     type: picture-entity
+  icon: mdi:lock
   path: security
   title: Security
 - badges: []
@@ -149,8 +149,77 @@ views:
     - entity: remote.master_bedroom_apple_tv
     title: Remotes
     type: entities
+  icon: mdi:movie-open
   path: media
   title: Media
+- badges: []
+  cards:
+  - entities:
+    - entity: input_datetime.dogs_breakfast
+    - entity: input_datetime.dogs_lunch
+    - entity: input_datetime.dogs_dinner
+    title: Meal Times
+    type: glance
+  - entities:
+    - entity: input_number.dogs_meal_advance
+    - entity: input_number.dogs_meal_advance
+    - entity: input_number.dogs_meal_relief
+    title: Offsets
+    type: entities
+  icon: mdi:dog
+  path: dogs
+  title: Dogs
+- badges:
+  - entity: vacuum.downstairs
+  - entity: vacuum.upstairs
+  cards:
+  - background_color: transparent
+    crop:
+      bottom: 0
+      left: 0
+      right: 0
+      top: 0
+    currently_cleaned_zone_color: --secondary-text-color
+    custom_buttons:
+    - icon: mdi:play
+      service: vacuum.start
+    - icon: mdi:stop
+      service: vacuum.stop
+    entity: sensor.downstairs_vacuum_map
+    floor_color: --secondary-background-color
+    min_height: 0
+    no_go_area_color: --accent-color
+    path_color: --primary-text-color
+    rotate: 0
+    title: Downstairs Vacuum
+    type: custom:valetudo-map-card
+    virtual_wall_color: --accent-color
+    wall_color: --accent-color
+  - background_color: transparent
+    crop:
+      bottom: 0
+      left: 0
+      right: 0
+      top: 0
+    currently_cleaned_zone_color: --secondary-text-color
+    custom_buttons:
+    - icon: mdi:play
+      service: vacuum.start
+    - icon: mdi:stop
+      service: vacuum.stop
+    entity: sensor.upstairs_vacuum_map
+    floor_color: --secondary-background-color
+    min_height: 0
+    no_go_area_color: --accent-color
+    path_color: --primary-text-color
+    rotate: -90
+    title: Upstairs Vacuum
+    type: custom:valetudo-map-card
+    virtual_wall_color: --accent-color
+    wall_color: --accent-color
+  icon: mdi:robot-vacuum
+  path: vacuums
+  title: Vacuums
 - badges: []
   cards:
   - entities:
@@ -191,6 +260,7 @@ views:
     show_header_toggle: false
     title: Presence
     type: entities
+  icon: mdi:cog
   path: settings
   title: Settings
 - badges: []
@@ -312,6 +382,7 @@ views:
     sort:
       method: name
     type: custom:auto-entities
+  icon: mdi:expand-all
   panel: false
   path: everything
   title: Everything Else

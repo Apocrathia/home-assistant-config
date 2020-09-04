@@ -102,6 +102,7 @@ automation:
         {% endif %}
       entity_id: input_boolean.away_mode
 ################################################################################
+### THIS NEEDS TO BE BROKEN INTO MULTIPLE AUTOMATIONS ###
   - id: function_presence_scripts
     alias: "Function - Presence - Scripts"
     trigger:
