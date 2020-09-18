@@ -3,7 +3,7 @@
 
 sensor:
   # Weather prediction
-  - platform: yr
+#  - platform: yr
 
   - platform: moon
 
