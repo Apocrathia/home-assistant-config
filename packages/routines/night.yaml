@@ -182,7 +182,9 @@ automation:
     action:
       - service: light.turn_on
         data:
-          entity_id: light.master_bedroom_lights
+          entity_id: 
+            - light.master_bedroom_floor_lamp
+            - light.master_bedroom_table_lamps
           profile: relax
           brightness_pct: 50
         data_template:

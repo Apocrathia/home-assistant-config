@@ -1,0 +1,84 @@
+---
+### Lighting Toys ###
+
+# Inputs
+
+input_boolean:
+  party_lights:
+    name: Party Lights
+    icon: mdi:party-popper
+
+
+automation:
+################################################################################
+  - id: party_lights
+    # Going to leave this off for now. Using Node-Red for the loop.
+    initial_state: off
+    alias: Party Lights
+    variables:
+      # Although we can't do for loops yet, I'm establishing this as a variable
+      entity_id:
+        - light.front_porch_left
+        - light.front_porch_right
+        - light.outdoor_garage_left
+        - light.outdoor_garage_right
+      colors: 
+        - Red
+        - Orange
+        - Yellow
+        - Green
+        - Blue
+        - Indigo
+        - Violet
+    trigger:
+      - platform: state
+        entity_id: input_boolean.party_lights
+        to: 'on'
+    action:
+      repeat:
+    # Turn each light on to scroll colors across the house
+    # Manually specify colors, as current lights do not support colorloop effect
+        sequence:
+            - service: light.turn_on
+              data:
+                entity_id: light.front_porch_left
+                effect: colorloop
+                brightness_pct: 100
+            - delay:
+                seconds: 2
+            - service: light.turn_on
+              data:
+                entity_id: light.front_porch_right
+                effect: colorloop
+                brightness_pct: 100
+            - delay:
+                seconds: 2
+            - service: light.turn_on
+              data:
+                entity_id: light.outdoor_garage_left
+                effect: colorloop
+                brightness_pct: 100
+            - delay:
+                seconds: 2
+            - service: light.turn_on
+              data:
+                entity_id: light.outdoor_garage_right
+                effect: colorloop
+                brightness_pct: 100
+        until:
+          - condition: state
+            entity_id: binary_sensor.party_lights
+            state: 'off'
+################################################################################
+
+script:
+################################################################################
+  annoying_lights:
+    alias: 'Annoy Aimee'
+    sequence:
+      - service: light.turn_on
+        data:
+          entity_id: light.master_bedroom_lights
+          effect: colorloop
+          brightness_pct: 100
+################################################################################
