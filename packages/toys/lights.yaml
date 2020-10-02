@@ -13,6 +13,9 @@ automation:
 ################################################################################
   - id: party_lights
     # Going to leave this off for now. Using Node-Red for the loop.
+    # The lights that I currently have lack a colorloop effect, so this is an
+    # attempt to try and build that, but the Home Assistant automtions
+    # aren't there quite yet. Perhaps we can custom define effects eventually.
     initial_state: off
     alias: Party Lights
     variables:
