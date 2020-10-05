@@ -6,4 +6,5 @@ splunk:
   token: !secret splunk_token
   port: !secret splunk_port
   ssl: !secret splunk_ssl
+  verify_ssl: !secret splunk_verify_ssl
   name: Home Assistant
