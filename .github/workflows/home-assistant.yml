@@ -99,6 +99,8 @@ jobs:
           esphome version
       - name: Copy stub files into configuration folder
         run: cp -R ./.stubs/* ./esphome/
+      - name: Remove HA-specific files
+        run: rm -v ./esphome/customize.yaml
       - name: Run esphome on all files
         run: |
           for file in $(find ./esphome -type f -name "*.yaml" -not -name "secrets.yaml"); do esphome "${file}" config; done
