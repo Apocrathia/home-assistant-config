@@ -20,14 +20,19 @@ rules:
   empty-lines: enable
   empty-values: disable
   hyphens: enable
-  indentation: disable
+  indentation: 
+    level: warning
   key-duplicates: enable
   key-ordering: disable
-  line-length: disable
-  new-line-at-end-of-file: disable
-  new-lines: disable
+  line-length: 
+    level: warning
+  new-line-at-end-of-file: 
+    level: warning
+  new-lines: 
+    level: warning
   octal-values: disable
   quoted-strings: disable
-  trailing-spaces: disable
+  trailing-spaces: 
+    level: warning
   truthy:
     level: warning

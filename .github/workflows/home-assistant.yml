@@ -46,7 +46,7 @@ jobs:
         with:
           args: |
             python -m homeassistant \
-              --config . \
+              --config ./ \
               --script check_config \
               --info all
   home_assistant_beta:
@@ -67,7 +67,7 @@ jobs:
         with:
           args: |
             python -m homeassistant \
-              --config . \
+              --config ./ \
               --script check_config \
               --info all
   home_assistant_dev:
@@ -88,7 +88,7 @@ jobs:
         with:
           args: |
             python -m homeassistant \
-            --config . \
+            --config ./ \
             --script check_config \
             --info all
   esphome:
@@ -108,7 +108,7 @@ jobs:
           pip list
           esphome version
       - name: Copy stub files into configuration folder
-        run: cp -R ./.stubs/* ./config/esphome/
+        run: cp -R ./.stubs/* ./esphome/
       - name: Run esphome on all files
         # yamllint disable rule:line-length
         run: |
