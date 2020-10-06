@@ -1,4 +1,11 @@
-# Travis CI
+# Stubs
+
+Credit to Frenck for his GitHub actions configuration.
+https://github.com/frenck/home-assistant-config
+
+# Travis CI (DEPRECATED)
+
+*This used to be used for Travis CI. Migrated to GitHub Actions*
 
 Initial credit for this configuration goes to [Shortbloke](https://github.com/shortbloke/home_assistant_config)
 

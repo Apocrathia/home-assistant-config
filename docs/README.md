@@ -6,7 +6,7 @@
 [![GitHub Activity][commits-shield]][commits]
 [![GitHub Last Commit][last-commit-shield]][commits]
 
-[![Build Status][travis-shield]][travis]
+[![GitHub Actions][actions-shield]][actions]
 [![Black Duck Security Risk][black-duck-shield]][black-duck]
 
 ![GitHub Stars][stars-shield]
