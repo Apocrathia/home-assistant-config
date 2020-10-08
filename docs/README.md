@@ -1,7 +1,7 @@
 # Apocrathia's Home Assistant Configuration Files 
 
 ![Project Maintenance][maintenance-shield]
-[![License][license-shield]](docs/LICENSE.md)
+[![License][license-shield]](LICENSE.md)
 
 [![GitHub Activity][commits-shield]][commits]
 [![GitHub Last Commit][last-commit-shield]][commits]
