@@ -36,7 +36,7 @@ jobs:
       - name: Copy stub files into configuration folder
         run: cp -R ./.stubs/* .
       - name: Install custom components
-        run: /github/workspace/utilities/install_custom_components.sh
+        run: bash ./utilities/install_custom_components.sh
       - name: Home Assistant Version
         uses: "docker://homeassistant/home-assistant:stable"
         with:
@@ -56,7 +56,7 @@ jobs:
       - name: Copy stub files into configuration folder
         run: cp -R ./.stubs/* .
       - name: Install custom components
-        run: /github/workspace/utilities/install_custom_components.sh
+        run: bash ./utilities/install_custom_components.sh
       - name: Home Assistant Version
         uses: "docker://homeassistant/home-assistant:beta"
         with:
@@ -76,7 +76,7 @@ jobs:
       - name: Copy stub files into configuration folder
         run: cp -R ./.stubs/* .
       - name: Install custom components
-        run: /github/workspace/utilities/install_custom_components.sh
+        run: bash ./utilities/install_custom_components.sh
       - name: Home Assistant Version
         uses: "docker://homeassistant/home-assistant:dev"
         with:
