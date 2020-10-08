@@ -1,3 +1,19 @@
+# Disclaimer
+
+This is the configuration for my personal Home Assistnat instance, but it is 
+[listed as an official configuration example](https://www.home-assistant.io/cookbook/). 
+Becuase of this, there are a lot of people who see this repository. As the sole maintainer of 
+everything here, there are going to be errors. The configuration you see is the one that I'm
+currently running, and it has to pass a configuration check before I push it to GitHub. (Even
+if the Home Assistant CI says it's broken. Sometimes I forget to make sure that's working.)
+However, I am human, and I make mistakes. A lot of mistakes. So, if you see a spelling error,
+or a grammatical error, or something just doesn't make sense; say something. Because, odds are,
+you aren't the only one who noticed, and it could make my configuration confusing to somebody
+else. You don't have to open a pull request, but even just posting an issue asking for
+clarification on something could prove beneficial to others.
+
+Now, on with the canned template.
+
 # Contributing
 
 When contributing to this repository, please first discuss the change you wish to make via issue,
@@ -73,7 +89,7 @@ further defined and clarified by project maintainers.
 ### Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported by contacting the project team at [INSERT EMAIL ADDRESS]. All
+reported by contacting the project team at [ian@apocrathia.com](mailto:ian@apocrathia.com). All
 complaints will be reviewed and investigated and will result in a response that
 is deemed necessary and appropriate to the circumstances. The project team is
 obligated to maintain confidentiality with regard to the reporter of an incident.
