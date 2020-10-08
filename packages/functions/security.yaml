@@ -28,6 +28,29 @@ input_datetime:
     has_time: true
 ################################################################################
 
+################################################################################
+# iOS Notifications
+################################################################################
+ios:
+  push:
+    categories:
+      - name: Garage Door
+        identifier: 'garage_door'
+        actions:
+          - identifier: 'garage_close'
+            title: 'Close'
+            activationMode: 'background'
+            authenticationRequired: true
+            destructive: false
+            behavior: 'default'
+          - identifier: 'dismiss'
+            title: 'Dismiss'
+            activationMode: 'background'
+            authenticationRequired: true
+            destructive: true
+            behavior: 'default'
+################################################################################
+
 sensor:
 ################################################################################
   - platform: template
@@ -147,6 +170,37 @@ automation:
     action:
     # Send an alert to all users
       - service: script.notification_alarm_armed
+################################################################################
+  - id: function_security_garage
+    alias: 'Function - Security - Garage'
+    trigger:
+      - platform: state
+        entity_id:
+          - cover.main_garage_door
+          - cover.second_garage_door
+        from: closed
+        to: open
+        for: 00:05:00
+    condition:
+      - condition: state
+        entity_id: input_boolean.away_mode
+        # state: 'on'
+        # Condition override for testing purposes
+        state: 'off'
+    action:
+      - service: notify.mobile_app_ians_iphone
+        data:
+          title: "Garage Open!"
+          message: "The {{ trigger.name }} has been left open. What would you like to do?"
+          data:
+            push:
+              category: "garage_door"
+            action_data:
+              entity_id: >
+                {{ trigger.entity_id }}
+      - wait_for_trigger:
+          platform: event
+          event_type: ios.notification_action_fired
 ################################################################################
 
 script:
