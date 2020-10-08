@@ -1,17 +1,21 @@
 ---
 ### Lovelace ###
 
-  # Credit to github.com/basnijholt/home-assistant-config
+# Credit to github.com/basnijholt/home-assistant-config
 
-sensor:
-  - platform: filesize
-    file_paths:
-      - .storage/lovelace
+# Commenting out for now. The filesize sensor does not want to work with 
+# the Lovelace JSON file, and I don't want to expose it 
+# via allowlist_external_dirs 
 
-automation:
-  - alias: "System - Lovelace - Update"
-    trigger:
-      platform: state
-      entity_id: sensor.lovelace
-    action:
-      service: shell_command.convert_lovelace
+# sensor:
+#   - platform: filesize
+#     file_paths:
+#       - .storage/lovelace
+
+# automation:
+#   - alias: "System - Lovelace - Update"
+#     trigger:
+#       platform: state
+#       entity_id: sensor.lovelace
+#     action:
+#       service: shell_command.convert_lovelace
