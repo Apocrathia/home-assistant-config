@@ -94,7 +94,7 @@ automation:
       - platform: state
         entity_id: group.people
     action:
-      service_template: >
+      service: >
         {% if is_state('group.people', 'home') %}
           input_boolean.turn_off
         {% elif is_state('group.people', 'not_home') %}
@@ -109,7 +109,7 @@ automation:
       - platform: state
         entity_id: input_boolean.away_mode
     action:
-      service_template: >
+      service: >
         {% if is_state('input_boolean.away_mode', 'off') %}
           script.location_home
         {% elif is_state('input_boolean.away_mode', 'on') %}
@@ -125,7 +125,7 @@ automation:
         below: 100
         # for: 01:00:00
     action:
-      service_template: >
+      service: >
         # Going on vacation
         {% if trigger.to_state > 100 %}
             - service: input_boolean.turn_on
@@ -151,7 +151,7 @@ automation:
         below: 100
         # for: 01:00:00
     action:
-      service_template: >
+      service: >
         # Going on vacation
         {% if trigger.to_state > 100 %}
             - service: input_boolean.turn_on
@@ -174,7 +174,7 @@ automation:
       - platform: state
         entity_id: group.vacation
     action:
-      service_template: >
+      service: >
         {% if is_state('group.vacation', 'off') %}
           input_boolean.turn_off
         {% elif is_state('group.vacation', 'on') %}
@@ -188,7 +188,7 @@ automation:
       - platform: state
         entity_id: input_boolean.vacation_mode
     action:
-      service_template: >
+      service: >
         {% if is_state('input_boolean.vacation_mode', 'off') %}
           script.vacation_mode_on
         {% elif is_state('input_boolean.vacation_mode', 'on') %}

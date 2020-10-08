@@ -58,13 +58,13 @@ sensor:
       alarm_auto_arm:
         friendly_name: "Alarm Auto Arm"
         icon_template: mdi:clock-outline
-        entity_id: input_datetime.alarm_auto_arm
+        # entity_id: input_datetime.alarm_auto_arm
         value_template: >
           {{ states.input_datetime.alarm_auto_arm.attributes.timestamp | int | timestamp_custom("%H:%M",False) }}
       alarm_auto_disarm:
         friendly_name: "Alarm Auto Disarm"
         icon_template: mdi:clock-outline
-        entity_id: input_datetime.alarm_auto_disarm
+        # entity_id: input_datetime.alarm_auto_disarm
         value_template: >
           {{ states.input_datetime.alarm_auto_disarm.attributes.timestamp | int | timestamp_custom("%H:%M",False) }}
 ################################################################################
