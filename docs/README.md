@@ -57,6 +57,8 @@ This configuration controls a couple of significant features in my smart home.
 
 [commits-shield]: https://img.shields.io/github/commit-activity/y/Apocrathia/home-assistant-config.svg
 [commits]: https://github.com/Apocrathia/home-assistant-config/commits/master
+[actions-shield]: https://github.com/Apocrathia/home-assistant-config/workflows/Home%20Assistant%20CI/badge.svg
+[actions]: https://github.com/Apocrathia/home-assistant-config/actions
 [contributors]: https://github.com/Apocrathia/home-assistant-config/graphs/contributors
 [discord-shield]: https://img.shields.io/discord/330944238910963714.svg
 [discord]: https://discord.gg/c5DvZ4e
