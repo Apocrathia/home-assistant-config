@@ -6,7 +6,7 @@
 sensor:
   - platform: filesize
     file_paths:
-      - /config/.storage/lovelace
+      - .storage/lovelace
 
 automation:
   - alias: "System - Lovelace - Update"
