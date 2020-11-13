@@ -1,0 +1,280 @@
+---
+### Dogs ### 
+
+# Feed the dogs (@ & 15 minutes before 0800, 1200, & 1600)
+          # Add inputs for this later.
+          # 3 input datetime's & 1 input number
+          # This could be done as a single automation with a template
+### Inputs ###
+input_datetime:
+  dogs_meal_breakfast:
+    name: Dogs - Breakfast
+    has_date: false
+    has_time: true
+  dogs_meal_lunch:
+    name: Dogs - Lunch
+    has_date: false
+    has_time: true
+  dogs_meal_dinner:
+    name: Dogs - Dinner
+    has_date: false
+    has_time: true
+
+input_number:
+  dogs_meal_advance:
+    name: Dogs - Meal - Advance
+    icon: mdi:clock-in
+    min: 0
+    max: 60
+    step: 5
+    unit_of_measurement: Minutes
+  dogs_meal_duration:
+    name: Dogs - Meal - Duration
+    icon: mdi:clock-outline
+    min: 0
+    max: 60
+    step: 5
+    unit_of_measurement: Minutes
+  dogs_meal_relief:
+    name: Dogs - Meal - Relief
+    icon: mdi:clock-out
+    min: 0
+    max: 6
+    step: 1
+    unit_of_measurement: Hours
+
+### Sensors ###
+sensor:
+  - platform: template
+    sensors:
+# Breakfast
+      dogs_meal_breakfast:
+        friendly_name: Dogs - Meal - Breakfast
+        value_template: >
+          {{ (states.input_datetime.dogs_meal_breakfast.attributes.timestamp |
+              int | timestamp_custom("%H:%M",False)) }}
+      dogs_meal_breakfast_advance:
+        friendly_name: Dogs - Meal - Breakfast (Advance)
+        value_template: >
+          {{ ((states.input_datetime.dogs_meal_breakfast.attributes.timestamp |
+              int - states.input_number.dogs_meal_advance.state | int * 60) |
+              timestamp_custom("%H:%M",False)) }}
+      dogs_meal_breakfast_end:
+        friendly_name: Dogs - Meal - Breakfast (End)
+        value_template: >
+          {{ ((states.input_datetime.dogs_meal_breakfast.attributes.timestamp |
+            int + states.input_number.dogs_meal_duration.state |
+            int * 60) | timestamp_custom("%H:%M",False)) }}
+      dogs_meal_breakfast_relief:
+        friendly_name: Dogs - Meal - Breakfast (Relief)
+        value_template: >
+          {{ ((states.input_datetime.dogs_meal_breakfast.attributes.timestamp |
+            int + states.input_number.dogs_meal_duration.state | int * 60 + 
+            states.input_number.dogs_meal_relief.state | int * 60 * 60) |
+            timestamp_custom("%H:%M",False)) }}
+# Lunch
+      dogs_meal_lunch:
+        friendly_name: Dogs - Meal - Lunch
+        value_template: >
+          {{ (states.input_datetime.dogs_meal_lunch.attributes.timestamp |
+              int | timestamp_custom("%H:%M",False)) }}
+      dogs_meal_lunch_advance:
+        friendly_name: Dogs - Meal - Lunch (Advance)
+        value_template: >
+          {{ ((states.input_datetime.dogs_meal_lunch.attributes.timestamp |
+              int - states.input_number.dogs_meal_advance.state | int * 60) |
+              timestamp_custom("%H:%M",False)) }}
+      dogs_meal_lunch_end:
+        friendly_name: Dogs - Meal - Lunch (End)
+        value_template: >
+          {{ ((states.input_datetime.dogs_meal_lunch.attributes.timestamp |
+            int + states.input_number.dogs_meal_duration.state |
+            int * 60) | timestamp_custom("%H:%M",False)) }}
+      dogs_meal_lunch_relief:
+        friendly_name: Dogs - Meal - Lunch (Relief)
+        value_template: >
+          {{ ((states.input_datetime.dogs_meal_lunch.attributes.timestamp |
+            int + states.input_number.dogs_meal_duration.state | int * 60 + 
+            states.input_number.dogs_meal_relief.state | int * 60 * 60) |
+            timestamp_custom("%H:%M",False)) }}
+# Dinner
+      dogs_meal_dinner:
+        friendly_name: Dogs - Meal - Dinner
+        value_template: >
+          {{ (states.input_datetime.dogs_meal_dinner.attributes.timestamp |
+              int | timestamp_custom("%H:%M",False)) }}
+      dogs_meal_dinner_advance:
+        friendly_name: Dogs - Meal - Dinner (Advance)
+        value_template: >
+          {{ ((states.input_datetime.dogs_meal_dinner.attributes.timestamp |
+              int - states.input_number.dogs_meal_advance.state | int * 60) |
+              timestamp_custom("%H:%M",False)) }}
+      dogs_meal_dinner_end:
+        friendly_name: Dogs - Meal - Dinner (End)
+        value_template: >
+          {{ ((states.input_datetime.dogs_meal_dinner.attributes.timestamp |
+            int + states.input_number.dogs_meal_duration.state |
+            int * 60) | timestamp_custom("%H:%M",False)) }}
+      dogs_meal_dinner_relief:
+        friendly_name: Dogs - Meal - Dinner (Relief)
+        value_template: >
+          {{ ((states.input_datetime.dogs_meal_dinner.attributes.timestamp |
+            int + states.input_number.dogs_meal_duration.state | int * 60 + 
+            states.input_number.dogs_meal_relief.state | int * 60 * 60) |
+            timestamp_custom("%H:%M",False)) }}
+
+automation:
+################################################################################
+  - id: routine_dogs_breakfast
+    alias: Routine - Dogs - Breakfast
+    trigger:
+      - platform: template
+        value_template: >
+          {{ (states.sensor.time.state
+            == states.sensor.dogs_meal_breakfast.state) }}
+    condition:
+      - condition: state
+        entity_id: input_boolean.away_mode
+        state: 'off'
+    action:
+      - service: notify.notify
+        data:
+          title: It's Breakfast Time!
+          message: Get up and go feed the dogs!
+################################################################################
+  - id: routine_dogs_breakfast_upcoming
+    alias: Routine - Dogs - Breakfast (Upcoming)
+    trigger:
+      - platform: template
+        value_template: >
+          {{ (states.sensor.time.state 
+            == states.sensor.dogs_meal_breakfast_advance.state) }}
+    condition:
+      - condition: state
+        entity_id: input_boolean.away_mode
+        state: 'off'
+    action:
+      - service: notify.notify
+        data:
+          title: It's Almost Breakfast Time!
+          message: Get ready to get up and go feed the dogs!
+################################################################################
+  - id: routine_dogs_breakfast_relief
+    alias: Routine - Dogs - Breakfast (Relief)
+    trigger:
+      - platform: template
+        value_template: >
+          {{ (states.sensor.time.state 
+            == states.sensor.dogs_meal_breakfast_relief.state) }}
+    condition:
+      - condition: state
+        entity_id: input_boolean.away_mode
+        state: 'off'
+    action:
+      - service: notify.notify
+        data:
+          title: Take The Dogs Out!
+          message: Time to empty the dogs!
+################################################################################
+  - id: routine_dogs_lunch
+    alias: Routine - Dogs - Lunch
+    trigger:
+      - platform: template
+        value_template: >
+          {{ (states.sensor.time.state 
+            == states.sensor.dogs_meal_lunch.state) }}
+    condition:
+      - condition: state
+        entity_id: input_boolean.away_mode
+        state: 'off'
+    action:
+      - service: notify.notify
+        data:
+          title: It's Lunch Time!
+          message: Get up and go feed the dogs!
+################################################################################
+  - id: routine_dogs_lunch_upcoming
+    alias: Routine - Dogs - Lunch (Upcoming)
+    trigger:
+      - platform: template
+        value_template: >
+          {{ (states.sensor.time.state 
+            == states.sensor.dogs_meal_advance.state) }}
+    condition:
+      - condition: state
+        entity_id: input_boolean.away_mode
+        state: 'off'
+    action:
+      - service: notify.notify
+        data:
+          title: It's Almost Lunch Time!
+          message: Get ready to get up and go feed the dogs!
+################################################################################
+  - id: routine_dogs_lunch_relief
+    alias: Routine - Dogs - Lunch (Relief)
+    trigger:
+      - platform: template
+        value_template: >
+          {{ (states.sensor.time.state 
+            == states.sensor.dogs_meal_lunch_relief.state) }}
+    condition:
+      - condition: state
+        entity_id: input_boolean.away_mode
+        state: 'off'
+    action:
+      - service: notify.notify
+        data:
+          title: Take The Dogs Out!
+          message: Time to empty the dogs!
+################################################################################
+  - id: routine_dogs_dinner
+    alias: Routine - Dogs - Dinner
+    trigger:
+      - platform: template
+        value_template: >
+          {{ (states.sensor.time.state 
+            == states.sensor.dogs_meal_dinner.state) }}
+    condition:
+      - condition: state
+        entity_id: input_boolean.away_mode
+        state: 'off'
+    action:
+      - service: notify.notify
+        data:
+          title: It's Dinner Time!
+          message: Get up and go feed the dogs!
+################################################################################
+  - id: routine_dogs_dinner_upcoming
+    alias: Routine - Dogs - Dinner (Upcoming)
+    trigger:
+      - platform: template
+        value_template: >
+          {{ (states.sensor.time.state 
+            == states.sensor.dogs_meal_dinner_advance.state) }}
+    condition:
+      - condition: state
+        entity_id: input_boolean.away_mode
+        state: 'off'
+    action:
+      - service: notify.notify
+        data:
+          title: It's Almost Dinner Time!
+          message: Get ready to get up and go feed the dogs!
+################################################################################
+  - id: routine_dogs_dinner_relief
+    alias: Routine - Dogs - Dinner (Relief)
+    trigger:
+      - platform: template
+        value_template: >
+          {{ (states.sensor.time.state 
+            == states.sensor.dogs_meal_dinner_relief.state) }}
+    condition:
+      - condition: state
+        entity_id: input_boolean.away_mode
+        state: 'off'
+    action:
+      - service: notify.notify
+        data:
+          title: Take The Dogs Out!
+          message: Time to empty the dogs!
+################################################################################
