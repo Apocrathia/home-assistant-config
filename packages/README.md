@@ -16,12 +16,9 @@ of this follows the nomenclature outlined in the [Home Assistant Glossary](https
 
 Prefix | Description | Example
 --- | --- | ---
+area | Configurations related to an area of the home | area_back_yard
 integration | Configurations specific to core functionality of Home Assistant | integration_ecobee
 routine | Configurations to perform tasks which happen on a routine basis | routine_morning
 function | Configurations that can be bundled together to perform a specific function | function_presence
 system | Things that work specifically with the management of Home Assistant | system_backup
 toy | Things that have no real use, but are just for fun. | toy_annoyaimee
-
-## Notes on prefixes
-
-I've started to add rooms to the functions category. For my purposes, I am defining a function as something that *does something*, and a routine as something that *routinely happens*. Eventually I may create another prefix called "Rooms" and have things split up there, but for now, I will be sticking room functionality into the "Function" prefix.
