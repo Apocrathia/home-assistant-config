@@ -1,9 +1,0 @@
----
-################################################################################
-# Alarm System
-################################################################################
-
-# This will eventually contain functions to augment our alarm system 
-# Examples: 
-# - integrating additional sensors that could trip the system when armed.
-# - flashing lights and making additional noise when the alarm is tripped
