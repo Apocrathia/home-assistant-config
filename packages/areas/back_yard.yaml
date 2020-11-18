@@ -1,0 +1,50 @@
+### Back Yard ###
+automation:
+################################################################################
+# Turn on the string lights around the back yard when it gets dark
+  - id: area_back_yard_string_lights_dusk
+    alias: 'Area - Back Yard - String Lights (Dusk)'
+    trigger:
+      - platform: state
+        entity_id: sun.sun
+        from: 'off'
+        to: 'below_horizon'
+    condition:
+      condition: state
+      entity_id: group.people
+      state: 'home'
+    action:
+    # Wait a few minutes until it gets a little bit darker
+      - delay:
+          minutes: 15
+      - service: light.turn_on
+        data:
+          entity_id: light.back_yard_string_lights
+          brightness_pct: 50
+    # Wait a few *more* minutes until it gets a little bit darker
+      - delay:
+          minutes: 15
+      - service: light.turn_on
+        data:
+          entity_id: light.back_yard_string_lights
+          brightness_pct: 100
+################################################################################
+# Turn off the string lights when the alarm is turned on
+# This is so that there is a clear indication that the alarm is on
+  - id: area_back_yard_string_lights_alarm
+    alias: 'Area - Back Yard - String Lights (Night)'
+    trigger:
+      - platform: state
+        entity_id:
+          - alarm_control_panel.home
+        to: 'armed_home'
+    condition:
+      condition: state
+      entity_id: group.people
+      state: 'home'
+    action:
+      - service: light.turn_off
+        data:
+          entity_id: light.back_yard_string_lights
+################################################################################
+

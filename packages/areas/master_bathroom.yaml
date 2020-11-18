@@ -1,0 +1,99 @@
+---
+### Master Bathroom Stuff ###
+
+# Note: This is a stub right now, as I have installed the associated sensors
+# but that's it. I still need to install some switches.
+
+# Inputs
+input_number:
+  # This will be used for the shower automation
+  master_bathroom_humidity_threshold:
+    name: Master Bathroom Humidity Threshold
+    icon: mdi:water-percent
+    min: 0
+    max: 100
+    step: 5
+    unit_of_measurement: Percent
+
+binary_sensor:
+  - platform: template
+    sensors:
+      master_bathroom_humidity_high:
+        friendly_name: "Master Bathroom Humidity High"
+        value_template: >
+          {{ ( float(states.input_number.master_bathroom_humidity_threshold.state)
+            < float(states.sensor.master_bathroom_humidity.state) ) }}
+
+# Automations
+automation:
+################################################################################
+# Turn on the fan when someone is in the shower. 
+  - id: function_master_bathroom_humidity_high
+    alias: 'Function - Master Bathroom - Humidity High'
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.master_bathroom_humidity_high
+      from: "off"
+      to: "on"
+      for: 
+        minutes: 5
+    action:
+      # just notify for now
+      service: notify.notify
+      data:
+        title: Master Bathroom Humidity High
+        message: "Is someone in the shower?"
+################################################################################
+  - id: function_master_bathroom_humidity_low
+    alias: 'Function - Master Bathroom - Humidity Low'
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.master_bathroom_humidity_high
+      from: "on"
+      to: "off"
+      for:
+        minutes: 5
+    action:
+      # just notify for now
+      service: notify.notify
+      data:
+        title: Master Bathroom Humidity Low
+        message: "Are you out of the shower?"
+################################################################################
+# Turn on the fan when the shitter closet door is closed.
+  - id: function_master_bathroom_toilet_door_closed
+    alias: 'Function - Master Bathroom - Toilet Door Closed'
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.master_bathroom_toilet_door
+      from: "on"
+      to: "off"
+      for:
+        seconds: 30
+    action:
+      # just notify for now
+      service: notify.notify
+      data:
+        title: Master Bathroom Toilet Door Closed
+        message: "Someone's baking brownies."
+################################################################################
+  - id: function_master_bathroom_toilet_door_open
+    alias: 'Function - Master Bathroom - Toilet Door Closed'
+    trigger:
+      platform: state
+      entity_id:
+        - binary_sensor.master_bathroom_toilet_door
+      from: "off"
+      to: "on"
+      for:
+        seconds: 30
+    action:
+      # just notify for now
+      service: notify.notify
+      data:
+        title: Master Bathroom Toilet Door Opened
+        message: "Warning: Toxic waste."
+################################################################################
