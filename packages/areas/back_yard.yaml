@@ -8,7 +8,6 @@ automation:
     trigger:
       - platform: state
         entity_id: sun.sun
-        from: 'off'
         to: 'below_horizon'
     condition:
       condition: state
@@ -32,7 +31,7 @@ automation:
 ################################################################################
 # Turn off the string lights when the alarm is turned on
 # This is so that there is a clear indication that the alarm is on
-  - id: area_back_yard_string_lights_alarm
+  - id: area_back_yard_string_lights_night
     alias: 'Area - Back Yard - String Lights (Night)'
     trigger:
       - platform: state
@@ -43,6 +42,23 @@ automation:
       condition: state
       entity_id: group.people
       state: 'home'
+    action:
+      - service: light.turn_off
+        data:
+          entity_id: light.back_yard_string_lights
+################################################################################
+# The switch that these are on doesn't properly report back it's state when it's
+# turned off. So, even if it's off, the device reports 30% on. This is the fix.
+# Currently the switch is a GE/Jasco, but I will probably replace it with an 
+# Inovelli eventually, as this is kind of a bullshit thing to have to mitigate.
+  - id: area_back_yard_string_lights_
+    alias: 'Area - Back Yard - String Lights (Night)'
+    trigger:
+      - platform: template
+        value_template: >
+          '{{states.light.back_yard_string_lights.attributes.brightness == 85}}'
+        for:
+          minutes: 5
     action:
       - service: light.turn_off
         data:
