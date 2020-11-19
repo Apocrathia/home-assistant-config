@@ -38,28 +38,29 @@ sensor:
       morning:
         friendly_name: Morning
         icon_template: mdi:clock-outline
-        entity_id: input_datetime.morning
         value_template: >
-          {{ states.input_datetime.morning.attributes.timestamp | int | timestamp_custom("%H:%M",False) }}
+          {{ states.input_datetime.morning.attributes.timestamp | int | 
+              timestamp_custom("%H:%M",False) }}
       morning_start:
         friendly_name: Morning Start
         icon_template: mdi:clock-outline
-        entity_id: input_datetime.morning, input_number.morning_advance
         value_template: >
-          {{ ((states.input_datetime.morning.attributes.timestamp | int) - (states.input_number.morning_advance.state | int * 60)) | timestamp_custom("%H:%M",False) }}
+          {{ (((states.input_datetime.morning.attributes.timestamp | int) 
+              - (states.input_number.morning_advance.state | int * 60)) | 
+              timestamp_custom("%H:%M",False)) }}
       daytime_lighting_transition:
         friendly_name: Day Time Lighting Transition
         icon_template: mdi:transition-masked
         unit_of_measurement: 'Seconds'
-        entity_id: input_number.daytime_lighting_transition
         value_template: >
-          {{ ((states.input_number.daytime_lighting_transition.state | int) * 60) }}
+          {{ ((states.input_number.daytime_lighting_transition.state | 
+              int) * 60) }}
       next_sunrise:
         friendly_name: Next Sunrise
         icon_template: mdi:weather-sunset-up
-        entity_id: sun.sun
         value_template: >
-          {{ as_timestamp(states.sun.sun.attributes.next_dawn) | int | timestamp_custom("%H:%M", True) }}
+          {{ (as_timestamp(states.sun.sun.attributes.next_dawn) | int |
+              timestamp_custom("%H:%M", True)) }}
 ################################################################################
 
 automation:

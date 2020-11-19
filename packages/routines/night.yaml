@@ -43,28 +43,29 @@ sensor:
       bedtime:
         friendly_name: Bedtime
         icon_template: mdi:clock-outline
-        entity_id: input_datetime.bedtime
         value_template: >
-          {{ states.input_datetime.bedtime.attributes.timestamp | int | timestamp_custom("%H:%M",False) }}
+          {{ (states.input_datetime.bedtime.attributes.timestamp | int | 
+              timestamp_custom("%H:%M",False)) }}
       nighttime_start:
         friendly_name: Night Time Start
         icon_template: mdi:clock-outline
-        entity_id: input_datetime.bedtime, input_number.nighttime_delay
         value_template: >
-          {{ ((states.input_datetime.bedtime.attributes.timestamp | int) + (states.input_number.nighttime_delay.state | int * 60)) | timestamp_custom("%H:%M",False) }}
+          {{ (((states.input_datetime.bedtime.attributes.timestamp | int) + 
+              (states.input_number.nighttime_delay.state | int * 60)) | 
+              timestamp_custom("%H:%M",False)) }}
       nighttime_lighting_transition:
         friendly_name: Night Time Lighting 
         icon_template: mdi:transition-masked
         unit_of_measurement: 'Seconds'
-        entity_id: input_number.nighttime_lighting_transition
         value_template: >
-          {{ ((states.input_number.nighttime_lighting_transition.state | int) * 60) }}
+          {{ ((states.input_number.nighttime_lighting_transition.state | 
+              int) * 60) }}
       next_sunset:
         friendly_name: Next Sunset
         icon_template: mdi:weather-sunset-down
-        entity_id: sun.sun
         value_template: >
-          {{ as_timestamp(states.sun.sun.attributes.next_dusk) | int | timestamp_custom("%H:%M", True) }}
+          {{ (as_timestamp(states.sun.sun.attributes.next_dusk) | int | 
+              timestamp_custom("%H:%M", True)) }}
 ################################################################################
 
 binary_sensor:
