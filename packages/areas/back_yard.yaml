@@ -6,9 +6,8 @@ automation:
   - id: area_back_yard_string_lights_dusk
     alias: 'Area - Back Yard - String Lights (Dusk)'
     trigger:
-      - platform: state
-        entity_id: sun.sun
-        to: 'below_horizon'
+      - platform: sun
+        event: sunset
     condition:
       condition: state
       entity_id: group.people

@@ -6,9 +6,8 @@ automation:
   - id: area_living_room_ceiling_fan_light_dusk
     alias: 'Area - Living Room - Ceiling Fan Light (Dusk)'
     trigger:
-      - platform: state
-        entity_id: sun.sun
-        to: 'below_horizon'
+      - platform: sun
+        event: sunset
     condition:
       - condition: and
         conditions:
