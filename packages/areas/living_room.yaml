@@ -1,0 +1,57 @@
+---
+### Living Room ###
+automation:
+################################################################################
+# Turn on the living room light when it gets dark
+  - id: area_living_room_ceiling_fan_light_dusk
+    alias: 'Area - Living Room - Ceiling Fan Light (Dusk)'
+    trigger:
+      - platform: state
+        entity_id: sun.sun
+        to: 'below_horizon'
+    condition:
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: group.people
+            state: 'home'
+            # Because this light is controlled via an RF interface, the actual
+            # state of the light is unknown. However, by checking the HA state
+            # we can try to mitigate the physical state getting flipped.
+          - condition: state
+            entity_id: light.living_room_ceiling_fan
+            state: 'off'
+    action:
+    # Wait a few minutes until it gets a little bit darker
+      - delay:
+          minutes: 20
+      - service: light.turn_on
+        data:
+          entity_id: light.living_room_ceiling_fan
+################################################################################
+# Turn off the string lights when the alarm is turned on
+# This is so that there is a clear indication that the alarm is on
+  - id: area_living_room_ceiling_fan_light_night
+    alias: 'Area - Living Room - Ceiling Fan Light (Night)'
+    trigger:
+      - platform: state
+        entity_id:
+          - alarm_control_panel.home
+        to: 'armed_home'
+    condition:
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: group.people
+            state: 'home'
+          - condition: state
+            entity_id: light.living_room_ceiling_fan
+            state: 'on'
+    action:
+    # Wait a few minutes before shutting the light off in case we're still up.
+      - delay:
+          minutes: 5
+      - service: light.turn_off
+        data:
+          entity_id: light.living_room_ceiling_fan
+################################################################################
