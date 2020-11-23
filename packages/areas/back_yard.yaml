@@ -53,6 +53,15 @@ automation:
   - id: area_back_yard_string_lights_fix
     alias: 'Area - Back Yard - String Lights (Fix)'
     trigger:
+      - platform: numeric_state
+        entity_id:
+          - light.back_yard_string_lights
+        attribute: brightness
+        # 85/255 = 30%. Add some wiggle room to be safe.
+        above: 80
+        below: 90
+        for:
+          minutes: 5
       - platform: template
         value_template: >
           '{{states.light.back_yard_string_lights.attributes.brightness == 85}}'
