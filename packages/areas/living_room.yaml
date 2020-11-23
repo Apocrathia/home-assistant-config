@@ -8,6 +8,7 @@ automation:
     trigger:
       - platform: sun
         event: sunset
+        offset: "00:10:00"
     condition:
       - condition: and
         conditions:
@@ -21,9 +22,6 @@ automation:
             entity_id: light.living_room_ceiling_fan
             state: 'off'
     action:
-    # Wait a few minutes until it gets a little bit darker
-      - delay:
-          minutes: 20
       - service: light.turn_on
         data:
           entity_id: light.living_room_ceiling_fan
