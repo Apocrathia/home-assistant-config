@@ -187,9 +187,9 @@ automation:
             - light.master_bedroom_floor_lamp
             - light.master_bedroom_table_lamps
           brightness_pct: 100
-        data_template:
-          transition: >
-            {{ (states.sensor.nighttime_lighting_transition.state | int) }}
+        # data_template:
+        #   transition: >
+        #     {{ (states.sensor.nighttime_lighting_transition.state | int) }}
 ################################################################################
 
 ################################################################################
