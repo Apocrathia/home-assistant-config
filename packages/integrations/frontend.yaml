@@ -2,5 +2,5 @@
 ## Frontend ##
 
 frontend:
-  javascript_version: latest
+  # javascript_version: latest
   themes: !include_dir_merge_named /config/themes
