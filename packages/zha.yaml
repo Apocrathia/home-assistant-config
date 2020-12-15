@@ -11,3 +11,6 @@
   # usb_path: /dev/serial/by-id/usb-Silicon_Labs_HubZ_Smart_Home_Controller_81300F29-if01-port0
   # baudrate: 57600
   # database_path: /config/zigbee.db
+
+# ZHA Map custom componnt
+zha_map:
