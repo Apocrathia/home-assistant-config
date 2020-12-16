@@ -68,9 +68,14 @@ automation:
         {{ (states.sensor.time.state == 
             states.sensor.wakeup_alarm_start_time.state) }}
     condition:
-      condition: state
-      entity_id: binary_sensor.workday
-      state: 'on'
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.workday
+          state: 'on'
+        - condition: state
+          entity_id: sun.sun
+          state: below_horizon
     action:
     - service: light.turn_on
       data:
