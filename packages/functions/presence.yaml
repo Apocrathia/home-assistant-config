@@ -123,24 +123,39 @@ automation:
         entity_id: proximity.ian
         above: 100
         below: 100
-        # for: 01:00:00
+        for: 01:00:00 # set this just in case we get a fluke proximity reading
     action:
-      service: >
-        # Going on vacation
-        {% if trigger.to_state > 100 %}
-            - service: input_boolean.turn_on
-              data:
-                entity_id: input_boolean.vacation_ian
-            - service: notify.notify
-              data_template:
-                title: "Vacation Mode Triggered"
-                message: >
-                  "{{ trigger.entity_id }} has turned {{ trigger.to_state }}."
-        {% else %}
+      - choose:
+        - conditions:
+            - condition: numeric_state
+              entity_id: proximity.ian
+              below: 100
+          sequence:
             - service: input_boolean.turn_off
-              data:
-                entity_id: input_boolean.vacation_ian
-        {% endif %}
+              entity_id: input_boolean.vacation_ian
+        - conditions:
+            - condition: numeric_state
+              entity_id: proximity.ian
+              above: 100
+          sequence:
+            - service: input_boolean.turn_on
+              entity_id: input_boolean.vacation_ian
+      # service: >
+      #   # Going on vacation
+      #   {% if trigger.to_state > 100 %}
+      #       - service: input_boolean.turn_on
+      #         data:
+      #           entity_id: input_boolean.vacation_ian
+      #       - service: notify.notify
+      #         data_template:
+      #           title: "Vacation Mode Triggered"
+      #           message: >
+      #             "{{ trigger.entity_id }} has turned {{ trigger.to_state }}."
+      #   {% else %}
+      #       - service: input_boolean.turn_off
+      #         data:
+      #           entity_id: input_boolean.vacation_ian
+      #   {% endif %}
 ################################################################################
   - id: function_vacation_aimee
     alias: "Function - Vacation - Aimee"
@@ -151,22 +166,37 @@ automation:
         below: 100
         # for: 01:00:00
     action:
-      service: >
-        # Going on vacation
-        {% if trigger.to_state > 100 %}
-            - service: input_boolean.turn_on
-              data:
-                entity_id: input_boolean.vacation_aimee
-            - service: notify.notify
-              data_template:
-                title: "Vacation Mode Triggered"
-                message: >
-                  "{{ trigger.entity_id }} has turned {{ trigger.to_state }}."
-        {% else %}
+      - choose:
+        - conditions:
+            - condition: numeric_state
+              entity_id: proximity.aimee
+              below: 100
+          sequence:
             - service: input_boolean.turn_off
-              data:
-                entity_id: input_boolean.vacation_aimee
-        {% endif %}
+              entity_id: input_boolean.vacation_aimee
+        - conditions:
+            - condition: numeric_state
+              entity_id: proximity.aimee
+              above: 100
+          sequence:
+            - service: input_boolean.turn_on
+              entity_id: input_boolean.vacation_aimee
+      # service: >
+      #   # Going on vacation
+      #   {% if trigger.to_state > 100 %}
+      #       - service: input_boolean.turn_on
+      #         data:
+      #           entity_id: input_boolean.vacation_aimee
+      #       - service: notify.notify
+      #         data_template:
+      #           title: "Vacation Mode Triggered"
+      #           message: >
+      #             "{{ trigger.entity_id }} has turned {{ trigger.to_state }}."
+      #   {% else %}
+      #       - service: input_boolean.turn_off
+      #         data:
+      #           entity_id: input_boolean.vacation_aimee
+      #   {% endif %}
 ################################################################################
   - id: function_vacation_detection
     alias: "Function - Vacation - Detection"
@@ -174,13 +204,28 @@ automation:
       - platform: state
         entity_id: group.vacation
     action:
-      service: >
-        {% if is_state('group.vacation', 'off') %}
-          input_boolean.turn_off
-        {% elif is_state('group.vacation', 'on') %}
-          input_boolean.turn_on
-        {% endif %}
-      entity_id: input_boolean.vacation_mode
+      - choose:
+        - conditions:
+            - condition: state
+              entity_id: group.vacation
+              state: "off"
+          sequence:
+            - service: input_boolean.turn_off
+              entity_id: input_boolean.vacation_mode
+        - conditions:
+            - condition: state
+              entity_id: group.vacation
+              state: "on"
+          sequence:
+            - service: input_boolean.turn_on
+              entity_id: input_boolean.vacation_mode
+      # service: >
+      #   {% if is_state('group.vacation', 'off') %}
+      #     input_boolean.turn_off
+      #   {% elif is_state('group.vacation', 'on') %}
+      #     input_boolean.turn_on
+      #   {% endif %}
+      # entity_id: input_boolean.vacation_mode
 ################################################################################
   - id: function_vacation_scripts
     alias: "Function - Vacation - Scripts"
@@ -188,12 +233,25 @@ automation:
       - platform: state
         entity_id: input_boolean.vacation_mode
     action:
-      service: >
-        {% if is_state('input_boolean.vacation_mode', 'off') %}
-          script.vacation_mode_on
-        {% elif is_state('input_boolean.vacation_mode', 'on') %}
-          script.vacation_mode_off
-        {% endif %}
+      - choose:
+        - conditions:
+            - condition: state
+              entity_id: input_boolean.vacation_mode
+              state: "off"
+          sequence:
+            - service: script.vacation_mode_off
+        - conditions:
+            - condition: state
+              entity_id: input_boolean.vacation_mode
+              state: "on"
+          sequence:
+            - service: script.vacation_mode_on
+      # service: >
+      #   {% if is_state('input_boolean.vacation_mode', 'off') %}
+      #     script.vacation_mode_on
+      #   {% elif is_state('input_boolean.vacation_mode', 'on') %}
+      #     script.vacation_mode_off
+      #   {% endif %}
 ################################################################################
 
 # Scripts
