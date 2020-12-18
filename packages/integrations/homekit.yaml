@@ -28,7 +28,10 @@ homekit:
       - light.living_room_ceiling_fan
       - fan.master_bedroom_ceiling_fan
       - fan.living_room_ceiling_fan
-      - camera.dogcam
+      - camera.living_room
+      - camera.dining_room
+      - camera.front_porch
+      - camera.kitchen
 
 # The following automation delays HomeKit while the Z-Wave network starts up.
 automation:
