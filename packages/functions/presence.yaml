@@ -63,6 +63,16 @@ proximity:
     unit_of_measurement: km
 ################################################################################
 
+sensor:
+# and this is just because I'll find something funny to do with it.
+################################################################################
+  - platform: template
+    sensors:
+      distance_apart:
+        value_template: >-
+          {{ distance('person.ian','person.aimee') }}
+################################################################################
+
 input_boolean:
 ################################################################################
   vacation_ian:
