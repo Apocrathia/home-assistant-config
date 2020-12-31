@@ -28,14 +28,16 @@ homekit:
       - light.living_room_ceiling_fan
       - fan.master_bedroom_ceiling_fan
       - fan.living_room_ceiling_fan
-      - camera.living_room
-      - camera.dining_room
-      - camera.front_porch
-      - camera.kitchen
 
-# The following automation delays HomeKit while the Z-Wave network starts up.
+# These aren't playing nice. I've got to get better cameras...
+      # - camera.living_room
+      # - camera.dining_room
+      # - camera.front_porch
+      # - camera.kitchen
+
+# Start HomeKit once the Z-Wave network starts up.
 automation:
-  - alias: 'HomeKit - Delayed Start'
+  - alias: 'HomeKit - Z-Wave Start'
     trigger:
       - platform: event
         event_type: zwave.network_ready
@@ -45,3 +47,12 @@ automation:
         event_type: zwave.network_complete_some_dead
     action:
       - service: homekit.start
+# I've had issues with HomeKit being unresponsive every now and then.
+# This should keep it on it's toes.
+  - alias: 'Homekit - Routine Reload'
+    trigger:
+      - platform: time_pattern
+        # This will become seemingly random, as 37 is prime.
+        minutes: "/37"
+    action:
+      - service: homekit.reload
