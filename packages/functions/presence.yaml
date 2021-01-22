@@ -278,22 +278,22 @@ script:
     - service: climate.set_preset_mode
       data:
         entity_id: 
-          - climate.ecobee_downstairs
-          - climate.ecobee_upstairs
+          - climate.homekit_downstairs
+          - climate.homekit_upstairs
         preset_mode: 'away'
       # Set the vacuums to turbo
     - service: vacuum.set_fan_speed
       data:
         entity_id:
-          - vacuum.downstairs
-          - vacuum.upstairs
+          - vacuum.downstairs_vacuum
+          - vacuum.upstairs_vacuum
         fan_speed: max
       # Start the vacuum
     - service: vacuum.start
       data:
         entity_id: 
-          - vacuum.downstairs
-          - vacuum.upstairs
+          - vacuum.downstairs_vacuum
+          - vacuum.upstairs_vacuum
       # Arm the alarm
     - service: alarm_control_panel.alarm_arm_away
       data:
@@ -309,7 +309,13 @@ script:
         entity_id:
           - cover.garage_door_01
           - cover.garage_door_02
-      # Turn off the lights
+    # Turn up the air purifiers while we're gone
+    - service: xiaomi_miio.fan_set_fan_level
+      data:
+        entity_id: 
+          - fan.master_bedroom_air_purifier
+          # - fan.master_bedroom_humidifier
+        level: 3
     # - service: scene.turn_on
     #   data:
     #     entity_id: scene.away
@@ -328,22 +334,22 @@ script:
     - service: climate.set_preset_mode
       data:
         entity_id: 
-          - climate.ecobee_downstairs
-          - climate.ecobee_upstairs
+          - climate.homekit_downstairs
+          - climate.homekit_upstairs
         preset_mode: 'home'
       # Set the vacuums to silent
     - service: vacuum.set_fan_speed
       data:
         entity_id:
-          - vacuum.downstairs
-          - vacuum.upstairs
+          - vacuum.downstairs_vacuum
+          - vacuum.upstairs_vacuum
         fan_speed: min
       # Stop the vacuums
     - service: vacuum.stop
       data:
         entity_id:
-          - vacuum.downstairs
-          - vacuum.upstairs
+          - vacuum.downstairs_vacuum
+          - vacuum.upstairs_vacuum
       # wait 2 seconds for command to take effect
     - delay:
         seconds: 2
@@ -351,8 +357,15 @@ script:
     - service: vacuum.return_to_base
       data:
         entity_id: 
-          - vacuum.downstairs
-          - vacuum.upstairs
+          - vacuum.downstairs_vacuum
+          - vacuum.upstairs_vacuum
+    # Turn the air purifiers back down
+    - service: fan.set_speed
+      data:
+        entity_id:
+          - fan.master_bedroom_air_purifier
+          # - fan.master_bedroom_humidifier
+        speed: silent
       # Turn on some lights
     # - service: scene.turn_on
     #   data:
