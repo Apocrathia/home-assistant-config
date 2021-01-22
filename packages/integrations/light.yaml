@@ -20,6 +20,7 @@ light:
     entities:
       - light.front_porch_lights
       - light.outdoor_garage_lights
+      - light.back_yard_string_lights
   
   - platform: group
     name: Master Bedroom Lights
@@ -30,10 +31,13 @@ light:
   - platform: group
     name: Indoor Lights
     entities:
-      - light.master_bedroom_lights
       - light.sitting_room_floor_lamp
       - light.dining_room_chandelier
       - light.kitchen_chandelier
+      - light.aimees_desk_lamp
+      - light.guest_bedroom_floor_lamp
+      - light.master_bedroom_floor_lamp
+      - light.master_bedroom_table_lamps
 
   - platform: group
     name: Night Lights

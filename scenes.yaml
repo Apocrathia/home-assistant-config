@@ -1,2 +1,25 @@
----
-[]
+- id: '1610253006330'
+  name: Goodnight
+  entities:
+    light.dining_room_chandelier:
+      node_id: 5
+      value_index: 0
+      value_instance: 1
+      value_id: '72057594126630913'
+      friendly_name: Dining Room Chandelier
+      supported_features: 33
+      state: 'off'
+    light.living_room_ceiling_fan:
+      friendly_name: Living Room Ceiling Fan
+      assumed_state: true
+      supported_features: 0
+      state: 'off'
+    light.back_yard_string_lights:
+      brightness: 85
+      node_id: 7
+      value_index: 0
+      value_instance: 1
+      value_id: '72057594160185345'
+      friendly_name: Back Yard String Lights
+      supported_features: 33
+      state: 'on'
