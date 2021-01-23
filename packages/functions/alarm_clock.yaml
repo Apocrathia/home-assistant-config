@@ -29,7 +29,8 @@ input_select:
     name: Alarm Type
     options:
       - Plex
-      - Local News
+      - News
+      - Music
     # initial: Plex
     icon: mdi:alarm
 
@@ -106,133 +107,117 @@ automation:
         condition: and
         conditions:
           - condition: state
-            entity_id: input_select.alarm_type
-            state: 'Plex'
-          - condition: state
             entity_id: binary_sensor.workday
             state: 'on'
     action:
-      service: script.function_wakeup_plex
+      service: script.function_alarm_clock
 ################################################################################
 
+# No longer needed due to choose action
 # Currently a stub, will eventually work with an HDHomeRun or IPTV
 ################################################################################
-  - id: function_wakeup_local_news
-    alias: 'Function - Wakeup - Local News'
-    trigger:
-    - platform: template
-      value_template: >
-        {{ (states.sensor.time.state == 
-            states.sensor.wakeup_alarm_midpoint.state) }}
-    condition:
-        condition: and
-        conditions:
-          - condition: state
-            entity_id: input_select.alarm_type
-            state: 'Local News'
-          - condition: state
-            entity_id: binary_sensor.workday
-            state: 'on'
-    action:
-      service: script.function_wakeup_local_news
+  # - id: function_wakeup_local_news
+  #   alias: 'Function - Wakeup - Local News'
+  #   trigger:
+  #   - platform: template
+  #     value_template: >
+  #       {{ (states.sensor.time.state == 
+  #           states.sensor.wakeup_alarm_midpoint.state) }}
+  #   condition:
+  #       condition: and
+  #       conditions:
+  #         - condition: state
+  #           entity_id: input_select.alarm_type
+  #           state: 'Local News'
+  #         - condition: state
+  #           entity_id: binary_sensor.workday
+  #           state: 'on'
+  #   action:
+  #     service: script.function_wakeup_local_news
 ################################################################################
 
 script:
+# Also deprecated due to chooser
 ################################################################################
-  function_wakeup_plex:
-    alias: 'Wakeup - Plex'
-    sequence:
-  # Device wakeup
-      - service: remote.send_command
-        data:
-          entity_id: remote.master_bedroom_apple_tv
-          command:
-            - menu
-      - delay:
-          seconds: 15
-  # Go to the home menu
-      - service: remote.send_command
-        data:
-          entity_id: remote.master_bedroom_apple_tv
-          command:
-            - top_menu
-      - delay:
-          seconds: 1
-  ### Note: I have no idea if volume control will ever work. This is mainly a note. ###
-  # Set Volume to 0 (By spamming volume down > 20x)
-  #    - service: remote.send_command
-  #      data:
-  #        entity_id: remote.master_bedroom_apple_tv
-  #        command:
-  #          - volume_down
-  #        repeat:
-  #          times: 2
-  # Raise Volume to ~20
-  # Go to the home menu (again, just in case the first one didn't work.)
-      - service: remote.send_command
-        data:
-          entity_id: remote.master_bedroom_apple_tv
-          command:
-            - top_menu
-      - delay:
-          seconds: 1
-  # Go to the first menu item (Plex)
-      - service: remote.send_command
-        data:
-          entity_id: remote.master_bedroom_apple_tv
-          command:
-            - top_menu
-  # Open Plex
-      - service: remote.send_command
-        data:
-          entity_id: remote.master_bedroom_apple_tv
-          command:
-            - select
-      - delay:
-          seconds: 15
-  # Select Apocrathia user account
-      - service: remote.send_command
-        data:
-          entity_id: remote.master_bedroom_apple_tv
-          command:
-            - select
-      - delay:
-          seconds: 5
-  # Go to news
-      - service: remote.send_command
-        data:
-          entity_id: remote.master_bedroom_apple_tv
-          command:
-            - down
-            - down
-            - down
-            - down
-            - down
-            - select
-            - select
-      - delay:
-          seconds: 5
-      - service: remote.send_command
-        data:
-          entity_id: remote.master_bedroom_apple_tv
-          command:
-            - select
-      - delay:
-          seconds: 5
-  # Fullscreen
-      - service: remote.send_command
-        data:
-          entity_id: remote.master_bedroom_apple_tv
-          command:
-            - select
+  # function_wakeup_plex:
+  #   alias: 'Wakeup - Plex'
+  #   sequence:
+  # # Device wakeup
+  #     - service: remote.send_command
+  #       data:
+  #         entity_id: remote.master_bedroom_apple_tv
+  #         command:
+  #           - menu
+  #     - delay:
+  #         seconds: 15
+  # # Go to the home menu
+  #     - service: remote.send_command
+  #       data:
+  #         entity_id: remote.master_bedroom_apple_tv
+  #         command:
+  #           - top_menu
+  #     - delay:
+  #         seconds: 1
+  # ### Note: I have no idea if volume control will ever work. This is mainly a note. ###
+  # # Set Volume to 0 (By spamming volume down > 20x)
+  # #    - service: remote.send_command
+  # #      data:
+  # #        entity_id: remote.master_bedroom_apple_tv
+  # #        command:
+  # #          - volume_down
+  # #        repeat:
+  # #          times: 2
+  # # Raise Volume to ~20
+  # # Go to the home menu (again, just in case the first one didn't work.)
+  #     - service: remote.send_command
+  #       data:
+  #         entity_id: remote.master_bedroom_apple_tv
+  #         command:
+  #           - top_menu
+  #     - delay:
+  #         seconds: 1
+  # # Go to the first menu item (Plex)
+  #     - service: remote.send_command
+  #       data:
+  #         entity_id: remote.master_bedroom_apple_tv
+  #         command:
+  #           - top_menu
+  # # Open Plex
+  #     - service: remote.send_command
+  #       data:
+  #         entity_id: remote.master_bedroom_apple_tv
+  #         command:
+  #           - select
+  #     - delay:
+  #         seconds: 15
+  # # Select Apocrathia user account
+  #     - service: remote.send_command
+  #       data:
+  #         entity_id: remote.master_bedroom_apple_tv
+  #         command:
+  #           - select
+  #     - delay:
+  #         seconds: 5
+  # # Go to news
+  #     - service: remote.send_command
+  #       data:
+  #         entity_id: remote.master_bedroom_apple_tv
+  #         command:
+  #           - right
+  #           - down
+  #           - down
+  #           - down
+  #           - down
+  #           - down
+  #           - down
+  #           - select
 ################################################################################
 
-# TODO Update for HDHomeRun or IPTV
 ################################################################################
-  function_wakeup_local_news:
-    alias: 'Wakeup - Local News'
+  function_wakeup_apple_tv:
+    alias: 'Function - Wakeup - Apple TV'
     sequence:
-  # Device wakeup
+    # Device wakeup
       - service: remote.send_command
         data:
           entity_id: remote.master_bedroom_apple_tv
@@ -240,7 +225,7 @@ script:
             - menu
       - delay:
           seconds: 15
-  # Go to the home menu
+    # Go to the home menu
       - service: remote.send_command
         data:
           entity_id: remote.master_bedroom_apple_tv
@@ -248,17 +233,6 @@ script:
             - top_menu
       - delay:
           seconds: 1
-  ### Note: I have no idea if volume control will ever work. This is mainly a note. ###
-  # Set Volume to 0 (By spamming volume down > 20x)
-  #    - service: remote.send_command
-  #      data:
-  #        entity_id: remote.master_bedroom_apple_tv
-  #        command:
-  #          - volume_down
-  #        repeat:
-  #          times: 2
-  # Raise Volume to ~20
-  # Go to the home menu (again, just in case the first one didn't work.)
       - service: remote.send_command
         data:
           entity_id: remote.master_bedroom_apple_tv
@@ -266,54 +240,81 @@ script:
             - top_menu
       - delay:
           seconds: 1
-  # Go to the first menu item (Plex)
-      - service: remote.send_command
-        data:
-          entity_id: remote.master_bedroom_apple_tv
-          command:
-            - top_menu
-  # Open Plex
-      - service: remote.send_command
-        data:
-          entity_id: remote.master_bedroom_apple_tv
-          command:
-            - select
-      - delay:
-          seconds: 15
-  # Select Apocrathia user account
-      - service: remote.send_command
-        data:
-          entity_id: remote.master_bedroom_apple_tv
-          command:
-            - select
-      - delay:
-          seconds: 5
-  # Go to news
-      - service: remote.send_command
-        data:
-          entity_id: remote.master_bedroom_apple_tv
-          command:
-            - down
-            - down
-            - down
-            - down
-            - down
-            - down
-            - select
-            - select
-      - delay:
-          seconds: 5
-      - service: remote.send_command
-        data:
-          entity_id: remote.master_bedroom_apple_tv
-          command:
-            - select
-      - delay:
-          seconds: 5
-  # Fullscreen
-      - service: remote.send_command
-        data:
-          entity_id: remote.master_bedroom_apple_tv
-          command:
-            - select
+    # Now figure out what we're doing
+      - choose:
+        ############
+        ### Plex ###
+        ############
+        - conditions:
+          - condition: state
+            entity_id: input_select.alarm_type
+            state: 'Plex'
+          sequence:
+            # Should be sitting on the first menu item (Plex)
+            # Open Plex
+            - service: remote.send_command
+              data:
+                entity_id: remote.master_bedroom_apple_tv
+                command:
+                  - select
+            - delay:
+                seconds: 15
+            # Select Apocrathia user account
+            - service: remote.send_command
+              data:
+                entity_id: remote.master_bedroom_apple_tv
+                command:
+                  - select
+            - delay:
+                seconds: 5
+            # Go to news
+            - service: remote.send_command
+              data:
+                entity_id: remote.master_bedroom_apple_tv
+                delay_secs: 0.75
+                command:
+                  - right
+                  - down
+                  - down
+                  - down
+                  - down
+                  - down
+                  - down
+                  - select
+        ############
+        ### News ###
+        ############
+        - conditions:
+          - condition: state
+            entity_id: input_select.alarm_type
+            state: 'News'
+          sequence:
+            # TODO
+            - delay: 00:00:00
+        #############
+        ### Music ###
+        #############
+        - conditions:
+          - condition: state
+            entity_id: input_select.alarm_type
+            state: 'Music'
+          sequence:
+            - service: remote.send_command
+              data:
+                entity_id: remote.master_bedroom_apple_tv
+                command:
+                  # Move down one (Music)
+                  - down
+                  # Open Music
+                  - select
+            - delay:
+                seconds: 15
+            - service: remote.send_command
+              data:
+                entity_id: remote.master_bedroom_apple_tv
+                command:
+                  # Move to first item
+                  - down
+                  # Play
+                  - select
 ################################################################################
