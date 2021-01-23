@@ -219,9 +219,7 @@ automation:
     action:
       - service: vacuum.start
         entity_id: vacuum.upstairs
-
-
-
+# Try to consolidate into a single automation with a variable
   - id: function_vacuum_daily
     alias: "Function - Vacuum - Daily"
     variables:
