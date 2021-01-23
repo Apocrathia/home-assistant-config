@@ -119,10 +119,12 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - vacuum.downstairs
-          - vacuum.upstairs
+          - vacuum.downstairs_vacuum
+          - vacuum.upstairs_vacuum
         from: cleaning
         to: error
+        for: 
+          minutes: 5
     action:
       #  This hasn't seemed to work, so let me make sure the template works
       - service: notify.notify
@@ -149,9 +151,9 @@ automation:
     trigger:
       - platform: numeric_state
         entity_id:
-          - vacuum.downstairs
-          - vacuum.upstairs
-        value_template: "{{ state.attributes.battery }}"
+          - vacuum.downstairs_vacuum
+          - vacuum.upstairs_vacuum
+        value_template: "{{ state.attributes.battery_level }}"
         above: 99
     condition:
       condition: and
@@ -176,8 +178,8 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - vacuum.downstairs
-          - vacuum.upstairs
+          - vacuum.downstairs_vacuum
+          - vacuum.upstairs_vacuum
         to: idle
         for:
           minutes: 5
@@ -217,4 +219,23 @@ automation:
     action:
       - service: vacuum.start
         entity_id: vacuum.upstairs
+
+
+
+  - id: function_vacuum_daily
+    alias: "Function - Vacuum - Daily"
+    variables:
+      vacuums: vacuum.downstairs_vacuum, vacuum.upstairs_vacuum
+    trigger:
+      - platform: time
+        at: "08:00:00" # Check every morning at 0800
+    condition:
+      condition: state
+      entity_id: "{{ vacuums }}"
+      state: docked
+      for:
+        hours: 24
+    action:
+      - service: vacuum.start
+        entity_id: "{{ vacuums }}"
 ################################################################################
