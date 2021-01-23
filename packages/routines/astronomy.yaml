@@ -19,7 +19,7 @@ automation:
           entity_id: sensor.moon
           state: 'new_moon'
         - condition: state
-          entity_id: sensor.dark_sky_summary
+          entity_id: sensor.dark_sky_summary # This will be broken in 2022
           state: 'Clear'
     action:
       - service: notify.notify
@@ -27,8 +27,8 @@ automation:
           message: 'New moon tonight.'
 ################################################################################
   ## Send a notification on full moon nights
-  - id: routine_astronomy_lunar
-    alias: 'Routine - Astronomy - Dark Sky'
+  - id: routine_astronomy_full moon
+    alias: 'Routine - Astronomy - Full Moon'
     # initial_state: 'on'
     trigger:
       - platform: state
@@ -42,7 +42,7 @@ automation:
           entity_id: sensor.moon
           state: 'full_moon'
         - condition: state
-          entity_id: sensor.dark_sky_summary
+          entity_id: sensor.dark_sky_summary # This will be broken in 2022
           state: 'Clear'
     action:
       - service: notify.notify
