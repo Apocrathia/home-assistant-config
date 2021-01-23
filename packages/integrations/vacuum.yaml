@@ -229,7 +229,9 @@ automation:
         at: "08:00:00" # Check every morning at 0800
     condition:
       condition: state
-      entity_id: "{{ vacuums }}"
+      entity_id:
+        - vacuum.downstairs_vacuum
+        - vacuum.upstairs_vacuum
       state: docked
       for:
         hours: 24
