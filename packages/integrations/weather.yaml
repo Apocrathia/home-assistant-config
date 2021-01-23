@@ -1,6 +1,7 @@
 ---
 ### Weather ###
 
-# weather:
-#   - platform: darksky
-#     api_key: !secret darksky_api_key
+# I know it's getting killed by Apple, but NWS is always down.
+weather:
+  - platform: darksky
+    api_key: !secret darksky_api_key
