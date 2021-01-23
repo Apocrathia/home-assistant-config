@@ -208,7 +208,7 @@ automation:
 script:
 ################################################################################
   notification_alarm_armed:
-    alias: "Notification - Amarm Armed"
+    alias: "Notification - Alarm Armed"
     sequence:
     - service: media_player.volume_set
       entity_id: 
