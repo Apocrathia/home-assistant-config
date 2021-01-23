@@ -219,11 +219,9 @@ automation:
     action:
       - service: vacuum.start
         entity_id: vacuum.upstairs
-# Try to consolidate into a single automation with a variable
+# Try to consolidate into a single automation
   - id: function_vacuum_daily
     alias: "Function - Vacuum - Daily"
-    variables:
-      vacuums: vacuum.downstairs_vacuum, vacuum.upstairs_vacuum
     trigger:
       - platform: time
         at: "08:00:00" # Check every morning at 0800
@@ -237,5 +235,7 @@ automation:
         hours: 24
     action:
       - service: vacuum.start
-        entity_id: "{{ vacuums }}"
+        entity_id: 
+          - vacuum.downstairs_vacuum
+          - vacuum.upstairs_vacuum
 ################################################################################
