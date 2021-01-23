@@ -71,5 +71,4 @@ automation:
       - service: light.turn_off
         data:
           entity_id: light.back_yard_string_lights
-          brightness_pct: 0
 ################################################################################
