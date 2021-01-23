@@ -15,6 +15,10 @@ input_datetime:
     has_date: false
     has_time: true
     # initial: '21:00'
+  last_call:
+    name: Last Call
+    has_date: false
+    has_time: true
 
 input_number:
   nighttime_delay:
@@ -60,6 +64,12 @@ sensor:
         value_template: >
           {{ ((states.input_number.nighttime_lighting_transition.state | 
               int) * 60) }}
+      last_call:
+        friendly_name: Last Call
+        icon_template: mdi:clock-outline
+        value_template: >
+          {{ (states.input_datetime.last_call.attributes.timestamp | int | 
+              timestamp_custom("%H:%M",False)) }}
       next_sunset:
         friendly_name: Next Sunset
         icon_template: mdi:weather-sunset-down
@@ -207,4 +217,24 @@ automation:
           entity_id: 
             - light.living_room_ceiling_fan
             - light.dining_room_chandelier
+################################################################################
+
+################################################################################
+  - id: routine_night_last_call
+    alias: "Routine - Night - Last Call"
+    trigger:
+      - platform: template
+        value_template: >
+          {{ states.sensor.time.state == states.sensor.last_call.state }}
+    condition:
+      condition: state
+      entity_id: binary_sensor.worknight
+      state: 'on'
+      # will probably leverage bed occupancy sensor eventually
+    action:
+      - service: light.turn_off
+        data:
+          entity_id: light.master_bedroom_lights
+      # Turn out the lights
+      # https://www.youtube.com/watch?v=Udj-o2m39NA
 ################################################################################
