@@ -233,7 +233,7 @@ automation:
         data:
           data:
             type: tts
-          target: 
+          target:
             - media_player.downstairs_thermostat
             - media_player.upstairs_thermostat
           message: 'Go the fuck to sleep!'
