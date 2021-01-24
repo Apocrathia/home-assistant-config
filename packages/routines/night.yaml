@@ -226,7 +226,7 @@ automation:
             state: 'on'
           - condition: state
             entity_id: light.master_bedroom_lights
-            state:  'on'
+            state: 'on'
       # will probably leverage bed occupancy sensor eventually
     action:
       - service: notify.alexa_media
