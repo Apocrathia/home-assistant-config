@@ -227,11 +227,24 @@ automation:
         value_template: >
           {{ states.sensor.time.state == states.sensor.last_call.state }}
     condition:
-      condition: state
-      entity_id: binary_sensor.worknight
-      state: 'on'
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: binary_sensor.worknight
+            state: 'on'
+          - condition: state
+            entity_id: light.master_bedroom_lights
+            state:  'on'
       # will probably leverage bed occupancy sensor eventually
     action:
+      - service: notify.alexa_media
+        data:
+          data:
+            type: tts
+          target: 
+            - media_player.downstairs_thermostat
+            - media_player.upstairs_thermostat
+          message: 'Go the fuck to sleep!'
       - service: light.turn_off
         data:
           entity_id: light.master_bedroom_lights
