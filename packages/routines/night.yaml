@@ -236,7 +236,7 @@ automation:
           target:
             - media_player.downstairs_thermostat
             - media_player.upstairs_thermostat
-          message: 'Go the fuck to sleep!'
+          message: 'Go the phuque to sleep!'
       - service: light.turn_off
         data:
           entity_id: light.master_bedroom_lights
