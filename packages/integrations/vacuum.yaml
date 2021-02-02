@@ -184,7 +184,7 @@ automation:
         for:
           minutes: 5
     action:
-      - service: 'vacuum.return_to_base'
+      - service: 'vacuum.start' # Just keep cleaning
         data_template:
           entity_id: "{{ trigger.entity_id }}"
 ################################################################################
