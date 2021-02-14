@@ -128,7 +128,7 @@ automation:
           - error
           - idle
         for: 
-          minutes: 5
+          seconds: 30
     action:
       #  This hasn't seemed to work, so let me make sure the template works
       - service: notify.notify
@@ -245,7 +245,6 @@ automation:
         hours: 24
     action:
       - service: vacuum.start
-        entity_id: 
-          - vacuum.downstairs_vacuum
-          - vacuum.upstairs_vacuum
+        data_template:
+          entity_id: "{{ trigger.entity_id }}"
 ################################################################################
