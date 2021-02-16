@@ -26,8 +26,8 @@ input_number:
     icon: mdi:clock-in
     # initial: 60
     min: 0
-    max: 120
-    step: 15
+    max: 60
+    step: 5
     unit_of_measurement: Minutes
 
   nighttime_lighting_transition:
@@ -209,7 +209,7 @@ automation:
       - service: light.turn_off
         data:
           entity_id: 
-            - light.living_room_ceiling_fan
+            # - light.living_room_ceiling_fan
             - light.dining_room_chandelier
 ################################################################################
   - id: routine_night_last_call
