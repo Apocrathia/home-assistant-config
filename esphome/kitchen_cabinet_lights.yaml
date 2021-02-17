@@ -18,6 +18,7 @@ wifi:
   password: !secret esphome_wifi_password
   domain: !secret esphome_domain
   fast_connect: !secret esphome_fast_connect
+  power_save_mode: none
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
