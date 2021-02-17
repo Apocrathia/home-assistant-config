@@ -69,6 +69,7 @@ sensor:
   - platform: template
     sensors:
       distance_apart:
+        friendly_name: 'Distance Apart'
         value_template: >-
           {{ distance('person.ian','person.aimee') }}
 ################################################################################
