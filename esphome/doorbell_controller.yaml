@@ -1,0 +1,94 @@
+---
+# Kitchen Cabinet Lights
+###############################################################################
+# The following configuration is for a doorbell controller that I have made
+# which allows me to continue using my regular doorbell with the following
+# added functionality.
+# - Current sensor to detect when doorbell is pressed
+# - Relay to disable physical button
+# - Relay to remotely trigger chime
+# - Local button to test chime
+# Power is supplied by the doorbell's 12v AC, converted to DC on a basic brige
+# rectifier, dropped to 5v DC with a buck converter, and smoothed by a 
+# capacitor that I cannot remember the value of. With that said, it's also
+# important that we monitor the power coming into the device.
+###############################################################################
+
+esphome:
+  name: doorbell_controller
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: !secret esphome_wifi_ssid
+  password: !secret esphome_wifi_password
+  domain: !secret esphome_domain
+  fast_connect: !secret esphome_fast_connect
+  power_save_mode: none
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: !secret esphome_kitchen_cabinet_lights_ssid
+    password: !secret esphome_kitchen_cabinet_lights_password
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: !secret esphome_api
+
+ota:
+  password: !secret esphome_ota
+
+sensor:
+# Monitor VCC.
+  # - platform: adc
+  #   pin: VCC
+  #   name: "VCC Voltage"
+  #   unit_of_measurement: V
+# Current Sensor
+  - platform: adc
+    pin: A0
+    name: "Doorbell Current"
+    unit_of_measurement: A
+    update_interval: 20ms
+    internal: yes
+    # filters:
+    #   - delta: 0.2
+    # on_value_range:
+    #   below: 0
+    #   above: 0
+    #   then:
+    #     - binary_sensor.template.publish:
+    #         id: doorbell_button
+    #         state: ON
+# Binary Sensor (Template)
+binary_sensor:
+  - platform: template
+    name: "Doorbell Button"
+    id: doorbell_button
+# TODO
+
+switch:
+# Relay 1 - Disable Button
+  - platform: gpio
+    name: "Disable Doorbell"
+    pin:
+      number: 5
+      inverted: yes
+# Relay 2 - Trigger Chime
+  - platform: gpio
+    id: chime
+    pin:
+      number: 4
+      inverted: yes
+  - platform: template
+    name: "Doorbell Chime"
+    icon: "mdi:bell"
+    turn_on_action:
+    - switch.turn_on: chime
+    - delay: 250ms
+    - switch.turn_off: chime
