@@ -28,8 +28,8 @@ wifi:
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: !secret esphome_kitchen_cabinet_lights_ssid
-    password: !secret esphome_kitchen_cabinet_lights_password
+    ssid: !secret esphome_doorbell_controller_ssid
+    password: !secret esphome_doorbell_controller_password
 
 captive_portal:
 
