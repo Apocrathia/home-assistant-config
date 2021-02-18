@@ -28,6 +28,7 @@ homekit:
       - light.living_room_ceiling_fan
       - fan.master_bedroom_ceiling_fan
       - fan.living_room_ceiling_fan
+      - switch.fireplace
 
 # These aren't playing nice. I've got to get better cameras...
       # - camera.living_room

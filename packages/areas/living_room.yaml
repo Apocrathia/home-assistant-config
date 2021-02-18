@@ -51,3 +51,35 @@ automation:
         data:
           entity_id: light.living_room_ceiling_fan
 ################################################################################
+# Automatically turn the fireplace blower on when the fireplace is turned on
+# and leave the blower on for 30 minutes after the fireplace has been turned off
+# to allow the fireplace to cool down.
+  - id: area_living_room_fireplace_blower
+    alias: 'Area - Living Room - Fireplace Blower'
+    trigger:
+      - platform: state
+        entity_id:
+          - switch.fireplace
+    action:
+      - choose:
+        - conditions:
+          - condition: state
+            entity_id:
+              - switch.fireplace
+            state: 'on'
+          sequence:
+            - service: switch.turn_on
+        - conditions:
+          - condition: state
+            entity_id:
+              - switch.fireplace
+            state: 'off'
+          sequence:
+            - delay:
+                minutes: 30
+            - service: switch.turn_off
+              entity_id: switch.fireplace_blower
+# In case anyone is looking at this and is curious how I set this up:
+# The fireplace is a pretty typical millivolt valve being controlled by a Shelly
+# and the blower switch is just an Inovelli LZW30-SN.
+################################################################################
