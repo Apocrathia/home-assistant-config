@@ -69,8 +69,8 @@ This configuration controls a couple of significant features in my smart home.
 [travis]: https://travis-ci.org/Apocrathia/home-assistant-config
 [home-assistant]: https://home-assistant.io
 [issue]: https://github.com/Apocrathia/home-assistant-config/issues
-[license-shield]: https://img.shields.io/github/license/Apocrathia/home-assistant-config.svg
-[maintenance-shield]: https://img.shields.io/maintenance/yes/2020.svg
+[license-shield]: https://img.shields.io/badge/license-apache-brightgreen.svg
+[maintenance-shield]: https://img.shields.io/maintenance/yes/2021.svg
 [last-commit-shield]: https://img.shields.io/github/last-commit/Apocrathia/home-assistant-config.svg
 [stars-shield]: https://img.shields.io/github/stars/Apocrathia/home-assistant-config.svg?style=social&label=Stars
 [forks-shield]: https://img.shields.io/github/forks/Apocrathia/home-assistant-config.svg?style=social&label=Forks
