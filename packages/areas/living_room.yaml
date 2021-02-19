@@ -69,6 +69,7 @@ automation:
             state: 'on'
           sequence:
             - service: switch.turn_on
+              entity_id: switch.fireplace_blower
         - conditions:
           - condition: state
             entity_id:
