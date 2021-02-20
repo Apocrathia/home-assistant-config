@@ -1,8 +1,5 @@
 ---
-### Master Bathroom Stuff ###
-
-# Note: This is a stub right now, as I have installed the associated sensors
-# but that's it. I still need to install some switches.
+### Master Bathroom ###
 
 # Inputs
 input_number:
@@ -37,13 +34,11 @@ automation:
       from: "off"
       to: "on"
       for: 
-        minutes: 5
+        seconds: 10
     action:
-      # just notify for now
-      service: notify.notify
-      data:
-        title: Master Bathroom Humidity High
-        message: "Is someone in the shower?"
+      - service: switch.turn_on
+        data:
+          entity_id: switch.master_bathroom_fan
 ################################################################################
   - id: function_master_bathroom_humidity_low
     alias: 'Function - Master Bathroom - Humidity Low'
@@ -54,13 +49,13 @@ automation:
       from: "on"
       to: "off"
       for:
-        minutes: 5
+        seconds: 10
     action:
-      # just notify for now
-      service: notify.notify
-      data:
-        title: Master Bathroom Humidity Low
-        message: "Are you out of the shower?"
+      - delay:
+          minutes: 5
+      - service: switch.turn_off
+        data:
+          entity_id: switch.master_bathroom_fan
 ################################################################################
 # Turn on the fan when the shitter closet door is closed.
   - id: function_master_bathroom_toilet_door_closed
@@ -72,13 +67,11 @@ automation:
       from: "on"
       to: "off"
       for:
-        seconds: 30
+        seconds: 10
     action:
-      # just notify for now
-      service: notify.notify
-      data:
-        title: Master Bathroom Toilet Door Closed
-        message: "Someone's baking brownies."
+      - service: switch.turn_on
+        data:
+          entity_id: switch.master_bathroom_fan
 ################################################################################
   - id: function_master_bathroom_toilet_door_open
     alias: 'Function - Master Bathroom - Toilet Door Closed'
@@ -89,11 +82,11 @@ automation:
       from: "off"
       to: "on"
       for:
-        seconds: 30
+        seconds: 10
     action:
-      # just notify for now
-      service: notify.notify
-      data:
-        title: Master Bathroom Toilet Door Opened
-        message: "Warning: Toxic waste."
+      - delay:
+          minutes: 5
+      - service: switch.turn_off
+        data:
+          entity_id: switch.master_bathroom_fan
 ################################################################################
