@@ -50,6 +50,12 @@ automation:
       to: "off"
       for:
         seconds: 10
+    condition:
+    # Only execute if the toilet door is already open
+      condition: state
+      entity_id:
+        - binary_sensor.master_bathroom_toilet_door
+      state: 'on'
     action:
       - delay:
           minutes: 5
@@ -83,6 +89,12 @@ automation:
       to: "on"
       for:
         seconds: 10
+    condition:
+      # Only execute if someone isn't in the shower
+      condition: state
+      entity_id:
+        - binary_sensor.master_bathroom_humidity_high
+      state: 'off'
     action:
       - delay:
           minutes: 5
