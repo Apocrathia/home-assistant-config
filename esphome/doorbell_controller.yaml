@@ -17,7 +17,7 @@
 esphome:
   name: doorbell_controller
   platform: ESP8266
-  board: esp01_1m
+  board: d1_mini
 
 wifi:
   ssid: !secret esphome_wifi_ssid
