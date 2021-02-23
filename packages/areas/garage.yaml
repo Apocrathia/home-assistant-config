@@ -1,0 +1,50 @@
+---
+### Garage ###
+
+automation:
+################################################################################
+# Turn on the lights if the garage door is opened
+  - id: area_garage_motion
+    alias: 'Area - Garage - Motion'
+    trigger:
+      - platform: state
+        entity_id:
+          - cover.main_garage_door
+          - cover.second_garage_door
+        from: 'closed'
+        to: 'open'
+      - platform: state
+        entity_id:
+          - binary_sensor.garage_door
+          - binary_sensor.garage_motion
+        from: 'off'
+        to: 'on'
+    condition:
+      - condition: state
+        entity_id: switch.garage_lights
+        state: 'off'
+    action:
+      - service: switch.turn_on
+        data:
+          entity_id: switch.garage_lights
+################################################################################
+# Turn the lights off if there's been no motion for 5 minutes
+  - id: area_garage_no_motion
+    alias: 'Area - Garage - No Motion'
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.garage_motion
+        from: 'on'
+        to: 'off'
+        for:
+          minutes: 5
+    condition:
+      - condition: state
+        entity_id: switch.garage_lights
+        state: 'on'
+    action:
+      - service: switch.turn_off
+        data:
+          entity_id: switch.garage_lights
+################################################################################
