@@ -73,6 +73,25 @@ sensor:
 
 automation:
 ################################################################################
+  # Watch the following sensors when the alarm is on to extend the system
+  - id: function_security_additional_sensors
+    alias: 'Function - Security - Additional Sensors'
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.garage_motion
+          - binary_sensor.garage_side_door
+    condition:
+      - condition: state
+        entity_id:
+          - alarm_control_panel.home
+        state:
+          - armed
+          - armed_home
+    action:
+      - service: alarm_control_panel.alarm_trigger
+        entity_id: alarm_control_panel.home
+################################################################################
   - id: function_security_alarm_auto_arm
     alias: 'Function - Security - Alarm Auto Arm'
     trigger:
