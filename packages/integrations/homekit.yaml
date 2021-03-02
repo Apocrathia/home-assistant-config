@@ -29,6 +29,9 @@ homekit:
       - fan.master_bedroom_ceiling_fan
       - fan.living_room_ceiling_fan
       - switch.fireplace
+      - switch.garage_lights
+      - light.downstairs_hallway
+      - light.office_floor_lamp
 
 # These aren't playing nice. I've got to get better cameras...
       # - camera.living_room
