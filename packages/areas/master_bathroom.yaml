@@ -80,7 +80,7 @@ automation:
           entity_id: switch.master_bathroom_fan
 ################################################################################
   - id: function_master_bathroom_toilet_door_open
-    alias: 'Function - Master Bathroom - Toilet Door Closed'
+    alias: 'Function - Master Bathroom - Toilet Door Open'
     trigger:
       platform: state
       entity_id:
