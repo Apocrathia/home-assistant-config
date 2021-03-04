@@ -14,6 +14,7 @@
 vacuum:
   # Downstairs
   - platform: xiaomi_miio
+    id: downstairs_miio
     name: Downstairs Vacuum
     host: !secret downstairs_vacuum_host
     token: !secret downstairs_vacuum_token
@@ -32,6 +33,10 @@ vacuum:
 # Update: As the device tokens keep changing as the vacuums have been
 # doing that weird factory reset thing every night, I've migrated to
 # using the MQTT devices. It's a bit more stable.
+# Update 20210303: Switched to using miio primarily almost a month ago
+# and it seemed to break some of my automations. This is mostly due to
+# an availability issue that caused state duration times to be reset.
+# Going back to MQTT.
 
 # For drawing the map in Lovelace, I am using the Valetudo map card
 # https://github.com/TheLastProject/lovelace-valetudo-map-card
@@ -119,8 +124,8 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - vacuum.downstairs_vacuum
-          - vacuum.upstairs_vacuum
+          - vacuum.downstairs
+          - vacuum.upstairs
         from: 
           - cleaning
           - returning
@@ -161,8 +166,8 @@ automation:
     trigger:
       - platform: numeric_state
         entity_id:
-          - vacuum.downstairs_vacuum
-          - vacuum.upstairs_vacuum
+          - vacuum.downstairs
+          - vacuum.upstairs
         value_template: "{{ trigger.attributes.battery_level }}"
         above: 99
     condition:
@@ -172,7 +177,8 @@ automation:
           entity_id: input_boolean.away_mode
           state: 'on'
         - condition: template
-          value_template: "{{ trigger.entity_id }} = docked"
+          value_template: >
+            {{ trigger.state == "docked" }}
     action:
       - delay: 0:30
       - service: 'vacuum.start'
@@ -208,13 +214,13 @@ automation:
         at: "08:00:00" # Check every morning at 0800
     condition:
       condition: state
-      entity_id: vacuum.downstairs_vacuum
+      entity_id: vacuum.downstairs
       state: docked
       for:
         hours: 24
     action:
       - service: vacuum.start
-        entity_id: vacuum.downstairs_vacuum
+        entity_id: vacuum.downstairs
   - id: function_vacuum_daily_upstairs
     alias: "Function - Vacuum - Daily (Upstairs)"
     trigger:
@@ -222,13 +228,13 @@ automation:
         at: "08:00:00" # Check every morning at 0800
     condition:
       condition: state
-      entity_id: vacuum.upstairs_vacuum
+      entity_id: vacuum.upstairs
       state: docked
       for:
         hours: 24
     action:
       - service: vacuum.start
-        entity_id: vacuum.upstairs_vacuum
+        entity_id: vacuum.upstairs
 # Try to consolidate into a single automation
   - id: function_vacuum_daily
     alias: "Function - Vacuum - Daily"
@@ -238,8 +244,8 @@ automation:
     condition:
       condition: state
       entity_id:
-        - vacuum.downstairs_vacuum
-        - vacuum.upstairs_vacuum
+        - vacuum.downstairs
+        - vacuum.upstairs
       state: docked
       for:
         hours: 24
