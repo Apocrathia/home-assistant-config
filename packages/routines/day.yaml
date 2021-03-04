@@ -99,9 +99,9 @@ automation:
       - service: light.turn_off
         data:
           entity_id: light.night_lights
-        data_template:
-          transition: >
-            {{ (states.sensor.daytime_lighting_transition.state | int) }}
+        # data_template:
+        #   transition: >
+        #     {{ (states.sensor.daytime_lighting_transition.state | int) }}
 ################################################################################
 
 ################################################################################
