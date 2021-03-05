@@ -180,7 +180,9 @@ automation:
           state: 'on'
         - condition: template
           value_template: >
-            {{ trigger.state == "docked" }}
+            {{ trigger.attributes.state == "docked" }}
+        # If that doesn't work. Here's a backup.
+        # {{ state_attr(trigger.entity_id, 'state') == "docked" }}
     action:
       - delay: 0:30
       - service: 'vacuum.start'
