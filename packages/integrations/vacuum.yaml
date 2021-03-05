@@ -50,14 +50,14 @@ sensor:
     json_attributes_topic: "vacuum/upstairs/map_data_parsed"
     name: Upstairs Vacuum Map
     value_template: 'OK'
-    # scan_interval: 5
+    scan_interval: 5
   - platform: mqtt
     unique_id: downstairs_vacuum_map
     state_topic: "vacuum/downstairs/state"
     json_attributes_topic: "vacuum/downstairs/map_data_parsed"
     name: Downstairs Vacuum Map
     value_template: 'OK'
-    # scan_interval: 5
+    scan_interval: 5
 
 # Keep the database from getting out of control 
 recorder:
