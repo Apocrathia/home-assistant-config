@@ -11,18 +11,20 @@
 # https://github.com/zvldz/vacuum
 # https://dustbuilder.xvm.mit.edu/
 
-vacuum:
-  # Downstairs
-  - platform: xiaomi_miio
-    id: downstairs_miio
-    name: Downstairs Vacuum
-    host: !secret downstairs_vacuum_host
-    token: !secret downstairs_vacuum_token
-  # Upstairs
-  - platform: xiaomi_miio
-    name: Upstairs Vacuum
-    host: !secret upstairs_vacuum_host
-    token: !secret upstairs_vacuum_token
+# Deprecated as of 2021.3.0
+# https://www.home-assistant.io/blog/2021/03/03/release-20213/#breaking-changes
+# vacuum:
+#   # Downstairs
+#   - platform: xiaomi_miio
+#     id: downstairs_miio
+#     name: Downstairs Vacuum
+#     host: !secret downstairs_vacuum_host
+#     token: !secret downstairs_vacuum_token
+#   # Upstairs
+#   - platform: xiaomi_miio
+#     name: Upstairs Vacuum
+#     host: !secret upstairs_vacuum_host
+#     token: !secret upstairs_vacuum_token
 
 # Both of these devices are also being populated in Home Assistant
 # via MQTT auto-discovery, which I may or may not utilize in the future.
