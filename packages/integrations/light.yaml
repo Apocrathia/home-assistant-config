@@ -21,12 +21,6 @@ light:
       - light.front_porch_lights
       - light.outdoor_garage_lights
       - light.back_yard_string_lights
-  
-  - platform: group
-    name: Master Bedroom Lights
-    entities:
-      - light.master_bedroom_floor_lamp
-      - light.master_bedroom_table_lamps
 
   - platform: group
     name: Indoor Lights
@@ -44,6 +38,12 @@ light:
     entities:
       - light.sitting_room_floor_lamp
       - light.kitchen_cabinet_lights
+
+  - platform: group
+    name: Master Bedroom Lights
+    entities:
+      - light.master_bedroom_floor_lamp
+      - light.master_bedroom_table_lamps
 
   - platform: group
     name: Living Room Ceiling Fan
