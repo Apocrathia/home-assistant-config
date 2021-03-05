@@ -44,3 +44,9 @@ light:
     entities:
       - light.sitting_room_floor_lamp
       - light.kitchen_cabinet_lights
+
+  - platform: group
+    name: Living Room Ceiling Fan
+    entities:
+      - light.living_room_ceiling_fan_down_light
+      - light.living_room_ceiling_fan_up_light
