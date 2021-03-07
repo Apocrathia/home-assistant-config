@@ -274,7 +274,12 @@ script:
       # Turn off all of the lights
     - service: light.turn_off
       data:
-        entity_id: group.indoor_lights
+        entity_id: 
+          - group.indoor_lights
+    - service: switch.turn_off
+      data:
+        entity_id:
+          - switch.garage_lights
       # Set the thermostats to away
     - service: climate.set_preset_mode
       data:
