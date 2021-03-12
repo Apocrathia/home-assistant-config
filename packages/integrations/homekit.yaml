@@ -31,7 +31,9 @@ homekit:
       - switch.fireplace
       - switch.garage_lights
       - light.downstairs_hallway
+      - light.upstairs_hallway
       - light.office_floor_lamp
+      - light.kitchen
 
 # These aren't playing nice. I've got to get better cameras...
       # - camera.living_room
