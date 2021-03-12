@@ -38,6 +38,7 @@ light:
     entities:
       - light.sitting_room_floor_lamp
       - light.kitchen_cabinet_lights
+      - light.kitchen_sink
 
   - platform: group
     name: Master Bedroom Lights
