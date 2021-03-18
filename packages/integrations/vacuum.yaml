@@ -245,22 +245,24 @@ automation:
     action:
       - service: vacuum.start
         entity_id: vacuum.upstairs
-# Try to consolidate into a single automation
-  - id: function_vacuum_daily
-    alias: "Function - Vacuum - Daily"
-    trigger:
-      - platform: time
-        at: "08:00:00" # Check every morning at 0800
-    condition:
-      condition: state
-      entity_id:
-        - vacuum.downstairs
-        - vacuum.upstairs
-      state: docked
-      for:
-        hours: 24
-    action:
-      - service: vacuum.start
-        data_template:
-          entity_id: "{{ trigger.entity_id }}"
+# # Try to consolidate into a single automation
+#   - id: function_vacuum_daily
+#     alias: "Function - Vacuum - Daily"
+#     trigger:
+#       - platform: time
+#         at: "05:00:00" # Check every morning at 0500
+#     condition:
+#       condition: state
+#       entity_id:
+#         - vacuum.downstairs
+#         - vacuum.upstairs
+#       state: 
+#         - docked
+#         - unavailable # Vacuums keep disappearing at around 0300
+#       for:
+#         hours: 12
+#     action:
+#       - service: vacuum.start
+#         data_template:
+#           entity_id: "{{ trigger.entity_id }}"
 ################################################################################
