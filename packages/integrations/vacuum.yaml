@@ -217,11 +217,13 @@ automation:
     alias: "Function - Vacuum - Daily (Downstairs)"
     trigger:
       - platform: time
-        at: "08:00:00" # Check every morning at 0800
+        at: "05:00:00" # Check every morning at 0500
     condition:
       condition: state
       entity_id: vacuum.downstairs
-      state: docked
+      state: 
+        - docked
+        - unavailable # Vacuums keep disappearing at around 0300
       for:
         hours: 24
     action:
@@ -231,11 +233,13 @@ automation:
     alias: "Function - Vacuum - Daily (Upstairs)"
     trigger:
       - platform: time
-        at: "08:00:00" # Check every morning at 0800
+        at: "05:00:00" # Check every morning at 0500
     condition:
       condition: state
-      entity_id: vacuum.upstairs
-      state: docked
+      entity_id: vacuum.downstairs
+      state: 
+        - docked
+        - unavailable # Vacuums keep disappearing at around 0300
       for:
         hours: 24
     action:
