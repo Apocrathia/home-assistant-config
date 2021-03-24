@@ -21,6 +21,8 @@ light:
       - light.front_porch_lights
       - light.outdoor_garage_lights
       - light.back_yard_string_lights
+      - light.back_door
+      - light.outdoor_garage_side
 
   - platform: group
     name: Indoor Lights
