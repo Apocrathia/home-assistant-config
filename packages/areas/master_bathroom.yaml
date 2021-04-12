@@ -25,8 +25,8 @@ binary_sensor:
 automation:
 ################################################################################
 # Turn on the fan when someone is in the shower. 
-  - id: function_master_bathroom_humidity_high
-    alias: 'Function - Master Bathroom - Humidity High'
+  - id: area_master_bathroom_humidity_high
+    alias: 'Area - Master Bathroom - Humidity High'
     trigger:
       platform: state
       entity_id:
@@ -40,8 +40,8 @@ automation:
         data:
           entity_id: switch.master_bathroom_fan
 ################################################################################
-  - id: function_master_bathroom_humidity_low
-    alias: 'Function - Master Bathroom - Humidity Low'
+  - id: area_master_bathroom_humidity_low
+    alias: 'Area - Master Bathroom - Humidity Low'
     trigger:
       platform: state
       entity_id:
@@ -64,8 +64,8 @@ automation:
           entity_id: switch.master_bathroom_fan
 ################################################################################
 # Turn on the fan when the shitter closet door is closed.
-  - id: function_master_bathroom_toilet_door_closed
-    alias: 'Function - Master Bathroom - Toilet Door Closed'
+  - id: area_master_bathroom_toilet_door_closed
+    alias: 'Area - Master Bathroom - Toilet Door Closed'
     trigger:
       platform: state
       entity_id:
@@ -79,8 +79,8 @@ automation:
         data:
           entity_id: switch.master_bathroom_fan
 ################################################################################
-  - id: function_master_bathroom_toilet_door_open
-    alias: 'Function - Master Bathroom - Toilet Door Open'
+  - id: area_master_bathroom_toilet_door_open
+    alias: 'Area - Master Bathroom - Toilet Door Open'
     trigger:
       platform: state
       entity_id:
