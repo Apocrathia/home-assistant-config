@@ -12,5 +12,20 @@
   # baudrate: 57600
   # database_path: /config/zigbee.db
 
-# ZHA Map custom componnt
+zha:
+  zigpy_config:
+    network:
+      channel: 15             # What channel the radio should try to use.
+      channels: [15, 20, 25]  # Channel mask
+  device_config:
+    # 84:71:27:ff:fe:93:17:24-1:    # format: {ieee}-{endpoint_id}
+    #   type: "switch"              # corrected device type
+    00:15:8d:00:02:3d:9b:af-1: # Xiaomi Button
+      type: "binary_sensor"
+    00:17:88:01:02:18:e8:35-1: # Phillips Hue Dimmer
+      type: "binary_sensor"
+    00:17:88:01:02:18:e8:35-2: # Phillips Hue Dimmer
+      type: "binary_sensor"
+
+# ZHA Map custom component
 zha_map:
