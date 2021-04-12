@@ -4,7 +4,9 @@
 # From configuration.yaml
 # HomeKit
 homekit:
-  auto_start: true
+  # Deprecated as on 2021.4.0
+  # https://www.home-assistant.io/blog/2021/04/07/release-20214/#breaking-changes
+  # auto_start: true
   pincode: !secret homekit_pin
   port: 51827
   filter:
