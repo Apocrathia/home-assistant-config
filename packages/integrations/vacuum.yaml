@@ -223,7 +223,7 @@ automation:
         entity_id:
           - vacuum.downstairs
           - vacuum.upstairs
-        value_template: "{{ trigger.attributes.battery_level }}"
+        value_template: "{{ state.attributes.battery_level }}"
         above: 99
     condition:
       condition: and
