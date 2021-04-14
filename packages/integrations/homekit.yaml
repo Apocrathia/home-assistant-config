@@ -1,41 +1,83 @@
 ---
 ### HomeKit ###
 
-# From configuration.yaml
 # HomeKit
 homekit:
-  # Deprecated as on 2021.4.0
-  # https://www.home-assistant.io/blog/2021/04/07/release-20214/#breaking-changes
-  # auto_start: true
-  pincode: !secret homekit_pin
-  port: 51827
-  filter:
-    include_entities:
-      - climate.homekit_downstairs
-      - climate.homekit_upstairs
-      - light.master_bedroom_floor_lamp
-      - light.master_bedroom_table_lamps
-      - light.sitting_room_floor_lamp
-      - light.outdoor_lights
-      - light.back_yard_string_lights
-      - lock.front_door
-      - lock.back_door
-      - alarm_control_panel.home
-      - switch.downstairs_vacuum
-      - switch.upstairs_vacuum
-      - light.dining_room_chandelier
-      - light.kitchen_chandelier
-      - cover.main_garage_door
-      - cover.second_garage_door
-      - light.living_room_ceiling_fan
-      - fan.master_bedroom_ceiling_fan
-      - fan.living_room_ceiling_fan
-      - switch.fireplace
-      - switch.garage_lights
-      - light.downstairs_hallway
-      - light.upstairs_hallway
-      - light.office_floor_lamp
-      - light.kitchen
+################################################################################
+  - name: Home Assistant Bridge
+    # Deprecated as on 2021.4.0
+    # https://www.home-assistant.io/blog/2021/04/07/release-20214/#breaking-changes
+    # auto_start: true
+    mode: bridge
+    pincode: !secret homekit_pin
+    port: 51827
+    filter:
+      include_entities:
+        - climate.homekit_downstairs
+        - climate.homekit_upstairs
+        - light.master_bedroom_floor_lamp
+        - light.master_bedroom_table_lamps
+        - light.sitting_room_floor_lamp
+        - light.outdoor_lights
+        - light.back_yard_string_lights
+        - switch.downstairs_vacuum
+        - switch.upstairs_vacuum
+        - light.dining_room_chandelier
+        - light.kitchen_chandelier
+        - light.living_room_ceiling_fan
+        - fan.master_bedroom_ceiling_fan
+        - fan.living_room_ceiling_fan
+        - switch.fireplace
+        - switch.garage_lights
+        - light.downstairs_hallway
+        - light.upstairs_hallway
+        - light.office_floor_lamp
+        - light.kitchen
+################################################################################
+  # Moving door locks to separate accessory bridges
+  # https://github.com/home-assistant/core/issues/48843#issuecomment-817447652
+  - name: Front Door Lock
+    mode: accessory
+    pincode: !secret homekit_pin
+    port: 51828
+    filter:
+      include_entities:
+        - lock.front_door
+################################################################################
+  - name: Back Door Lock
+    mode: accessory
+    pincode: !secret homekit_pin
+    port: 51829
+    filter:
+      include_entities:
+        - lock.back_door
+################################################################################
+# Might as well move any other security devices as well.
+  - name: Alarm Panel
+    mode: accessory
+    pincode: !secret homekit_pin
+    port: 51830
+    filter:
+      include_entities:
+        - alarm_control_panel.home
+################################################################################
+  - name: Main Garage Door
+    mode: accessory
+    pincode: !secret homekit_pin
+    port: 51831
+    filter:
+      include_entities:
+        - cover.main_garage_door
+################################################################################
+  - name: Second Garage Door
+    mode: accessory
+    pincode: !secret homekit_pin
+    port: 51832
+    filter:
+      include_entities:
+        - cover.second_garage_door
+################################################################################
+
 
 # These aren't playing nice. I've got to get better cameras...
       # - camera.living_room
@@ -43,8 +85,9 @@ homekit:
       # - camera.front_porch
       # - camera.kitchen
 
-# Start HomeKit once the Z-Wave network starts up.
 automation:
+################################################################################
+# Start HomeKit once the Z-Wave network starts up.
   - alias: 'HomeKit - Z-Wave Start'
     trigger:
       - platform: event
@@ -55,6 +98,7 @@ automation:
         event_type: zwave.network_complete_some_dead
     action:
       - service: homekit.start
+################################################################################
 # I've had issues with HomeKit being unresponsive every now and then.
 # This should keep it on it's toes.
   - alias: 'Homekit - Routine Reload'
@@ -64,3 +108,4 @@ automation:
         minutes: "/37"
     action:
       - service: homekit.reload
+################################################################################
