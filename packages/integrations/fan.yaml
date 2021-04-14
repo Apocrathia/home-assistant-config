@@ -1,7 +1,11 @@
 ---
 ### Fans ###
 
-fan:
+# Deprecated in 2021.4.0
+# https://www.home-assistant.io/blog/2021/04/07/release-20214/#breaking-changes
+# Getting sick of integrations being added to the UI and YAML config deprecated
+
+# fan:
 # These two were an absolute pain in the ass to get working.
 # Finally tracked down this tidbit of information about Miio not working across
 # subnets on some of the newer firmware.
@@ -10,15 +14,15 @@ fan:
 # https://github.com/rytilahti/python-miio/issues/422#issuecomment-583924473
 # There is now a masquerade NAT rule on my gateway that forwards all of the Miio traffic
 # and shit *just works* (tm)
-  # Master Bedroom Air Purifier
-  - platform: xiaomi_miio
-    model: zhimi.airpurifier.ma4
-    name: Master Bedroom Air Purifier
-    host: !secret master_bedroom_air_purifier_host
-    token: !secret master_bedroom_air_purifier_token
-  # Master Bedroom Humidifier
-  - platform: xiaomi_miio
-    name: Master Bedroom Humidifier
-    model: zhimi.humidifier.ca1
-    host: !secret master_bedroom_humidifier_host
-    token: !secret master_bedroom_humidifier_token
+  # # Master Bedroom Air Purifier
+  # - platform: xiaomi_miio
+  #   model: zhimi.airpurifier.ma4
+  #   name: Master Bedroom Air Purifier
+  #   host: !secret master_bedroom_air_purifier_host
+  #   token: !secret master_bedroom_air_purifier_token
+  # # Master Bedroom Humidifier
+  # - platform: xiaomi_miio
+  #   name: Master Bedroom Humidifier
+  #   model: zhimi.humidifier.ca1
+  #   host: !secret master_bedroom_humidifier_host
+  #   token: !secret master_bedroom_humidifier_token
