@@ -67,7 +67,6 @@ automation:
 ################################################################################
   - id: routine_day_outdoor_lights
     alias: 'Routine - Day - Outdoor Lights'
-    # initial_state: 'on'
     trigger:
       - platform: sun
         event: sunrise
@@ -87,7 +86,6 @@ automation:
 ################################################################################
   - id: routine_day_night_lights
     alias: 'Routine - Day - Night Lights'
-    # initial_state: 'on'
     trigger:
       - platform: sun
         event: sunrise
@@ -107,7 +105,6 @@ automation:
 ################################################################################
   # - id: routine_day_kitchen_cabinet_lights
   #   alias: 'Routine - Day - Kitchen Cabnet Lights'
-  #   # initial_state: 'on'
   #   trigger:
   #     - platform: sun
   #       event: sunrise
@@ -125,7 +122,6 @@ automation:
 ################################################################################
   - id: routine_day_lighting_off
     alias: 'Routine - Day - Turn Off Lights After Sunrise'
-    # initial_state: 'on'
     trigger:
       - platform: sun
         event: sunrise

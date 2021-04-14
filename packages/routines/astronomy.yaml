@@ -6,7 +6,6 @@ automation:
   ## Send a notification on new moon nights
   - id: routine_astronomy_dark_sky
     alias: 'Routine - Astronomy - Dark Sky'
-    # initial_state: 'on'
     trigger:
       - platform: state
         entity_id: sun.sun
@@ -29,7 +28,6 @@ automation:
   ## Send a notification on full moon nights
   - id: routine_astronomy_full moon
     alias: 'Routine - Astronomy - Full Moon'
-    # initial_state: 'on'
     trigger:
       - platform: state
         entity_id: sun.sun

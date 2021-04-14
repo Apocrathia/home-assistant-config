@@ -5,7 +5,6 @@ automation:
 ################################################################################
 - id: routine_notification_trash
   alias: 'Routine - Notification - Trash Pickup'
-  # initial_state: 'on'
   trigger:
     platform: template
     value_template: >
