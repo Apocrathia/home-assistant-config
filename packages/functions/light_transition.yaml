@@ -92,3 +92,43 @@ script:
           brightness_pct: >
             {{ ending_brightness_pct | float }}
 ###############################################################################
+# Saving the testing template that I used to debug this.
+
+# {% set starting_brightness_pct = "25" %}
+# {% set ending_brightness_pct = "100" %}
+# {% set interval_pct = "10" %}
+# {% set index = "1" %}
+# {% set transition_time = "300" %}
+# {% set starting_brightness = ((starting_brightness_pct | float * 255) / 100) | round | int %}
+# Starting Brightness = {{starting_brightness }}
+# {% set ending_brightness = ((ending_brightness_pct | float * 255) / 100) | round | int  %}
+# Ending Brightness = {{ending_brightness }}
+# {% set interval = (( interval_pct | float * 255 ) / 100 ) | int %}
+# Interval = {{ interval }}
+# {% set count = ((ending_brightness - starting_brightness) / interval | float) | abs | round | int %}
+# Count = {{ count }}
+# {% set step = ((ending_brightness - starting_brightness) / count) | round | int %}
+# Step = {{ step }}
+# {% set next_step = starting_brightness + (step * index | float) | int %}
+# Next Step = {{ next_step }}
+# {% set delay = ((transition_time | float) / count) | round | int %}
+# Delay = {{ delay }}
+
+# variables:
+#   starting_brightness: >
+#     {{ ((( starting_brightness_pct | float * 255 ) 
+#         / 100 ) | round | int ) }}
+#   ending_brightness: >
+#     {{ ((( ending_brightness_pct | float * 255) 
+#         / 100) | round | int ) }}
+#   interval: >
+#     {{ (( interval_pct | float * 255 ) / 100 ) | int }}
+#   count: >
+#     {{ ((( ending_brightness | float - starting_brightness | float ) 
+#         / interval | float ) | abs | round | int ) }}
+#   step: >
+#     {{ ((( ending_brightness | float - starting_brightness | float ) 
+#         / count | float ) | round | int )  }}
+#   delay: >
+#     {{ (( transition_time | float ) / count ) | round | int }}
+###############################################################################
