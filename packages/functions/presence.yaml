@@ -71,7 +71,14 @@ sensor:
       distance_apart:
         friendly_name: 'Distance Apart'
         value_template: >-
-          {{ distance('person.ian','person.aimee') }}
+          {% if states('proximity.aimee') | int > states('proximity.ian') | int %}
+            {{ states('proximity.aimee') | int - states('proximity.ian') | int }}
+          {% else %}
+            {{ states('proximity.ian') | int - states('proximity.aimee') | int }}
+          {% endif %}
+# Turns out this wasn't very accurate, or it wasn't using metric. ¯\_(ツ)_/¯
+# {{ distance('person.ian','person.aimee') | round | int }}
+        unit_of_measurement: km
 ################################################################################
 
 input_boolean:
@@ -113,19 +120,35 @@ automation:
         {% endif %}
       entity_id: input_boolean.away_mode
 ################################################################################
-### THIS NEEDS TO BE BROKEN INTO MULTIPLE AUTOMATIONS ###
   - id: function_presence_scripts
     alias: "Function - Presence - Scripts"
     trigger:
       - platform: state
         entity_id: input_boolean.away_mode
     action:
-      service: >
-        {% if is_state('input_boolean.away_mode', 'off') %}
-          script.location_home
-        {% elif is_state('input_boolean.away_mode', 'on') %}
-          script.location_away
-        {% endif %}
+      - alias: "Determine away_mode state"
+        choose:
+        - conditions:
+            - alias: "away_mode = on"
+              condition: state
+              entity_id: input_boolean.away_mode
+              state: "on"
+          sequence:
+            service: script.location_away
+        - conditions:
+            - alias: "away_mode = off"
+              condition: state
+              entity_id: input_boolean.away_mode
+              state: "off"
+          sequence:
+            service: script.location_home
+      # Leaving this as a fallback for now
+      # service: >
+      #   {% if is_state('input_boolean.away_mode', 'off') %}
+      #     script.location_home
+      #   {% elif is_state('input_boolean.away_mode', 'on') %}
+      #     script.location_away
+      #   {% endif %}
 ################################################################################
   - id: function_vacation_ian
     alias: "Function - Vacation - Ian"
@@ -175,7 +198,7 @@ automation:
         entity_id: proximity.aimee
         above: 100
         below: 100
-        # for: 01:00:00
+        for: 01:00:00
     action:
       - choose:
         - conditions:
