@@ -1,0 +1,94 @@
+---
+### Function - Light - Transition ###
+###############################################################################
+# Example usage:
+# service: script.light_transition
+# data:
+#   entity_id: light.test
+#   starting_brightness_pct: 100
+#   ending_brightness_pct: 0
+#   interval_pct: 5
+#   transition_time: 00:00:05
+###############################################################################
+script:
+  light_transition:
+    alias: "Function - Light - Transition"
+    description: |
+      This script will transition a light based upon a set of given parameters.
+      Most Z-Wave dimmer switches don't support any sort of transition effects. 
+      This script is to fix that by generating a fuckload more traffic on the 
+      Z-Wave network because this is absolutely not how this is supposed to be 
+      done and why it's something most Z-wave devices don't normally support.
+    fields:
+      entity_id:
+        description: "The light object for the script to act upon."
+        example: "light.living_room"
+      starting_brightness_pct:
+        description: "Where the light should initially be set to. 0-100"
+        example: "25"
+      ending_brightness_pct:
+        description: "Where the light should end up. 0-100"
+        example: "100"
+      interval_pct:
+        description: "How large of a step to take. 0-100"
+        example: "20"
+      transition_time:
+        description: "How long does the transition take? (in seconds)"
+        example: "300"
+    sequence:
+      - alias: "Setup loop parameters"
+        variables:
+          starting_brightness: >
+            {{ ((( starting_brightness_pct | float * 255 ) 
+                / 100 ) | round | int ) }}
+          ending_brightness: >
+            {{ ((( ending_brightness_pct | float * 255) 
+                / 100) | round | int ) }}
+          interval: >
+            {{ (( interval_pct | float * 255 ) / 100 ) | int }}
+          count: >
+            {{ ((( ending_brightness | float - starting_brightness | float ) 
+                / interval | float ) | abs | round | int ) }}
+          step: >
+            {{ ((( ending_brightness | float - starting_brightness | float ) 
+                / count | float ) | round | int )  }}
+          delay: >
+            {{ (( transition_time | float ) / count ) | round | int }}
+      - alias: "Execute the loop"
+        repeat:
+          count: >
+            {{ count }}
+          sequence:
+            - alias: "Loop-local Variables"
+              variables:
+                next_step: >
+                  {{ starting_brightness + ( step * repeat.index ) }}
+            - alias: "Change the brightness"
+              service: >
+                {% if next_step <= 5 %}
+                  light.turn_off
+                {% else %}
+                  light.turn_on
+                {% endif %}
+              target:
+                entity_id: "{{ entity_id }}"
+              data:
+                brightness_step: "{{ step }}"
+            - alias: "And now we wait..."
+              delay: 
+                seconds: >
+                  {{ delay }}
+      - alias: "Set final brightness"
+        service: >
+          {% if ending_brightness_pct | float <= 5 %}
+            light.turn_off
+          {% else %}
+            light.turn_on
+          {% endif %}
+        target:
+          entity_id: >
+            {{ entity_id }}
+        data:
+          brightness_pct: >
+            {{ ending_brightness_pct | float }}
+###############################################################################
