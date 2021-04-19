@@ -52,15 +52,15 @@ proximity:
     zone: home
     devices:
       - person.ian
-    tolerance: 5000
-    unit_of_measurement: km
+    tolerance: 50
+    unit_of_measurement: mi
 ################################################################################
   aimee:
     zone: home
     devices:
       - person.aimee
-    tolerance: 5000
-    unit_of_measurement: km
+    tolerance: 50
+    unit_of_measurement: mi
 ################################################################################
 
 sensor:
@@ -71,14 +71,14 @@ sensor:
       distance_apart:
         friendly_name: 'Distance Apart'
         value_template: >-
-          {% if states('proximity.aimee') | int > states('proximity.ian') | int %}
-            {{ states('proximity.aimee') | int - states('proximity.ian') | int }}
-          {% else %}
-            {{ states('proximity.ian') | int - states('proximity.aimee') | int }}
-          {% endif %}
-# Turns out this wasn't very accurate, or it wasn't using metric. ¯\_(ツ)_/¯
-# {{ distance('person.ian','person.aimee') | round | int }}
-        unit_of_measurement: km
+          {{ distance('person.ian','person.aimee') | round | int }}
+# This was actaually a horribly inacurate idea.
+# {% if states('proximity.aimee') | int > states('proximity.ian') | int %}
+#   {{ states('proximity.aimee') | int - states('proximity.ian') | int }}
+# {% else %}
+#   {{ states('proximity.ian') | int - states('proximity.aimee') | int }}
+# {% endif %}
+        unit_of_measurement: mi
 ################################################################################
 
 input_boolean:
@@ -336,8 +336,8 @@ script:
     - service: cover.close_cover
       data:
         entity_id:
-          - cover.garage_door_01
-          - cover.garage_door_02
+          - cover.main_garage_door
+          - cover.second_garage_door
     # Turn up the air purifiers while we're gone
     - service: xiaomi_miio.fan_set_fan_level
       data:
