@@ -13,20 +13,28 @@ automation:
       entity_id: group.people
       state: 'home'
     action:
-    # Wait a few minutes until it gets a little bit darker
-      - delay:
-          minutes: 15
-      - service: light.turn_on
+      - alias: "Ramp up lights over next hour"
+        service: script.light_transition
         data:
           entity_id: light.back_yard_string_lights
-          brightness_pct: 50
-    # Wait a few *more* minutes until it gets a little bit darker
-      - delay:
-          minutes: 15
-      - service: light.turn_on
-        data:
-          entity_id: light.back_yard_string_lights
-          brightness_pct: 100
+          starting_brightness_pct: 25
+          ending_brightness_pct: 100
+          interval_pct: 5
+          transition_time: 3600
+    # # Wait a few minutes until it gets a little bit darker
+    #   - delay:
+    #       minutes: 15
+    #   - service: light.turn_on
+    #     data:
+    #       entity_id: light.back_yard_string_lights
+    #       brightness_pct: 50
+    # # Wait a few *more* minutes until it gets a little bit darker
+    #   - delay:
+    #       minutes: 15
+    #   - service: light.turn_on
+    #     data:
+    #       entity_id: light.back_yard_string_lights
+    #       brightness_pct: 100
 ################################################################################
 # Turn off the string lights when the alarm is turned on
 # This is so that there is a clear indication that the alarm is on
@@ -64,7 +72,8 @@ automation:
           minutes: 5
       - platform: template
         value_template: >
-          '{{states.light.back_yard_string_lights.attributes.brightness == 85}}'
+          '{{ ( states.light.back_yard_string_lights.attributes.brightness >= 80 
+          and states.light.back_yard_string_lights.attributes.brightness <= 90 ) }}'
         for:
           minutes: 5
     action:
