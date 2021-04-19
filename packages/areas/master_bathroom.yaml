@@ -39,6 +39,9 @@ automation:
       - service: switch.turn_on
         data:
           entity_id: switch.master_bathroom_fan
+      - service: light.turn_on
+        data:
+          entity_id: light.master_bathroom_shower_lights
 ################################################################################
   - id: area_master_bathroom_humidity_low
     alias: 'Area - Master Bathroom - Humidity Low'
@@ -62,6 +65,9 @@ automation:
       - service: switch.turn_off
         data:
           entity_id: switch.master_bathroom_fan
+      - service: light.turn_off
+        data:
+          entity_id: light.master_bathroom_shower_lights
 ################################################################################
 # Turn on the fan when the shitter closet door is closed.
   - id: area_master_bathroom_toilet_door_closed
