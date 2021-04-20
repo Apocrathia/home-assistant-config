@@ -57,9 +57,18 @@ automation:
   - id: area_living_room_fireplace_blower
     alias: 'Area - Living Room - Fireplace Blower'
     trigger:
+    # Specifying specific state changes from on <-> off because the shelly
+    # that's installed here keeps going 'unavailable' and triggering this.
       - platform: state
         entity_id:
           - switch.fireplace
+        to: 'on'
+        from: 'off'
+      - platform: state
+        entity_id:
+          - switch.fireplace
+        to: 'off'
+        from: 'on'
     action:
       - choose:
         - conditions:
