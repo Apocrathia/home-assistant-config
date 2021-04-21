@@ -3,18 +3,6 @@
 
 light:  
   # Groups
-  # - platform: group
-  #   name: Front Porch Lights
-  #   entities:
-  #     - light.front_porch_left
-  #     - light.front_porch_right
-
-  # - platform: group
-  #   name: Outdoor Garage Lights
-  #   entities:
-  #     - light.outdoor_garage_left
-  #     - light.outdoor_garage_right
-
   - platform: group
     name: Outdoor Lights
     entities:
@@ -43,6 +31,16 @@ light:
       - light.kitchen_sink
 
   - platform: group
+    name: Lights Out!
+    entities:
+      - light.living_room_lights
+      - light.kitchen_lights
+      - light.dining_room_lights
+      - light.office_lights
+      - light.downstairs_lights
+      - light.upstairs_lights
+
+  - platform: group
     name: Master Bedroom Lights
     entities:
       - light.master_bedroom_floor_lamp
@@ -53,3 +51,42 @@ light:
     entities:
       - light.living_room_ceiling_fan_down_light
       - light.living_room_ceiling_fan_up_light
+
+  - platform: group
+    name: Living Room Lights
+    entities:
+      - light.living_room_ceiling_fan
+      # - light.living_room_floor_lamp # Coming soon
+
+  - platform: group
+    name: Office Lights
+    entities:
+      - light.office_floor_lamp
+      - light.office_key_light
+      - light.office_light
+
+  - platform: group
+    name: Kitchen Lights
+    entities:
+      - light.kitchen
+      - light.kitchen_chandelier
+
+  - platform: group
+    name: Dining Room Lights
+    entities:
+      - light.dining_room_chandelier
+      # - light.dining_room_cabinet_lights # Coming Soon
+
+  - platform: group
+    name: Downstairs Lights
+    entities:
+      - light.downstairs_hallway
+      - light.foyer_chandelier
+      - light.garage_hallway
+
+  - platform: group
+    name: Upstairs Lights
+    entities:
+      - light.stairwell
+      - light.upstairs_hallway
+      - light.upstairs_desk
