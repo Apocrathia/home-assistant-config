@@ -6,3 +6,10 @@
 # calls are not loaded by default.
 
 lock:
+
+group:
+  all_locks:
+    name: All Locks
+    entities:
+      - lock.front_door
+      - lock.back_door
