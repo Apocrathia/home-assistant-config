@@ -1,0 +1,28 @@
+---
+### Master Bedroom ###
+
+# Automations:
+################################################################################
+automation:
+  - id: area_master_bedroom_humidifer_low
+    alias: "Area - Master Bedroom - Humidifer Low"
+    trigger:
+      - platform: numeric_state
+        entity_id: fan.master_bedroom_humidifier
+        value_template: >
+          "{{ state_attr('fan.master_bedroom_humidifier', 'depth') }}"
+        below: 20 # I think this is measured 0-127
+      - platform: template
+        value_template: >
+          "{{ ( state_attr('fan.master_bedroom_humidifier', 'dry') 
+                == true ) }}"
+    condition:
+      - condition: state
+        entity_id: group.people
+        state: "home"
+    action:
+      - service: notify.notify
+        data:
+          title: "Master Bedroom Humidifer Low"
+          message: "Please refill"
+################################################################################
