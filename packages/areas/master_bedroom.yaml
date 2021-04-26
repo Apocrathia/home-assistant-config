@@ -10,12 +10,12 @@ automation:
       - platform: numeric_state
         entity_id: fan.master_bedroom_humidifier
         value_template: >
-          "{{ state_attr('fan.master_bedroom_humidifier', 'depth') }}"
+          {{ state_attr('fan.master_bedroom_humidifier', 'depth') | int }}
         below: 20 # I think this is measured 0-127
       - platform: template
         value_template: >
-          "{{ ( state_attr('fan.master_bedroom_humidifier', 'dry') 
-                == true ) }}"
+          {{ ( state_attr('fan.master_bedroom_humidifier', 'dry') 
+                == true ) }}
     condition:
       - condition: state
         entity_id: group.people
