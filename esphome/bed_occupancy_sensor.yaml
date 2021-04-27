@@ -44,7 +44,7 @@ sensor:
     clk_pin: D3
     filters:
       - calibrate_linear:
-          - 1500 -> 0
+          - 1600 -> 0
           - 145000 -> 5.6
       - sliding_window_moving_average:
           window_size: 5
@@ -60,7 +60,7 @@ sensor:
     clk_pin: D5
     filters:
       - calibrate_linear:
-          - 1800 -> 0
+          - 2000 -> 0
           - 145000 -> 5.6
       - sliding_window_moving_average:
           window_size: 5
