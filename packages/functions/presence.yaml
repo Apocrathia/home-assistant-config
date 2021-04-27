@@ -372,7 +372,7 @@ script:
         entity_id:
           - vacuum.downstairs
           - vacuum.upstairs
-        fan_speed: min
+        fan_speed: low
       # Stop the vacuums
     - service: vacuum.stop
       data:
