@@ -118,6 +118,24 @@ automation:
     action:
       service: script.function_alarm_clock
 ################################################################################
+  - id: function_wakeup_vacuum
+    alias: 'Function - Wakeup - Vacuum'
+    trigger:
+    - platform: time
+      at: input_datetime.wakeup_time
+    condition:
+        condition: and
+        conditions:
+          - condition: state
+            entity_id: binary_sensor.workday
+            state: 'on'
+    action:
+    - service: vacuum.start
+      data:
+        entity_id: 
+          - vacuum.downstairs
+          - vacuum.upstairs
+################################################################################
 
 script:
 ################################################################################

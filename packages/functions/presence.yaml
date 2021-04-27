@@ -314,15 +314,15 @@ script:
     - service: vacuum.set_fan_speed
       data:
         entity_id:
-          - vacuum.downstairs_vacuum
-          - vacuum.upstairs_vacuum
+          - vacuum.downstairs
+          - vacuum.upstairs
         fan_speed: max
       # Start the vacuum
     - service: vacuum.start
       data:
         entity_id: 
-          - vacuum.downstairs_vacuum
-          - vacuum.upstairs_vacuum
+          - vacuum.downstairs
+          - vacuum.upstairs
       # Arm the alarm
     - service: alarm_control_panel.alarm_arm_away
       data:
@@ -370,15 +370,15 @@ script:
     - service: vacuum.set_fan_speed
       data:
         entity_id:
-          - vacuum.downstairs_vacuum
-          - vacuum.upstairs_vacuum
+          - vacuum.downstairs
+          - vacuum.upstairs
         fan_speed: min
       # Stop the vacuums
     - service: vacuum.stop
       data:
         entity_id:
-          - vacuum.downstairs_vacuum
-          - vacuum.upstairs_vacuum
+          - vacuum.downstairs
+          - vacuum.upstairs
       # wait 30 seconds for command to take effect
     - delay:
         seconds: 30
@@ -386,8 +386,8 @@ script:
     - service: vacuum.return_to_base
       data:
         entity_id: 
-          - vacuum.downstairs_vacuum
-          - vacuum.upstairs_vacuum
+          - vacuum.downstairs
+          - vacuum.upstairs
     # Turn the air purifiers back down
     - service: fan.set_speed
       data:

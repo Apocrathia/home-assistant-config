@@ -73,103 +73,7 @@
 # get valetudo-mapper to work... https://github.com/rand256/valetudo/issues/135
 # https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card
 
-# Inputs
-input_boolean:
-################################################################################
-  downstairs_vacuum_ran:
-    name: "Downstairs Vacuum Ran"
-    icon: mdi:robot-vacuum
-  upstairs_vacuum_ran:
-    name: "Upstairs Vacuum Ran"
-    icon: mdi:robot-vacuum
-
-switch:
-################################################################################
-  - platform: template
-    switches:
-# Downstairs Vacuum
-      downstairs_vacuum:
-        friendly_name: "Downstairs Vacuum"
-        value_template: "{{ is_state('vacuum.downstairs', 'on') }}"
-        turn_on:
-          service: 'vacuum.start'
-          data:
-            entity_id: 'vacuum.downstairs'
-        turn_off: 
-          service: 'vacuum.stop'
-          data:
-            entity_id: 'vacuum.downstairs'
-        icon_template: >-
-          {% if is_state('vacuum.downstairs', 'on') %}
-            mdi:broom
-          {% else %}
-            mdi:robot-vacuum
-          {% endif %}
-################################################################################
-# Upstairs Vacuum
-      upstairs_vacuum:
-        friendly_name: "Upstairs Vacuum"
-        value_template: "{{ is_state('vacuum.upstairs', 'on') }}"
-        turn_on:
-          service: 'vacuum.start'
-          data:
-            entity_id: 'vacuum.upstairs'
-        turn_off: 
-          service: 'vacuum.stop'
-          data:
-            entity_id: 'vacuum.upstairs'
-        icon_template: >-
-          {% if is_state('vacuum.upstairs', 'on') %}
-            mdi:broom
-          {% else %}
-            mdi:robot-vacuum
-          {% endif %}
-################################################################################
-
 automation:
-################################################################################
-# Set the above input_booleans to on when the vacuum has been run
-  - id: function_vacuum_downstairs_ran
-    alias: "Function - Vacuum - Downstairs Ran"
-    trigger:
-      - platform: state
-        entity_id: vacuum.downstairs
-        to: "cleaning"
-    action:
-      service: input_boolean.turn_on
-      entity_id: input_boolean.downstairs_vacuum_ran
-  - id: function_vacuum_upstairs_ran
-    alias: "Function - Vacuum - Upstairs Ran"
-    trigger:
-      - platform: state
-        entity_id: vacuum.upstairs
-        to: "cleaning"
-    action:
-      service: input_boolean.turn_on
-      entity_id: input_boolean.upstairs_vacuum_ran
-# Turn off after 24 hours
-  - id: function_vacuum_downstairs_stale
-    alias: "Function - Vacuum - Downstairs Stale"
-    trigger: 
-      - platform: state
-        entity_id: input_boolean.downstairs_vacuum_ran
-        to: "on"
-        for:
-          hours: 24
-    action:
-      service: input_boolean.turn_off
-      entity_id: input_boolean.downstairs_vacuum_ran
-  - id: function_vacuum_upstairs_stale
-    alias: "Function - Vacuum - Upstairs Stale"
-    trigger: 
-      - platform: state
-        entity_id: input_boolean.upstairs_vacuum_ran
-        to: "on"
-        for:
-          hours: 24
-    action:
-      service: input_boolean.turn_off
-      entity_id: input_boolean.upstairs_vacuum_ran
 ################################################################################
 # keep the vacuum going if it complains that it's stuck.
 # We have fairly high pile carpets, and the added resistance against the 
@@ -182,6 +86,8 @@ automation:
         entity_id:
           - vacuum.downstairs
           - vacuum.upstairs
+          - vacuum.downstairs_vacuum
+          - vacuum.upstairs_vacuum
         from: 
           - cleaning
           - returning
@@ -223,7 +129,8 @@ automation:
         entity_id:
           - vacuum.downstairs
           - vacuum.upstairs
-        value_template: "{{ state.attributes.battery_level }}"
+        value_template: >
+          {{ state.attributes.battery_level | int }}
         above: 99
     condition:
       condition: and
@@ -270,16 +177,12 @@ automation:
         at: "05:00:00" # Check every morning at 0500
     condition:
       condition: state
-      entity_id:
-        - input_boolean.downstairs_vacuum_ran
-      state: "off"
-      # condition: state
-      # entity_id: vacuum.downstairs
-      # state: 
-      #   - docked
-      #   - unavailable # Vacuums keep disappearing at around 0300
-      # for:
-      #   hours: 24
+      entity_id: vacuum.downstairs
+      state: 
+        - docked
+        - unavailable # Vacuums keep disappearing at around 0300
+      for:
+        hours: 24
     action:
       - service: vacuum.start
         entity_id: vacuum.downstairs
@@ -290,37 +193,13 @@ automation:
         at: "05:00:00" # Check every morning at 0500
     condition:
       condition: state
-      entity_id:
-        - input_boolean.upstairs_vacuum_ran
-      state: "off"
-      # condition: state
-      # entity_id: vacuum.downstairs
-      # state: 
-      #   - docked
-      #   - unavailable # Vacuums keep disappearing at around 0300
-      # for:
-      #   hours: 24
+      entity_id: vacuum.downstairs
+      state: 
+        - docked
+        - unavailable # Vacuums keep disappearing at around 0300
+      for:
+        hours: 24
     action:
       - service: vacuum.start
         entity_id: vacuum.upstairs
-# # Try to consolidate into a single automation
-#   - id: function_vacuum_daily
-#     alias: "Function - Vacuum - Daily"
-#     trigger:
-#       - platform: time
-#         at: "05:00:00" # Check every morning at 0500
-#     condition:
-#       condition: state
-#       entity_id:
-#         - vacuum.downstairs
-#         - vacuum.upstairs
-#       state: 
-#         - docked
-#         - unavailable # Vacuums keep disappearing at around 0300
-#       for:
-#         hours: 12
-#     action:
-#       - service: vacuum.start
-#         data_template:
-#           entity_id: "{{ trigger.entity_id }}"
 ################################################################################
