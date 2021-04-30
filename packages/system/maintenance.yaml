@@ -16,8 +16,8 @@ automation:
       service: hassio.host_reboot
 ################################################################################
 # Check for certificate renewals weekly
-  - id: system_maintenance_certificate
-    alias: "System - Maintenance - Certificate"
+  - id: system_maintenance_certificate_renewal
+    alias: "System - Maintenance - Certificate Renewal"
     trigger:
       platform: time
       at: "08:00:00"
@@ -25,6 +25,13 @@ automation:
       condition: time
       weekday: sat
     action:
+    - alias: "Wait a random amount of time"
+      delay:
+        minutes: >
+          "{{ range(1, 59) | random }}"
+        seconds: >
+          "{{ range(1, 59) | random }}"
+    - alias: "Start the Let's Encrypt container"
       service: hassio.addon_start
       data:
         addon: core_letsencrypt
