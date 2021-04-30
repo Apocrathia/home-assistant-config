@@ -17,7 +17,7 @@ automation:
         service: script.light_transition
         data:
           entity_id: light.back_yard_string_lights
-          starting_brightness_pct: 25
+          starting_brightness_pct: 5
           ending_brightness_pct: 100
           interval_pct: 5
           transition_time: 3600
