@@ -72,12 +72,6 @@ sensor:
         friendly_name: 'Distance Apart'
         value_template: >-
           {{ distance('person.ian','person.aimee') | round | int }}
-# This was actaually a horribly inacurate idea.
-# {% if states('proximity.aimee') | int > states('proximity.ian') | int %}
-#   {{ states('proximity.aimee') | int - states('proximity.ian') | int }}
-# {% else %}
-#   {{ states('proximity.ian') | int - states('proximity.aimee') | int }}
-# {% endif %}
         unit_of_measurement: mi
 ################################################################################
 
@@ -142,13 +136,6 @@ automation:
               state: "off"
           sequence:
             service: script.location_home
-      # Leaving this as a fallback for now
-      # service: >
-      #   {% if is_state('input_boolean.away_mode', 'off') %}
-      #     script.location_home
-      #   {% elif is_state('input_boolean.away_mode', 'on') %}
-      #     script.location_away
-      #   {% endif %}
 ################################################################################
   - id: function_vacation_ian
     alias: "Function - Vacation - Ian"
@@ -174,22 +161,6 @@ automation:
           sequence:
             - service: input_boolean.turn_on
               entity_id: input_boolean.vacation_ian
-      # service: >
-      #   # Going on vacation
-      #   {% if trigger.to_state > 100 %}
-      #       - service: input_boolean.turn_on
-      #         data:
-      #           entity_id: input_boolean.vacation_ian
-      #       - service: notify.notify
-      #         data_template:
-      #           title: "Vacation Mode Triggered"
-      #           message: >
-      #             "{{ trigger.entity_id }} has turned {{ trigger.to_state }}."
-      #   {% else %}
-      #       - service: input_boolean.turn_off
-      #         data:
-      #           entity_id: input_boolean.vacation_ian
-      #   {% endif %}
 ################################################################################
   - id: function_vacation_aimee
     alias: "Function - Vacation - Aimee"
@@ -215,22 +186,6 @@ automation:
           sequence:
             - service: input_boolean.turn_on
               entity_id: input_boolean.vacation_aimee
-      # service: >
-      #   # Going on vacation
-      #   {% if trigger.to_state > 100 %}
-      #       - service: input_boolean.turn_on
-      #         data:
-      #           entity_id: input_boolean.vacation_aimee
-      #       - service: notify.notify
-      #         data_template:
-      #           title: "Vacation Mode Triggered"
-      #           message: >
-      #             "{{ trigger.entity_id }} has turned {{ trigger.to_state }}."
-      #   {% else %}
-      #       - service: input_boolean.turn_off
-      #         data:
-      #           entity_id: input_boolean.vacation_aimee
-      #   {% endif %}
 ################################################################################
   - id: function_vacation_detection
     alias: "Function - Vacation - Detection"
@@ -253,13 +208,6 @@ automation:
           sequence:
             - service: input_boolean.turn_on
               entity_id: input_boolean.vacation_mode
-      # service: >
-      #   {% if is_state('group.vacation', 'off') %}
-      #     input_boolean.turn_off
-      #   {% elif is_state('group.vacation', 'on') %}
-      #     input_boolean.turn_on
-      #   {% endif %}
-      # entity_id: input_boolean.vacation_mode
 ################################################################################
   - id: function_vacation_scripts
     alias: "Function - Vacation - Scripts"
@@ -280,12 +228,6 @@ automation:
               state: "on"
           sequence:
             - service: script.vacation_mode_on
-      # service: >
-      #   {% if is_state('input_boolean.vacation_mode', 'off') %}
-      #     script.vacation_mode_on
-      #   {% elif is_state('input_boolean.vacation_mode', 'on') %}
-      #     script.vacation_mode_off
-      #   {% endif %}
 ################################################################################
 
 # Scripts
