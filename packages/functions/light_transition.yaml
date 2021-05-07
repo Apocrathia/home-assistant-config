@@ -54,6 +54,19 @@ script:
                 / count | float ) | round | int )  }}
           delay: >
             {{ (( transition_time | float ) / count ) | round | int }}
+      - alias: "Set initial brightness"
+        service: >
+          {% if starting_brightness_pct | float < 5 %}
+            light.turn_off
+          {% else %}
+            light.turn_on
+          {% endif %}
+        target:
+          entity_id: >
+            {{ entity_id }}
+        data:
+          brightness_pct: >
+            {{ starting_brightness_pct | float }}
       - alias: "Execute the loop"
         repeat:
           count: >
