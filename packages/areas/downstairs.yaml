@@ -1,8 +1,8 @@
 ---
 ### Downstairs ###
 automation:
-################################################################################
-# Turn on the downstairs hallway lights when it gets dark
+  ################################################################################
+  # Turn on the downstairs hallway lights when it gets dark
   - id: area_downstairs_hallway_lights_dusk
     alias: 'Area - Downstairs - Hallway Lights (Dusk)'
     trigger:

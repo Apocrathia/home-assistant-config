@@ -1,5 +1,4 @@
 ---
-
 yaml-files:
   - '*.yaml'
   - '*.yml'
@@ -20,19 +19,20 @@ rules:
   empty-lines: enable
   empty-values: disable
   hyphens: enable
-  indentation: 
+  indentation:
     level: warning
   key-duplicates: enable
   key-ordering: disable
-  line-length: 
+  line-length:
+    max: 100
     level: warning
-  new-line-at-end-of-file: 
+  new-line-at-end-of-file:
     level: warning
-  new-lines: 
+  new-lines:
     level: warning
   octal-values: disable
   quoted-strings: disable
-  trailing-spaces: 
+  trailing-spaces:
     level: warning
   truthy:
     level: warning

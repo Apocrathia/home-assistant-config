@@ -5,7 +5,7 @@
 ################################################################################
 automation:
   - id: area_master_bedroom_humidifer_low
-    alias: "Area - Master Bedroom - Humidifer Low"
+    alias: 'Area - Master Bedroom - Humidifer Low'
     trigger:
       - platform: numeric_state
         entity_id: fan.master_bedroom_humidifier
@@ -16,35 +16,35 @@ automation:
       # flag as true even if the unit is full.
       # - platform: template
       #   value_template: >
-      #     {{ ( state_attr('fan.master_bedroom_humidifier', 'dry') 
+      #     {{ ( state_attr('fan.master_bedroom_humidifier', 'dry')
       #           == true ) }}
     action:
-      - alias: "Keep harassing us until the unit is filled back up"
+      - alias: 'Keep harassing us until the unit is filled back up'
         repeat:
-          while:      
-          - condition: numeric_state
-            entity_id: fan.master_bedroom_humidifier
-            value_template: >
-              {{ state_attr('fan.master_bedroom_humidifier', 'depth') | int }}
-            below: 20
+          while:
+            - condition: numeric_state
+              entity_id: fan.master_bedroom_humidifier
+              value_template: >
+                {{ state_attr('fan.master_bedroom_humidifier', 'depth') | int }}
+              below: 20
           sequence:
-          - alias: "choose alias (name)"
-            choose:
-            - conditions:
-                condition: state
-                entity_id: group.people
-                state: "home"
-              sequence:
-              - service: notify.notify
-                data:
-                  title: "Master Bedroom Humidifer Low"
-                  message: "Please refill"
-            - conditions:
-                condition: state
-                entity_id: group.people
-                state: "away"
-              sequence:
-                - alias: "Wait until we're home"
-                - delay:
-                    hours: 1
+            - alias: 'choose alias (name)'
+              choose:
+                - conditions:
+                    condition: state
+                    entity_id: group.people
+                    state: 'home'
+                  sequence:
+                    - service: notify.notify
+                      data:
+                        title: 'Master Bedroom Humidifer Low'
+                        message: 'Please refill'
+                - conditions:
+                    condition: state
+                    entity_id: group.people
+                    state: 'away'
+                  sequence:
+                    - alias: "Wait until we're home"
+                    - delay:
+                        hours: 1
 ################################################################################

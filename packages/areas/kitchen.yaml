@@ -1,27 +1,27 @@
 ---
 ### Kitchen ###
-  
+
 automation:
-################################################################################
+  ################################################################################
   - id: area_kitchen_pantry_open
-    alias: "Area - Kitchen - Pantry Light (Open)"
+    alias: 'Area - Kitchen - Pantry Light (Open)'
     trigger:
       - platform: state
         entity_id: binary_sensor.kitchen_pantry_door
-        to: "on"
+        to: 'on'
     action:
       service: light.turn_on
       data:
         entity_id: light.kitchen_pantry
         transition: 3
         brightness_pct: 100
-################################################################################
+  ################################################################################
   - id: area_kitchen_pantry_closed
-    alias: "Area - Kitchen - Pantry Light (Closed)"
+    alias: 'Area - Kitchen - Pantry Light (Closed)'
     trigger:
       - platform: state
         entity_id: binary_sensor.kitchen_pantry_door
-        to: "off"
+        to: 'off'
     action:
       service: light.turn_off
       data:

@@ -8,9 +8,8 @@ input_boolean:
     name: Party Lights
     icon: mdi:party-popper
 
-
 automation:
-################################################################################
+  ################################################################################
   - id: party_lights
     # Going to leave this off for now. Using Node-Red for the loop.
     # The lights that I currently have lack a colorloop effect, so this is an
@@ -24,7 +23,7 @@ automation:
         - light.front_porch_right
         - light.outdoor_garage_left
         - light.outdoor_garage_right
-      colors: 
+      colors:
         - Red
         - Orange
         - Yellow
@@ -38,35 +37,35 @@ automation:
         to: 'on'
     action:
       repeat:
-    # Turn each light on to scroll colors across the house
-    # Manually specify colors, as current lights do not support colorloop effect
+        # Turn each light on to scroll colors across the house
+        # Manually specify colors, as current lights do not support colorloop effect
         sequence:
-            - service: light.turn_on
-              data:
-                entity_id: light.front_porch_left
-                effect: colorloop
-                brightness_pct: 100
-            - delay:
-                seconds: 2
-            - service: light.turn_on
-              data:
-                entity_id: light.front_porch_right
-                effect: colorloop
-                brightness_pct: 100
-            - delay:
-                seconds: 2
-            - service: light.turn_on
-              data:
-                entity_id: light.outdoor_garage_left
-                effect: colorloop
-                brightness_pct: 100
-            - delay:
-                seconds: 2
-            - service: light.turn_on
-              data:
-                entity_id: light.outdoor_garage_right
-                effect: colorloop
-                brightness_pct: 100
+          - service: light.turn_on
+            data:
+              entity_id: light.front_porch_left
+              effect: colorloop
+              brightness_pct: 100
+          - delay:
+              seconds: 2
+          - service: light.turn_on
+            data:
+              entity_id: light.front_porch_right
+              effect: colorloop
+              brightness_pct: 100
+          - delay:
+              seconds: 2
+          - service: light.turn_on
+            data:
+              entity_id: light.outdoor_garage_left
+              effect: colorloop
+              brightness_pct: 100
+          - delay:
+              seconds: 2
+          - service: light.turn_on
+            data:
+              entity_id: light.outdoor_garage_right
+              effect: colorloop
+              brightness_pct: 100
         until:
           - condition: state
             entity_id: binary_sensor.party_lights
@@ -74,7 +73,7 @@ automation:
 ################################################################################
 
 script:
-################################################################################
+  ################################################################################
   annoying_lights:
     alias: 'Annoy Aimee'
     sequence:

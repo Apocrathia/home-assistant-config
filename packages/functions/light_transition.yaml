@@ -12,7 +12,7 @@
 ###############################################################################
 script:
   light_transition:
-    alias: "Function - Light - Transition"
+    alias: 'Function - Light - Transition'
     description: |
       This script will transition a light based upon a set of given parameters.
       Most Z-Wave dimmer switches don't support any sort of transition effects. 
@@ -21,22 +21,22 @@ script:
       done and why it's something most Z-wave devices don't normally support.
     fields:
       entity_id:
-        description: "The light object for the script to act upon."
-        example: "light.living_room"
+        description: 'The light object for the script to act upon.'
+        example: 'light.living_room'
       starting_brightness_pct:
-        description: "Where the light should initially be set to. 0-100"
-        example: "25"
+        description: 'Where the light should initially be set to. 0-100'
+        example: '25'
       ending_brightness_pct:
-        description: "Where the light should end up. 0-100"
-        example: "100"
+        description: 'Where the light should end up. 0-100'
+        example: '100'
       interval_pct:
-        description: "How large of a step to take. 0-100"
-        example: "20"
+        description: 'How large of a step to take. 0-100'
+        example: '20'
       transition_time:
-        description: "How long does the transition take? (in seconds)"
-        example: "300"
+        description: 'How long does the transition take? (in seconds)'
+        example: '300'
     sequence:
-      - alias: "Setup loop parameters"
+      - alias: 'Setup loop parameters'
         variables:
           starting_brightness: >
             {{ ((( starting_brightness_pct | float * 255 ) 
@@ -54,7 +54,7 @@ script:
                 / count | float ) | round | int )  }}
           delay: >
             {{ (( transition_time | float ) / count ) | round | int }}
-      - alias: "Set initial brightness"
+      - alias: 'Set initial brightness'
         service: >
           {% if starting_brightness_pct | float < 5 %}
             light.turn_off
@@ -64,9 +64,9 @@ script:
       # Some light switches, like the GE/Jasco Z-Wave switches, are trash and
       # can't do what they were told the first time around, so we have to tell
       # them again.
-      - alias: "Brief delay"
+      - alias: 'Brief delay'
         delay: 1
-      - alias: "Set initial brightness"
+      - alias: 'Set initial brightness'
         service: >
           {% if starting_brightness_pct | float < 5 %}
             light.turn_off
@@ -79,16 +79,16 @@ script:
         data:
           brightness_pct: >
             {{ starting_brightness_pct | float }}
-      - alias: "Execute the loop"
+      - alias: 'Execute the loop'
         repeat:
           count: >
             {{ count }}
           sequence:
-            - alias: "Loop-local Variables"
+            - alias: 'Loop-local Variables'
               variables:
                 next_step: >
                   {{ starting_brightness + ( step * repeat.index ) }}
-            - alias: "Change the brightness"
+            - alias: 'Change the brightness'
               service: >
                 {% if next_step <= 5 %}
                   light.turn_off
@@ -96,14 +96,14 @@ script:
                   light.turn_on
                 {% endif %}
               target:
-                entity_id: "{{ entity_id }}"
+                entity_id: '{{ entity_id }}'
               data:
-                brightness_step: "{{ step }}"
-            - alias: "And now we wait..."
-              delay: 
+                brightness_step: '{{ step }}'
+            - alias: 'And now we wait...'
+              delay:
                 seconds: >
                   {{ delay }}
-      - alias: "Set final brightness"
+      - alias: 'Set final brightness'
         service: >
           {% if ending_brightness_pct | float <= 5 %}
             light.turn_off
@@ -116,6 +116,7 @@ script:
         data:
           brightness_pct: >
             {{ ending_brightness_pct | float }}
+
 ###############################################################################
 # Saving the testing template that I used to debug this.
 
@@ -141,18 +142,18 @@ script:
 
 # variables:
 #   starting_brightness: >
-#     {{ ((( starting_brightness_pct | float * 255 ) 
+#     {{ ((( starting_brightness_pct | float * 255 )
 #         / 100 ) | round | int ) }}
 #   ending_brightness: >
-#     {{ ((( ending_brightness_pct | float * 255) 
+#     {{ ((( ending_brightness_pct | float * 255)
 #         / 100) | round | int ) }}
 #   interval: >
 #     {{ (( interval_pct | float * 255 ) / 100 ) | int }}
 #   count: >
-#     {{ ((( ending_brightness | float - starting_brightness | float ) 
+#     {{ ((( ending_brightness | float - starting_brightness | float )
 #         / interval | float ) | abs | round | int ) }}
 #   step: >
-#     {{ ((( ending_brightness | float - starting_brightness | float ) 
+#     {{ ((( ending_brightness | float - starting_brightness | float )
 #         / count | float ) | round | int )  }}
 #   delay: >
 #     {{ (( transition_time | float ) / count ) | round | int }}

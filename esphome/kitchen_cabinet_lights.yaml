@@ -45,7 +45,7 @@ ota:
 # Configuration entry
 light:
   - platform: rgb
-    name: "Kitchen Cabinet Lights"
+    name: 'Kitchen Cabinet Lights'
     red: output_red
     green: output_green
     blue: output_blue

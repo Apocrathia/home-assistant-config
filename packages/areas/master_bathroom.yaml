@@ -16,24 +16,24 @@ binary_sensor:
   - platform: template
     sensors:
       master_bathroom_humidity_high:
-        friendly_name: "Master Bathroom Humidity High"
+        friendly_name: 'Master Bathroom Humidity High'
         value_template: >
           {{ ( float(states.input_number.master_bathroom_humidity_threshold.state)
             < float(states.sensor.master_bathroom_humidity.state) ) }}
 
 # Automations
 automation:
-################################################################################
-# Turn on the fan when someone is in the shower. 
+  ################################################################################
+  # Turn on the fan when someone is in the shower.
   - id: area_master_bathroom_humidity_high
     alias: 'Area - Master Bathroom - Humidity High'
     trigger:
       platform: state
       entity_id:
         - binary_sensor.master_bathroom_humidity_high
-      from: "off"
-      to: "on"
-      for: 
+      from: 'off'
+      to: 'on'
+      for:
         seconds: 10
     action:
       - service: switch.turn_on
@@ -42,19 +42,19 @@ automation:
       - service: light.turn_on
         data:
           entity_id: light.master_bathroom_shower_lights
-################################################################################
+  ################################################################################
   - id: area_master_bathroom_humidity_low
     alias: 'Area - Master Bathroom - Humidity Low'
     trigger:
       platform: state
       entity_id:
         - binary_sensor.master_bathroom_humidity_high
-      from: "on"
-      to: "off"
+      from: 'on'
+      to: 'off'
       for:
         seconds: 10
     condition:
-    # Only execute if the toilet door is already open
+      # Only execute if the toilet door is already open
       condition: state
       entity_id:
         - binary_sensor.master_bathroom_toilet_door
@@ -68,31 +68,31 @@ automation:
       - service: light.turn_off
         data:
           entity_id: light.master_bathroom_shower_lights
-################################################################################
-# Turn on the fan when the shitter closet door is closed.
+  ################################################################################
+  # Turn on the fan when the shitter closet door is closed.
   - id: area_master_bathroom_toilet_door_closed
     alias: 'Area - Master Bathroom - Toilet Door Closed'
     trigger:
       platform: state
       entity_id:
         - binary_sensor.master_bathroom_toilet_door
-      from: "on"
-      to: "off"
+      from: 'on'
+      to: 'off'
       for:
         seconds: 10
     action:
       - service: switch.turn_on
         data:
           entity_id: switch.master_bathroom_fan
-################################################################################
+  ################################################################################
   - id: area_master_bathroom_toilet_door_open
     alias: 'Area - Master Bathroom - Toilet Door Open'
     trigger:
       platform: state
       entity_id:
         - binary_sensor.master_bathroom_toilet_door
-      from: "off"
-      to: "on"
+      from: 'off'
+      to: 'on'
       for:
         seconds: 10
     condition:

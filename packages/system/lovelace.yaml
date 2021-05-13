@@ -3,9 +3,9 @@
 
 # Credit to github.com/basnijholt/home-assistant-config
 
-# Commenting out for now. The filesize sensor does not want to work with 
-# the Lovelace JSON file, and I don't want to expose it 
-# via allowlist_external_dirs 
+# Commenting out for now. The filesize sensor does not want to work with
+# the Lovelace JSON file, and I don't want to expose it
+# via allowlist_external_dirs
 
 # sensor:
 #   - platform: filesize

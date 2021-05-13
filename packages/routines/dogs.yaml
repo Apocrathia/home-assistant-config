@@ -1,10 +1,10 @@
 ---
-### Dogs ### 
+### Dogs ###
 
 # Feed the dogs (@ & 15 minutes before 0800, 1200, & 1600)
-          # Add inputs for this later.
-          # 3 input datetime's & 1 input number
-          # This could be done as a single automation with a template
+# Add inputs for this later.
+# 3 input datetime's & 1 input number
+# This could be done as a single automation with a template
 ### Inputs ###
 input_datetime:
   dogs_meal_breakfast:
@@ -47,7 +47,7 @@ input_number:
 sensor:
   - platform: template
     sensors:
-# Breakfast
+      # Breakfast
       dogs_meal_breakfast:
         friendly_name: Dogs - Meal - Breakfast
         value_template: >
@@ -72,7 +72,7 @@ sensor:
             int + states.input_number.dogs_meal_duration.state | int * 60 + 
             states.input_number.dogs_meal_relief.state | int * 60 * 60) |
             timestamp_custom("%H:%M",False)) }}
-# Lunch
+      # Lunch
       dogs_meal_lunch:
         friendly_name: Dogs - Meal - Lunch
         value_template: >
@@ -97,7 +97,7 @@ sensor:
             int + states.input_number.dogs_meal_duration.state | int * 60 + 
             states.input_number.dogs_meal_relief.state | int * 60 * 60) |
             timestamp_custom("%H:%M",False)) }}
-# Dinner
+      # Dinner
       dogs_meal_dinner:
         friendly_name: Dogs - Meal - Dinner
         value_template: >
@@ -124,7 +124,7 @@ sensor:
             timestamp_custom("%H:%M",False)) }}
 
 automation:
-################################################################################
+  ################################################################################
   - id: routine_dogs_breakfast
     alias: Routine - Dogs - Breakfast
     trigger:
@@ -141,7 +141,7 @@ automation:
         data:
           title: It's Breakfast Time!
           message: Get up and go feed the dogs!
-################################################################################
+  ################################################################################
   - id: routine_dogs_breakfast_upcoming
     alias: Routine - Dogs - Breakfast (Upcoming)
     trigger:
@@ -158,7 +158,7 @@ automation:
         data:
           title: It's Almost Breakfast Time!
           message: Get ready to get up and go feed the dogs!
-################################################################################
+  ################################################################################
   - id: routine_dogs_breakfast_relief
     alias: Routine - Dogs - Breakfast (Relief)
     trigger:
@@ -175,7 +175,7 @@ automation:
         data:
           title: Take The Dogs Out!
           message: Time to empty the dogs!
-################################################################################
+  ################################################################################
   - id: routine_dogs_lunch
     alias: Routine - Dogs - Lunch
     trigger:
@@ -192,7 +192,7 @@ automation:
         data:
           title: It's Lunch Time!
           message: Get up and go feed the dogs!
-################################################################################
+  ################################################################################
   - id: routine_dogs_lunch_upcoming
     alias: Routine - Dogs - Lunch (Upcoming)
     trigger:
@@ -209,7 +209,7 @@ automation:
         data:
           title: It's Almost Lunch Time!
           message: Get ready to get up and go feed the dogs!
-################################################################################
+  ################################################################################
   - id: routine_dogs_lunch_relief
     alias: Routine - Dogs - Lunch (Relief)
     trigger:
@@ -226,7 +226,7 @@ automation:
         data:
           title: Take The Dogs Out!
           message: Time to empty the dogs!
-################################################################################
+  ################################################################################
   - id: routine_dogs_dinner
     alias: Routine - Dogs - Dinner
     trigger:
@@ -243,7 +243,7 @@ automation:
         data:
           title: It's Dinner Time!
           message: Get up and go feed the dogs!
-################################################################################
+  ################################################################################
   - id: routine_dogs_dinner_upcoming
     alias: Routine - Dogs - Dinner (Upcoming)
     trigger:
@@ -260,7 +260,7 @@ automation:
         data:
           title: It's Almost Dinner Time!
           message: Get ready to get up and go feed the dogs!
-################################################################################
+  ################################################################################
   - id: routine_dogs_dinner_relief
     alias: Routine - Dogs - Dinner (Relief)
     trigger:

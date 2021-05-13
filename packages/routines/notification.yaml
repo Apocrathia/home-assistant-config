@@ -2,19 +2,19 @@
 ## Routine Notifications ##
 
 automation:
-################################################################################
-- id: routine_notification_trash
-  alias: 'Routine - Notification - Trash Pickup'
-  trigger:
-    platform: template
-    value_template: >
-      {{ 
-        (now().weekday() == 1) and
-        (now().time().hour == 19) and
-        (now().time().minute == 0) 
-      }}
-  action:
-    service: notify.notify
-    data:
-      message: 'Trash pickup is tomorrow! Pull the bin to the curb!'
+  ################################################################################
+  - id: routine_notification_trash
+    alias: 'Routine - Notification - Trash Pickup'
+    trigger:
+      platform: template
+      value_template: >
+        {{ 
+          (now().weekday() == 1) and
+          (now().time().hour == 19) and
+          (now().time().minute == 0) 
+        }}
+    action:
+      service: notify.notify
+      data:
+        message: 'Trash pickup is tomorrow! Pull the bin to the curb!'
 ################################################################################

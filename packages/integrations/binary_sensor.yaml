@@ -6,7 +6,7 @@ binary_sensor:
   - platform: workday
     name: workday
     country: US
-    
+
   # Worknight
   - platform: workday
     name: worknight

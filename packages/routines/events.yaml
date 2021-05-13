@@ -9,12 +9,12 @@
 # - Green lights for St. Patrick's Day
 
 automation:
-################################################################################
+  ################################################################################
   - id: routine_events_game_night
     alias: 'Routine - Events - Game Night'
     trigger:
       - platform: time
-        at: "18:00:00"
+        at: '18:00:00'
     condition:
       condition: and
       conditions:
@@ -37,19 +37,19 @@ automation:
       - service: input_boolean.turn_on
         entity_id: input_boolean.party_lights
       - delay:
-        # Turn it off at midnight. 6 hours. 360 minutes.
+          # Turn it off at midnight. 6 hours. 360 minutes.
           minutes: 360
       - service: input_boolean.turn_off
         entity_id: input_boolean.party_lights
 ################################################################################
 
 script:
-################################################################################
+  ################################################################################
   notification_party_mode:
-    alias: "Notification - Party Mode"
+    alias: 'Notification - Party Mode'
     sequence:
       - service: media_player.volume_set
-        entity_id: 
+        entity_id:
           - media_player.downstairs_thermostat
           - media_player.upstairs_thermostat
           - media_player.ian_s_echo_dot
@@ -59,7 +59,7 @@ script:
         data:
           data:
             type: tts
-          target: 
+          target:
             - media_player.downstairs_thermostat
             - media_player.upstairs_thermostat
             - media_player.ian_s_echo_dot

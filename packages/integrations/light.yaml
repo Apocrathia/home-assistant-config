@@ -1,7 +1,7 @@
 ---
 ### Light ###
 
-light:  
+light:
   # Groups
   - platform: group
     name: Outdoor Lights

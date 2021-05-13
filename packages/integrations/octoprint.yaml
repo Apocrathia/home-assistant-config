@@ -37,7 +37,6 @@ camera:
     name: OctoPrint CR-6 SE
     still_image_url: http://octopi-cr6.apocrathia.com/webcam/?action=snapshot
     stream_source: http://octopi-cr6.apocrathia.com/webcam/?action=stream
-
 # Automation ideas
 # - Announce when a print is done
 # - Turn on room lights when printing (For Octolapse and TSD)

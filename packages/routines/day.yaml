@@ -32,7 +32,7 @@ input_number:
 ################################################################################
 
 sensor:
-################################################################################
+  ################################################################################
   - platform: template
     sensors:
       morning:
@@ -62,9 +62,8 @@ sensor:
           {{ (as_timestamp(states.sun.sun.attributes.next_dawn) | int |
               timestamp_custom("%H:%M", True)) }}
 ################################################################################
-
 automation:
-################################################################################
+  ################################################################################
   - id: routine_day_outdoor_lights
     alias: 'Routine - Day - Outdoor Lights'
     trigger:
@@ -81,9 +80,9 @@ automation:
         # data_template:
         #   transition: >
         #     {{ (states.sensor.daytime_lighting_transition.state | int) }}
-################################################################################
+  ################################################################################
 
-################################################################################
+  ################################################################################
   - id: routine_day_night_lights
     alias: 'Routine - Day - Night Lights'
     trigger:
@@ -100,9 +99,9 @@ automation:
         # data_template:
         #   transition: >
         #     {{ (states.sensor.daytime_lighting_transition.state | int) }}
-################################################################################
+  ################################################################################
 
-################################################################################
+  ################################################################################
   # - id: routine_day_kitchen_cabinet_lights
   #   alias: 'Routine - Day - Kitchen Cabnet Lights'
   #   trigger:
@@ -115,21 +114,21 @@ automation:
   #       data_template:
   #         transition: >
   #           {{ (states.sensor.daytime_lighting_transition.state | int) }}
-################################################################################
+  ################################################################################
 
-# I realize this automation will be a little redundant, but it's just in case I
-# forget to turn shit off, or another automation fails.
-################################################################################
+  # I realize this automation will be a little redundant, but it's just in case I
+  # forget to turn shit off, or another automation fails.
+  ################################################################################
   - id: routine_day_lighting_off
     alias: 'Routine - Day - Turn Off Lights After Sunrise'
     trigger:
       - platform: sun
         event: sunrise
-        offset: "01:00:00"
+        offset: '01:00:00'
     action:
       - service: light.turn_off
         data:
-          entity_id: 
+          entity_id:
             - light.indoor_lights
             - light.outdoor_lights
         # data_template:

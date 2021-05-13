@@ -61,7 +61,7 @@
 #     value_template: 'OK'
 #     scan_interval: 5
 
-# Keep the database from getting out of control 
+# Keep the database from getting out of control
 # recorder:
 #   exclude:
 #     entities:
@@ -74,13 +74,13 @@
 # https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card
 
 automation:
-################################################################################
-# keep the vacuum going if it complains that it's stuck.
-# We have fairly high pile carpets, and the added resistance against the 
-# brush is typically percieved as something being caught in the brush.
-# To work around this, we just tell the vacuum to keep going.
+  ################################################################################
+  # keep the vacuum going if it complains that it's stuck.
+  # We have fairly high pile carpets, and the added resistance against the
+  # brush is typically percieved as something being caught in the brush.
+  # To work around this, we just tell the vacuum to keep going.
   - id: function_vacuum_restart
-    alias: "Function - Vacuum - Restart"
+    alias: 'Function - Vacuum - Restart'
     trigger:
       - platform: state
         entity_id:
@@ -88,42 +88,42 @@ automation:
           - vacuum.upstairs
           - vacuum.downstairs_vacuum
           - vacuum.upstairs_vacuum
-        from: 
+        from:
           - cleaning
           - returning
-        to: 
+        to:
           - error
           - idle
-        for: 
+        for:
           seconds: 30
     action:
       #  This hasn't seemed to work, so let me make sure the template works
       - service: notify.notify
         data_template:
-          title: "{{ trigger.attributes.friendly_name }} has gotten stuck"
+          title: '{{ trigger.attributes.friendly_name }} has gotten stuck'
           message: >
             I'm going to tell it to get back to work.
             You might want to check on it.
       - choose:
-        - conditions:
-            - condition: template
-              value_template: "{{ trigger.from == 'cleaning' }}"
-          sequence:
-            - service: vacuum.start
-              data_template:
-                entity_id: "{{ trigger.entity_id }}"
-        - conditions:
-            - condition: template
-              value_template: "{{ trigger.from == 'returning' }}"
-          sequence:
-            - service: vacuum.return_to_base
-              data_template:
-                entity_id: "{{ trigger.entity_id }}"
-################################################################################
-# While we're out of the house, keep sending the vacuum out as soon as it's
-# reached a full charge. This may or may not end well.
+          - conditions:
+              - condition: template
+                value_template: "{{ trigger.from == 'cleaning' }}"
+            sequence:
+              - service: vacuum.start
+                data_template:
+                  entity_id: '{{ trigger.entity_id }}'
+          - conditions:
+              - condition: template
+                value_template: "{{ trigger.from == 'returning' }}"
+            sequence:
+              - service: vacuum.return_to_base
+                data_template:
+                  entity_id: '{{ trigger.entity_id }}'
+  ################################################################################
+  # While we're out of the house, keep sending the vacuum out as soon as it's
+  # reached a full charge. This may or may not end well.
   - id: function_vacuum_continue
-    alias: "Function - Vacuum - Continue"
+    alias: 'Function - Vacuum - Continue'
     trigger:
       - platform: numeric_state
         entity_id:
@@ -147,11 +147,11 @@ automation:
       - delay: 0:30
       - service: 'vacuum.start'
         data_template:
-          entity_id: "{{ trigger.entity_id }}"
-################################################################################
-# Every now and then the vacuums seem to get stuck or can't find the dock, and
-# they just give up really easily. Re-sending a go-to dock command usually works
-# So, we'll do that automatically if it's been sitting idle for 5 minutes.
+          entity_id: '{{ trigger.entity_id }}'
+  ################################################################################
+  # Every now and then the vacuums seem to get stuck or can't find the dock, and
+  # they just give up really easily. Re-sending a go-to dock command usually works
+  # So, we'll do that automatically if it's been sitting idle for 5 minutes.
   # - id: function_vacuum_idle
   #   alias: "Function - Vacuum - Idle"
   #   trigger:
@@ -166,19 +166,19 @@ automation:
   #     - service: 'vacuum.start' # Just keep cleaning
   #       data_template:
   #         entity_id: "{{ trigger.entity_id }}"
-################################################################################
-# Because nobody is leaving the house thanks to the current pandemic, our vacuum
-# cleaners have barely run lately. This automation will check every morning to 
-# see if the vacuum has run within the last 24 hours. If not, send it out.
+  ################################################################################
+  # Because nobody is leaving the house thanks to the current pandemic, our vacuum
+  # cleaners have barely run lately. This automation will check every morning to
+  # see if the vacuum has run within the last 24 hours. If not, send it out.
   - id: function_vacuum_daily_downstairs
-    alias: "Function - Vacuum - Daily (Downstairs)"
+    alias: 'Function - Vacuum - Daily (Downstairs)'
     trigger:
       - platform: time
-        at: "05:00:00" # Check every morning at 0500
+        at: '05:00:00' # Check every morning at 0500
     condition:
       condition: state
       entity_id: vacuum.downstairs
-      state: 
+      state:
         - docked
         - unavailable # Vacuums keep disappearing at around 0300
       for:
@@ -187,14 +187,14 @@ automation:
       - service: vacuum.start
         entity_id: vacuum.downstairs
   - id: function_vacuum_daily_upstairs
-    alias: "Function - Vacuum - Daily (Upstairs)"
+    alias: 'Function - Vacuum - Daily (Upstairs)'
     trigger:
       - platform: time
-        at: "05:00:00" # Check every morning at 0500
+        at: '05:00:00' # Check every morning at 0500
     condition:
       condition: state
       entity_id: vacuum.downstairs
-      state: 
+      state:
         - docked
         - unavailable # Vacuums keep disappearing at around 0300
       for:

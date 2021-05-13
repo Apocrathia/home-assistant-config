@@ -60,16 +60,16 @@ sensor:
               int * 60)/2 )) | timestamp_custom("%H:%M",False)) }}
 
 automation:
-################################################################################
+  ################################################################################
   - id: function_wakeup_bedroom_light
     alias: 'Function - Wakeup - Bedroom Light'
     trigger:
-    - platform: template
-      value_template: >
-        {{ (states.sensor.time.state == 
-            states.sensor.wakeup_alarm_start_time.state) }}
-    - platform: time
-      at: input_datetime.wakeup_time
+      - platform: template
+        value_template: >
+          {{ (states.sensor.time.state == 
+              states.sensor.wakeup_alarm_start_time.state) }}
+      - platform: time
+        at: input_datetime.wakeup_time
     condition:
       condition: and
       conditions:
@@ -83,66 +83,65 @@ automation:
           entity_id: group.people
           state: home
     action:
-    - service: light.turn_on
-      data:
-        entity_id: light.master_bedroom_floor_lamp
-        profile: energize
-        brightness_pct: 100
-      data_template:
-        transition: >
-          {{ states.input_number.wakeup_duration.state | multiply(60) | int }}
-    - service: script.light_transition
-      data:
-        entity_id: light.master_bedroom_table_lamps
-        starting_brightness_pct: 0
-        ending_brightness_pct: 100
-        interval_pct: 10
-        transition_time: >
-          {{ states.input_number.wakeup_duration.state | multiply(60) | int }}
-################################################################################
-
-################################################################################
+      - service: light.turn_on
+        data:
+          entity_id: light.master_bedroom_floor_lamp
+          profile: energize
+          brightness_pct: 100
+        data_template:
+          transition: >
+            {{ states.input_number.wakeup_duration.state | multiply(60) | int }}
+      - service: script.light_transition
+        data:
+          entity_id: light.master_bedroom_table_lamps
+          starting_brightness_pct: 0
+          ending_brightness_pct: 100
+          interval_pct: 10
+          transition_time: >
+            {{ states.input_number.wakeup_duration.state | multiply(60) | int }}
+  ################################################################################
+  ################################################################################
   - id: function_wakeup_apple_tv
     alias: 'Function - Wakeup - Apple TV'
     trigger:
-    - platform: template
-      value_template: >
-        {{ (states.sensor.time.state == 
-            states.sensor.wakeup_alarm_midpoint.state) }}
+      - platform: template
+        value_template: >
+          {{ (states.sensor.time.state == 
+              states.sensor.wakeup_alarm_midpoint.state) }}
     condition:
-        condition: and
-        conditions:
-          - condition: state
-            entity_id: binary_sensor.workday
-            state: 'on'
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.workday
+          state: 'on'
     action:
       service: script.function_alarm_clock
-################################################################################
+  ################################################################################
   - id: function_wakeup_vacuum
     alias: 'Function - Wakeup - Vacuum'
     trigger:
-    - platform: time
-      at: input_datetime.wakeup_time
+      - platform: time
+        at: input_datetime.wakeup_time
     condition:
-        condition: and
-        conditions:
-          - condition: state
-            entity_id: binary_sensor.workday
-            state: 'on'
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.workday
+          state: 'on'
     action:
-    - service: vacuum.start
-      data:
-        entity_id: 
-          - vacuum.downstairs
-          - vacuum.upstairs
+      - service: vacuum.start
+        data:
+          entity_id:
+            - vacuum.downstairs
+            - vacuum.upstairs
 ################################################################################
 
 script:
-################################################################################
+  ################################################################################
   function_wakeup_apple_tv:
     alias: 'Function - Wakeup - Apple TV'
     sequence:
-    # Device wakeup
+      # Device wakeup
       - service: remote.send_command
         data:
           entity_id: remote.master_bedroom_apple_tv
@@ -150,7 +149,7 @@ script:
             - menu
       - delay:
           seconds: 15
-    # Go to the home menu
+      # Go to the home menu
       - service: remote.send_command
         data:
           entity_id: remote.master_bedroom_apple_tv
@@ -165,81 +164,81 @@ script:
             - top_menu
       - delay:
           seconds: 1
-    # Now figure out what we're doing
+      # Now figure out what we're doing
       - choose:
-        ############
-        ### Plex ###
-        ############
-        - conditions:
-          - condition: state
-            entity_id: input_select.alarm_type
-            state: 'Plex'
-          sequence:
-            # Should be sitting on the first menu item (Plex)
-            # Open Plex
-            - service: remote.send_command
-              data:
-                entity_id: remote.master_bedroom_apple_tv
-                command:
-                  - select
-            - delay:
-                seconds: 15
-            # Select Apocrathia user account
-            - service: remote.send_command
-              data:
-                entity_id: remote.master_bedroom_apple_tv
-                command:
-                  - select
-            - delay:
-                seconds: 5
-            # Go to news
-            - service: remote.send_command
-              data:
-                entity_id: remote.master_bedroom_apple_tv
-                delay_secs: 0.75
-                command:
-                  - right
-                  - down
-                  - down
-                  - down
-                  - down
-                  - down
-                  - down
-                  - select
-        ############
-        ### News ###
-        ############
-        - conditions:
-          - condition: state
-            entity_id: input_select.alarm_type
-            state: 'News'
-          sequence:
-            # TODO
-            - delay: 00:00:00
-        #############
-        ### Music ###
-        #############
-        - conditions:
-          - condition: state
-            entity_id: input_select.alarm_type
-            state: 'Music'
-          sequence:
-            - service: remote.send_command
-              data:
-                entity_id: remote.master_bedroom_apple_tv
-                command:
-                  # Move down one (Music)
-                  - down
-                  # Open Music
-                  - select
-            - delay:
-                seconds: 15
-            - service: remote.send_command
-              data:
-                entity_id: remote.master_bedroom_apple_tv
-                command:
-                  # Move to first item
-                  - down
-                  # Play
-                  - select
+          ############
+          ### Plex ###
+          ############
+          - conditions:
+              - condition: state
+                entity_id: input_select.alarm_type
+                state: 'Plex'
+            sequence:
+              # Should be sitting on the first menu item (Plex)
+              # Open Plex
+              - service: remote.send_command
+                data:
+                  entity_id: remote.master_bedroom_apple_tv
+                  command:
+                    - select
+              - delay:
+                  seconds: 15
+              # Select Apocrathia user account
+              - service: remote.send_command
+                data:
+                  entity_id: remote.master_bedroom_apple_tv
+                  command:
+                    - select
+              - delay:
+                  seconds: 5
+              # Go to news
+              - service: remote.send_command
+                data:
+                  entity_id: remote.master_bedroom_apple_tv
+                  delay_secs: 0.75
+                  command:
+                    - right
+                    - down
+                    - down
+                    - down
+                    - down
+                    - down
+                    - down
+                    - select
+          ############
+          ### News ###
+          ############
+          - conditions:
+              - condition: state
+                entity_id: input_select.alarm_type
+                state: 'News'
+            sequence:
+              # TODO
+              - delay: 00:00:00
+          #############
+          ### Music ###
+          #############
+          - conditions:
+              - condition: state
+                entity_id: input_select.alarm_type
+                state: 'Music'
+            sequence:
+              - service: remote.send_command
+                data:
+                  entity_id: remote.master_bedroom_apple_tv
+                  command:
+                    # Move down one (Music)
+                    - down
+                    # Open Music
+                    - select
+              - delay:
+                  seconds: 15
+              - service: remote.send_command
+                data:
+                  entity_id: remote.master_bedroom_apple_tv
+                  command:
+                    # Move to first item
+                    - down
+                    # Play
+                    - select
 ################################################################################

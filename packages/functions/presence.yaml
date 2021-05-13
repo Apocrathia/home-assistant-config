@@ -2,19 +2,19 @@
 ### Presence Detection Functionality ###
 
 group:
-################################################################################
+  ################################################################################
   vacation:
     name: Vacation
     entities:
       - input_boolean.vacation_ian
       - input_boolean.vacation_aimee
-################################################################################
+  ################################################################################
   network_phones:
     name: Phones
     entities:
       - device_tracker.network_aimees_iphone
       - device_tracker.network_ians_iphone
-################################################################################
+  ################################################################################
   people:
     name: People
     entities:
@@ -47,14 +47,14 @@ group:
 
 # This will eventually be used for the vacation status
 proximity:
-################################################################################
+  ################################################################################
   ian:
     zone: home
     devices:
       - person.ian
     tolerance: 50
     unit_of_measurement: mi
-################################################################################
+  ################################################################################
   aimee:
     zone: home
     devices:
@@ -64,8 +64,8 @@ proximity:
 ################################################################################
 
 sensor:
-# and this is just because I'll find something funny to do with it.
-################################################################################
+  # and this is just because I'll find something funny to do with it.
+  ################################################################################
   - platform: template
     sensors:
       distance_apart:
@@ -76,7 +76,7 @@ sensor:
 ################################################################################
 
 input_boolean:
-################################################################################
+  ################################################################################
   vacation_ian:
     name: 'Vacation - Ian'
     # initial: off
@@ -96,12 +96,12 @@ input_boolean:
 ################################################################################
 
 automation:
-################################################################################
-# I realize the input boolean seems redundant, but I wanted a simply switch that
-# I could hit in case I wanted to activate an Away Mode, as well as something
-# that could be accessed externally by Node-RED.
+  ################################################################################
+  # I realize the input boolean seems redundant, but I wanted a simply switch that
+  # I could hit in case I wanted to activate an Away Mode, as well as something
+  # that could be accessed externally by Node-RED.
   - id: function_presence_detection
-    alias: "Function - Presence - Detection"
+    alias: 'Function - Presence - Detection'
     trigger:
       - platform: state
         entity_id: group.people
@@ -113,32 +113,32 @@ automation:
           input_boolean.turn_on
         {% endif %}
       entity_id: input_boolean.away_mode
-################################################################################
+  ################################################################################
   - id: function_presence_scripts
-    alias: "Function - Presence - Scripts"
+    alias: 'Function - Presence - Scripts'
     trigger:
       - platform: state
         entity_id: input_boolean.away_mode
     action:
-      - alias: "Determine away_mode state"
+      - alias: 'Determine away_mode state'
         choose:
-        - conditions:
-            - alias: "away_mode = on"
-              condition: state
-              entity_id: input_boolean.away_mode
-              state: "on"
-          sequence:
-            service: script.location_away
-        - conditions:
-            - alias: "away_mode = off"
-              condition: state
-              entity_id: input_boolean.away_mode
-              state: "off"
-          sequence:
-            service: script.location_home
-################################################################################
+          - conditions:
+              - alias: 'away_mode = on'
+                condition: state
+                entity_id: input_boolean.away_mode
+                state: 'on'
+            sequence:
+              service: script.location_away
+          - conditions:
+              - alias: 'away_mode = off'
+                condition: state
+                entity_id: input_boolean.away_mode
+                state: 'off'
+            sequence:
+              service: script.location_home
+  ################################################################################
   - id: function_vacation_ian
-    alias: "Function - Vacation - Ian"
+    alias: 'Function - Vacation - Ian'
     trigger:
       - platform: numeric_state
         entity_id: proximity.ian
@@ -147,23 +147,23 @@ automation:
         for: 01:00:00 # set this just in case we get a fluke proximity reading
     action:
       - choose:
-        - conditions:
-            - condition: numeric_state
-              entity_id: proximity.ian
-              below: 100
-          sequence:
-            - service: input_boolean.turn_off
-              entity_id: input_boolean.vacation_ian
-        - conditions:
-            - condition: numeric_state
-              entity_id: proximity.ian
-              above: 100
-          sequence:
-            - service: input_boolean.turn_on
-              entity_id: input_boolean.vacation_ian
-################################################################################
+          - conditions:
+              - condition: numeric_state
+                entity_id: proximity.ian
+                below: 100
+            sequence:
+              - service: input_boolean.turn_off
+                entity_id: input_boolean.vacation_ian
+          - conditions:
+              - condition: numeric_state
+                entity_id: proximity.ian
+                above: 100
+            sequence:
+              - service: input_boolean.turn_on
+                entity_id: input_boolean.vacation_ian
+  ################################################################################
   - id: function_vacation_aimee
-    alias: "Function - Vacation - Aimee"
+    alias: 'Function - Vacation - Aimee'
     trigger:
       - platform: numeric_state
         entity_id: proximity.aimee
@@ -172,196 +172,196 @@ automation:
         for: 01:00:00
     action:
       - choose:
-        - conditions:
-            - condition: numeric_state
-              entity_id: proximity.aimee
-              below: 100
-          sequence:
-            - service: input_boolean.turn_off
-              entity_id: input_boolean.vacation_aimee
-        - conditions:
-            - condition: numeric_state
-              entity_id: proximity.aimee
-              above: 100
-          sequence:
-            - service: input_boolean.turn_on
-              entity_id: input_boolean.vacation_aimee
-################################################################################
+          - conditions:
+              - condition: numeric_state
+                entity_id: proximity.aimee
+                below: 100
+            sequence:
+              - service: input_boolean.turn_off
+                entity_id: input_boolean.vacation_aimee
+          - conditions:
+              - condition: numeric_state
+                entity_id: proximity.aimee
+                above: 100
+            sequence:
+              - service: input_boolean.turn_on
+                entity_id: input_boolean.vacation_aimee
+  ################################################################################
   - id: function_vacation_detection
-    alias: "Function - Vacation - Detection"
+    alias: 'Function - Vacation - Detection'
     trigger:
       - platform: state
         entity_id: group.vacation
     action:
       - choose:
-        - conditions:
-            - condition: state
-              entity_id: group.vacation
-              state: "off"
-          sequence:
-            - service: input_boolean.turn_off
-              entity_id: input_boolean.vacation_mode
-        - conditions:
-            - condition: state
-              entity_id: group.vacation
-              state: "on"
-          sequence:
-            - service: input_boolean.turn_on
-              entity_id: input_boolean.vacation_mode
-################################################################################
+          - conditions:
+              - condition: state
+                entity_id: group.vacation
+                state: 'off'
+            sequence:
+              - service: input_boolean.turn_off
+                entity_id: input_boolean.vacation_mode
+          - conditions:
+              - condition: state
+                entity_id: group.vacation
+                state: 'on'
+            sequence:
+              - service: input_boolean.turn_on
+                entity_id: input_boolean.vacation_mode
+  ################################################################################
   - id: function_vacation_scripts
-    alias: "Function - Vacation - Scripts"
+    alias: 'Function - Vacation - Scripts'
     trigger:
       - platform: state
         entity_id: input_boolean.vacation_mode
     action:
       - choose:
-        - conditions:
-            - condition: state
-              entity_id: input_boolean.vacation_mode
-              state: "off"
-          sequence:
-            - service: script.vacation_mode_off
-        - conditions:
-            - condition: state
-              entity_id: input_boolean.vacation_mode
-              state: "on"
-          sequence:
-            - service: script.vacation_mode_on
+          - conditions:
+              - condition: state
+                entity_id: input_boolean.vacation_mode
+                state: 'off'
+            sequence:
+              - service: script.vacation_mode_off
+          - conditions:
+              - condition: state
+                entity_id: input_boolean.vacation_mode
+                state: 'on'
+            sequence:
+              - service: script.vacation_mode_on
 ################################################################################
 
 # Scripts
 script:
-################################################################################
+  ################################################################################
   location_away:
     alias: 'Function - Presence - Away'
     sequence:
       # Turn off all of the lights
-    - service: light.turn_off
-      data:
-        entity_id: 
-          - group.indoor_lights
-    - service: switch.turn_off
-      data:
-        entity_id:
-          - switch.garage_lights
-      # Set the thermostats to away
-    - service: climate.set_preset_mode
-      data:
-        entity_id: 
-          - climate.homekit_downstairs
-          - climate.homekit_upstairs
-        preset_mode: 'away'
-      # Set the vacuums to turbo
-    - service: vacuum.set_fan_speed
-      data:
-        entity_id:
-          - vacuum.downstairs
-          - vacuum.upstairs
-        fan_speed: max
-      # Start the vacuum
-    - service: vacuum.start
-      data:
-        entity_id: 
-          - vacuum.downstairs
-          - vacuum.upstairs
-      # Arm the alarm
-    - service: alarm_control_panel.alarm_arm_away
-      data:
-        entity_id: alarm_control_panel.home
-        code: !secret alarm_code
-      # Ensure the doors are locked
-    - service: lock.lock
-      data:
-        entity_id: group.all_locks
-      # Close the garage doors
-    - service: cover.close_cover
-      data:
-        entity_id:
-          - cover.main_garage_door
-          - cover.second_garage_door
-    # Turn up the air purifiers while we're gone
-    - service: xiaomi_miio.fan_set_fan_level
-      data:
-        entity_id: 
-          - fan.master_bedroom_air_purifier
-          # - fan.master_bedroom_humidifier
-        level: 3
+      - service: light.turn_off
+        data:
+          entity_id:
+            - group.indoor_lights
+      - service: switch.turn_off
+        data:
+          entity_id:
+            - switch.garage_lights
+        # Set the thermostats to away
+      - service: climate.set_preset_mode
+        data:
+          entity_id:
+            - climate.homekit_downstairs
+            - climate.homekit_upstairs
+          preset_mode: 'away'
+        # Set the vacuums to turbo
+      - service: vacuum.set_fan_speed
+        data:
+          entity_id:
+            - vacuum.downstairs
+            - vacuum.upstairs
+          fan_speed: max
+        # Start the vacuum
+      - service: vacuum.start
+        data:
+          entity_id:
+            - vacuum.downstairs
+            - vacuum.upstairs
+        # Arm the alarm
+      - service: alarm_control_panel.alarm_arm_away
+        data:
+          entity_id: alarm_control_panel.home
+          code: !secret alarm_code
+        # Ensure the doors are locked
+      - service: lock.lock
+        data:
+          entity_id: group.all_locks
+        # Close the garage doors
+      - service: cover.close_cover
+        data:
+          entity_id:
+            - cover.main_garage_door
+            - cover.second_garage_door
+      # Turn up the air purifiers while we're gone
+      - service: xiaomi_miio.fan_set_fan_level
+        data:
+          entity_id:
+            - fan.master_bedroom_air_purifier
+            # - fan.master_bedroom_humidifier
+          level: 3
     # - service: scene.turn_on
     #   data:
     #     entity_id: scene.away
-      # Lights will now be randomly turned on and off
-      # and is triggered by input_boolean.away_mode
-################################################################################
+    # Lights will now be randomly turned on and off
+    # and is triggered by input_boolean.away_mode
+  ################################################################################
   location_home:
     alias: 'Function - Presence - Home'
     sequence:
       # Disarm the alarm
-    - service: alarm_control_panel.alarm_disarm
-      data:
-        entity_id: alarm_control_panel.home
-        code: !secret alarm_code
-      # Set the thermostat to home
-    - service: climate.set_preset_mode
-      data:
-        entity_id: 
-          - climate.homekit_downstairs
-          - climate.homekit_upstairs
-        preset_mode: 'home'
-      # Set the vacuums to silent
-    - service: vacuum.set_fan_speed
-      data:
-        entity_id:
-          - vacuum.downstairs
-          - vacuum.upstairs
-        fan_speed: low
-      # Stop the vacuums
-    - service: vacuum.stop
-      data:
-        entity_id:
-          - vacuum.downstairs
-          - vacuum.upstairs
-      # wait 30 seconds for command to take effect
-    - delay:
-        seconds: 30
-      # Return vacuums to dock
-    - service: vacuum.return_to_base
-      data:
-        entity_id: 
-          - vacuum.downstairs
-          - vacuum.upstairs
-    # Turn the air purifiers back down
-    - service: fan.set_speed
-      data:
-        entity_id:
-          - fan.master_bedroom_air_purifier
-          # - fan.master_bedroom_humidifier
-        speed: silent
-      # Turn on some lights
+      - service: alarm_control_panel.alarm_disarm
+        data:
+          entity_id: alarm_control_panel.home
+          code: !secret alarm_code
+        # Set the thermostat to home
+      - service: climate.set_preset_mode
+        data:
+          entity_id:
+            - climate.homekit_downstairs
+            - climate.homekit_upstairs
+          preset_mode: 'home'
+        # Set the vacuums to silent
+      - service: vacuum.set_fan_speed
+        data:
+          entity_id:
+            - vacuum.downstairs
+            - vacuum.upstairs
+          fan_speed: low
+        # Stop the vacuums
+      - service: vacuum.stop
+        data:
+          entity_id:
+            - vacuum.downstairs
+            - vacuum.upstairs
+        # wait 30 seconds for command to take effect
+      - delay:
+          seconds: 30
+        # Return vacuums to dock
+      - service: vacuum.return_to_base
+        data:
+          entity_id:
+            - vacuum.downstairs
+            - vacuum.upstairs
+      # Turn the air purifiers back down
+      - service: fan.set_speed
+        data:
+          entity_id:
+            - fan.master_bedroom_air_purifier
+            # - fan.master_bedroom_humidifier
+          speed: silent
+        # Turn on some lights
     # - service: scene.turn_on
     #   data:
     #     entity_id: scene.home
-################################################################################
+  ################################################################################
   vacation_mode_on:
     alias: 'Function - Vacation - On'
     sequence:
       # Test Notificaton
-    - service: notify.notify
-      data_template:
-        title: "Vacation Script (On) Triggered"
-################################################################################
+      - service: notify.notify
+        data_template:
+          title: 'Vacation Script (On) Triggered'
+  ################################################################################
   vacation_mode_off:
     alias: 'Function - Vacation - Off'
     sequence:
       # Test Notificaton
-    - service: notify.notify
-      data_template:
-        title: "Vacation Script (Off) Triggered"
+      - service: notify.notify
+        data_template:
+          title: 'Vacation Script (Off) Triggered'
 ################################################################################
 
 # Scenes
 scene:
-################################################################################
+  ################################################################################
   - name: Home
     entities:
       light.dining_room_chandelier:
@@ -373,7 +373,7 @@ scene:
       light.sitting_room_floor_lamp:
         state: 'on'
         brightness: 100
-################################################################################
+  ################################################################################
   - name: Away
     entities:
       light.dining_room_chandelier:

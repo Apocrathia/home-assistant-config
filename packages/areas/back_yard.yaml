@@ -1,8 +1,8 @@
 ---
 ### Back Yard ###
 automation:
-################################################################################
-# Turn on the string lights around the back yard when it gets dark
+  ################################################################################
+  # Turn on the string lights around the back yard when it gets dark
   - id: area_back_yard_string_lights_dusk
     alias: 'Area - Back Yard - String Lights (Dusk)'
     trigger:
@@ -13,7 +13,7 @@ automation:
       entity_id: group.people
       state: 'home'
     action:
-      - alias: "Ramp up lights over next hour"
+      - alias: 'Ramp up lights over next hour'
         service: script.light_transition
         data:
           entity_id: light.back_yard_string_lights
@@ -21,9 +21,9 @@ automation:
           ending_brightness_pct: 100
           interval_pct: 5
           transition_time: 3600
-################################################################################
-# Turn off the string lights when the alarm is turned on
-# This is so that there is a clear indication that the alarm is on
+  ################################################################################
+  # Turn off the string lights when the alarm is turned on
+  # This is so that there is a clear indication that the alarm is on
   - id: area_back_yard_string_lights_night
     alias: 'Area - Back Yard - String Lights (Night)'
     trigger:
@@ -39,11 +39,11 @@ automation:
       - service: light.turn_off
         data:
           entity_id: light.back_yard_string_lights
-################################################################################
-# The switch that these are on doesn't properly report back it's state when it's
-# turned off. So, even if it's off, the device reports 30% on. This is the fix.
-# Currently the switch is a GE/Jasco, but I will probably replace it with an 
-# Inovelli eventually, as this is kind of a bullshit thing to have to mitigate.
+  ################################################################################
+  # The switch that these are on doesn't properly report back it's state when it's
+  # turned off. So, even if it's off, the device reports 30% on. This is the fix.
+  # Currently the switch is a GE/Jasco, but I will probably replace it with an
+  # Inovelli eventually, as this is kind of a bullshit thing to have to mitigate.
   - id: area_back_yard_string_lights_fix
     alias: 'Area - Back Yard - String Lights (Fix)'
     trigger:

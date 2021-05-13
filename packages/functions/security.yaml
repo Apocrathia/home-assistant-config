@@ -7,22 +7,22 @@
 # additional sensors into my alarm system, and provide a better means of
 # monitoring the house when we are away.
 # Ideas:
-  # Flash some lights/make some noise when the alarm is tripped
-  # Make a wife idicator light for when the alarm is armed
-  # integrate external sensors into the alarm
+# Flash some lights/make some noise when the alarm is tripped
+# Make a wife idicator light for when the alarm is armed
+# integrate external sensors into the alarm
 
 ################################################################################
 # Inputs
 ################################################################################
 input_datetime:
   alarm_auto_arm:
-    name: "Alarm Auto-Arm"
+    name: 'Alarm Auto-Arm'
     icon: mdi:clock-outline
     has_date: false
     has_time: true
 
   alarm_auto_disarm:
-    name: "Alarm Auto-Disarm"
+    name: 'Alarm Auto-Disarm'
     icon: mdi:clock-outline
     has_date: false
     has_time: true
@@ -52,27 +52,26 @@ ios:
 ################################################################################
 
 sensor:
-################################################################################
+  ################################################################################
   - platform: template
     sensors:
       alarm_auto_arm:
-        friendly_name: "Alarm Auto Arm"
+        friendly_name: 'Alarm Auto Arm'
         icon_template: mdi:clock-outline
         # entity_id: input_datetime.alarm_auto_arm
         value_template: >
           {{ (states.input_datetime.alarm_auto_arm.attributes.timestamp | 
               int | timestamp_custom("%H:%M",False)) }}
       alarm_auto_disarm:
-        friendly_name: "Alarm Auto Disarm"
+        friendly_name: 'Alarm Auto Disarm'
         icon_template: mdi:clock-outline
         # entity_id: input_datetime.alarm_auto_disarm
         value_template: >
           {{ (states.input_datetime.alarm_auto_disarm.attributes.timestamp | 
               int | timestamp_custom("%H:%M",False)) }}
 ################################################################################
-
 automation:
-################################################################################
+  ################################################################################
   # Watch the following sensors when the alarm is on to extend the system
   - id: function_security_additional_sensors
     alias: 'Function - Security - Additional Sensors'
@@ -91,49 +90,49 @@ automation:
     action:
       - service: alarm_control_panel.alarm_trigger
         entity_id: alarm_control_panel.home
-################################################################################
+  ################################################################################
   - id: function_security_alarm_auto_arm
     alias: 'Function - Security - Alarm Auto Arm'
     trigger:
-    - platform: template
-      value_template: >
-        {{ states.sensor.time.state == states.sensor.alarm_auto_arm.state }}
+      - platform: template
+        value_template: >
+          {{ states.sensor.time.state == states.sensor.alarm_auto_arm.state }}
     condition:
       condition: and
       conditions:
-      - condition: state
-        entity_id: binary_sensor.worknight
-        state: 'on'
-      - condition: state
-        entity_id: input_boolean.away_mode
-        state: 'off'
+        - condition: state
+          entity_id: binary_sensor.worknight
+          state: 'on'
+        - condition: state
+          entity_id: input_boolean.away_mode
+          state: 'off'
     action:
       service: alarm_control_panel.alarm_arm_home
       data:
         entity_id: alarm_control_panel.home
         code: !secret alarm_code
-################################################################################
+  ################################################################################
   - id: function_security_alarm_auto_disarm
     alias: 'Function - Security - Alarm Auto Disarm'
     trigger:
-    - platform: template
-      value_template: >
-        {{ states.sensor.time.state == states.sensor.alarm_auto_disarm.state }}
+      - platform: template
+        value_template: >
+          {{ states.sensor.time.state == states.sensor.alarm_auto_disarm.state }}
     condition:
       condition: and
       conditions:
-      - condition: state
-        entity_id: binary_sensor.workday
-        state: 'on'
-      - condition: state
-        entity_id: input_boolean.away_mode
-        state: 'off'
+        - condition: state
+          entity_id: binary_sensor.workday
+          state: 'on'
+        - condition: state
+          entity_id: input_boolean.away_mode
+          state: 'off'
     action:
       service: alarm_control_panel.alarm_disarm
       data:
         entity_id: alarm_control_panel.home
         code: !secret alarm_code
-################################################################################
+  ################################################################################
   - id: function_security_front_porch_motion
     alias: 'Function - Security - Front Porch Motion'
     trigger:
@@ -142,41 +141,41 @@ automation:
         from: 'off'
         to: 'on'
     action:
-  # Send an alert to all users
+      # Send an alert to all users
       - service: notify.notify
         data:
-          title: "Motion detected at front door"
-          message: "Who could it be?"
-  # TODO: 
+          title: 'Motion detected at front door'
+          message: 'Who could it be?'
+  # TODO:
   # - Send a snapshot from the front porch camera
   # - Make this an actionable notification to start a video call
-################################################################################
+  ################################################################################
   - id: function_security_alarm_armed
     alias: 'Function - Security - Alarm Armed'
     trigger:
       - platform: state
         entity_id: alarm_control_panel.home
         from: 'disarmed'
-        to: 
+        to:
           - 'armed'
           - 'armed_home'
     action:
-    # Send an alert to all users
+      # Send an alert to all users
       - service: script.notification_alarm_armed
-################################################################################
+  ################################################################################
   - id: function_security_alarm_disarmed
     alias: 'Function - Security - Alarm Disarmed'
     trigger:
       - platform: state
         entity_id: alarm_control_panel.home
-        from: 
+        from:
           - 'armed'
           - 'armed_home'
         to: 'disarmed'
     action:
-    # Send an alert to all users
+      # Send an alert to all users
       - service: script.notification_alarm_disarmed
-################################################################################
+  ################################################################################
   - id: function_security_alarm_warning
     alias: 'Function - Security - Alarm Warning'
     trigger:
@@ -189,9 +188,9 @@ automation:
         entity_id: alarm_control_panel.home
         state: 'armed_home'
     action:
-    # Send an alert to all users
+      # Send an alert to all users
       - service: script.notification_alarm_armed
-################################################################################
+  ################################################################################
   - id: function_security_garage
     alias: 'Function - Security - Garage'
     trigger:
@@ -211,11 +210,11 @@ automation:
     action:
       - service: notify.mobile_app_ians_iphone
         data:
-          title: "Garage Open!"
-          message: "The {{ trigger.name }} has been left open. What would you like to do?"
+          title: 'Garage Open!'
+          message: 'The {{ trigger.name }} has been left open. What would you like to do?'
           data:
             push:
-              category: "garage_door"
+              category: 'garage_door'
             action_data:
               entity_id: >
                 {{ trigger.entity_id }}
@@ -225,32 +224,12 @@ automation:
 ################################################################################
 
 script:
-################################################################################
+  ################################################################################
   notification_alarm_armed:
-    alias: "Notification - Alarm Armed"
-    sequence:
-    - service: media_player.volume_set
-      entity_id: 
-        - media_player.downstairs_thermostat
-        - media_player.upstairs_thermostat
-        - media_player.ian_s_echo_dot
-      data:
-        volume_level: '1.0'
-    - service: notify.alexa_media
-      data:
-        data:
-          type: tts
-        target: 
-          - media_player.downstairs_thermostat
-          - media_player.upstairs_thermostat
-          - media_player.ian_s_echo_dot
-        message: 'The alarm is armed.'
-################################################################################
-  notification_alarm_disarmed:
-    alias: "Notification - Alarm Disarmed"
+    alias: 'Notification - Alarm Armed'
     sequence:
       - service: media_player.volume_set
-        entity_id: 
+        entity_id:
           - media_player.downstairs_thermostat
           - media_player.upstairs_thermostat
           - media_player.ian_s_echo_dot
@@ -260,7 +239,27 @@ script:
         data:
           data:
             type: tts
-          target: 
+          target:
+            - media_player.downstairs_thermostat
+            - media_player.upstairs_thermostat
+            - media_player.ian_s_echo_dot
+          message: 'The alarm is armed.'
+  ################################################################################
+  notification_alarm_disarmed:
+    alias: 'Notification - Alarm Disarmed'
+    sequence:
+      - service: media_player.volume_set
+        entity_id:
+          - media_player.downstairs_thermostat
+          - media_player.upstairs_thermostat
+          - media_player.ian_s_echo_dot
+        data:
+          volume_level: '1.0'
+      - service: notify.alexa_media
+        data:
+          data:
+            type: tts
+          target:
             - media_player.downstairs_thermostat
             - media_player.upstairs_thermostat
             - media_player.ian_s_echo_dot

@@ -1,8 +1,8 @@
 ---
 ### Front Porch ###
-  
+
 automation:
-################################################################################
+  ################################################################################
   - id: area_front_porch_motion_initial
     alias: 'Area - Front Porch - Motion (Initial)'
     trigger:
@@ -15,14 +15,14 @@ automation:
       entity_id: sun.sun
       state: 'below_horizon'
     action:
-  # Transition to this profile, even if on
+      # Transition to this profile, even if on
       - service: light.turn_on
         data:
           entity_id: light.front_porch_lights
           profile: energize
           brightness_pct: 100
           transition: 1
-################################################################################
+  ################################################################################
   - id: area_front_porch_motion_motion_idle
     alias: 'Area - Front Porch - Motion (Idle)'
     trigger:
@@ -37,11 +37,11 @@ automation:
       entity_id: sun.sun
       state: 'below_horizon'
     action:
-  # Transition back to a preset profile/scene
-    - service: light.turn_on
-      data:
-        entity_id: light.front_porch_lights
-        profile: relax
-        brightness_pct: 50
-        transition: 5
+      # Transition back to a preset profile/scene
+      - service: light.turn_on
+        data:
+          entity_id: light.front_porch_lights
+          profile: relax
+          brightness_pct: 50
+          transition: 5
 ################################################################################

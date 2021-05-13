@@ -1,8 +1,8 @@
 ---
 ### Living Room ###
 automation:
-################################################################################
-# Turn on the living room light when it gets dark
+  ################################################################################
+  # Turn on the living room light when it gets dark
   - id: area_living_room_ceiling_fan_light_dusk
     alias: 'Area - Living Room - Ceiling Fan Light (Dusk)'
     trigger:
@@ -24,9 +24,9 @@ automation:
       - service: light.turn_on
         data:
           entity_id: light.living_room_ceiling_fan
-################################################################################
-# Turn off the string lights when the alarm is turned on
-# This is so that there is a clear indication that the alarm is on
+  ################################################################################
+  # Turn off the string lights when the alarm is turned on
+  # This is so that there is a clear indication that the alarm is on
   - id: area_living_room_ceiling_fan_light_night
     alias: 'Area - Living Room - Ceiling Fan Light (Night)'
     trigger:
@@ -44,21 +44,21 @@ automation:
             entity_id: light.living_room_ceiling_fan
             state: 'on'
     action:
-    # Wait a few minutes before shutting the light off in case we're still up.
+      # Wait a few minutes before shutting the light off in case we're still up.
       - delay:
           minutes: 5
       - service: light.turn_off
         data:
           entity_id: light.living_room_ceiling_fan
-################################################################################
-# Automatically turn the fireplace blower on when the fireplace is turned on
-# and leave the blower on for 30 minutes after the fireplace has been turned off
-# to allow the fireplace to cool down.
+  ################################################################################
+  # Automatically turn the fireplace blower on when the fireplace is turned on
+  # and leave the blower on for 30 minutes after the fireplace has been turned off
+  # to allow the fireplace to cool down.
   - id: area_living_room_fireplace_blower
     alias: 'Area - Living Room - Fireplace Blower'
     trigger:
-    # Specifying specific state changes from on <-> off because the shelly
-    # that's installed here keeps going 'unavailable' and triggering this.
+      # Specifying specific state changes from on <-> off because the shelly
+      # that's installed here keeps going 'unavailable' and triggering this.
       - platform: state
         entity_id:
           - switch.fireplace
@@ -71,24 +71,24 @@ automation:
         from: 'on'
     action:
       - choose:
-        - conditions:
-          - condition: state
-            entity_id:
-              - switch.fireplace
-            state: 'on'
-          sequence:
-            - service: switch.turn_on
-              entity_id: switch.fireplace_blower
-        - conditions:
-          - condition: state
-            entity_id:
-              - switch.fireplace
-            state: 'off'
-          sequence:
-            - delay:
-                minutes: 30
-            - service: switch.turn_off
-              entity_id: switch.fireplace_blower
+          - conditions:
+              - condition: state
+                entity_id:
+                  - switch.fireplace
+                state: 'on'
+            sequence:
+              - service: switch.turn_on
+                entity_id: switch.fireplace_blower
+          - conditions:
+              - condition: state
+                entity_id:
+                  - switch.fireplace
+                state: 'off'
+            sequence:
+              - delay:
+                  minutes: 30
+              - service: switch.turn_off
+                entity_id: switch.fireplace_blower
 # In case anyone is looking at this and is curious how I set this up:
 # The fireplace is a pretty typical millivolt valve being controlled by a Shelly
 # and the blower switch is just an Inovelli LZW30-SN.

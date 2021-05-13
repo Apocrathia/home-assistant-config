@@ -15,20 +15,20 @@
 # Home Assistant Remote
 remote_homeassistant:
   instances:
-  - host: !secret ha_remote_host
-    access_token: !secret ha_remote_token
-    exclude:
-      entities:
-      - sensor.hacs
-      - zone.home
-      - person.ian
-      - sun.sun
-      - binary_sensor.updater
-      domains:
-      - automation
-      - script
-    subscribe_events:
-    - state_changed
-    - service_registered
-    - zwave.network_ready
-    - zwave.node_event
+    - host: !secret ha_remote_host
+      access_token: !secret ha_remote_token
+      exclude:
+        entities:
+          - sensor.hacs
+          - zone.home
+          - person.ian
+          - sun.sun
+          - binary_sensor.updater
+        domains:
+          - automation
+          - script
+      subscribe_events:
+        - state_changed
+        - service_registered
+        - zwave.network_ready
+        - zwave.node_event

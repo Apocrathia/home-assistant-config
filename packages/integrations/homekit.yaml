@@ -3,7 +3,7 @@
 
 # HomeKit
 homekit:
-################################################################################
+  ################################################################################
   - name: Home Assistant Bridge
     # Deprecated as on 2021.4.0
     # https://www.home-assistant.io/blog/2021/04/07/release-20214/#breaking-changes
@@ -20,8 +20,8 @@ homekit:
         - light.sitting_room_floor_lamp
         - light.outdoor_lights
         - light.back_yard_string_lights
-        - switch.downstairs_vacuum
-        - switch.upstairs_vacuum
+        # - switch.downstairs_vacuum
+        # - switch.upstairs_vacuum
         - light.dining_room_chandelier
         - light.kitchen_chandelier
         - light.living_room_ceiling_fan
@@ -33,7 +33,12 @@ homekit:
         - light.upstairs_hallway
         - light.office_floor_lamp
         - light.kitchen
-################################################################################
+        # These aren't playing nice. I've got to get better cameras...
+        - camera.living_room
+        - camera.dining_room
+        - camera.front_porch
+        - camera.kitchen
+  ################################################################################
   # Moving door locks to separate accessory bridges
   # https://github.com/home-assistant/core/issues/48843#issuecomment-817447652
   - name: Front Door Lock
@@ -43,7 +48,7 @@ homekit:
     filter:
       include_entities:
         - lock.front_door
-################################################################################
+  ################################################################################
   - name: Back Door Lock
     mode: accessory
     pincode: !secret homekit_pin
@@ -51,8 +56,8 @@ homekit:
     filter:
       include_entities:
         - lock.back_door
-################################################################################
-# Might as well move any other security devices as well.
+  ################################################################################
+  # Might as well move any other security devices as well.
   - name: Alarm Panel
     mode: accessory
     pincode: !secret homekit_pin
@@ -60,7 +65,7 @@ homekit:
     filter:
       include_entities:
         - alarm_control_panel.home
-################################################################################
+  ################################################################################
   - name: Main Garage Door
     mode: accessory
     pincode: !secret homekit_pin
@@ -68,7 +73,7 @@ homekit:
     filter:
       include_entities:
         - cover.main_garage_door
-################################################################################
+  ################################################################################
   - name: Second Garage Door
     mode: accessory
     pincode: !secret homekit_pin
@@ -78,16 +83,9 @@ homekit:
         - cover.second_garage_door
 ################################################################################
 
-
-# These aren't playing nice. I've got to get better cameras...
-      # - camera.living_room
-      # - camera.dining_room
-      # - camera.front_porch
-      # - camera.kitchen
-
 automation:
-################################################################################
-# Start HomeKit once the Z-Wave network starts up.
+  ################################################################################
+  # Start HomeKit once the Z-Wave network starts up.
   - alias: 'HomeKit - Z-Wave Start'
     trigger:
       - platform: event
@@ -98,14 +96,14 @@ automation:
         event_type: zwave.network_complete_some_dead
     action:
       - service: homekit.start
-################################################################################
-# I've had issues with HomeKit being unresponsive every now and then.
-# This should keep it on it's toes.
+  ################################################################################
+  # I've had issues with HomeKit being unresponsive every now and then.
+  # This should keep it on it's toes.
   - alias: 'Homekit - Routine Reload'
     trigger:
       - platform: time_pattern
         # This will become seemingly random, as 37 is prime.
-        minutes: "/37"
+        minutes: '/37'
     action:
       - service: homekit.reload
 ################################################################################
