@@ -61,6 +61,18 @@ script:
           {% else %}
             light.turn_on
           {% endif %}
+      # Some light switches, like the GE/Jasco Z-Wave switches, are trash and
+      # can't do what they were told the first time around, so we have to tell
+      # them again.
+      - alias: "Brief delay"
+        delay: 1
+      - alias: "Set initial brightness"
+        service: >
+          {% if starting_brightness_pct | float < 5 %}
+            light.turn_off
+          {% else %}
+            light.turn_on
+          {% endif %}
         target:
           entity_id: >
             {{ entity_id }}
