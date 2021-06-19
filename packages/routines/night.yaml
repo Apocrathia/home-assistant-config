@@ -1,11 +1,6 @@
 ---
 ### Nighttime Routines ###
 
-homeassistant:
-  customize:
-    binary_sensor.in_bed:
-      friendly_name: 'In Bed'
-
 ################################################################################
 # Inputs
 ################################################################################
@@ -77,54 +72,8 @@ sensor:
           {{ (as_timestamp(states.sun.sun.attributes.next_dusk) | int | 
               timestamp_custom("%H:%M", True)) }}
 ################################################################################
-binary_sensor:
-  ################################################################################
-  - platform: bayesian
-    prior: 0.25
-    name: 'in_bed'
-    probability_threshold: 0.75
-    observations:
-      # No motion in the living room
-      - entity_id: 'binary_sensor.living_room_motion'
-        prob_given_true: 0.1
-        prob_given_false: 0.4
-        platform: 'state'
-        to_state: 'off'
-      # The sun is down
-      - entity_id: 'sun.sun'
-        prob_given_true: 0.3
-        platform: 'state'
-        to_state: 'below_horizon'
-      # If both of the phones are plugged in
-      - entity_id: sensor.ians_iphone_battery_state
-        prob_given_true: 0.4
-        platform: 'state'
-        to_state: 'charging'
-      - entity_id: sensor.aimees_iphone_battery_state
-        prob_given_true: 0.4
-        platform: 'state'
-        to_state: 'charging'
-      # If Away Mode is off (Meaning we're home)
-      - entity_id: input_boolean.away_mode
-        prob_given_true: 0.0
-        platform: 'state'
-        to_state: 'on'
-      # Eventually, the correct answer is to put pressure sensors under the bed.
-################################################################################
 
 automation:
-  ################################################################################
-  - id: in_bed_bayesian_test
-    alias: In Bed Bayesian Sensor Test
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.in_bed
-        to: 'on'
-    action:
-      - service: notify.notify
-        data:
-          title: Bayesian In-Bed Test
-          message: Hey, I think you're in bed right now, is that right?
   ################################################################################
   - id: routine_night_outdoor_lights
     alias: 'Routine - Night - Outdoor Lights'
@@ -150,15 +99,15 @@ automation:
     trigger:
       - platform: sun
         event: sunset
-    condition:
-      condition: and
-      conditions:
-        - condition: state
-          entity_id: input_boolean.away_mode
-          state: 'off'
-        - condition: state
-          entity_id: light.night_lights
-          state: 'off'
+    # condition:
+    #   condition: and
+    #   conditions:
+    #     - condition: state
+    #       entity_id: input_boolean.away_mode
+    #       state: 'off'
+    #     - condition: state
+    #       entity_id: light.night_lights
+    #       state: 'off'
     action:
       - service: light.turn_on
         data:
