@@ -34,10 +34,11 @@ homekit:
         - light.office_floor_lamp
         - light.kitchen
         # These aren't playing nice. I've got to get better cameras...
-        - camera.living_room
-        - camera.dining_room
-        - camera.front_porch
-        - camera.kitchen
+        # Cameras also need to be moved to separate accessory bridges
+        # - camera.living_room
+        # - camera.dining_room
+        # - camera.front_porch
+        # - camera.kitchen
   ################################################################################
   # Moving door locks to separate accessory bridges
   # https://github.com/home-assistant/core/issues/48843#issuecomment-817447652
