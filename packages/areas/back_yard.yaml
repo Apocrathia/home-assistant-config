@@ -20,6 +20,7 @@ automation:
           starting_brightness_pct: 5
           ending_brightness_pct: 100
           interval_pct: 5
+          # TODO - Use template to determine time based upon weather conditions
           transition_time: 3600
   ################################################################################
   # Turn off the string lights when the alarm is turned on
