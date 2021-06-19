@@ -9,6 +9,9 @@
 #   ending_brightness_pct: 0
 #   interval_pct: 5
 #   transition_time: 00:00:05
+#
+# Notes on usage:
+# - Don't use 0 as a starting brightness.
 ###############################################################################
 script:
   light_transition:
@@ -56,11 +59,17 @@ script:
             {{ (( transition_time | float ) / count ) | round | int }}
       - alias: 'Set initial brightness'
         service: >
-          {% if starting_brightness_pct | float < 5 %}
+          {% if starting_brightness_pct | float < 1 %}
             light.turn_off
           {% else %}
             light.turn_on
           {% endif %}
+        target:
+          entity_id: >
+            {{ entity_id }}
+        data:
+          brightness_pct: >
+            {{ starting_brightness_pct | float }}
       # Some light switches, like the GE/Jasco Z-Wave switches, are trash and
       # can't do what they were told the first time around, so we have to tell
       # them again.
@@ -68,7 +77,7 @@ script:
         delay: 1
       - alias: 'Set initial brightness'
         service: >
-          {% if starting_brightness_pct | float < 5 %}
+          {% if starting_brightness_pct | float < 1 %}
             light.turn_off
           {% else %}
             light.turn_on
