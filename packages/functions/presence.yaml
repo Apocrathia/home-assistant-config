@@ -7,19 +7,19 @@ group:
     name: Vacation
     entities:
       - input_boolean.vacation_ian
-      - input_boolean.vacation_aimee
+      # - input_boolean.vacation_aimee
   ################################################################################
   network_phones:
     name: Phones
     entities:
-      - device_tracker.network_aimees_iphone
+      # - device_tracker.network_aimees_iphone
       - device_tracker.network_ians_iphone
   ################################################################################
   people:
     name: People
     entities:
       - person.ian
-      - person.aimee
+      # - person.aimee
 ################################################################################
 
 # The Bayesian sensor has been a real bitch to wrap my head around.
