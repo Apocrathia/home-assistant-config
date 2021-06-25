@@ -80,10 +80,10 @@ automation:
     trigger:
       - platform: sun
         event: sunset
-    condition:
-      - condition: state
-        entity_id: light.outdoor_lights
-        state: 'off'
+    # condition:
+    #   - condition: state
+    #     entity_id: light.outdoor_lights
+    #     state: 'off'
     action:
       - service: light.turn_on
         data:
