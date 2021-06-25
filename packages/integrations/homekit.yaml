@@ -20,25 +20,27 @@ homekit:
         - light.sitting_room_floor_lamp
         - light.outdoor_lights
         - light.back_yard_string_lights
-        # - switch.downstairs_vacuum
-        # - switch.upstairs_vacuum
         - light.dining_room_chandelier
         - light.kitchen_chandelier
         - light.living_room_ceiling_fan
-        - fan.master_bedroom_ceiling_fan
-        - fan.living_room_ceiling_fan
-        - switch.fireplace
-        - switch.garage_lights
         - light.downstairs_hallway
         - light.upstairs_hallway
         - light.office_floor_lamp
         - light.kitchen
-        # These aren't playing nice. I've got to get better cameras...
-        # Cameras also need to be moved to separate accessory bridges
-        # - camera.living_room
-        # - camera.dining_room
-        # - camera.front_porch
-        # - camera.kitchen
+        - light.studio_floor_lamp
+        - fan.master_bedroom_ceiling_fan
+        - fan.living_room_ceiling_fan
+        - switch.fireplace
+        - switch.garage_lights
+        - camera.front_door
+    entity_config:
+      camera.front_door:
+        linked_doorbell_sensor: binary_sensor.doorbell_front_door
+        linked_motion_sensor: binary_sensor.motion_front_door
+        video_codec: copy
+        audio_codec: copy
+        support_audio: true
+        stream_count: 5
   ################################################################################
   # Moving door locks to separate accessory bridges
   # https://github.com/home-assistant/core/issues/48843#issuecomment-817447652
