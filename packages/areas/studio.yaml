@@ -1,0 +1,21 @@
+---
+### Studio ###
+automation:
+  ################################################################################
+  # Turn on the studio floor lamp when it gets dark
+  - id: area_studio_floor_lamp_dusk
+    alias: 'Area - Studio - Floor Lamp (Dusk)'
+    trigger:
+      - platform: sun
+        event: sunset
+    condition:
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: person.ian
+            state: 'home'
+    action:
+      - service: light.turn_on
+        data:
+          entity_id: light.studio_floor_lamp
+################################################################################
