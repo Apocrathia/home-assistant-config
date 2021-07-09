@@ -15,15 +15,12 @@ automation:
     action:
       service: hassio.host_reboot
   ################################################################################
-  # Check for certificate renewals weekly
+  # Check for certificate renewals daily
   - id: system_maintenance_certificate_renewal
     alias: 'System - Maintenance - Certificate Renewal'
     trigger:
       platform: time
       at: '08:00:00'
-    condition:
-      condition: time
-      weekday: sat
     action:
       - alias: 'Wait a random amount of time'
         delay:
