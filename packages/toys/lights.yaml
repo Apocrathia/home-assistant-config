@@ -71,15 +71,3 @@ automation:
             entity_id: binary_sensor.party_lights
             state: 'off'
 ################################################################################
-
-script:
-  ################################################################################
-  annoying_lights:
-    alias: 'Annoy Aimee'
-    sequence:
-      - service: light.turn_on
-        data:
-          entity_id: light.master_bedroom_lights
-          effect: colorloop
-          brightness_pct: 100
-################################################################################

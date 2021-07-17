@@ -21,4 +21,4 @@ integration | Configurations specific to core functionality of Home Assistant | 
 routine | Configurations to perform tasks which happen on a routine basis | routine_morning
 function | Configurations that can be bundled together to perform a specific function | function_presence
 system | Things that work specifically with the management of Home Assistant | system_backup
-toy | Things that have no real use, but are just for fun. | toy_annoyaimee
+toy | Things that have no real use, but are just for fun. | toy_annoy
