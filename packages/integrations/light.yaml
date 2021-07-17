@@ -38,6 +38,7 @@ light:
       - light.office_lights
       - light.downstairs_lights
       - light.upstairs_lights
+      - light.studio_lights
 
   - platform: group
     name: Master Bedroom Lights
@@ -89,3 +90,8 @@ light:
       - light.stairwell
       - light.upstairs_hallway
       - light.upstairs_desk
+
+  - platform: group
+    name: Studio Lights
+    entities:
+      - light.studio_floor_lamp
