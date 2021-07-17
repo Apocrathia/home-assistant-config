@@ -68,3 +68,34 @@ automation:
         data:
           entity_id: light.back_yard_string_lights
 ################################################################################
+  - id: area_back_yard_back_door_nfc
+    alias: 'Area - Back Yard - Back Door NFC'
+    trigger:
+      platform: event
+      event_type: tag_scanned
+      event_data:
+        tag_id: !secret nfc_back_door
+    action:
+      - alias: "State handler"
+        choose:
+        - conditions:
+          - alias: "Back Door Unlocked"
+            condition: state
+            entity_id: lock.back_door
+            state: "unlocked"
+          sequence:
+          - alias: "Lock Back Door"
+            service: lock.lock
+            target:
+              entity_id: lock.back_door
+        - conditions:
+          - alias: "Back Door Locked"
+            condition: state
+            entity_id: lock.back_door
+            state: "locked"
+          sequence:
+          - alias: "Unlock Back Door"
+            service: lock.unlock
+            target:
+              entity_id: lock.back_door
+################################################################################

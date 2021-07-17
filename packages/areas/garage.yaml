@@ -16,9 +16,19 @@ automation:
       - platform: state
         entity_id:
           - binary_sensor.garage_door
+          - binary_sensor.side_door
           - binary_sensor.garage_motion
         from: 'off'
         to: 'on'
+      - platform: event
+        event_type: call_service
+        event_data:
+          domain: cover
+          service: open_cover
+          service_data:
+            entity_id:
+              - cover.main_garage_door
+              - cover.second_garage_door
     condition:
       - condition: state
         entity_id: switch.garage_lights
@@ -47,4 +57,66 @@ automation:
       - service: switch.turn_off
         data:
           entity_id: switch.garage_lights
+################################################################################
+  - id: area_garage_main_door_nfc
+    alias: 'Area - Garage - Main Door NFC'
+    trigger:
+      platform: event
+      event_type: tag_scanned
+      event_data:
+        tag_id: !secret nfc_main_garage_door
+    action:
+      - alias: "State handler"
+        choose:
+        - conditions:
+          - alias: "Main Garage Door Open"
+            condition: state
+            entity_id: cover.main_garage_door
+            state: "open"
+          sequence:
+          - alias: "Close Main Garage Door"
+            service: cover.close_cover
+            target:
+              entity_id: cover.main_garage_door
+        - conditions:
+          - alias: "Main Garage Door Closed"
+            condition: state
+            entity_id: cover.main_garage_door
+            state: "closed"
+          sequence:
+          - alias: "Open Main Garage Door"
+            service: cover.open_cover
+            target:
+              entity_id: cover.main_garage_door
+################################################################################
+  - id: area_garage_second_door_nfc
+    alias: 'Area - Garage - Second Door NFC'
+    trigger:
+      platform: event
+      event_type: tag_scanned
+      event_data:
+        tag_id: !secret nfc_second_garage_door
+    action:
+      - alias: "State handler"
+        choose:
+        - conditions:
+          - alias: "Second Garage Door Open"
+            condition: state
+            entity_id: cover.second_garage_door
+            state: "open"
+          sequence:
+          - alias: "Close Second Garage Door"
+            service: cover.close_cover
+            target:
+              entity_id: cover.second_garage_door
+        - conditions:
+          - alias: "Second Garage Door Closed"
+            condition: state
+            entity_id: cover.second_garage_door
+            state: "closed"
+          sequence:
+          - alias: "Open Second Garage Door"
+            service: cover.open_cover
+            target:
+              entity_id: cover.second_garage_door
 ################################################################################
