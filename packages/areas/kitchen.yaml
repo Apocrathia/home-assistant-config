@@ -2,29 +2,59 @@
 ### Kitchen ###
 
 automation:
-  ################################################################################
-  - id: area_kitchen_pantry_open
-    alias: 'Area - Kitchen - Pantry Light (Open)'
+#   ################################################################################
+#   - id: area_kitchen_pantry_open
+#     alias: 'Area - Kitchen - Pantry Light (Open)'
+#     trigger:
+#       - platform: state
+#         entity_id: binary_sensor.kitchen_pantry_door
+#         to: 'on'
+#     action:
+#       service: light.turn_on
+#       data:
+#         entity_id: light.kitchen_pantry
+#         transition: 3
+#         brightness_pct: 100
+#   ################################################################################
+#   - id: area_kitchen_pantry_closed
+#     alias: 'Area - Kitchen - Pantry Light (Closed)'
+#     trigger:
+#       - platform: state
+#         entity_id: binary_sensor.kitchen_pantry_door
+#         to: 'off'
+#     action:
+#       service: light.turn_off
+#       data:
+#         entity_id: light.kitchen_pantry
+#         transition: 1
+################################################################################
+  - id: area_kitchen_pantry_light
+    alias: 'Area - Kitchen - Pantry Light'
     trigger:
       - platform: state
         entity_id: binary_sensor.kitchen_pantry_door
-        to: 'on'
     action:
-      service: light.turn_on
-      data:
-        entity_id: light.kitchen_pantry
-        transition: 3
-        brightness_pct: 100
-  ################################################################################
-  - id: area_kitchen_pantry_closed
-    alias: 'Area - Kitchen - Pantry Light (Closed)'
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.kitchen_pantry_door
-        to: 'off'
-    action:
-      service: light.turn_off
-      data:
-        entity_id: light.kitchen_pantry
-        transition: 1
+      - alias: "State Handler"
+        choose:
+        - conditions:
+            - alias: "Door is open"
+              condition: state
+              entity_id: binary_sensor.kitchen_pantry_door
+              state: "on"
+          sequence:
+            service: light.turn_on
+            data:
+              entity_id: light.kitchen_pantry
+              transition: 3
+              brightness_pct: 100
+        - conditions:
+            - alias: "Door is closed"
+              condition: state
+              entity_id: binary_sensor.kitchen_pantry_door
+              state: "off"
+          sequence:
+            service: light.turn_off
+            data:
+              entity_id: light.kitchen_pantry
+              transition: 1
 ################################################################################
