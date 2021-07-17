@@ -34,50 +34,40 @@ alert:
     notifiers:
       - ians_iphone
 
-# Automations:
+# Automations
+automation:
 ################################################################################
-# automation:
-#   - id: area_master_bedroom_humidifer_low
-#     alias: 'Area - Master Bedroom - Humidifer Low'
-#     trigger:
-#       - platform: numeric_state
-#         entity_id: fan.master_bedroom_humidifier
-#         value_template: >
-#           {{ state_attr('fan.master_bedroom_humidifier', 'depth') | int }}
-#         below: 20 # I think this is measured 0-127
-#       # I'm honestly not sure what the 'dry' value is for because it will
-#       # flag as true even if the unit is full.
-#       # - platform: template
-#       #   value_template: >
-#       #     {{ ( state_attr('fan.master_bedroom_humidifier', 'dry')
-#       #           == true ) }}
-#     action:
-#       - alias: 'Keep harassing us until the unit is filled back up'
-#         repeat:
-#           while:
-#             - condition: numeric_state
-#               entity_id: fan.master_bedroom_humidifier
-#               value_template: >
-#                 {{ state_attr('fan.master_bedroom_humidifier', 'depth') | int }}
-#               below: 20
-#           sequence:
-#             - alias: 'choose alias (name)'
-#               choose:
-#                 - conditions:
-#                     condition: state
-#                     entity_id: group.people
-#                     state: 'home'
-#                   sequence:
-#                     - service: notify.notify
-#                       data:
-#                         title: 'Master Bedroom Humidifer Low'
-#                         message: 'Please refill'
-#                 - conditions:
-#                     condition: state
-#                     entity_id: group.people
-#                     state: 'away'
-#                   sequence:
-#                     - alias: "Wait until we're home"
-#                     - delay:
-#                         hours: 1
+- id: area_master_bedroom_closet_motion
+  alias: Area - Master Bedroom - Closet Motion
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.master_bedroom_closet_motion
+  condition:
+  - alias: "House is occupied"
+    condition: state
+    entity_id: group.people
+    state: "home"
+  action:
+  - alias: "Status handler"
+    choose:
+    - conditions:
+      - alias: "Motion detected"
+        condition: state
+        entity_id: binary_sensor.master_bedroom_closet_motion
+        state: "on"
+      sequence:
+      - alias: "Turn on closet light"
+        service: light.turn_on
+        target:
+          entity_id: light.master_bedroom_closet
+    - conditions:
+      - alias: "Motion cleared"
+        condition: state
+        entity_id: binary_sensor.master_bedroom_closet_motion
+        state: "off"
+      sequence:
+      - alias: "Turn off closet light"
+        service: light.turn_off
+        target:
+          entity_id: light.master_bedroom_closet
 ################################################################################
