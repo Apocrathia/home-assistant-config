@@ -213,6 +213,14 @@ script:
             - fan.master_bedroom_air_purifier
             # - fan.master_bedroom_humidifier
           level: 3
+      # Turn up all of the ceiling fans
+      - service: fan.set_percentage
+        data:
+          entity_id: 
+            - fan.living_room_ceiling_fan
+            - fan.master_bedroom_ceiling_fan
+          percentage: 100
+
     # - service: scene.turn_on
     #   data:
     #     entity_id: scene.away
