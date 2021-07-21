@@ -93,6 +93,48 @@ homekit:
         support_audio: true
         stream_count: 5
 ################################################################################
+  - name: Dining Room
+    mode: accessory
+    pincode: !secret homekit_pin
+    port: 51834
+    filter:
+      include_entities:
+        - camera.dining_room
+    entity_config:
+      camera.dining_room:
+        video_codec: copy
+        audio_codec: copy
+        support_audio: true
+        stream_count: 5
+################################################################################
+  - name: Kitchen
+    mode: accessory
+    pincode: !secret homekit_pin
+    port: 51835
+    filter:
+      include_entities:
+        - camera.kitchen
+    entity_config:
+      camera.kitchen:
+        video_codec: copy
+        audio_codec: copy
+        support_audio: true
+        stream_count: 5
+################################################################################
+  - name: Living Room
+    mode: accessory
+    pincode: !secret homekit_pin
+    port: 51836
+    filter:
+      include_entities:
+        - camera.living_room
+    entity_config:
+      camera.living_room:
+        video_codec: copy
+        audio_codec: copy
+        support_audio: true
+        stream_count: 5
+################################################################################
 
 automation:
   ################################################################################
