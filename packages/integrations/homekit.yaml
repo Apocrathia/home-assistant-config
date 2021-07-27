@@ -135,6 +135,34 @@ homekit:
         support_audio: true
         stream_count: 5
 ################################################################################
+  - name: Garage
+    mode: accessory
+    pincode: !secret homekit_pin
+    port: 51837
+    filter:
+      include_entities:
+        - camera.garage
+    entity_config:
+      camera.garage:
+        video_codec: copy
+        audio_codec: copy
+        support_audio: true
+        stream_count: 5
+################################################################################
+  - name: Office
+    mode: accessory
+    pincode: !secret homekit_pin
+    port: 51838
+    filter:
+      include_entities:
+        - camera.office
+    entity_config:
+      camera.office:
+        video_codec: copy
+        audio_codec: copy
+        support_audio: true
+        stream_count: 5
+################################################################################
 
 automation:
   ################################################################################
