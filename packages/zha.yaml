@@ -28,4 +28,4 @@ zha:
       type: "binary_sensor"
 
 # ZHA Map custom component
-zha_map:
+# zha_map:
