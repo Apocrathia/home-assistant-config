@@ -71,3 +71,30 @@ automation:
         target:
           entity_id: light.master_bedroom_closet
 ################################################################################
+- id: area_master_bedroom_panic_button
+  alias: Area - Master Bedroom - Panic Button
+  trigger:
+    - platform: event
+      event_type: zha_event
+      event_data:
+        unique_id: !secret panic_button_unique_id
+        args:
+          attribute_name: on_off
+          value: 1 # Upon release
+  # condition:
+  action:
+  # - alias: "Test"
+  #   service: notify.alexa_media
+  #   data:
+  #     data:
+  #       type: tts
+  #     target:
+  #       - media_player.downstairs_thermostat
+  #       - media_player.upstairs_thermostat
+  #     message: 'The button was pressed.'
+  - alias: 'Sound the alarm'
+    service: alarm_control_panel.alarm_trigger
+    data:
+      entity_id: alarm_control_panel.home
+      code: !secret alarm_code
+################################################################################
