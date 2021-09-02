@@ -32,3 +32,4 @@ remote_homeassistant:
         - service_registered
         - zwave.network_ready
         - zwave.node_event
+        - zha_event
