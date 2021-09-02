@@ -12,6 +12,9 @@
 #
 # Notes on usage:
 # - Don't use 0 as a starting brightness.
+#
+# TODO
+# - Stop script if brightness was manually changed
 ###############################################################################
 script:
   light_transition:
