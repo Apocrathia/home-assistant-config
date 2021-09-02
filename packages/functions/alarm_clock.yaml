@@ -60,7 +60,7 @@ sensor:
               int * 60)/2 )) | timestamp_custom("%H:%M",False)) }}
 
 automation:
-  ################################################################################
+################################################################################
   - id: function_wakeup_bedroom_light
     alias: 'Function - Wakeup - Bedroom Light'
     trigger:
@@ -99,8 +99,7 @@ automation:
           interval_pct: 10
           transition_time: >
             {{ states.input_number.wakeup_duration.state | multiply(60) | int }}
-  ################################################################################
-  ################################################################################
+################################################################################
   - id: function_wakeup_apple_tv
     alias: 'Function - Wakeup - Apple TV'
     trigger:
@@ -116,7 +115,7 @@ automation:
           state: 'on'
     action:
       service: script.function_alarm_clock
-  ################################################################################
+################################################################################
   - id: function_wakeup_vacuum
     alias: 'Function - Wakeup - Vacuum'
     trigger:
@@ -137,7 +136,7 @@ automation:
 ################################################################################
 
 script:
-  ################################################################################
+################################################################################
   function_wakeup_apple_tv:
     alias: 'Function - Wakeup - Apple TV'
     sequence:
