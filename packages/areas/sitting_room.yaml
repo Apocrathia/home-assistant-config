@@ -1,0 +1,46 @@
+---
+### Sitting Room ###
+
+# Automations
+automation:
+################################################################################
+- id: area_sitting_room_motion
+  alias: Area - Sitting Room - Motion
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.sitting_room_motion
+  condition:
+  - condition: and
+    conditions:
+    - alias: "House is occupied"
+      condition: state
+      entity_id: group.people
+      state: "home"
+    - alias: "Sun is down"
+      condition: state
+      entity_id: sun.sun
+      state: "below_horizon"
+  action:
+  - alias: "Status handler"
+    choose:
+    - conditions:
+      - alias: "Motion detected"
+        condition: state
+        entity_id: binary_sensor.sitting_room_motion
+        state: "on"
+      sequence:
+      - alias: "Turn on closet light"
+        service: light.turn_on
+        target:
+          entity_id: light.foyer_chandelier
+    - conditions:
+      - alias: "Motion cleared"
+        condition: state
+        entity_id: binary_sensor.sitting_room_motion
+        state: "off"
+      sequence:
+      - alias: "Turn off closet light"
+        service: light.turn_off
+        target:
+          entity_id: light.foyer_chandelier
+################################################################################
