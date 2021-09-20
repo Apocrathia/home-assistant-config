@@ -10,3 +10,10 @@
 #     devices:
 #       - 2013 Nissan Frontier
 #       - 2016 Subaru Crosstrek
+
+device_tracker:
+  - platform: aprs
+    username: !secret aprs_username
+    callsigns:
+      - !secret aprs_callsign_ian_ht
+      - !secret aprs_callsign_ian_mobile
