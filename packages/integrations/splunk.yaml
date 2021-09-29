@@ -1,10 +1,10 @@
 ---
 ### Splunk ###
 
-splunk:
-  host: !secret splunk_host
-  token: !secret splunk_token
-  port: !secret splunk_port
-  ssl: !secret splunk_ssl
-  verify_ssl: !secret splunk_verify_ssl
-  name: Home Assistant
+# splunk:
+#   host: !secret splunk_host
+#   token: !secret splunk_token
+#   port: !secret splunk_port
+#   ssl: !secret splunk_ssl
+#   verify_ssl: !secret splunk_verify_ssl
+#   name: Home Assistant
