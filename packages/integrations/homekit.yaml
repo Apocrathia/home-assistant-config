@@ -91,6 +91,8 @@ homekit:
         video_codec: copy
         audio_codec: copy
         support_audio: true
+        max_width: 1600
+        max_height: 1200
         stream_count: 5
 ################################################################################
   - name: Dining Room
