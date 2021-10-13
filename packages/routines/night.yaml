@@ -114,9 +114,9 @@ automation:
           entity_id: light.night_lights
           profile: relax
           brightness_pct: 25
-        data_template:
-          transition: >
-            {{ (states.sensor.nighttime_lighting_transition.state | int) }}
+        # data_template:
+        #   transition: >
+        #     {{ (states.sensor.nighttime_lighting_transition.state | int) }}
   ################################################################################
   - id: routine_night_master_bedroom_lights
     alias: 'Routine - Night - Master Bedroom Lights'
