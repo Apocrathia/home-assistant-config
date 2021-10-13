@@ -39,7 +39,15 @@ sensor:
         friendly_name: 'Serenity'
         value_template: >-
           Catting
-      michio:
+      michio: # https://www.instagram.com/michiothedoge/
         friendly_name: 'Michio'
+        value_template: >-
+          Pupping
+      sagan: # https://www.instagram.com/saganthepomsky/
+        friendly_name: 'Sagan'
+        value_template: >-
+          Pupping
+      hubble: # https://www.instagram.com/hubbletheaussie/
+        friendly_name: 'Hubble'
         value_template: >-
           Pupping
