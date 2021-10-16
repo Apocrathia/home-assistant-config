@@ -7,16 +7,19 @@ group:
     name: Vacation
     entities:
       - input_boolean.vacation_ian
+      - input_boolean.vacation_aimee
   ################################################################################
   network_phones:
     name: Phones
     entities:
       - device_tracker.network_ians_iphone
+      - device_tracker.network_aimees_iphone
   ################################################################################
   people:
     name: People
     entities:
       - person.ian
+      - person.aimee
 ################################################################################
 
 # This will eventually be used for the vacation status
@@ -29,11 +32,34 @@ proximity:
     tolerance: 50
     unit_of_measurement: mi
   ################################################################################
+  aimee:
+    zone: home
+    devices:
+      - person.aimee
+    tolerance: 50
+    unit_of_measurement: mi
+################################################################################
+
+sensor:
+  # and this is just because I'll find something funny to do with it.
+  ################################################################################
+  - platform: template
+    sensors:
+      distance_apart:
+        friendly_name: 'Distance Apart'
+        value_template: >-
+          {{ distance('person.ian','person.aimee') | round | int }}
+        unit_of_measurement: mi
+################################################################################
 
 input_boolean:
   ################################################################################
   vacation_ian:
     name: 'Vacation - Ian'
+    # initial: off
+    icon: mdi:beach
+  vacation_aimee:
+    name: 'Vacation - Aimee'
     # initial: off
     icon: mdi:beach
   vacation_mode:
@@ -112,6 +138,31 @@ automation:
             sequence:
               - service: input_boolean.turn_on
                 entity_id: input_boolean.vacation_ian
+  ################################################################################
+  - id: function_vacation_aimee
+    alias: 'Function - Vacation - Aimee'
+    trigger:
+      - platform: numeric_state
+        entity_id: proximity.aimee
+        above: 100
+        below: 100
+        for: 01:00:00
+    action:
+      - choose:
+          - conditions:
+              - condition: numeric_state
+                entity_id: proximity.aimee
+                below: 100
+            sequence:
+              - service: input_boolean.turn_off
+                entity_id: input_boolean.vacation_aimee
+          - conditions:
+              - condition: numeric_state
+                entity_id: proximity.aimee
+                above: 100
+            sequence:
+              - service: input_boolean.turn_on
+                entity_id: input_boolean.vacation_aimee
   ################################################################################
   - id: function_vacation_detection
     alias: 'Function - Vacation - Detection'
