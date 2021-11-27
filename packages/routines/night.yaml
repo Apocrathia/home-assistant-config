@@ -113,7 +113,7 @@ automation:
         data:
           entity_id: light.night_lights
           profile: relax
-          brightness_pct: 25
+          brightness_pct: 50
         # data_template:
         #   transition: >
         #     {{ (states.sensor.nighttime_lighting_transition.state | int) }}
