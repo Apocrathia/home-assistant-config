@@ -4,7 +4,7 @@
 # Update 20210308 - Vacuums have been migrated to the standard Valetudo.
 # The vacuums are rooted and running Valetudo-RE for granular local control and
 # separation from the Xiaomi cloud. Plus, I can get the maps in lovelace.
-# I've used the mirobo tool to upload firmware built by vacuumz.info
+# I've used the mirobo tool to upload firmware built by rytilahti
 # mirobo --ip 192.168.8.1 --token $$$ update-firmware firmware.pkg
 # Vacuumz.info - https://vacuumz.info/download/gen2/
 # mirobo - https://github.com/rytilahti/python-miio
