@@ -4,6 +4,7 @@
 # The vacuums are rooted and running Valetudo for granular local control and
 # separation from the Xiaomi cloud. Plus, I can get the maps in lovelace.
 # I've used the mirobo tool built by rytilahti to upload firmware
+# ```mirobo --debug discover --handshake true```
 # ```mirobo --ip 192.168.8.1 --token $$$ update-firmware firmware.pkg```
 # Default login 'root:cleaner'
 # Sources
