@@ -1,77 +1,17 @@
 ---
 # Roborock Vacuums
 
-# Update 20210308 - Vacuums have been migrated to the standard Valetudo.
-# The vacuums are rooted and running Valetudo-RE for granular local control and
+# The vacuums are rooted and running Valetudo for granular local control and
 # separation from the Xiaomi cloud. Plus, I can get the maps in lovelace.
-# I've used the mirobo tool to upload firmware built by rytilahti
-# mirobo --ip 192.168.8.1 --token $$$ update-firmware firmware.pkg
+# I've used the mirobo tool built by rytilahti to upload firmware
+# ```mirobo --ip 192.168.8.1 --token $$$ update-firmware firmware.pkg```
+# Default login 'root:cleaner'
+# Sources
 # Vacuumz.info - https://vacuumz.info/download/gen2/
 # mirobo - https://github.com/rytilahti/python-miio
-# ValetudoRE - https://github.com/rand256/Valetudo/
-# https://github.com/zvldz/vacuum
-# https://dustbuilder.xvm.mit.edu/
-
-# Deprecated as of 2021.3.0
-# https://www.home-assistant.io/blog/2021/03/03/release-20213/#breaking-changes
-# vacuum:
-#   # Downstairs
-#   - platform: xiaomi_miio
-#     id: downstairs_miio
-#     name: Downstairs Vacuum
-#     host: !secret downstairs_vacuum_host
-#     token: !secret downstairs_vacuum_token
-#   # Upstairs
-#   - platform: xiaomi_miio
-#     name: Upstairs Vacuum
-#     host: !secret upstairs_vacuum_host
-#     token: !secret upstairs_vacuum_token
-
-# Both of these devices are also being populated in Home Assistant
-# via MQTT auto-discovery, which I may or may not utilize in the future.
-# I like that the miio protocol does not rely on an MQTT broker.
-# The devices get populated as 'vacuum.downstairs' & 'vacuum.upstairs'
-# which is a little less redundant than 'vacuum.downstairs_vacuum' etc.
-# I don't know how I'll proceed. I'm just making notes for future me.
-# Update: As the device tokens keep changing as the vacuums have been
-# doing that weird factory reset thing every night, I've migrated to
-# using the MQTT devices. It's a bit more stable.
-# Update 20210303: Switched to using miio primarily almost a month ago
-# and it seemed to break some of my automations. This is mostly due to
-# an availability issue that caused state duration times to be reset.
-# Going back to MQTT.
-
-# No longer required with Valetudo 2021.02.0
-# For drawing the map in Lovelace, I am using the Valetudo map card
-# https://github.com/TheLastProject/lovelace-valetudo-map-card
-# The following sensor configuration is required.
-# sensor:
-#   - platform: mqtt
-#     unique_id: upstairs_vacuum_map
-#     state_topic: "vacuum/upstairs/state"
-#     json_attributes_topic: "vacuum/upstairs/map_data_parsed"
-#     name: Upstairs Vacuum Map
-#     value_template: 'OK'
-#     scan_interval: 5
-#   - platform: mqtt
-#     unique_id: downstairs_vacuum_map
-#     state_topic: "vacuum/downstairs/state"
-#     json_attributes_topic: "vacuum/downstairs/map_data_parsed"
-#     name: Downstairs Vacuum Map
-#     value_template: 'OK'
-#     scan_interval: 5
-
-# Keep the database from getting out of control
-# recorder:
-#   exclude:
-#     entities:
-#       - sensor.downstairs_vacuum_map
-#       - sensor.upstairs_vacuum_map
-
-# Alternatively, using the camera integration is another option and
-# simply pull the image from valetudo-mapper. I'll do that when I can finally
-# get valetudo-mapper to work... https://github.com/rand256/valetudo/issues/135
-# https://github.com/PiotrMachowski/lovelace-xiaomi-vacuum-map-card
+# Valetudo - https://github.com/Hypfer/Valetudo
+# Firmware Builder - https://github.com/zvldz/vacuum
+# Firmware Builder - https://builder.dontvacuum.me
 
 automation:
   ################################################################################
