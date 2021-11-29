@@ -19,11 +19,6 @@
 # Any scripts that I may write
 !*.sh
 
-# Travis Configuration
-!.travis
-!.travis/travis.*
-!.travis.yml
-
 # Allow the following subfolders
 !appdaemon
 !automations
