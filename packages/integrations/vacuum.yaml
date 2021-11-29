@@ -27,16 +27,15 @@ automation:
         entity_id:
           - vacuum.downstairs
           - vacuum.upstairs
-          - vacuum.downstairs_vacuum
-          - vacuum.upstairs_vacuum
         from:
           - cleaning
           - returning
+          - error
         to:
           - error
           - idle
         for:
-          seconds: 30
+          minutes: 5
     action:
       #  This hasn't seemed to work, so let me make sure the template works
       - service: notify.notify
@@ -56,6 +55,13 @@ automation:
           - conditions:
               - condition: template
                 value_template: "{{ trigger.from == 'returning' }}"
+            sequence:
+              - service: vacuum.return_to_base
+                data_template:
+                  entity_id: '{{ trigger.entity_id }}'
+          - conditions:
+              - condition: template
+                value_template: "{{ trigger.from == 'error' }}"
             sequence:
               - service: vacuum.return_to_base
                 data_template:
@@ -90,57 +96,3 @@ automation:
         data_template:
           entity_id: '{{ trigger.entity_id }}'
   ################################################################################
-  # Every now and then the vacuums seem to get stuck or can't find the dock, and
-  # they just give up really easily. Re-sending a go-to dock command usually works
-  # So, we'll do that automatically if it's been sitting idle for 5 minutes.
-  # - id: function_vacuum_idle
-  #   alias: "Function - Vacuum - Idle"
-  #   trigger:
-  #     - platform: state
-  #       entity_id:
-  #         - vacuum.downstairs_vacuum
-  #         - vacuum.upstairs_vacuum
-  #       to: idle
-  #       for:
-  #         minutes: 5
-  #   action:
-  #     - service: 'vacuum.start' # Just keep cleaning
-  #       data_template:
-  #         entity_id: "{{ trigger.entity_id }}"
-  ################################################################################
-  # Because nobody is leaving the house thanks to the current pandemic, our vacuum
-  # cleaners have barely run lately. This automation will check every morning to
-  # see if the vacuum has run within the last 24 hours. If not, send it out.
-  - id: function_vacuum_daily_downstairs
-    alias: 'Function - Vacuum - Daily (Downstairs)'
-    trigger:
-      - platform: time
-        at: '05:00:00' # Check every morning at 0500
-    condition:
-      condition: state
-      entity_id: vacuum.downstairs
-      state:
-        - docked
-        - unavailable # Vacuums keep disappearing at around 0300
-      for:
-        hours: 24
-    action:
-      - service: vacuum.start
-        entity_id: vacuum.downstairs
-  - id: function_vacuum_daily_upstairs
-    alias: 'Function - Vacuum - Daily (Upstairs)'
-    trigger:
-      - platform: time
-        at: '05:00:00' # Check every morning at 0500
-    condition:
-      condition: state
-      entity_id: vacuum.downstairs
-      state:
-        - docked
-        - unavailable # Vacuums keep disappearing at around 0300
-      for:
-        hours: 24
-    action:
-      - service: vacuum.start
-        entity_id: vacuum.upstairs
-################################################################################
