@@ -29,18 +29,64 @@ script:
       entity_id:
         description: 'The light object for the script to act upon.'
         example: 'light.living_room'
+        advanced: false
+        required: true
+        # default:
+        selector:
+          entity:
+            domain: light
       starting_brightness_pct:
-        description: 'Where the light should initially be set to. 0-100'
+        description: 'Where the light should initially be set to. 1-100'
         example: '25'
+        advanced: false
+        required: true
+        default: 1
+        selector:
+          number:
+            min: 1
+            max: 100
+            step: 5
+            unit_of_measurement: Percent
+            mode: slider
       ending_brightness_pct:
         description: 'Where the light should end up. 0-100'
         example: '100'
+        advanced: false
+        required: true
+        default: 100
+        selector:
+          number:
+            min: 0
+            max: 100
+            step: 5
+            unit_of_measurement: Percent
+            mode: slider
       interval_pct:
-        description: 'How large of a step to take. 0-100'
+        description: 'How large of a step to take. 1-100'
         example: '20'
+        advanced: false
+        required: false
+        default: 20
+        selector:
+          number:
+            min: 5
+            max: 100
+            step: 5
+            unit_of_measurement: Percent
+            mode: slider
       transition_time:
         description: 'How long does the transition take? (in seconds)'
         example: '300'
+        advanced: false
+        required: false
+        default: 60
+        selector:
+          number:
+            min: 5
+            max: 600
+            step: 5
+            unit_of_measurement: Seconds
+            mode: slider
     sequence:
       - alias: 'Setup loop parameters'
         variables:
