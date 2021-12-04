@@ -8,12 +8,6 @@ automation:
     trigger:
       platform: state
       entity_id: updater.updater
-    # TODO: Condition on verified config
-    #  homeassistant check = 'ok'
-    #  condition:
-    #    condition: template
-    #    value_template: >
-    #      {{ true }}
     action:
       service: notify.notify
       data:
@@ -36,15 +30,15 @@ automation:
   ################################################################################
 
   ################################################################################
-  - id: system_notification_restart
-    alias: 'System - Notification - Home Assistant Restart'
+  - id: system_notification_start
+    alias: 'System - Notification - Home Assistant Start'
     trigger:
       platform: homeassistant
       event: start
     action:
       service: notify.notify
       data:
-        message: 'Home Assistant has restarted.'
+        message: 'Home Assistant has Started!'
   ################################################################################
 
   ################################################################################
