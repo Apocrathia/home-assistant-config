@@ -1,6 +1,7 @@
 ---
 name: Home Assistant CI
 
+# yamllint disable-line rule:truthy
 on:
   push:
   pull_request:
@@ -17,8 +18,9 @@ jobs:
         uses: "docker://pipelinecomponents/yamllint:latest"
         with:
           args: yamllint .
+
   remarklint:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - name: Getting your configuration from GitHub
         uses: actions/checkout@v1
@@ -108,5 +110,6 @@ jobs:
       - name: Remove HA-specific files
         run: rm -v ./esphome/customize.yaml
       - name: Run esphome on all files
+        # yamllint disable rule:line-length
         run: |
           for file in $(find ./esphome -type f -name "*.yaml" -not -name "secrets.yaml"); do esphome "${file}" config; done
