@@ -1,6 +1,32 @@
 ---
 ### Master Bathroom ###
 
+# There are a couple of things in here that I want to make sure I have
+# documented for anyone who may be looking at this.
+# Devices:
+#   - Humidity sensor over shower to detect when the water is on
+#   - Z-wave switches on the bathroom fan and everything else
+#   - Broadlink IR blaster (RM4 Mini)
+#   - LED Clock over vanity (visible from shower)
+#
+# A couple of things happen when the shower is on
+# - Lights over the shower turn on
+# - Bathroom fan turns on
+# - A stopwatch is started on the clock
+#
+# The clock in the bathroom is an interesting one I found on Amaazon
+# https://smile.amazon.com/gp/product/B07SKTZK6Z
+# It comes with a simple 6-button IR remote
+# The codes for the Broadlink are as follows:
+# "power": "JgBQAAABJ5MUERQRFBEUEhMSExITEhQRFDYUNxM3FDYUNxM3EzcUNxQRExIUNhQ2FTYUERMSFBEUNhU2FBEUERQRFDYVNhQ2FAAFFwABKUkUAA0F"
+# "mode": "JgBQAAABKJMUERQRFBEUERURFBEUERQRFDcTNxQ2FDYUNxQ2FDYUNhURFBEUERQRFBEUEhQ2FBEUNhQ3FDYUNhQ2FDcUERQ2FAAFFwABKkkUAA0F"
+# "alarm": "JgBQAAABKJMUERQRFBEVEBURFBEUERQRFDYVNhQ2FDYVNhQ2FDYVNhQRFBEUERQ2FREUERQRFBEUNhU2FDYUERQ2FTYUNhQ2FQAFFwABKUkUAA0F"
+# "timer": "JgBQAAABKJMTEhQRFBEUERQSExITEhMSEzcUNxM3EzcUNhQ3EzcUNhQRFRETNxMSExIUERQ3ExIUNhQ2FBITNxQ2FDcTEhM3FAAFFgABKUoUAA0F"
+# "up": "JgBQAAABKJIUEhQRFBEUERQRFBEVERQRFDYUNhU2FDYUNhU2FDYUNhURFBEUERQ2FDcUERQRFBEUNxQ2FDYUERQSFDYUNhQ2FQAFFwABKkkUAA0F"
+# "down": "JgBQAAABJ5MUERQRFBIUERQRFBEUERQRFTYUNhQ2FDcUNhQ2FDcUNhQRFDYVNhQ2FDYUERU2FBEUNhQRFREUERQRFDYVEBU2FAAFFwABKUoTAA0F"
+# "start_stop": "JgBQAAABKZIUERQRFBEUERURFBEUERQRFDYVNhQ2FDYVNhQ2FDYVNhQRFDYUERURFDYUERQ2FREUNhQRFDYVNhQRFDYUERQ3FAAFFwABKkkUAA0F"
+# "clear": "JgBQAAABKZIUERQRFBEUEhQRFBEUERQRFDYVNhQ2FDYVNhQ2FDYUNxQRFDYUERQ3FBEUERQ2FBEVNhQRFDYUERQ3FDYUERQ2FQAFFwABKUkUAA0F"
+
 # Inputs
 input_number:
   # This will be used for the shower automation
@@ -42,6 +68,7 @@ automation:
       - service: light.turn_on
         data:
           entity_id: light.master_bathroom_shower_lights
+      - service: script.area_master_bathroom_start_timer
   ################################################################################
   - id: area_master_bathroom_humidity_low
     alias: 'Area - Master Bathroom - Humidity Low'
@@ -68,6 +95,7 @@ automation:
       - service: light.turn_off
         data:
           entity_id: light.master_bathroom_shower_lights
+      - service: script.area_master_bathroom_stop_timer
   ################################################################################
   # Turn on the fan when the shitter closet door is closed.
   - id: area_master_bathroom_toilet_door_closed
@@ -107,4 +135,74 @@ automation:
       - service: switch.turn_off
         data:
           entity_id: switch.master_bathroom_fan
+################################################################################
+
+script:
+################################################################################
+  area_master_bathroom_start_timer:
+    alias: "Area - Master Bathroom - Start Timer"
+    sequence:
+      - service: remote.send_command
+        alias: "Enter stopwatch mode"
+        target:
+          entity_id: remote.master_bathroom_ir_blaster
+        data:
+          device: master_bathroom_clock
+          command: timer
+      - delay:
+          seconds: 1
+      - service: remote.send_command
+        alias: "Clear timer"
+        target:
+          entity_id: remote.master_bathroom_ir_blaster
+        data:
+          device: master_bathroom_clock
+          command: clear
+      - delay:
+          seconds: 1
+      - service: remote.send_command
+        alias: "Start timer"
+        target:
+          entity_id: remote.master_bathroom_ir_blaster
+        data:
+          device: master_bathroom_clock
+          command: start_stop
+################################################################################
+  area_master_bathroom_stop_timer:
+    alias: "Area - Master Bathroom - Stop Timer"
+    sequence:
+      - service: remote.send_command
+        alias: "Enter stopwatch mode"
+        target:
+          entity_id: remote.master_bathroom_ir_blaster
+        data:
+          device: master_bathroom_clock
+          command: timer
+      - delay:
+          seconds: 1
+      - service: remote.send_command
+        alias: "Stop timer"
+        target:
+          entity_id: remote.master_bathroom_ir_blaster
+        data:
+          device: master_bathroom_clock
+          command: start_stop
+      - delay:
+          seconds: 1
+      - service: remote.send_command
+        alias: "Clear timer"
+        target:
+          entity_id: remote.master_bathroom_ir_blaster
+        data:
+          device: master_bathroom_clock
+          command: clear
+      - delay:
+          seconds: 1
+      - service: remote.send_command
+        alias: "Go back to clock mode"
+        target:
+          entity_id: remote.master_bathroom_ir_blaster
+        data:
+          device: master_bathroom_clock
+          command: mode
 ################################################################################
