@@ -28,7 +28,6 @@ light:
       - light.sitting_room_floor_lamp
       - light.kitchen_cabinet_lights
       - light.kitchen_sink
-      - light.christmas_tree
 
   - platform: group
     name: Lights Out!
