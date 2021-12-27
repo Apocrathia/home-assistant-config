@@ -31,24 +31,24 @@ input_datetime:
 ################################################################################
 # iOS Notifications
 ################################################################################
-ios:
-  push:
-    categories:
-      - name: Garage Door
-        identifier: 'garage_door'
-        actions:
-          - identifier: 'garage_close'
-            title: 'Close'
-            activationMode: 'background'
-            authenticationRequired: true
-            destructive: false
-            behavior: 'default'
-          - identifier: 'dismiss'
-            title: 'Dismiss'
-            activationMode: 'background'
-            authenticationRequired: true
-            destructive: true
-            behavior: 'default'
+# ios:
+#   push:
+#     categories:
+#       - name: Garage Door
+#         identifier: 'garage_door'
+#         actions:
+#           - identifier: 'garage_close'
+#             title: 'Close'
+#             activationMode: 'background'
+#             authenticationRequired: true
+#             destructive: false
+#             behavior: 'default'
+#           - identifier: 'dismiss'
+#             title: 'Dismiss'
+#             activationMode: 'background'
+#             authenticationRequired: true
+#             destructive: true
+#             behavior: 'default'
 ################################################################################
 
 sensor:
