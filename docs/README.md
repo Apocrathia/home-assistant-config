@@ -16,6 +16,8 @@
 [![Discord][discord-shield]][discord]
 [![Community Forum][forum-shield]][forum]
 
+<a href="https://www.buymeacoffee.com/apocrathia" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/arial-violet.png" alt="Buy Me A Coffee" style="height: 30px !important;width: 117px !important;" ></a>
+
 ---
 
 ![My Home Assistant Default View](images/default_view.png)
