@@ -1,0 +1,4 @@
+---
+# Include root customize file
+homeassistant:
+  customize: !include ../../customize.yaml

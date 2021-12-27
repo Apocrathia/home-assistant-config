@@ -1,3 +1,3 @@
 ---
 # Include scenes made in the editor
-scene: !include scenes.yaml
+scene: !include ../../scenes.yaml
