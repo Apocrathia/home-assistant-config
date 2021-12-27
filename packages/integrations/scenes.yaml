@@ -1,0 +1,3 @@
+---
+# Include scenes made in the editor
+scene: !include scenes.yaml
