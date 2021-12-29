@@ -28,6 +28,8 @@ light:
       - light.sitting_room_floor_lamp
       - light.kitchen_cabinet_lights
       - light.kitchen_sink
+      - light.kitchen_task_lights_left
+      - light.kitchen_task_lights_right
 
   - platform: group
     name: Lights Out!
