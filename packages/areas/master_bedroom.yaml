@@ -72,7 +72,7 @@ automation:
           entity_id: light.master_bedroom_closet
 ################################################################################
 - id: area_master_bedroom_panic_button
-  alias: Area - Master Bedroom - Panic Button
+  alias: Area - Master Bedroom - Panic Button 
   trigger:
     - platform: event
       event_type: zha_event
