@@ -127,6 +127,8 @@ automation:
     trigger:
       - platform: sun
         event: sunset
+        # 5 Minutes before. Enjoy the sunset.
+        offset: "-00:05:00"
     condition:
       - alias: "Blinds Unlocked"
         condition: state
