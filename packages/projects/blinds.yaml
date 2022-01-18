@@ -55,7 +55,7 @@ automation:
             conditions:
             - alias: "Above Freezing"
               condition: numeric_state
-              entity_id: weather.dark_sky # Replace Dark Sky...
+              entity_id: weather.pirateweather
               attribute: temperature
               above: 32 # 0 C
             - alias: "Someone is home"
@@ -76,7 +76,7 @@ automation:
             conditions:
             - alias: "Below Freezing"
               condition: numeric_state
-              entity_id: weather.dark_sky # Replace Dark Sky...
+              entity_id: weather.pirateweather
               attribute: temperature
               below: 32 # 0 C
             - alias: "Nobody is home"
@@ -114,7 +114,9 @@ automation:
     trigger:
       - platform: numeric_state
         entity_id: sun.sun
-        attrubute: azimuth
+        # attrubute: azimuth
+        value_template: >
+          "{{ state.attributes.azimuth }}"
         above: 150 # The intersection of my home's western face.
     action:
       - alias: "Afternoon - Close"

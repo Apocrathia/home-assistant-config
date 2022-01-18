@@ -19,6 +19,21 @@ sensor:
     monitored_conditions:
       - summary
 
+  # Pirate Weather
+  - platform: pirateweather
+    api_key: !secret pirateweather_api_key
+    scan_interval: '00:17:17' # Use a prime number to simulate randomness
+    monitored_conditions:
+      - summary
+      - temperature
+      - precip_probability
+      - precip_type
+      - humidity
+      - cloud_cover
+      - nearest_storm_distance
+      - precip_intensity
+      - wind_speed
+
   # Steam
   - platform: steam_online
     # entity_namespace: steam

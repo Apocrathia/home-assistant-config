@@ -26,3 +26,8 @@ rm -rfv hass-auto-backup
 git clone https://github.com/lukas-hetzenecker/home-assistant-remote
 mv home-assistant-remote/custom_components/remote_homeassistant remote_homeassistant
 rm -rfv home-assistant-remote
+
+# pirateweather
+git clone https://github.com/alexander0042/pirate-weather-ha
+mv pirate-weather-ha/custom_components/pirateweather pirateweather
+rm -rfv pirate-weather-ha
