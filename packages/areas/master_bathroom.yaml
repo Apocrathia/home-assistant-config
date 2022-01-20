@@ -89,13 +89,21 @@ automation:
     action:
       - delay:
           minutes: 5
-      - service: switch.turn_off
-        data:
-          entity_id: switch.master_bathroom_fan
-      - service: light.turn_off
-        data:
-          entity_id: light.master_bathroom_shower_lights
-      - service: script.area_master_bathroom_stop_timer
+      - alias: "Ensure the humidity is still low"
+        choose:
+        - conditions:
+            condition: state
+            entity_id:
+              - binary_sensor.master_bathroom_humidity_high
+            state: 'off'
+          sequence:
+            - service: switch.turn_off
+              data:
+                entity_id: switch.master_bathroom_fan
+            - service: light.turn_off
+              data:
+                entity_id: light.master_bathroom_shower_lights
+            - service: script.area_master_bathroom_stop_timer
   ################################################################################
   # Turn on the fan when the shitter closet door is closed.
   - id: area_master_bathroom_toilet_door_closed
@@ -135,6 +143,26 @@ automation:
       - service: switch.turn_off
         data:
           entity_id: switch.master_bathroom_fan
+################################################################################
+  - id: area_master_bathroom_lighting_schedule
+    alias: "Area - Master Bathroom - Lightinng Schedule"
+    trigger:
+      - platform: time
+        at: 
+          - "05:00:00"
+          - "22:00:00"
+    action:
+      - alias: "Power Toggle"
+        service: remote.send_command
+        target:
+          entity_id: remote.master_bathroom_ir_blaster
+        data:
+          device: master_bathroom_clock
+          command: power
+      - alias: "Input Toggle"
+        service: input_boolean.toggle
+        target:
+          entity_id: input_boolean.master_bathroom_clock_light
 ################################################################################
 
 script:
