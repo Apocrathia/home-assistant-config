@@ -131,6 +131,7 @@ automation:
           entity_id:
             - light.indoor_lights
             - light.outdoor_lights
+            - light.back_yard_string_lights
         # data_template:
         #   transition: >
         #     {{ (states.sensor.daytime_lighting_transition.state | int) }}
