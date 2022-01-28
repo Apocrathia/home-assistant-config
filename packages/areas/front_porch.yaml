@@ -7,7 +7,7 @@ automation:
     alias: 'Area - Front Porch - Motion (Initial)'
     trigger:
       - platform: state
-        entity_id: binary_sensor.front_porch_motion
+        entity_id: binary_sensor.motion_front_door
         from: 'off'
         to: 'on'
     condition:
@@ -27,7 +27,7 @@ automation:
     alias: 'Area - Front Porch - Motion (Idle)'
     trigger:
       - platform: state
-        entity_id: binary_sensor.front_porch_motion
+        entity_id: binary_sensor.motion_front_door
         from: 'on'
         to: 'off'
         for:
