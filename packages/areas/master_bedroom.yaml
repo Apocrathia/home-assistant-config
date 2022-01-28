@@ -10,17 +10,13 @@ input_number:
     step: 10
 
 # Template Sensors
-sensor:
+binary_sensor:
   - platform: template
     sensors:
-      master_bedroom_humidifer_level:
-        friendly_name: "Master Bedroom Humidier Level"
-        value_template: >
-          {{ state_attr('fan.master_bedroom_humidifier', 'depth') | int }}
       master_bedroom_humidifer_low:
         friendly_name: "Master Bedroom Humidier Low"
         value_template: >
-          {{ ( float(states.sensor.master_bedroom_humidifer_level.state) > 
+          {{ ( float(states.sensor.sensor.master_bedroom_humidifier_water_level.state) < 
           float(states.input_number.master_bedroom_humidifer_threshold.state) ) }}
 
 # Alerts
@@ -97,4 +93,10 @@ automation:
     data:
       entity_id: alarm_control_panel.home
       code: !secret alarm_code
+################################################################################
+# - id: area_master_bedroom_humidifier_alert
+#   alias: Area - Master Bedroom - Humidifier Alert
+#   trigger:
+#   condition:
+#   action:
 ################################################################################
