@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Getting your configuration from GitHub
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
       - name: Running YAMLlint
         uses: "docker://pipelinecomponents/yamllint:latest"
         with:
@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Getting your configuration from GitHub
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
       - name: Running Remark lint
         uses: "docker://pipelinecomponents/remark-lint:latest"
         continue-on-error: true
@@ -34,7 +34,7 @@ jobs:
     needs: [yamllint, remarklint]
     steps:
       - name: Getting your configuration from GitHub
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
       - name: Copy stub files into configuration folder
         run: cp -R ./.stubs/* .
       - name: Install custom components
@@ -54,7 +54,7 @@ jobs:
     needs: [yamllint, remarklint]
     steps:
       - name: Getting your configuration from GitHub
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v3
       - name: Copy stub files into configuration folder
         run: cp -R ./.stubs/* .
       - name: Install custom components
@@ -74,7 +74,7 @@ jobs:
   #   needs: [yamllint, remarklint]
   #   steps:
   #     - name: Getting your configuration from GitHub
-  #       uses: actions/checkout@v2.4.0
+  #       uses: actions/checkout@v3
   #     - name: Copy stub files into configuration folder
   #       run: cp -R ./.stubs/* .
   #     - name: Install custom components
@@ -94,7 +94,7 @@ jobs:
   #   needs: [yamllint]
   #   steps:
   #     - name: Getting your configuration from GitHub
-  #       uses: actions/checkout@v2.4.0
+  #       uses: actions/checkout@v3
   #     - name: Set up Python 3.7
   #       uses: actions/setup-python@v2.3.1
   #       with:
