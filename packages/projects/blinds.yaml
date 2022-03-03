@@ -105,9 +105,11 @@ automation:
         state: "off"
     action:
       - alias: "Morning - Open"
-        service: cover.blinds
+        service: cover.set_cover_position
         target:
-          entity_id: cover.office_blinds
+          entity_id: cover.blinds
+        data:
+          position: 100
 ################################################################################
   - id: project_blinds_afternoon
     alias: Project - Blinds - Afternoon
@@ -120,9 +122,11 @@ automation:
         above: 150 # The intersection of my home's western face.
     action:
       - alias: "Afternoon - Close"
-        service: cover.close_cover
+        service: cover.set_cover_position
         target:
           entity_id: cover.blinds
+        data:
+          position: 0
 ################################################################################
   - id: project_blinds_sunset
     alias: Project - Blinds - Sunset
@@ -138,9 +142,11 @@ automation:
         state: "off"  
     action:
       - alias: "Sunset - Open"
-        service: cover.open_cover
+        service: cover.set_cover_position
         target:
           entity_id: cover.blinds
+        data:
+          position: 100
 ################################################################################
   - id: project_blinds_night
     alias: Project - Blinds - Night
@@ -150,9 +156,11 @@ automation:
         at: "23:00:00"
     action:
       - alias: "Night - Close"
-        service: cover.close_cover
+        service: cover.set_cover_position
         target:
           entity_id: cover.blinds
+        data:
+          position: 0
 ################################################################################
   - id: project_blinds_close
     alias: Project - Blinds - Away
@@ -169,7 +177,9 @@ automation:
         to: "on"
     action:
       - alias: "Blinds Close"
-        service: cover.close_cover
+        service: cover.set_cover_position
         target:
           entity_id: cover.blinds
+        data:
+          position: 0
 ################################################################################
