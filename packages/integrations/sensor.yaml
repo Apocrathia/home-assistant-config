@@ -46,6 +46,15 @@ sensor:
     host: !secret hass_url
     port: !secret hass_port
 
+  # Twitch
+  - platform: twitch
+    client_id: !secret twitch_client_id
+    token: !secret twitch_client_secret
+    channels:
+      - Apocrathia
+      - PB_Undesirables
+      - NineFoot3
+
   # Template
   - platform: template
     sensors:
