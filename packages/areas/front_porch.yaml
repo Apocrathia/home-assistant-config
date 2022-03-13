@@ -44,7 +44,7 @@ automation:
           profile: relax
           brightness_pct: 50
           transition: 5
-################################################################################
+  ################################################################################
   - id: area_front_porch_front_door_nfc
     alias: 'Area - Front Porch - Front Door NFC'
     trigger:
@@ -53,26 +53,26 @@ automation:
       event_data:
         tag_id: !secret nfc_front_door
     action:
-      - alias: "State handler"
+      - alias: 'State handler'
         choose:
-        - conditions:
-          - alias: "Front Door Unlocked"
-            condition: state
-            entity_id: lock.front_door
-            state: "unlocked"
-          sequence:
-          - alias: "Lock Front Door"
-            service: lock.lock
-            target:
-              entity_id: lock.front_door
-        - conditions:
-          - alias: "Front Door Locked"
-            condition: state
-            entity_id: lock.front_door
-            state: "locked"
-          sequence:
-          - alias: "Unlock Front Door"
-            service: lock.unlock
-            target:
-              entity_id: lock.front_door
+          - conditions:
+              - alias: 'Front Door Unlocked'
+                condition: state
+                entity_id: lock.front_door
+                state: 'unlocked'
+            sequence:
+              - alias: 'Lock Front Door'
+                service: lock.lock
+                target:
+                  entity_id: lock.front_door
+          - conditions:
+              - alias: 'Front Door Locked'
+                condition: state
+                entity_id: lock.front_door
+                state: 'locked'
+            sequence:
+              - alias: 'Unlock Front Door'
+                service: lock.unlock
+                target:
+                  entity_id: lock.front_door
 ################################################################################

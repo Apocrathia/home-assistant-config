@@ -42,31 +42,31 @@ sensor:
         friendly_name: Wakeup Time
         # entity_id: input_datetime.wakeup_time
         value_template: >
-          {{ (states.input_datetime.wakeup_time.attributes.timestamp | 
+          {{ (states.input_datetime.wakeup_time.attributes.timestamp |
               int | timestamp_custom("%H:%M",False)) }}
       wakeup_alarm_start_time:
         # entity_id: input_datetime.wakeup_time, input_number.wakeup_duration
         friendly_name: Alarm Clock Start
         value_template: >
-          {{ (((states.input_datetime.wakeup_time.attributes.timestamp | 
-              int) - (states.input_number.wakeup_duration.state | int * 60)) | 
+          {{ (((states.input_datetime.wakeup_time.attributes.timestamp |
+              int) - (states.input_number.wakeup_duration.state | int * 60)) |
               timestamp_custom("%H:%M",False)) }}
       wakeup_alarm_midpoint:
         # entity_id: input_datetime.wakeup_time, input_number.wakeup_duration
         friendly_name: Alarm Clock Midpoint
         value_template: >
-          {{ (((states.input_datetime.wakeup_time.attributes.timestamp | 
-              int) - ((states.input_number.wakeup_duration.state | 
+          {{ (((states.input_datetime.wakeup_time.attributes.timestamp |
+              int) - ((states.input_number.wakeup_duration.state |
               int * 60)/2 )) | timestamp_custom("%H:%M",False)) }}
 
 automation:
-################################################################################
+  ################################################################################
   - id: function_wakeup_bedroom_light
     alias: 'Function - Wakeup - Bedroom Light'
     trigger:
       - platform: template
         value_template: >
-          {{ (states.sensor.time.state == 
+          {{ (states.sensor.time.state ==
               states.sensor.wakeup_alarm_start_time.state) }}
       - platform: time
         at: input_datetime.wakeup_time
@@ -99,13 +99,13 @@ automation:
           interval_pct: 10
           transition_time: >
             {{ states.input_number.wakeup_duration.state | multiply(60) | int }}
-################################################################################
+  ################################################################################
   - id: function_wakeup_apple_tv
     alias: 'Function - Wakeup - Apple TV'
     trigger:
       - platform: template
         value_template: >
-          {{ (states.sensor.time.state == 
+          {{ (states.sensor.time.state ==
               states.sensor.wakeup_alarm_midpoint.state) }}
     condition:
       condition: and
@@ -115,7 +115,7 @@ automation:
           state: 'on'
     action:
       service: script.function_alarm_clock
-################################################################################
+  ################################################################################
   - id: function_wakeup_vacuum
     alias: 'Function - Wakeup - Vacuum'
     trigger:
@@ -136,7 +136,7 @@ automation:
 ################################################################################
 
 script:
-################################################################################
+  ################################################################################
   function_wakeup_apple_tv:
     alias: 'Function - Wakeup - Apple TV'
     sequence:

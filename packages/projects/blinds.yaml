@@ -31,12 +31,12 @@ homeassistant:
   customize:
     input_boolean.blinds_lock:
       templates:
-          icon: >
-            if (state === 'on') return 'mdi:lock';
-            return 'mdi:lock-open';
+        icon: >
+          if (state === 'on') return 'mdi:lock';
+          return 'mdi:lock-open';
 
 automation:
-################################################################################
+  ################################################################################
   - id: project_blinds_lock
     alias: Project - Blinds - Lock
     trigger:
@@ -48,69 +48,69 @@ automation:
         above: 32 # 0 C
         below: 32 # 0 C
     action:
-      - alias: "State Handler"
+      - alias: 'State Handler'
         choose:
-        - conditions:
-          - condition: and
-            conditions:
-            - alias: "Above Freezing"
-              condition: numeric_state
-              entity_id: weather.pirateweather
-              attribute: temperature
-              above: 32 # 0 C
-            - alias: "Someone is home"
-              condition: state
-              entity_id: input_boolean.away_mode
-              state: "off"
-            - alias: "Alarm is disarmed"
-              condition: state
-              entity_id: alarm_control_panel.home
-              state: "disarmed"
-          sequence:
-            - alias: "Disable Lock"
-              service: input_boolean.turn_off
-              target:
-                entity_id: input_boolean.blinds_lock
-        - conditions:
-          - condition: or
-            conditions:
-            - alias: "Below Freezing"
-              condition: numeric_state
-              entity_id: weather.pirateweather
-              attribute: temperature
-              below: 32 # 0 C
-            - alias: "Nobody is home"
-              condition: state
-              entity_id: input_boolean.away_mode
-              state: "on"
-            - alias: "Alarm is armed"
-              condition: state
-              entity_id: alarm_control_panel.home
-              state: "armed"
-          sequence:
-            - alias: "Enable Lock"
-              service: input_boolean.turn_on
-              target:
-                entity_id: input_boolean.blinds_lock
-################################################################################
+          - conditions:
+              - condition: and
+                conditions:
+                  - alias: 'Above Freezing'
+                    condition: numeric_state
+                    entity_id: weather.pirateweather
+                    attribute: temperature
+                    above: 32 # 0 C
+                  - alias: 'Someone is home'
+                    condition: state
+                    entity_id: input_boolean.away_mode
+                    state: 'off'
+                  - alias: 'Alarm is disarmed'
+                    condition: state
+                    entity_id: alarm_control_panel.home
+                    state: 'disarmed'
+            sequence:
+              - alias: 'Disable Lock'
+                service: input_boolean.turn_off
+                target:
+                  entity_id: input_boolean.blinds_lock
+          - conditions:
+              - condition: or
+                conditions:
+                  - alias: 'Below Freezing'
+                    condition: numeric_state
+                    entity_id: weather.pirateweather
+                    attribute: temperature
+                    below: 32 # 0 C
+                  - alias: 'Nobody is home'
+                    condition: state
+                    entity_id: input_boolean.away_mode
+                    state: 'on'
+                  - alias: 'Alarm is armed'
+                    condition: state
+                    entity_id: alarm_control_panel.home
+                    state: 'armed'
+            sequence:
+              - alias: 'Enable Lock'
+                service: input_boolean.turn_on
+                target:
+                  entity_id: input_boolean.blinds_lock
+  ################################################################################
   - id: project_blinds_morning
     alias: Project - Blinds - Morning
     trigger:
       - platform: sun
         event: sunrise
     condition:
-      - alias: "Blinds Unlocked"
+      - alias: 'Blinds Unlocked'
         condition: state
         entity_id: input_boolean.blinds_lock
-        state: "off"
+        state: 'off'
     action:
-      - alias: "Morning - Open"
+      - alias: 'Morning - Open'
         service: cover.set_cover_position
         target:
           entity_id: cover.blinds
         data:
           position: 100
-################################################################################
+  ################################################################################
   - id: project_blinds_afternoon
     alias: Project - Blinds - Afternoon
     trigger:
@@ -121,62 +121,62 @@ automation:
           "{{ state.attributes.azimuth }}"
         above: 150 # The intersection of my home's western face.
     action:
-      - alias: "Afternoon - Close"
+      - alias: 'Afternoon - Close'
         service: cover.set_cover_position
         target:
           entity_id: cover.blinds
         data:
           position: 0
-################################################################################
+  ################################################################################
   - id: project_blinds_sunset
     alias: Project - Blinds - Sunset
     trigger:
       - platform: sun
         event: sunset
         # 5 Minutes before. Enjoy the sunset.
-        offset: "-00:05:00"
+        offset: '-00:05:00'
     condition:
-      - alias: "Blinds Unlocked"
+      - alias: 'Blinds Unlocked'
         condition: state
         entity_id: input_boolean.blinds_lock
-        state: "off"  
+        state: 'off'
     action:
-      - alias: "Sunset - Open"
+      - alias: 'Sunset - Open'
         service: cover.set_cover_position
         target:
           entity_id: cover.blinds
         data:
           position: 100
-################################################################################
+  ################################################################################
   - id: project_blinds_night
     alias: Project - Blinds - Night
     trigger:
       # Close blinds at night
       - platform: time
-        at: "23:00:00"
+        at: '23:00:00'
     action:
-      - alias: "Night - Close"
+      - alias: 'Night - Close'
         service: cover.set_cover_position
         target:
           entity_id: cover.blinds
         data:
           position: 0
-################################################################################
+  ################################################################################
   - id: project_blinds_close
     alias: Project - Blinds - Away
     trigger:
       # Close blinds when alarm is armed
       - platform: state
         entity_id: alarm_control_panel.home
-        from: "disarmed"
-        to: "armed"
+        from: 'disarmed'
+        to: 'armed'
       # Close blinds when the house is empty
       - platform: state
         entity_id: input_boolean.away_mode
-        from: "off"
-        to: "on"
+        from: 'off'
+        to: 'on'
     action:
-      - alias: "Blinds Close"
+      - alias: 'Blinds Close'
         service: cover.set_cover_position
         target:
           entity_id: cover.blinds

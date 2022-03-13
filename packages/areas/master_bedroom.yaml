@@ -4,7 +4,7 @@
 # Inputs
 input_number:
   master_bedroom_humidifer_threshold:
-    name: "Master Bedroom Humidier Threshold"
+    name: 'Master Bedroom Humidier Threshold'
     min: 0
     max: 100
     step: 10
@@ -14,9 +14,9 @@ binary_sensor:
   - platform: template
     sensors:
       master_bedroom_humidifer_low:
-        friendly_name: "Master Bedroom Humidier Low"
+        friendly_name: 'Master Bedroom Humidier Low'
         value_template: >
-          {{ ( float(states.sensor.sensor.master_bedroom_humidifier_water_level.state) < 
+          {{ ( float(states.sensor.sensor.master_bedroom_humidifier_water_level.state) <
           float(states.input_number.master_bedroom_humidifer_threshold.state) ) }}
 
 # Alerts
@@ -24,7 +24,7 @@ alert:
   master_bedroom_humidifer_low:
     name: Master Bedroom Humidier Low
     entity_id: binary_sensor.master_bedroom_humidifer_low
-    state: "on"
+    state: 'on'
     repeat: 120
     can_acknowledge: true
     notifiers:
@@ -32,67 +32,67 @@ alert:
 
 # Automations
 automation:
-################################################################################
-- id: area_master_bedroom_closet_motion
-  alias: Area - Master Bedroom - Closet Motion
-  trigger:
-  - platform: state
-    entity_id: binary_sensor.master_bedroom_closet_motion
-  condition:
-  - alias: "House is occupied"
-    condition: state
-    entity_id: group.people
-    state: "home"
-  action:
-  - alias: "Status handler"
-    choose:
-    - conditions:
-      - alias: "Motion detected"
-        condition: state
+  ################################################################################
+  - id: area_master_bedroom_closet_motion
+    alias: Area - Master Bedroom - Closet Motion
+    trigger:
+      - platform: state
         entity_id: binary_sensor.master_bedroom_closet_motion
-        state: "on"
-      sequence:
-      - alias: "Turn on closet light"
-        service: light.turn_on
-        target:
-          entity_id: light.master_bedroom_closet
-    - conditions:
-      - alias: "Motion cleared"
+    condition:
+      - alias: 'House is occupied'
         condition: state
-        entity_id: binary_sensor.master_bedroom_closet_motion
-        state: "off"
-      sequence:
-      - alias: "Turn off closet light"
-        service: light.turn_off
-        target:
-          entity_id: light.master_bedroom_closet
-################################################################################
-- id: area_master_bedroom_panic_button
-  alias: Area - Master Bedroom - Panic Button 
-  trigger:
-    - platform: event
-      event_type: zha_event
-      event_data:
-        unique_id: !secret panic_button_unique_id
-        args:
-          attribute_name: on_off
-          value: 1 # Upon release
-  # condition:
-  action:
-  # - alias: "Test"
-  #   service: notify.alexa_media
-  #   data:
-  #     data:
-  #       type: tts
-  #     target:
-  #       - media_player.downstairs_thermostat
-  #       - media_player.upstairs_thermostat
-  #     message: 'The button was pressed.'
-  - alias: 'Sound the alarm'
-    service: alarm_control_panel.alarm_trigger
-    data:
-      entity_id: alarm_control_panel.home
-      code: !secret alarm_code
+        entity_id: group.people
+        state: 'home'
+    action:
+      - alias: 'Status handler'
+        choose:
+          - conditions:
+              - alias: 'Motion detected'
+                condition: state
+                entity_id: binary_sensor.master_bedroom_closet_motion
+                state: 'on'
+            sequence:
+              - alias: 'Turn on closet light'
+                service: light.turn_on
+                target:
+                  entity_id: light.master_bedroom_closet
+          - conditions:
+              - alias: 'Motion cleared'
+                condition: state
+                entity_id: binary_sensor.master_bedroom_closet_motion
+                state: 'off'
+            sequence:
+              - alias: 'Turn off closet light'
+                service: light.turn_off
+                target:
+                  entity_id: light.master_bedroom_closet
+  ################################################################################
+  - id: area_master_bedroom_panic_button
+    alias: Area - Master Bedroom - Panic Button
+    trigger:
+      - platform: event
+        event_type: zha_event
+        event_data:
+          unique_id: !secret panic_button_unique_id
+          args:
+            attribute_name: on_off
+            value: 1 # Upon release
+    # condition:
+    action:
+      # - alias: "Test"
+      #   service: notify.alexa_media
+      #   data:
+      #     data:
+      #       type: tts
+      #     target:
+      #       - media_player.downstairs_thermostat
+      #       - media_player.upstairs_thermostat
+      #     message: 'The button was pressed.'
+      - alias: 'Sound the alarm'
+        service: alarm_control_panel.alarm_trigger
+        data:
+          entity_id: alarm_control_panel.home
+          code: !secret alarm_code
 ################################################################################
 # - id: area_master_bedroom_humidifier_alert
 #   alias: Area - Master Bedroom - Humidifier Alert

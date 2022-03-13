@@ -43,36 +43,35 @@ sensor:
         friendly_name: Bedtime
         icon_template: mdi:clock-outline
         value_template: >
-          {{ (states.input_datetime.bedtime.attributes.timestamp | int | 
+          {{ (states.input_datetime.bedtime.attributes.timestamp | int |
               timestamp_custom("%H:%M",False)) }}
       nighttime_start:
         friendly_name: Night Time Start
         icon_template: mdi:clock-outline
         value_template: >
-          {{ (((states.input_datetime.bedtime.attributes.timestamp | int) + 
-              (states.input_number.nighttime_delay.state | int * 60)) | 
+          {{ (((states.input_datetime.bedtime.attributes.timestamp | int) +
+              (states.input_number.nighttime_delay.state | int * 60)) |
               timestamp_custom("%H:%M",False)) }}
       nighttime_lighting_transition:
         friendly_name: Night Time Lighting
         icon_template: mdi:transition-masked
         unit_of_measurement: 'Seconds'
         value_template: >
-          {{ ((states.input_number.nighttime_lighting_transition.state | 
+          {{ ((states.input_number.nighttime_lighting_transition.state |
               int) * 60) }}
       last_call:
         friendly_name: Last Call
         icon_template: mdi:clock-outline
         value_template: >
-          {{ (states.input_datetime.last_call.attributes.timestamp | int | 
+          {{ (states.input_datetime.last_call.attributes.timestamp | int |
               timestamp_custom("%H:%M",False)) }}
       next_sunset:
         friendly_name: Next Sunset
         icon_template: mdi:weather-sunset-down
         value_template: >
-          {{ (as_timestamp(states.sun.sun.attributes.next_dusk) | int | 
+          {{ (as_timestamp(states.sun.sun.attributes.next_dusk) | int |
               timestamp_custom("%H:%M", True)) }}
 ################################################################################
-
 automation:
   ################################################################################
   - id: routine_night_outdoor_lights

@@ -2,7 +2,7 @@
 ### Kitchen ###
 
 input_number:
-################################################################################
+  ################################################################################
   dishwasher_energy_threshold:
     name: 'Dishwasher Energy Threshold'
     icon: mdi:lightning-bolt
@@ -13,91 +13,91 @@ input_number:
 ################################################################################
 
 binary_sensor:
-################################################################################
+  ################################################################################
   - platform: template
     sensors:
       dishwasher_status:
-        friendly_name: "Dishwasher Status"
+        friendly_name: 'Dishwasher Status'
         value_template: >
           {{ ( float(states.input_number.dishwasher_energy_threshold.state)
             < float(states.sensor.dishwasher_energy_usage.state) ) }}
-        delay_off: 
+        delay_off:
           minutes: 15
 ################################################################################
 
 automation:
-################################################################################
+  ################################################################################
   - id: area_kitchen_pantry_light
     alias: 'Area - Kitchen - Pantry Light'
     trigger:
       - platform: state
         entity_id: binary_sensor.kitchen_pantry_door
     action:
-      - alias: "State Handler"
+      - alias: 'State Handler'
         choose:
-        - conditions:
-            - alias: "Door is open"
-              condition: state
-              entity_id: binary_sensor.kitchen_pantry_door
-              state: "on"
-          sequence:
-            service: light.turn_on
-            data:
-              entity_id: light.kitchen_pantry
-              transition: 3
-              brightness_pct: 100
-        - conditions:
-            - alias: "Door is closed"
-              condition: state
-              entity_id: binary_sensor.kitchen_pantry_door
-              state: "off"
-          sequence:
-            service: light.turn_off
-            data:
-              entity_id: light.kitchen_pantry
-              transition: 1
-################################################################################
+          - conditions:
+              - alias: 'Door is open'
+                condition: state
+                entity_id: binary_sensor.kitchen_pantry_door
+                state: 'on'
+            sequence:
+              service: light.turn_on
+              data:
+                entity_id: light.kitchen_pantry
+                transition: 3
+                brightness_pct: 100
+          - conditions:
+              - alias: 'Door is closed'
+                condition: state
+                entity_id: binary_sensor.kitchen_pantry_door
+                state: 'off'
+            sequence:
+              service: light.turn_off
+              data:
+                entity_id: light.kitchen_pantry
+                transition: 1
+  ################################################################################
   - id: area_kitchen_dishwasher_status
     alias: 'Area - Kitchen - Dishwasher Status'
     trigger:
       - platform: state
         entity_id: binary_sensor.dishwasher_status
     condition:
-      - alias: "At home"
+      - alias: 'At home'
         condition: state
         entity_id: input_boolean.away_mode
-        state: "off"
+        state: 'off'
     action:
-      - alias: "State Handler"
+      - alias: 'State Handler'
         choose:
-        - conditions:
-            - alias: "Dishwasher is on"
-              condition: state
-              entity_id: binary_sensor.dishwasher_status
-              state: "on"
-          sequence:
-            - alias: "Announce status"
-              service: notify.alexa_media
-              data:
+          - conditions:
+              - alias: 'Dishwasher is on'
+                condition: state
+                entity_id: binary_sensor.dishwasher_status
+                state: 'on'
+            sequence:
+              - alias: 'Announce status'
+                service: notify.alexa_media
                 data:
-                  type: tts
-                target:
-                  - media_player.downstairs_thermostat
-                  - media_player.upstairs_thermostat
-                message: 'The dishwasher is now running.'
-        - conditions:
-            - alias: "Dishwasher is off"
-              condition: state
-              entity_id: binary_sensor.dishwasher_status
-              state: "off"
-          sequence:
-            - alias: "Announce status"
-              service: notify.alexa_media
-              data:
+                  data:
+                    type: tts
+                  target:
+                    - media_player.downstairs_thermostat
+                    - media_player.upstairs_thermostat
+                  message: 'The dishwasher is now running.'
+          - conditions:
+              - alias: 'Dishwasher is off'
+                condition: state
+                entity_id: binary_sensor.dishwasher_status
+                state: 'off'
+            sequence:
+              - alias: 'Announce status'
+                service: notify.alexa_media
                 data:
-                  type: tts
-                target:
-                  - media_player.downstairs_thermostat
-                  - media_player.upstairs_thermostat
-                message: 'The dishwasher is now finished.'
+                  data:
+                    type: tts
+                  target:
+                    - media_player.downstairs_thermostat
+                    - media_player.upstairs_thermostat
+                  message: 'The dishwasher is now finished.'
 ################################################################################

@@ -5,7 +5,7 @@ https://github.com/frenck/home-assistant-config
 
 # Travis CI (DEPRECATED)
 
-*This used to be used for Travis CI. Migrated to GitHub Actions*
+_This used to be used for Travis CI. Migrated to GitHub Actions_
 
 Initial credit for this configuration goes to [Shortbloke](https://github.com/shortbloke/home_assistant_config)
 

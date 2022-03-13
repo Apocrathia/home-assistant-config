@@ -1,25 +1,19 @@
 {
-  "extends": [
-    "config:base",
-    "packages:linters",
-    "packages:test"
-  ],
-  "enabled": true,
-  "pre-commit": {
-    "enabled": true
-  },
-  "ignorePaths": [],
-  "semanticCommits": "enabled",
-  "dependencyDashboard": true,
-  "dependencyDashboardApproval": true,
-  "vulnerabilityAlerts": {
-    "enabled": true
-  },
-  "automerge": true,
-  "lockFileMaintenance": {
-    "enabled": true,
-    "extends": [
-      "schedule:weekly"
-    ]
-  }
+	"extends": ["config:base", "packages:linters", "packages:test"],
+	"enabled": true,
+	"pre-commit": {
+		"enabled": true
+	},
+	"ignorePaths": [],
+	"semanticCommits": "enabled",
+	"dependencyDashboard": true,
+	"dependencyDashboardApproval": true,
+	"vulnerabilityAlerts": {
+		"enabled": true
+	},
+	"automerge": true,
+	"lockFileMaintenance": {
+		"enabled": true,
+		"extends": ["schedule:weekly"]
+	}
 }

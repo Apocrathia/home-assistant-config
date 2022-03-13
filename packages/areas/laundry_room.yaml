@@ -2,7 +2,7 @@
 ### Laundry Room ###
 
 input_number:
-################################################################################
+  ################################################################################
   washing_machine_energy_threshold:
     name: 'Washing Machine Energy Threshold'
     icon: mdi:lightning-bolt
@@ -13,14 +13,14 @@ input_number:
 ################################################################################
 
 binary_sensor:
-################################################################################
+  ################################################################################
   - platform: template
     sensors:
       dishwasher_status:
-        friendly_name: "Washing Machine Status"
+        friendly_name: 'Washing Machine Status'
         value_template: >
           {{ ( float(states.input_number.washing_machine_energy_threshold.state)
             < float(states.sensor.washing_machine_energy_usage.state) ) }}
-        delay_off: 
+        delay_off:
           minutes: 15
 ################################################################################
