@@ -37,18 +37,18 @@ ota:
 
 # Configuration entry
 light:
-  - platform: binary
+  - platform: monochromatic
     name: 'Office Microphone Light (Red)'
     output: output_red
-  - platform: binary
+  - platform: monochromatic
     name: 'Office Microphone Light (Blue)'
     output: output_blue
 
 # Output entry
 output:
-  - platform: gpio #esp8266_pwm
+  - platform: esp8266_pwm
     id: output_red
     pin: GPIO05 # D1
-  - platform: gpio #esp8266_pwm
+  - platform: esp8266_pwm
     id: output_blue
     pin: GPIO04 # D2
