@@ -49,7 +49,8 @@ sensor:
   # Twitch
   - platform: twitch
     client_id: !secret twitch_client_id
-    token: !secret twitch_client_secret
+    client_secret: !secret twitch_client_secret
+    token: !secret twitch_client_token
     channels:
       - Apocrathia
       - PB_Undesirables
