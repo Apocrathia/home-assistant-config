@@ -1,0 +1,89 @@
+---
+### HVAC Sync ###
+
+automation:
+  #############################################################################
+  # keep both HVAC units set temperature synchronized
+  - id: function_hvac_sync
+    alias: 'Function - HVAC Sync'
+    trigger:
+      - platform: state
+        entity_id:
+          - climate.homekit_downstairs
+          - climate.homekit_upstairs
+    action:
+      - alias: 'State Handler'
+        choose:
+          - conditions:
+              alias: Upstairs was changed
+              condition: template
+              value_template: >
+                {{ trigger.event.data.entity_id = climate.homekit_upstairs }}
+            sequence:
+              service: climate.set_temperature
+              entity_id: climate.homekit_downstairs
+              data_template:
+                temperature: >
+                  {{ state_attr('climate.homekit_downstairs', 'temperature') }}
+                hvac_mode: >
+                  {{ states.climate.homekit_downstairs.state }}
+          - conditions:
+              alias: Downstairs was changed
+              condition: template
+              value_template: >
+                {{ trigger.event.data.entity_id = climate.homekit_downstairs }}
+            sequence:
+              service: climate.set_temperature
+              entity_id: climate.homekit_upstairs
+              data_template:
+                temperature: >
+                  {{ state_attr('climate.homekit_upstairs', 'temperature') }}
+                hvac_mode: >
+                  {{ states.climate.homekit_upstairs.state }}
+  #############################################################################
+  # Turn off HVAC if an outside door has been left open for 60 seconds
+  - id: function_hvac_efficiency_doors
+    alias: Function - HVAC - Efficency (Doors)
+    trigger:
+      - platform: state
+        entity_id:
+          - binary_sensor.front_door
+          - binary_sensor.back_door
+          - binary_sensor.garage_door
+        from: 'closed'
+        to: 'open'
+        for:
+          seconds: 60
+      - platform: state
+        entity_id:
+          - binary_sensor.front_door
+          - binary_sensor.back_door
+          - binary_sensor.garage_door
+        from: 'open'
+        to: 'closed'
+    action:
+      - alias: 'State Handler'
+        choose:
+          - conditions:
+              - alias: 'Door Open'
+                condition: template
+                value_template: "{{ trigger.to_state = 'open' }}"
+            sequence:
+              - alias: 'Turn off HVAC'
+                service: climate.turn_off
+                target:
+                  entity_id:
+                    - climate.homekit_downstairs
+                    - climate.homekit_upstairs
+          - conditions:
+              - alias: 'Door Closed'
+                condition: template
+                value_template: "{{ trigger.to_state = 'closed' }}"
+            sequence:
+              - alias: 'Turn on HVAC'
+                service: climate.turn_on
+                target:
+                  entity_id:
+                    - climate.homekit_downstairs
+                    - climate.homekit_upstairs
+################################################################################
