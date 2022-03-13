@@ -232,10 +232,14 @@ script:
       # Turn up all of the ceiling fans
       - service: fan.set_percentage
         data:
-          entity_id: 
+          entity_id:
             - fan.living_room_ceiling_fan
             - fan.master_bedroom_ceiling_fan
           percentage: 100
+      - service: switch.turn_off
+        data:
+          entity_id:
+            - switch.fireplace
 
     # - service: scene.turn_on
     #   data:
