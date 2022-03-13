@@ -1,4 +1,3 @@
----
 ### Master Bathroom ###
 
 # There are a couple of things in here that I want to make sure I have
@@ -68,6 +67,11 @@ automation:
       - service: light.turn_on
         data:
           entity_id: light.master_bathroom_shower_lights
+      - service: fan.set_speed
+        target:
+          entity_id: fan.master_bedroom_ceiling_fan
+        data:
+          percentage: 100
       - service: script.area_master_bathroom_start_timer
   ################################################################################
   - id: area_master_bathroom_humidity_low
@@ -89,21 +93,26 @@ automation:
     action:
       - delay:
           minutes: 5
-      - alias: "Ensure the humidity is still low"
+      - alias: 'Ensure the humidity is still low'
         choose:
-        - conditions:
-            condition: state
-            entity_id:
-              - binary_sensor.master_bathroom_humidity_high
-            state: 'off'
-          sequence:
-            - service: switch.turn_off
-              data:
-                entity_id: switch.master_bathroom_fan
-            - service: light.turn_off
-              data:
-                entity_id: light.master_bathroom_shower_lights
-            - service: script.area_master_bathroom_stop_timer
+          - conditions:
+              condition: state
+              entity_id:
+                - binary_sensor.master_bathroom_humidity_high
+              state: 'off'
+            sequence:
+              - service: switch.turn_off
+                data:
+                  entity_id: switch.master_bathroom_fan
+              - service: light.turn_off
+                data:
+                  entity_id: light.master_bathroom_shower_lights
+              - service: fan.set_speed
+                target:
+                  entity_id: fan.master_bedroom_ceiling_fan
+                data:
+                  percentage: 33
+              - service: script.area_master_bathroom_stop_timer
   ################################################################################
   # Turn on the fan when the shitter closet door is closed.
   - id: area_master_bathroom_toilet_door_closed
@@ -143,35 +152,35 @@ automation:
       - service: switch.turn_off
         data:
           entity_id: switch.master_bathroom_fan
-################################################################################
+  ################################################################################
   - id: area_master_bathroom_lighting_schedule
-    alias: "Area - Master Bathroom - Lightinng Schedule"
+    alias: 'Area - Master Bathroom - Lightinng Schedule'
     trigger:
       - platform: time
-        at: 
-          - "05:00:00"
-          - "22:00:00"
+        at:
+          - '05:00:00'
+          - '22:00:00'
     action:
-      - alias: "Power Toggle"
+      - alias: 'Power Toggle'
         service: remote.send_command
         target:
           entity_id: remote.master_bathroom_ir_blaster
         data:
           device: master_bathroom_clock
           command: power
-      - alias: "Input Toggle"
+      - alias: 'Input Toggle'
         service: input_boolean.toggle
         target:
           entity_id: input_boolean.master_bathroom_clock_light
 ################################################################################
 
 script:
-################################################################################
+  ################################################################################
   area_master_bathroom_start_timer:
-    alias: "Area - Master Bathroom - Start Timer"
+    alias: 'Area - Master Bathroom - Start Timer'
     sequence:
       - service: remote.send_command
-        alias: "Enter stopwatch mode"
+        alias: 'Enter stopwatch mode'
         target:
           entity_id: remote.master_bathroom_ir_blaster
         data:
@@ -180,7 +189,7 @@ script:
       - delay:
           seconds: 1
       - service: remote.send_command
-        alias: "Clear timer"
+        alias: 'Clear timer'
         target:
           entity_id: remote.master_bathroom_ir_blaster
         data:
@@ -189,18 +198,18 @@ script:
       - delay:
           seconds: 1
       - service: remote.send_command
-        alias: "Start timer"
+        alias: 'Start timer'
         target:
           entity_id: remote.master_bathroom_ir_blaster
         data:
           device: master_bathroom_clock
           command: start_stop
-################################################################################
+  ################################################################################
   area_master_bathroom_stop_timer:
-    alias: "Area - Master Bathroom - Stop Timer"
+    alias: 'Area - Master Bathroom - Stop Timer'
     sequence:
       - service: remote.send_command
-        alias: "Enter stopwatch mode"
+        alias: 'Enter stopwatch mode'
         target:
           entity_id: remote.master_bathroom_ir_blaster
         data:
@@ -209,7 +218,7 @@ script:
       - delay:
           seconds: 1
       - service: remote.send_command
-        alias: "Stop timer"
+        alias: 'Stop timer'
         target:
           entity_id: remote.master_bathroom_ir_blaster
         data:
@@ -218,7 +227,7 @@ script:
       - delay:
           seconds: 1
       - service: remote.send_command
-        alias: "Clear timer"
+        alias: 'Clear timer'
         target:
           entity_id: remote.master_bathroom_ir_blaster
         data:
@@ -227,7 +236,7 @@ script:
       - delay:
           seconds: 1
       - service: remote.send_command
-        alias: "Go back to clock mode"
+        alias: 'Go back to clock mode'
         target:
           entity_id: remote.master_bathroom_ir_blaster
         data:
