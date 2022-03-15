@@ -18,7 +18,7 @@ automation:
               alias: Upstairs was changed
               condition: template
               value_template: >
-                {{ trigger.event.data.entity_id = climate.homekit_upstairs }}
+                {{ trigger.event.data.entity_id = 'climate.homekit_upstairs' }}
             sequence:
               service: climate.set_temperature
               entity_id: climate.homekit_downstairs
@@ -31,7 +31,7 @@ automation:
               alias: Downstairs was changed
               condition: template
               value_template: >
-                {{ trigger.event.data.entity_id = climate.homekit_downstairs }}
+                {{ trigger.event.data.entity_id = 'climate.homekit_downstairs' }}
             sequence:
               service: climate.set_temperature
               entity_id: climate.homekit_upstairs
