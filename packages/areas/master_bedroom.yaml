@@ -16,8 +16,8 @@ binary_sensor:
       master_bedroom_humidifer_low:
         friendly_name: 'Master Bedroom Humidier Low'
         value_template: >
-          {{ ( float(states.sensor.sensor.master_bedroom_humidifier_water_level.state) <
-          float(states.input_number.master_bedroom_humidifer_threshold.state) ) }}
+          {{ ( float(states('sensor.master_bedroom_humidifier_water_level')) <
+          float(states('input_number.master_bedroom_humidifer_threshold')) ) }}
 
 # Alerts
 alert:
