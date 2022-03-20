@@ -37,7 +37,7 @@ rules:
     present: false
   document-start:
     level: warning
-    present: false
+    present: true
   empty-lines:
     level: warning
     max: 1
