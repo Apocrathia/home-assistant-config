@@ -67,10 +67,9 @@ automation:
       - service: light.turn_on
         data:
           entity_id: light.master_bathroom_shower_lights
-      - service: fan.set_speed
-        target:
-          entity_id: fan.master_bedroom_ceiling_fan
+      - service: fan.set_percentage
         data:
+          entity_id: fan.master_bedroom_ceiling_fan
           percentage: 100
       - service: script.area_master_bathroom_start_timer
   ################################################################################
@@ -107,10 +106,9 @@ automation:
               - service: light.turn_off
                 data:
                   entity_id: light.master_bathroom_shower_lights
-              - service: fan.set_speed
-                target:
-                  entity_id: fan.master_bedroom_ceiling_fan
+              - service: fan.set_percentage
                 data:
+                  entity_id: fan.master_bedroom_ceiling_fan
                   percentage: 33
               - service: script.area_master_bathroom_stop_timer
   ################################################################################

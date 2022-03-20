@@ -278,19 +278,13 @@ script:
           entity_id:
             - vacuum.downstairs
             - vacuum.upstairs
-      # Turn the air purifiers back down
-      - service: fan.set_speed
-        data:
-          entity_id:
-            - fan.master_bedroom_air_purifier
-            # - fan.master_bedroom_humidifier
-          speed: silent
       # Turn the fans back down
       - service: fan.set_percentage
         data:
           entity_id:
             - fan.living_room_ceiling_fan
             - fan.master_bedroom_ceiling_fan
+            - fan.master_bedroom_air_purifier
           percentage: 33
         # Turn on some lights
     # - service: scene.turn_on
