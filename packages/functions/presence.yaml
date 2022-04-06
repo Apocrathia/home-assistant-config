@@ -178,6 +178,21 @@ script:
   location_away:
     alias: 'Function - Presence - Away'
     sequence:
+      - alias: 'Determine which actions to execute'
+        choose:
+          - conditions:
+              - alias: 'The sun is down'
+                condition: state
+                entity_id: sun.sun
+                state: 'below_horizon'
+            sequence:
+              - alias: 'Turn on guest bedroom light'
+                service: light.turn_on
+                target:
+                  entity_id: light.guest_bedroom_floor_lamp
+                data:
+                  brightness_pct: 50
+      # Execute the following every time
       # Turn off all of the lights
       - service: light.turn_off
         data:
@@ -244,6 +259,21 @@ script:
   location_home:
     alias: 'Function - Presence - Home'
     sequence:
+      - alias: 'Determine which actions to execute'
+        choose:
+          - conditions:
+              - alias: 'The sun is down'
+                condition: state
+                entity_id: sun.sun
+                state: 'below_horizon'
+            sequence:
+              - alias: 'Turn on hallway light'
+                service: light.turn_on
+                target:
+                  entity_id: light.garage_hallway
+                data:
+                  brightness_pct: 50
+      # Execute the following every time
       # Disarm the alarm
       - service: alarm_control_panel.alarm_disarm
         data:
@@ -286,10 +316,10 @@ script:
             - fan.master_bedroom_ceiling_fan
             - fan.master_bedroom_air_purifier
           percentage: 33
-        # Turn on some lights
-    # - service: scene.turn_on
-    #   data:
-    #     entity_id: scene.home
+      # Turn on some lights
+      # - service: scene.turn_on
+      #   data:
+      #     entity_id: scene.home
   ################################################################################
   vacation_mode_on:
     alias: 'Function - Vacation - On'
