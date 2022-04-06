@@ -1,0 +1,101 @@
+---
+### Work ###
+
+# Inputs
+input_datetime:
+  routine_work_start:
+    name: Routine - Work - Start
+    has_date: false
+    has_time: true
+  routine_work_stop:
+    name: Routine - Work - Stop
+    has_date: false
+    has_time: true
+
+# Automations
+automation:
+  ###############################################################################
+  - id: routine_work_meetings
+    alias: Routine - Work - Meetings
+    trigger:
+      - platform: state
+        entity_id: calendar.work
+    condition:
+      - alias: 'Ian is home'
+        condition: state
+        entity_id: person.ian
+        state: 'home'
+    action:
+      - alias: 'Status handler'
+        choose:
+          - conditions:
+              - alias: 'Meeting Started'
+                condition: state
+                entity_id: calendar.work
+                state: 'on'
+            sequence:
+              - alias: 'Turn on key light'
+                service: light.turn_on
+                target:
+                  entity_id: light.office_key_light
+              - alias: 'Set doorbell message'
+                service: unifiprotect.add_doorbell_text
+                data:
+                  entity_id: camera.front_door
+                  message: In Meeting
+          - conditions:
+              - alias: 'Meeting Ended'
+                condition: state
+                entity_id: calendar.work
+                state: 'off'
+            sequence:
+              - alias: 'Turn on key light'
+                service: light.turn_off
+                target:
+                  entity_id: light.office_key_light
+              - alias: 'Set doorbell message'
+                service: unifiprotect.add_doorbell_text
+                data:
+                  entity_id: camera.front_door
+                  message: Go Away
+  ###############################################################################
+  - id: routine_work_start
+    alias: Routine - Work - Start
+    trigger:
+      - platform: time
+        at: input_datetime.routine_work_start
+    condition:
+      - alias: 'Only on workdays'
+        condition: state
+        entity_id: sensor.workday
+        state: 'on'
+    action:
+      - alias: 'Turn on office lights'
+        service: light.turn_on
+        target:
+          entity_id:
+            - light.office_floor_lamp
+            - light.office_light_panels_north
+            - light.office_light_panels_west
+            # - light.office_workbench
+  ###############################################################################
+  - id: routine_work_stop
+    alias: Routine - Work - Stop
+    trigger:
+      - platform: time
+        at: input_datetime.routine_work_stop
+    condition:
+      - alias: 'Only on workdays'
+        condition: state
+        entity_id: sensor.workday
+        state: 'on'
+    action:
+      - alias: 'Turn off office lights'
+        service: light.turn_off
+        target:
+          entity_id:
+            - light.office_floor_lamp
+            - light.office_light_panels_north
+            - light.office_light_panels_west
+            # - light.office_workbench
+###############################################################################
