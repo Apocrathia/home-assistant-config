@@ -67,7 +67,7 @@ automation:
     condition:
       - alias: 'Only on workdays'
         condition: state
-        entity_id: sensor.workday
+        entity_id: binary_sensor.workday
         state: 'on'
     action:
       - alias: 'Turn on office lights'
@@ -75,9 +75,21 @@ automation:
         target:
           entity_id:
             - light.office_floor_lamp
-            - light.office_light_panels_north
-            - light.office_light_panels_west
+            - light.office_panel_lights_south
+            - light.office_panel_lights_west
             # - light.office_workbench
+      - alias: 'Stop the vacuums'
+        service: vacuum.stop
+        target:
+          entity_id:
+            - vacuum.downstairs
+            - vacuum.upstairs
+      - alias: 'Return vacuums to docks'
+        service: vacuum.return_to_base
+        target:
+          entity_id:
+            - vacuum.downstairs
+            - vacuum.upstairs
   ###############################################################################
   - id: routine_work_stop
     alias: Routine - Work - Stop
@@ -87,7 +99,7 @@ automation:
     condition:
       - alias: 'Only on workdays'
         condition: state
-        entity_id: sensor.workday
+        entity_id: binary_sensor.workday
         state: 'on'
     action:
       - alias: 'Turn off office lights'
@@ -95,7 +107,7 @@ automation:
         target:
           entity_id:
             - light.office_floor_lamp
-            - light.office_light_panels_north
-            - light.office_light_panels_west
+            - light.office_panel_lights_south
+            - light.office_panel_lights_west
             # - light.office_workbench
 ###############################################################################
