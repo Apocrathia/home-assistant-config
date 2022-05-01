@@ -206,8 +206,8 @@ script:
       - service: climate.set_preset_mode
         data:
           entity_id:
-            - climate.homekit_downstairs
-            - climate.homekit_upstairs
+            - climate.downstairs
+            - climate.upstairs
           preset_mode: 'away'
         # Set the vacuums to turbo
       - service: vacuum.set_fan_speed
@@ -283,8 +283,8 @@ script:
       - service: climate.set_preset_mode
         data:
           entity_id:
-            - climate.homekit_downstairs
-            - climate.homekit_upstairs
+            - climate.downstairs
+            - climate.upstairs
           preset_mode: 'home'
         # Set the vacuums to silent
       - service: vacuum.set_fan_speed
