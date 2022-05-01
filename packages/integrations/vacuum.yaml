@@ -79,6 +79,9 @@ automation:
         value_template: >
           {{ state.attributes.battery_level | int }}
         above: 99
+        for:
+          # if it's been charged for this long, it's finished it's last cleaning.
+          minutes: 30
     condition:
       condition: and
       conditions:
