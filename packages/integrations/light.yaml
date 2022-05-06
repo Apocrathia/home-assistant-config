@@ -8,7 +8,7 @@ light:
     entities:
       - light.front_porch_lights
       - light.outdoor_garage_lights
-      - light.back_door
+      - light.back_door_light
       - light.outdoor_garage_side
 
   - platform: group
@@ -27,7 +27,7 @@ light:
     entities:
       - light.sitting_room_floor_lamp
       - light.kitchen_cabinet_lights
-      - light.kitchen_sink
+      - light.kitchen_sink_light
       - light.kitchen_task_lights_left
       - light.kitchen_task_lights_right
 
@@ -67,11 +67,12 @@ light:
       - light.office_key_light
       - light.office_light
 
-  - platform: group
-    name: Kitchen Lights
-    entities:
-      - light.kitchen
-      - light.kitchen_chandelier
+  # These groups have been superceded by Areas
+  # - platform: group
+  #   name: Kitchen Lights
+  #   entities:
+  #     - light.kitchen
+  #     - light.kitchen_chandelier
 
   - platform: group
     name: Dining Room Lights
