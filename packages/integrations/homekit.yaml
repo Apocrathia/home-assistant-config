@@ -23,10 +23,10 @@ homekit:
         - light.dining_room_chandelier
         - light.kitchen_chandelier
         - light.living_room_ceiling_fan
-        - light.downstairs_hallway
-        - light.upstairs_hallway
+        - light.downstairs_hallway_lights
+        - light.upstairs_hallway_lights
         - light.office_floor_lamp
-        - light.kitchen
+        - light.kitchen_lights
         - light.studio_floor_lamp
         - fan.master_bedroom_ceiling_fan
         - fan.living_room_ceiling_fan
@@ -41,7 +41,7 @@ homekit:
     port: 51828
     filter:
       include_entities:
-        - lock.front_door
+        - lock.front_door_lock
   ################################################################################
   - name: Back Door Lock
     mode: accessory
@@ -49,7 +49,7 @@ homekit:
     port: 51829
     filter:
       include_entities:
-        - lock.back_door
+        - lock.back_door_lock
   ################################################################################
   # Might as well move any other security devices as well.
   - name: Alarm Panel
