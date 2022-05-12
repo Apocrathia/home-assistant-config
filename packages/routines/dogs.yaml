@@ -69,7 +69,7 @@ sensor:
         friendly_name: Dogs - Meal - Breakfast (Relief)
         value_template: >
           {{ ((states.input_datetime.dogs_meal_breakfast.attributes.timestamp |
-            int + states.input_number.dogs_meal_duration.state | int * 60 + 
+            int + states.input_number.dogs_meal_duration.state | int * 60 +
             states.input_number.dogs_meal_relief.state | int * 60 * 60) |
             timestamp_custom("%H:%M",False)) }}
       # Lunch
@@ -94,7 +94,7 @@ sensor:
         friendly_name: Dogs - Meal - Lunch (Relief)
         value_template: >
           {{ ((states.input_datetime.dogs_meal_lunch.attributes.timestamp |
-            int + states.input_number.dogs_meal_duration.state | int * 60 + 
+            int + states.input_number.dogs_meal_duration.state | int * 60 +
             states.input_number.dogs_meal_relief.state | int * 60 * 60) |
             timestamp_custom("%H:%M",False)) }}
       # Dinner
@@ -119,7 +119,7 @@ sensor:
         friendly_name: Dogs - Meal - Dinner (Relief)
         value_template: >
           {{ ((states.input_datetime.dogs_meal_dinner.attributes.timestamp |
-            int + states.input_number.dogs_meal_duration.state | int * 60 + 
+            int + states.input_number.dogs_meal_duration.state | int * 60 +
             states.input_number.dogs_meal_relief.state | int * 60 * 60) |
             timestamp_custom("%H:%M",False)) }}
 
@@ -147,7 +147,7 @@ automation:
     trigger:
       - platform: template
         value_template: >
-          {{ (states.sensor.time.state 
+          {{ (states.sensor.time.state
             == states.sensor.dogs_meal_breakfast_advance.state) }}
     condition:
       - condition: state
@@ -164,7 +164,7 @@ automation:
     trigger:
       - platform: template
         value_template: >
-          {{ (states.sensor.time.state 
+          {{ (states.sensor.time.state
             == states.sensor.dogs_meal_breakfast_relief.state) }}
     condition:
       - condition: state
@@ -181,7 +181,7 @@ automation:
     trigger:
       - platform: template
         value_template: >
-          {{ (states.sensor.time.state 
+          {{ (states.sensor.time.state
             == states.sensor.dogs_meal_lunch.state) }}
     condition:
       - condition: state
@@ -198,7 +198,7 @@ automation:
     trigger:
       - platform: template
         value_template: >
-          {{ (states.sensor.time.state 
+          {{ (states.sensor.time.state
             == states.sensor.dogs_meal_advance.state) }}
     condition:
       - condition: state
@@ -215,7 +215,7 @@ automation:
     trigger:
       - platform: template
         value_template: >
-          {{ (states.sensor.time.state 
+          {{ (states.sensor.time.state
             == states.sensor.dogs_meal_lunch_relief.state) }}
     condition:
       - condition: state
@@ -232,7 +232,7 @@ automation:
     trigger:
       - platform: template
         value_template: >
-          {{ (states.sensor.time.state 
+          {{ (states.sensor.time.state
             == states.sensor.dogs_meal_dinner.state) }}
     condition:
       - condition: state
@@ -249,7 +249,7 @@ automation:
     trigger:
       - platform: template
         value_template: >
-          {{ (states.sensor.time.state 
+          {{ (states.sensor.time.state
             == states.sensor.dogs_meal_dinner_advance.state) }}
     condition:
       - condition: state
@@ -266,7 +266,7 @@ automation:
     trigger:
       - platform: template
         value_template: >
-          {{ (states.sensor.time.state 
+          {{ (states.sensor.time.state
             == states.sensor.dogs_meal_dinner_relief.state) }}
     condition:
       - condition: state
@@ -277,4 +277,57 @@ automation:
         data:
           title: Take The Dogs Out!
           message: Time to empty the dogs!
+  ################################################################################
+  - id: routine_dogs_collar_light
+    alias: Routine - Dogs - Collar Light
+    trigger:
+      - platform: sun
+        event: sunset
+      - platform: sun
+        event: sunrise
+      - platform: state
+        entity_id:
+          - input_boolean.away_mode
+          - light.michio_collar_light
+    action:
+      - alias: 'State Handler'
+        choose:
+          - conditions:
+              - alias: 'Home'
+                condition: state
+                entity_id: input_boolean.away_mode
+                state: 'off'
+            sequence:
+              - alias: 'Turn off Light'
+                service: light.turn_off
+                target:
+                  entity_id: light.michio_collar_light
+          - conditions:
+              - alias: 'Away'
+                condition: state
+                entity_id: input_boolean.away_mode
+                state: 'on'
+            sequence:
+              - alias: 'Time'
+                choose:
+                  - conditions:
+                      - alias: 'Day'
+                        condition: state
+                        entity_id: sun.sun
+                        state: 'above_horizon'
+                    sequence:
+                      - alias: 'Turn off Light'
+                        service: light.turn_off
+                        target:
+                          entity_id: light.michio_collar_light
+                  - conditions:
+                      - alias: 'Night'
+                        condition: state
+                        entity_id: sun.sun
+                        state: 'below_horizon'
+                    sequence:
+                      - alias: 'Turn on Light'
+                        service: light.turn_on
+                        target:
+                          entity_id: light.michio_collar_light
 ################################################################################
