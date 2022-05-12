@@ -15,6 +15,6 @@ automation:
     action:
       - service: light.turn_on
         data:
-          entity_id: light.downstairs_hallway
+          entity_id: light.downstairs_hallway_lights
           brightness_pct: 15
 ################################################################################

@@ -55,7 +55,7 @@ automation:
               - alias: 'Turn on closet light'
                 service: light.turn_on
                 target:
-                  entity_id: light.master_bedroom_closet
+                  entity_id: light.master_bedroom_closet_light
           - conditions:
               - alias: 'Motion cleared'
                 condition: state
@@ -65,7 +65,7 @@ automation:
               - alias: 'Turn off closet light'
                 service: light.turn_off
                 target:
-                  entity_id: light.master_bedroom_closet
+                  entity_id: light.master_bedroom_closet_light
   ################################################################################
   - id: area_master_bedroom_panic_button
     alias: Area - Master Bedroom - Panic Button

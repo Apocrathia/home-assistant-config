@@ -44,7 +44,7 @@ binary_sensor:
         friendly_name: 'Master Bathroom Humidity High'
         value_template: >
           {{ ( float(states.input_number.master_bathroom_humidity_threshold.state)
-            < float(states.sensor.master_bathroom_humidity.state) ) }}
+            < float(states.sensor.master_bathroom_climate_sensor_humidity.state) ) }}
 
 # Automations
 automation:

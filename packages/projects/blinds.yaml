@@ -45,8 +45,8 @@ automation:
       - platform: numeric_state
         entity_id: weather.dark_sky
         attribute: temperature
-        above: 32 # 0 C
-        below: 32 # 0 C
+        above: 0
+        below: 0
     action:
       - alias: 'State Handler'
         choose:
@@ -57,7 +57,7 @@ automation:
                     condition: numeric_state
                     entity_id: weather.pirateweather
                     attribute: temperature
-                    above: 32 # 0 C
+                    above: 0
                   - alias: 'Someone is home'
                     condition: state
                     entity_id: input_boolean.away_mode
@@ -78,7 +78,7 @@ automation:
                     condition: numeric_state
                     entity_id: weather.pirateweather
                     attribute: temperature
-                    below: 32 # 0 C
+                    below: 0
                   - alias: 'Nobody is home'
                     condition: state
                     entity_id: input_boolean.away_mode

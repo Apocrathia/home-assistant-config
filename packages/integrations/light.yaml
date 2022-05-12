@@ -9,7 +9,7 @@ light:
       - light.front_porch_lights
       - light.outdoor_garage_lights
       - light.back_door_light
-      - light.outdoor_garage_side
+      - light.outdoor_garage_side_light
 
   - platform: group
     name: Indoor Lights
@@ -90,9 +90,9 @@ light:
   - platform: group
     name: Upstairs Lights
     entities:
-      - light.stairwell
-      - light.upstairs_hallway
-      - light.upstairs_desk
+      - light.stairwell_lights
+      - light.upstairs_hallway_lights
+      - light.upstairs_desk_light
 
   - platform: group
     name: Studio Lights
