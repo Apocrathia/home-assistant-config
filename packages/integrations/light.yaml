@@ -43,6 +43,19 @@ light:
       - light.studio_lights
 
   - platform: group
+    name: Front Porch Lights
+    entities:
+      - light.front_porch_light_left
+      - light.front_porch_light_right
+
+  - platform: group
+    name: Outdoor Garage Lights
+    entities:
+      - light.outdoor_garage_light_right
+      - light.outdoor_garage_light_left
+      - light.outdoor_garage_light_side
+
+  - platform: group
     name: Master Bedroom Lights
     entities:
       - light.master_bedroom_floor_lamp
@@ -85,7 +98,7 @@ light:
     entities:
       - light.downstairs_hallway
       - light.foyer_chandelier
-      - light.garage_hallway
+      - light.garage_hallway_light
 
   - platform: group
     name: Upstairs Lights
