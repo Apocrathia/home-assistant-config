@@ -37,7 +37,7 @@ automation:
     alias: Area - Master Bedroom - Closet Motion
     trigger:
       - platform: state
-        entity_id: binary_sensor.master_bedroom_closet_motion
+        entity_id: binary_sensor.master_bedroom_closet_motion_occupancy
     condition:
       - alias: 'House is occupied'
         condition: state
@@ -49,7 +49,7 @@ automation:
           - conditions:
               - alias: 'Motion detected'
                 condition: state
-                entity_id: binary_sensor.master_bedroom_closet_motion
+                entity_id: binary_sensor.master_bedroom_closet_motion_occupancy
                 state: 'on'
             sequence:
               - alias: 'Turn on closet light'
@@ -59,7 +59,7 @@ automation:
           - conditions:
               - alias: 'Motion cleared'
                 condition: state
-                entity_id: binary_sensor.master_bedroom_closet_motion
+                entity_id: binary_sensor.master_bedroom_closet_motion_occupancy
                 state: 'off'
             sequence:
               - alias: 'Turn off closet light'

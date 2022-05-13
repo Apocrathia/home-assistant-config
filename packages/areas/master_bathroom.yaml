@@ -87,7 +87,7 @@ automation:
       # Only execute if the toilet door is already open
       condition: state
       entity_id:
-        - binary_sensor.master_bathroom_toilet_door
+        - binary_sensor.master_bathroom_toilet_door_contact
       state: 'on'
     action:
       - delay:
@@ -118,7 +118,7 @@ automation:
     trigger:
       platform: state
       entity_id:
-        - binary_sensor.master_bathroom_toilet_door
+        - binary_sensor.master_bathroom_toilet_door_contact
       from: 'on'
       to: 'off'
       for:
@@ -133,7 +133,7 @@ automation:
     trigger:
       platform: state
       entity_id:
-        - binary_sensor.master_bathroom_toilet_door
+        - binary_sensor.master_bathroom_toilet_door_contact
       from: 'off'
       to: 'on'
       for:

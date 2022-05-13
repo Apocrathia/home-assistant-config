@@ -8,7 +8,7 @@ automation:
     alias: Area - Sitting Room - Motion
     trigger:
       - platform: state
-        entity_id: binary_sensor.sitting_room_motion
+        entity_id: binary_sensor.sitting_room_motion_sensor_occupancy
     condition:
       - condition: and
         conditions:

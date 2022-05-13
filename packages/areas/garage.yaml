@@ -12,12 +12,16 @@ automation:
           - cover.main_garage_door
           - cover.second_garage_door
         from: 'closed'
-        to: 'open'
+        to:
+          - 'open'
+          - 'opening'
       - platform: state
         entity_id:
           - binary_sensor.garage_door
           - binary_sensor.side_door
+          - binary_sensor.side_door_2
           - binary_sensor.garage_motion
+          - binary_sensor.garage_motion_2
         from: 'off'
         to: 'on'
       - platform: event
@@ -45,6 +49,7 @@ automation:
       - platform: state
         entity_id:
           - binary_sensor.garage_motion
+          - binary_sensor.garage_motion_2
         from: 'on'
         to: 'off'
         for:
