@@ -8,7 +8,7 @@ automation:
     alias: Area - Sitting Room - Motion
     trigger:
       - platform: state
-        entity_id: binary_sensor.sitting_room_motion_sensor_occupancy
+        entity_id: binary_sensor.sitting_room_motion_occupancy
     condition:
       - condition: and
         conditions:
@@ -26,7 +26,7 @@ automation:
           - conditions:
               - alias: 'Motion detected'
                 condition: state
-                entity_id: binary_sensor.sitting_room_motion_sensor_occupancy
+                entity_id: binary_sensor.sitting_room_motion_occupancy
                 state: 'on'
             sequence:
               - alias: 'Turn on closet light'
@@ -36,7 +36,7 @@ automation:
           - conditions:
               - alias: 'Motion cleared'
                 condition: state
-                entity_id: binary_sensor.sitting_room_motion_sensor_occupancy
+                entity_id: binary_sensor.sitting_room_motion_occupancy
                 state: 'off'
             sequence:
               - alias: 'Turn off closet light'
