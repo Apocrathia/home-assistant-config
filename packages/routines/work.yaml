@@ -39,10 +39,10 @@ automation:
                 target:
                   entity_id: light.office_key_light
               - alias: 'Set doorbell message'
-                service: unifiprotect.add_doorbell_text
+                service: select.select_option
                 data:
-                  entity_id: camera.front_door
-                  message: In Meeting
+                  entity_id: select.front_door_doorbell_text
+                  option: In Meeting
           - conditions:
               - alias: 'Meeting Ended'
                 condition: state
@@ -54,10 +54,10 @@ automation:
                 target:
                   entity_id: light.office_key_light
               - alias: 'Set doorbell message'
-                service: unifiprotect.add_doorbell_text
+                service: select.select_option
                 data:
-                  entity_id: camera.front_door
-                  message: Go Away
+                  entity_id: select.front_door_doorbell_text
+                  option: Go Away
   ###############################################################################
   - id: routine_work_start
     alias: Routine - Work - Start
