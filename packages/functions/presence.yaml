@@ -267,10 +267,12 @@ script:
                 entity_id: sun.sun
                 state: 'below_horizon'
             sequence:
-              - alias: 'Turn on hallway light'
+              - alias: 'Turn on some lights'
                 service: light.turn_on
                 target:
-                  entity_id: light.garage_hallway_light
+                  entity_id:
+                    - light.garage_hallway_light
+                    - light.evening_lights
                 data:
                   brightness_pct: 50
       # Execute the following every time
