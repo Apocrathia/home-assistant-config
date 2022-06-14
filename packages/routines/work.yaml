@@ -12,6 +12,16 @@ input_datetime:
     has_date: false
     has_time: true
 
+# Sensors
+binary_sensor:
+  - platform: template
+    sensors:
+      routine_work_active:
+        friendly_name: Routine - Work - Active
+        value_template: >
+          {{ today_at(states('input_datetime.routine_work_start')) <
+          now() < today_at(states('input_datetime.routine_work_stop')) }}
+
 # Automations
 automation:
   ###############################################################################
@@ -69,6 +79,10 @@ automation:
         condition: state
         entity_id: binary_sensor.workday
         state: 'on'
+      - alias: 'Only during work hours'
+        condition: state
+        entity_id: binary_sensor.routine_work_active
+        state: 'on'
     action:
       - alias: 'Turn on office lights'
         service: light.turn_on
@@ -91,6 +105,48 @@ automation:
             - vacuum.downstairs
             - vacuum.upstairs
   ###############################################################################
+  - id: routine_work_break
+    alias: Routine - Work - Break
+    trigger:
+      - platform: state
+        entity_id: input_boolean.away_mode
+    condition:
+      - alias: 'Only on workdays'
+        condition: state
+        entity_id: binary_sensor.workday
+        state: 'on'
+      - alias: 'During Work Hours'
+        condition: state
+        entity_id: binary_sensor.workday
+        state: 'on'
+    action:
+      - alias: 'State Handler'
+        choose:
+          - conditions:
+              - alias: 'Left the house'
+                condition: state
+                entity_id: input_boolean.away_mode
+                state: 'on'
+            sequence:
+              - alias: 'Turn off office lights'
+                service: light.turn_off
+                target:
+                  entity_id:
+                    - light.office_panel_lights_south
+                    - light.office_panel_lights_west
+          - conditions:
+              - alias: 'Returned'
+                condition: state
+                entity_id: input_boolean.away_mode
+                state: 'off'
+            sequence:
+              - alias: 'Turn on office lights'
+                service: light.turn_on
+                target:
+                  entity_id:
+                    - light.office_panel_lights_south
+                    - light.office_panel_lights_west
+  ###############################################################################
   - id: routine_work_stop
     alias: Routine - Work - Stop
     trigger:
@@ -98,6 +154,10 @@ automation:
         at: input_datetime.routine_work_stop
     condition:
       - alias: 'Only on workdays'
+        condition: state
+        entity_id: binary_sensor.workday
+        state: 'on'
+      - alias: 'During Work Hours'
         condition: state
         entity_id: binary_sensor.workday
         state: 'on'
