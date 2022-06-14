@@ -25,9 +25,9 @@ automation:
       - alias: 'Wait a random amount of time'
         delay:
           minutes: >
-            "{{ range(1, 59) | random | float }}"
+            {{ range(1, 59) | random | float }}
           seconds: >
-            "{{ range(1, 59) | random | float }}"
+            {{ range(1, 59) | random | float }}
       - alias: "Start the Let's Encrypt container"
         service: hassio.addon_start
         data:
