@@ -72,6 +72,7 @@ automation:
     trigger:
       - platform: state
         entity_id: group.people
+        for: 00:00:30
     action:
       service: >
         {% if is_state('group.people', 'home') %}
@@ -186,12 +187,10 @@ script:
                 entity_id: sun.sun
                 state: 'below_horizon'
             sequence:
-              - alias: 'Turn on guest bedroom light'
-                service: light.turn_on
+              - alias: 'Turn off evening lights'
+                service: light.turn_off
                 target:
-                  entity_id: light.guest_bedroom_floor_lamp
-                data:
-                  brightness_pct: 50
+                  entity_id: light.evening_lights
       # Execute the following every time
       # Turn off all of the lights
       - service: light.turn_off
