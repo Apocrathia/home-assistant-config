@@ -21,15 +21,28 @@ light:
       - light.music_room_floor_lamp
       - light.master_bedroom_lights
 
-  # - platform: group
-  #   name: Evening Lights
-  #   entities:
-  #     - light.back_yard_string_lights
-  #     - light.downstairs_hallway_lights
-  #     - light.upstairs_hallway_lights
-  #     - light.office_floor_lamp
-  #     - light.master_bedroom_lights
-  #     - light.living_room_ceiling_fan
+  - name: Away Lights
+    platform: group
+    entities:
+      - light.living_room_lights
+      - light.dining_room_chandelier
+      - light.foyer_chandelier
+      - light.kitchen
+      - light.studio_floor_lamp
+      - light.master_bedroom_table_lamps
+      - light.master_bathroom_vanity_lights
+      - light.music_room_floor_lamp
+      - light.office_light
+
+  - name: Evening Lights
+    platform: group
+    entities:
+      - light.back_yard_string_lights
+      - light.downstairs_hallway_lights
+      - light.upstairs_hallway_lights
+      - light.office_floor_lamp
+      - light.master_bedroom_lights
+      - light.living_room_ceiling_fan
 
   - platform: group
     name: Night Lights
