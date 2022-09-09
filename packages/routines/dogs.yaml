@@ -43,6 +43,14 @@ input_number:
     step: 1
     unit_of_measurement: Hours
 
+proximity:
+  michio:
+    zone: home
+    devices:
+      - device_tracker.michio_tracker
+    tolerance: 50
+    unit_of_measurement: km
+
 ### Sensors ###
 sensor:
   - platform: template
@@ -122,7 +130,12 @@ sensor:
             int + states.input_number.dogs_meal_duration.state | int * 60 +
             states.input_number.dogs_meal_relief.state | int * 60 * 60) |
             timestamp_custom("%H:%M",False)) }}
-
+      # Location
+      distance_apart:
+        friendly_name: 'Distance Apart'
+        value_template: >-
+          {{ distance('device_tracker.michio_tracker','person.ian') }}
+        unit_of_measurement: km
 automation:
   ################################################################################
   - id: routine_dogs_breakfast
