@@ -27,7 +27,7 @@ proximity:
     devices:
       - person.ian
     tolerance: 50
-    unit_of_measurement: mi
+    unit_of_measurement: km
 ################################################################################
 
 # sensor:
