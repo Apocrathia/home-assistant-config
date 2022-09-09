@@ -122,8 +122,6 @@ automation:
     trigger:
       - platform: sun
         event: sunset
-        # Set this to 5 minutes after sundown to 'override' the previous automation
-        offset: '00:05:00'
     condition:
       condition: and
       conditions:
@@ -138,6 +136,27 @@ automation:
         data:
           entity_id: light.master_bedroom_lights
           brightness_pct: 100
+          profile: relax
+        # data_template:
+        #   transition: >
+        #     {{ (states.sensor.nighttime_lighting_transition.state | int) }}
+  ################################################################################
+  - id: routine_night_evening_lights
+    alias: 'Routine - Night - Evening Lights'
+    trigger:
+      - platform: sun
+        event: sunset
+    condition:
+      - condition: state
+        entity_id: input_boolean.away_mode
+        state: 'off'
+    action:
+      - service: light.turn_on
+        data:
+          entity_id:
+            - light.upstairs_hallway_lights
+            - light.downstairs_hallway_lights
+          brightness_pct: 25
           profile: relax
         # data_template:
         #   transition: >
