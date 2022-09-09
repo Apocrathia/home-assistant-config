@@ -71,6 +71,11 @@ automation:
         data:
           entity_id: fan.master_bedroom_ceiling_fan
           percentage: 100
+      - service: media_player.volume_set
+        target:
+          entity_id: media_player.master_bathroom_homepod
+        data:
+          volume_level: 0.65
       - service: script.area_master_bathroom_start_timer
   ################################################################################
   - id: area_master_bathroom_humidity_low
@@ -110,6 +115,12 @@ automation:
                 data:
                   entity_id: fan.master_bedroom_ceiling_fan
                   percentage: 33
+
+              - service: media_player.volume_set
+                target:
+                  entity_id: media_player.master_bathroom_homepod
+                data:
+                  volume_level: 0.50
               - service: script.area_master_bathroom_stop_timer
   ################################################################################
   # Turn on the fan when the shitter closet door is closed.
