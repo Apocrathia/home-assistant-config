@@ -18,28 +18,30 @@ automation:
               alias: Upstairs was changed
               condition: template
               value_template: >
-                {{ trigger.event.data.entity_id = 'climate.homekit_upstairs' }}
+                {{ trigger.entity_id == 'climate.homekit_upstairs' }}
             sequence:
               service: climate.set_temperature
-              entity_id: climate.homekit_downstairs
-              data_template:
-                temperature: >
-                  {{ state_attr('climate.homekit_downstairs', 'temperature') }}
-                hvac_mode: >
-                  {{ states.climate.homekit_downstairs.state }}
-          - conditions:
-              alias: Downstairs was changed
-              condition: template
-              value_template: >
-                {{ trigger.event.data.entity_id = 'climate.homekit_downstairs' }}
-            sequence:
-              service: climate.set_temperature
-              entity_id: climate.homekit_upstairs
-              data_template:
+              target:
+                entity_id: climate.homekit_downstairs
+              data:
                 temperature: >
                   {{ state_attr('climate.homekit_upstairs', 'temperature') }}
                 hvac_mode: >
                   {{ states.climate.homekit_upstairs.state }}
+          - conditions:
+              alias: Downstairs was changed
+              condition: template
+              value_template: >
+                {{ trigger.entity_id == 'climate.homekit_downstairs' }}
+            sequence:
+              service: climate.set_temperature
+              target:
+                entity_id: climate.homekit_upstairs
+              data:
+                temperature: >
+                  {{ state_attr('climate.homekit_downstairs', 'temperature') }}
+                hvac_mode: >
+                  {{ states.climate.homekit_downstairs.state }}
   #############################################################################
   # Turn off HVAC if an outside door has been left open for 60 seconds
   - id: function_hvac_efficiency_doors
@@ -67,7 +69,7 @@ automation:
           - conditions:
               - alias: 'Door Open'
                 condition: template
-                value_template: "{{ trigger.to_state = 'open' }}"
+                value_template: "{{ trigger.to_state == 'open' }}"
             sequence:
               - alias: 'Turn off HVAC'
                 service: climate.turn_off
@@ -78,7 +80,7 @@ automation:
           - conditions:
               - alias: 'Door Closed'
                 condition: template
-                value_template: "{{ trigger.to_state = 'closed' }}"
+                value_template: "{{ trigger.to_state == 'closed' }}"
             sequence:
               - alias: 'Turn on HVAC'
                 service: climate.turn_on
