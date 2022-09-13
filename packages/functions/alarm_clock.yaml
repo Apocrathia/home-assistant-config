@@ -114,7 +114,7 @@ automation:
           entity_id: binary_sensor.workday
           state: 'on'
     action:
-      service: script.function_alarm_clock
+      service: script.function_wakeup_apple_tv
   ################################################################################
   - id: function_wakeup_vacuum
     alias: 'Function - Wakeup - Vacuum'
