@@ -65,14 +65,19 @@ input_boolean:
 automation:
   ################################################################################
   # I realize the input boolean seems redundant, but I wanted a simply switch that
-  # I could hit in case I wanted to activate an Away Mode, as well as something
-  # that could be accessed externally by Node-RED.
+  # I could hit in case I wanted to activate an Away Mode.
+  # There are two triggers here so that the
   - id: function_presence_detection
     alias: 'Function - Presence - Detection'
     trigger:
       - platform: state
         entity_id: group.people
+        from: 'home'
         for: 00:05:00 # Ensure this is > the iOS app location reporting interval.
+      - platform: state
+        entity_id: group.people
+        to: 'home'
+        for: 00:01:30 # Keep this value lower to disable away mode quickly
     action:
       service: >
         {% if is_state('group.people', 'home') %}
