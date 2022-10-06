@@ -119,7 +119,7 @@ light:
   - platform: group
     name: Downstairs Lights
     entities:
-      - light.downstairs_hallway
+      - light.downstairs_hallway_lights
       - light.foyer_chandelier
       - light.garage_hallway_light
 
