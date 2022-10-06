@@ -5,7 +5,7 @@ sensor:
   # Weather prediction
   #  - platform: yr
 
-  - platform: moon
+  # - platform: moon
 
   # Time & Date
   - platform: time_date
