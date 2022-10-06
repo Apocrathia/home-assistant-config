@@ -1,0 +1,69 @@
+---
+# Office Air Quality Sensor
+
+esphome:
+  name: office_air_quality_sensor
+  platform: ESP32
+  board: wemos_d1_mini32
+
+wifi:
+  ssid: !secret esphome_wifi_ssid
+  password: !secret esphome_wifi_password
+  domain: !secret esphome_domain
+  fast_connect: !secret esphome_fast_connect
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: !secret esphome_office_air_quality_sensor_ssid
+    password: !secret esphome_office_air_quality_sensor_password
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: !secret esphome_api
+
+ota:
+  password: !secret esphome_ota
+
+# Enable active Bluetooth proxy
+bluetooth_proxy:
+  active: True
+
+uart:
+  rx_pin: GPIO22 # D2 # IO22
+  baud_rate: 9600
+
+sensor:
+  - platform: pm1006
+    pm_2_5:
+      name: 'Office Air Quality'
+
+###############################################################################
+# I got this microphone arm for my office, and it has an LED. The controller
+# sucked, so I replaced it with an ESP.
+# https://gatorframeworks.com/products/broadcast-boom-mic-stand-with-led-indicator-light-gfwmicbcbm4000/
+###############################################################################
+
+# Configuration entry
+light:
+  - platform: monochromatic
+    name: 'Office Microphone Light (Red)'
+    output: output_red
+  - platform: monochromatic
+    name: 'Office Microphone Light (Blue)'
+    output: output_blue
+
+# Output entry
+output:
+  - platform: ledc
+    id: output_red
+    pin: GPIO18 # D5
+    inverted: True
+  - platform: ledc
+    id: output_blue
+    pin: GPIO19 # D6
+    inverted: True

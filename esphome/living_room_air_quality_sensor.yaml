@@ -1,0 +1,43 @@
+---
+# Living Room Air Quality Sensor
+
+esphome:
+  name: living_room_air_quality_sensor
+  platform: ESP32
+  board: wemos_d1_mini32
+
+wifi:
+  ssid: !secret esphome_wifi_ssid
+  password: !secret esphome_wifi_password
+  domain: !secret esphome_domain
+  fast_connect: !secret esphome_fast_connect
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: !secret esphome_living_room_air_quality_sensor_ssid
+    password: !secret esphome_living_room_air_quality_sensor_password
+
+captive_portal:
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  password: !secret esphome_api
+
+ota:
+  password: !secret esphome_ota
+
+# Enable active Bluetooth proxy
+bluetooth_proxy:
+  active: True
+
+uart:
+  rx_pin: GPIO22 # D2 # IO22
+  baud_rate: 9600
+
+sensor:
+  - platform: pm1006
+    pm_2_5:
+      name: 'Living Room Air Quality'
