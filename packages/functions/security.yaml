@@ -60,14 +60,14 @@ sensor:
         icon_template: mdi:clock-outline
         # entity_id: input_datetime.alarm_auto_arm
         value_template: >
-          {{ (states.input_datetime.alarm_auto_arm.attributes.timestamp | 
+          {{ (states.input_datetime.alarm_auto_arm.attributes.timestamp |
               int | timestamp_custom("%H:%M",False)) }}
       alarm_auto_disarm:
         friendly_name: 'Alarm Auto Disarm'
         icon_template: mdi:clock-outline
         # entity_id: input_datetime.alarm_auto_disarm
         value_template: >
-          {{ (states.input_datetime.alarm_auto_disarm.attributes.timestamp | 
+          {{ (states.input_datetime.alarm_auto_disarm.attributes.timestamp |
               int | timestamp_custom("%H:%M",False)) }}
 ################################################################################
 automation:
@@ -162,6 +162,16 @@ automation:
     action:
       # Send an alert to all users
       - service: script.notification_alarm_armed
+      # Lock all doors
+      - service: lock.lock
+        entity_id:
+          - lock.front_door
+          - lock.back_door
+      # Close all covers
+      - service: cover.close_cover
+        entity_id:
+          - cover.main_garage_door
+          - cover.second_garage_door
   ################################################################################
   - id: function_security_alarm_disarmed
     alias: 'Function - Security - Alarm Disarmed'
@@ -244,6 +254,8 @@ script:
             - media_player.upstairs_thermostat
             - media_player.ian_s_echo_dot
           message: 'The alarm is armed.'
+      # HomePod announcement
+
   ################################################################################
   notification_alarm_disarmed:
     alias: 'Notification - Alarm Disarmed'
