@@ -173,13 +173,12 @@ script:
                 entity_id: input_select.alarm_type
                 state: 'Plex'
             sequence:
-              # Should be sitting on the first menu item (Plex)
               # Open Plex
-              - service: remote.send_command
+              - service: media_player.select_source
                 data:
-                  entity_id: remote.master_bedroom_apple_tv
-                  command:
-                    - select
+                  source: Plex
+                target:
+                  entity_id: media_player.master_bedroom_apple_tv
               - delay:
                   seconds: 15
               # Select Apocrathia user account
