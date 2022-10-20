@@ -6,40 +6,40 @@
 #   api_key: !secret ecobee_api_key
 #  entity_namespace: ecobee ### Not implemented ###
 
-sensor:
-  - platform: template
-    sensors:
-      template_downstairs_temperature:
-        friendly_name: 'Downstairs Temperature'
-        unit_of_measurement: °F
-        icon_template: mdi:thermometer
-        value_template: >-
-          {{ states.climate.homekit_downstairs.attributes.current_temperature }}
-      template_upstairs_temperature:
-        friendly_name: 'Upstairs Temperature'
-        unit_of_measurement: °F
-        icon_template: mdi:thermometer
-        value_template: >-
-          {{ states.climate.homekit_upstairs.attributes.current_temperature }}
-      template_average_temperature:
-        friendly_name: 'Average Temperature'
-        unit_of_measurement: °F
-        icon_template: mdi:thermometer
-        value_template: >-
-          {{
-            (( states('sensor.template_downstairs_temperature') | float +
-            states('sensor.template_upstairs_temperature') | float +
-            states('sensor.homekit_kitchen_temperature') | float +
-            states('sensor.homekit_master_bedroom_temperature') | float) 
-            / 4) | round(2)
-          }}
-      template_delta_temperature:
-        friendly_name: 'Delta Temperature'
-        unit_of_measurement: °F
-        icon_template: mdi:thermometer
-        value_template: >-
-          {{ 
-            ( float(states.weather.kfly_hourly.attributes.temperature) -
-            float(states.sensor.template_average_temperature.state) )
-            | round(2)
-          }}
+# sensor:
+#   - platform: template
+#     sensors:
+#       template_downstairs_temperature:
+#         friendly_name: 'Downstairs Temperature'
+#         unit_of_measurement: °F
+#         icon_template: mdi:thermometer
+#         value_template: >-
+#           {{ states.climate.homekit_downstairs.attributes.current_temperature }}
+#       template_upstairs_temperature:
+#         friendly_name: 'Upstairs Temperature'
+#         unit_of_measurement: °F
+#         icon_template: mdi:thermometer
+#         value_template: >-
+#           {{ states.climate.homekit_upstairs.attributes.current_temperature }}
+#       template_average_temperature:
+#         friendly_name: 'Average Temperature'
+#         unit_of_measurement: °F
+#         icon_template: mdi:thermometer
+#         value_template: >-
+#           {{
+#             (( states('sensor.template_downstairs_temperature') | float +
+#             states('sensor.template_upstairs_temperature') | float +
+#             states('sensor.homekit_kitchen_temperature') | float +
+#             states('sensor.homekit_master_bedroom_temperature') | float)
+#             / 4) | round(2)
+#           }}
+#       template_delta_temperature:
+#         friendly_name: 'Delta Temperature'
+#         unit_of_measurement: °F
+#         icon_template: mdi:thermometer
+#         value_template: >-
+#           {{
+#             ( float(states.weather.kfly_hourly.attributes.temperature) -
+#             float(states.sensor.template_average_temperature.state) )
+#             | round(2)
+#           }}
