@@ -1,29 +1,29 @@
----
-### System Themes ###
+# ---
+# ### System Themes ###
 
-################################################################################
-automation:
-  ################################################################################
-  # IF: { sun.sun goes under horizon } THEN: { set theme to night mode }
-  - id: system_theme_management
-    alias: System - Theme - Management
-    trigger:
-      - platform: homeassistant
-        event: start
-      - platform: state
-        entity_id: sun.sun
-        to: above_horizon
-      - platform: state
-        entity_id: sun.sun
-        to: below_horizon
-    action:
-      - service: frontend.set_theme
-        data_template:
-          name: >
-            {% if states.sun.sun.state == "above_horizon" %}
-              clear
-            {% else %}
-              clear-dark
-            {% endif %}
+# ################################################################################
+# automation:
+#   ################################################################################
+#   # IF: { sun.sun goes under horizon } THEN: { set theme to night mode }
+#   - id: system_theme_management
+#     alias: System - Theme - Management
+#     trigger:
+#       - platform: homeassistant
+#         event: start
+#       - platform: state
+#         entity_id: sun.sun
+#         to: above_horizon
+#       - platform: state
+#         entity_id: sun.sun
+#         to: below_horizon
+#     action:
+#       - service: frontend.set_theme
+#         data_template:
+#           name: >
+#             {% if states.sun.sun.state == "above_horizon" %}
+#               clear
+#             {% else %}
+#               clear-dark
+#             {% endif %}
 
-################################################################################
+# ################################################################################
