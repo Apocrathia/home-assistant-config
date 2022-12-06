@@ -21,6 +21,38 @@ binary_sensor:
         value_template: >
           {{ today_at(states('input_datetime.routine_work_start')) <
           now() < today_at(states('input_datetime.routine_work_stop')) }}
+      routine_work_test:
+        friendly_name: Routine - Work - Test
+        value_template: >
+          {{ is_state('schedule.routine_work_schedule', 'on') and
+          is_state('binary_sensor.workday', 'on') }}
+  # Workday
+  - platform: workday
+    name: workday
+    country: US
+
+  # Worknight
+  - platform: workday
+    name: worknight
+    country: US
+    days_offset: 1
+
+# Work Schedule
+schedule:
+  routine_work_schedule:
+    name: Routine - Work - Schedule
+    monday:
+      - from: '09:00:00'
+        to: '15:00:00'
+    tuesday:
+      - from: '09:00:00'
+        to: '15:00:00'
+    wednesday:
+      - from: '09:00:00'
+        to: '15:00:00'
+    thursday:
+      - from: '09:00:00'
+        to: '15:00:00'
 
 # Automations
 automation:
@@ -92,12 +124,19 @@ automation:
             - light.office_panel_lights_south
             - light.office_panel_lights_west
             # - light.office_workbench
+      - alias: 'Set brightness for office floor lamp'
+        service: light.turn_on
+        target:
+          entity_id: light.office_floor_lamp
+        data:
+          brightness: 100%
       - alias: 'Stop the vacuums'
         service: vacuum.stop
         target:
           entity_id:
             - vacuum.downstairs
             - vacuum.upstairs
+      - delay: 00:00:01
       - alias: 'Return vacuums to docks'
         service: vacuum.return_to_base
         target:
@@ -117,7 +156,7 @@ automation:
         state: 'on'
       - alias: 'During Work Hours'
         condition: state
-        entity_id: binary_sensor.workday
+        entity_id: binary_sensor.routine_work_active
         state: 'on'
     action:
       - alias: 'State Handler'
@@ -159,7 +198,7 @@ automation:
         state: 'on'
       - alias: 'During Work Hours'
         condition: state
-        entity_id: binary_sensor.workday
+        entity_id: binary_sensor.routine_work_active
         state: 'on'
     action:
       - alias: 'Turn off office lights'
