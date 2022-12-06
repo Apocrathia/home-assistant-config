@@ -5,3 +5,11 @@
 weather:
   - platform: darksky
     api_key: !secret darksky_api_key
+
+  - platform: pirateweather
+    api_key: !secret pirateweather_api_key
+    # Additional optional values:
+    latitude: !secret latitude
+    longitude: !secret longitude
+    mode: 'hourly'
+    name: PirateWeather
