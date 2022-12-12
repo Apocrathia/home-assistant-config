@@ -98,7 +98,7 @@ automation:
           ending_brightness_pct: 100
           interval_pct: 10
           transition_time: >
-            {{ states.input_number.wakeup_duration.state | multiply(60) | int }}
+            {{ states.input_number.wakeup_duration.state | multiply(60) | int - 1 }}
   ################################################################################
   - id: function_wakeup_apple_tv
     alias: 'Function - Wakeup - Apple TV'
