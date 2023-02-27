@@ -73,11 +73,13 @@ automation:
       - platform: state
         entity_id: group.people
         from: 'home'
-        for: 00:05:00 # Ensure this is > the iOS app location reporting interval.
+        # Ensure this is > the iOS app location reporting interval.
+        for: 00:05:00
       - platform: state
         entity_id: group.people
         to: 'home'
-        for: 00:01:30 # Keep this value lower to disable away mode quickly
+        # Keep this value lower to disable away mode quickly
+        for: 00:01:30
     action:
       service: >
         {% if is_state('group.people', 'home') %}
@@ -117,7 +119,8 @@ automation:
         entity_id: proximity.ian
         above: 100
         below: 100
-        for: 01:00:00 # set this just in case we get a fluke proximity reading
+        # set this just in case we get a fluke proximity reading
+        for: 01:00:00
     action:
       - choose:
           - conditions:
@@ -206,36 +209,36 @@ script:
         data:
           entity_id:
             - switch.garage_lights
-        # Set the thermostats to away
+      # Set the thermostats to away
       - service: climate.set_preset_mode
         data:
           entity_id:
             - climate.downstairs
             - climate.upstairs
           preset_mode: 'away'
-        # Set the vacuums to turbo
+      # Set the vacuums to turbo
       - service: vacuum.set_fan_speed
         data:
           entity_id:
             - vacuum.downstairs
             - vacuum.upstairs
           fan_speed: max
-        # Start the vacuum
+      # Start the vacuum
       - service: vacuum.start
         data:
           entity_id:
             - vacuum.downstairs
             - vacuum.upstairs
-        # Arm the alarm
+      # Arm the alarm
       - service: alarm_control_panel.alarm_arm_away
         data:
           entity_id: alarm_control_panel.home
           code: !secret alarm_code
-        # Ensure the doors are locked
+      # Ensure the doors are locked
       - service: lock.lock
         data:
           entity_id: group.all_locks
-        # Close the garage doors
+      # Close the garage doors
       - service: cover.close_cover
         data:
           entity_id:
@@ -253,12 +256,6 @@ script:
         data:
           entity_id:
             - switch.fireplace
-
-    # - service: scene.turn_on
-    #   data:
-    #     entity_id: scene.away
-    # Lights will now be randomly turned on and off
-    # and is triggered by input_boolean.away_mode
   ################################################################################
   location_home:
     alias: 'Function - Presence - Home'
@@ -285,30 +282,30 @@ script:
         data:
           entity_id: alarm_control_panel.home
           code: !secret alarm_code
-        # Set the thermostat to home
+      # Set the thermostat to home
       - service: climate.set_preset_mode
         data:
           entity_id:
             - climate.downstairs
             - climate.upstairs
           preset_mode: 'home'
-        # Set the vacuums to silent
+      # Set the vacuums to silent
       - service: vacuum.set_fan_speed
         data:
           entity_id:
             - vacuum.downstairs
             - vacuum.upstairs
           fan_speed: low
-        # Stop the vacuums
+      # Stop the vacuums
       - service: vacuum.stop
         data:
           entity_id:
             - vacuum.downstairs
             - vacuum.upstairs
-        # wait 30 seconds for command to take effect
+      # wait 30 seconds for command to take effect
       - delay:
           seconds: 30
-        # Return vacuums to dock
+      # Return vacuums to dock
       - service: vacuum.return_to_base
         data:
           entity_id:
@@ -322,10 +319,6 @@ script:
             - fan.master_bedroom_ceiling_fan
             - fan.master_bedroom_air_purifier
           percentage: 33
-      # Turn on some lights
-      # - service: scene.turn_on
-      #   data:
-      #     entity_id: scene.home
   ################################################################################
   vacation_mode_on:
     alias: 'Function - Vacation - On'

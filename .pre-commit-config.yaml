@@ -1,3 +1,4 @@
+---
 # Pre-commit configuration
 #
 # This will help ensure everything I commit is kinda clean and neat.
@@ -5,7 +6,7 @@
 exclude: ^(custom_components|www/community)/
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0
+    rev: v4.4.0
     hooks:
       - id: check-json
       - id: check-case-conflict
@@ -18,7 +19,7 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.26.3
+    rev: v1.28.0
     hooks:
       - id: yamllint
 
@@ -26,3 +27,8 @@ repos:
     rev: v2.5.1
     hooks:
       - id: prettier
+
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v2.38.0
+    hooks:
+      - id: commitizen

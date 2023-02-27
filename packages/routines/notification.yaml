@@ -8,10 +8,10 @@ automation:
     trigger:
       platform: template
       value_template: >
-        {{ 
+        {{
           (now().weekday() == 1) and
           (now().time().hour == 19) and
-          (now().time().minute == 0) 
+          (now().time().minute == 0)
         }}
     action:
       service: notify.notify

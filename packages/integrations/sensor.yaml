@@ -22,7 +22,8 @@ sensor:
   # Pirate Weather
   - platform: pirateweather
     api_key: !secret pirateweather_api_key
-    scan_interval: '00:17:17' # Use a prime number to simulate randomness
+    # Use a prime number to simulate randomness
+    scan_interval: '00:17:17'
     monitored_conditions:
       - summary
       - temperature
@@ -64,15 +65,18 @@ sensor:
         friendly_name: 'Serenity'
         value_template: >-
           Catting
-      michio: # https://www.instagram.com/michiothedoge/
+      # https://www.instagram.com/michiothedoge/
+      michio:
         friendly_name: 'Michio'
         value_template: >-
           Pupping
-      sagan: # https://www.instagram.com/saganthepomsky/
+      # https://www.instagram.com/saganthepomsky/
+      sagan:
         friendly_name: 'Sagan'
         value_template: >-
           Pupping
-      hubble: # https://www.instagram.com/hubbletheaussie/
+      # https://www.instagram.com/hubbletheaussie/
+      hubble:
         friendly_name: 'Hubble'
         value_template: >-
           Pupping

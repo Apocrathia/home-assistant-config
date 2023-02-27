@@ -2,7 +2,7 @@
 ### Home Assistant Core Configurations ###
 
 # Show links to resources in log and frontend
-#introduction:
+# introduction:
 
 # Enable iOS frontend
 ios:
@@ -21,8 +21,6 @@ homeassistant:
     - type: homeassistant
     - type: trusted_networks
       trusted_networks: !secret trusted_networks
-  # auth_mfa_modules:
-  #   - type: totp
 
 # Checks for available updates
 # Note: This component will send some information about your system to

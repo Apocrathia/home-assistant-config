@@ -22,19 +22,16 @@ captive_portal:
 # Enable logging
 logger:
 
-# Enable Home Assistant API
-api:
-  password: !secret esphome_api
-
 ota:
   password: !secret esphome_ota
 
 # Enable active Bluetooth proxy
 bluetooth_proxy:
-  active: True
+  active: true
 
 uart:
-  rx_pin: GPIO22 # D2 # IO22
+  # D2 = IO22
+  rx_pin: GPIO22
   baud_rate: 9600
 
 sensor:

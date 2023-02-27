@@ -39,21 +39,21 @@ sensor:
         friendly_name: Morning
         icon_template: mdi:clock-outline
         value_template: >
-          {{ states.input_datetime.morning.attributes.timestamp | int | 
+          {{ states.input_datetime.morning.attributes.timestamp | int |
               timestamp_custom("%H:%M",False) }}
       morning_start:
         friendly_name: Morning Start
         icon_template: mdi:clock-outline
         value_template: >
-          {{ (((states.input_datetime.morning.attributes.timestamp | int) 
-              - (states.input_number.morning_advance.state | int * 60)) | 
+          {{ (((states.input_datetime.morning.attributes.timestamp | int)
+              - (states.input_number.morning_advance.state | int * 60)) |
               timestamp_custom("%H:%M",False)) }}
       daytime_lighting_transition:
         friendly_name: Day Time Lighting Transition
         icon_template: mdi:transition-masked
         unit_of_measurement: 'Seconds'
         value_template: >
-          {{ ((states.input_number.daytime_lighting_transition.state | 
+          {{ ((states.input_number.daytime_lighting_transition.state |
               int) * 60) }}
       next_sunrise:
         friendly_name: Next Sunrise
@@ -77,9 +77,6 @@ automation:
       - service: light.turn_off
         data:
           entity_id: light.outdoor_lights
-        # data_template:
-        #   transition: >
-        #     {{ (states.sensor.daytime_lighting_transition.state | int) }}
   ################################################################################
 
   ################################################################################
@@ -96,24 +93,6 @@ automation:
       - service: light.turn_off
         data:
           entity_id: light.night_lights
-        # data_template:
-        #   transition: >
-        #     {{ (states.sensor.daytime_lighting_transition.state | int) }}
-  ################################################################################
-
-  ################################################################################
-  # - id: routine_day_kitchen_cabinet_lights
-  #   alias: 'Routine - Day - Kitchen Cabnet Lights'
-  #   trigger:
-  #     - platform: sun
-  #       event: sunrise
-  #   action:
-  #     - service: light.turn_off
-  #       data:
-  #         entity_id: light.kitchen_cabinet_lights
-  #       data_template:
-  #         transition: >
-  #           {{ (states.sensor.daytime_lighting_transition.state | int) }}
   ################################################################################
 
   # I realize this automation will be a little redundant, but it's just in case I
@@ -132,7 +111,4 @@ automation:
             - light.indoor_lights
             - light.outdoor_lights
             - light.back_yard_string_lights
-        # data_template:
-        #   transition: >
-        #     {{ (states.sensor.daytime_lighting_transition.state | int) }}
 ################################################################################

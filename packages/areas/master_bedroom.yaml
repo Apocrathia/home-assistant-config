@@ -24,11 +24,14 @@ alert:
   master_bedroom_humidifer_low:
     name: Master Bedroom Humidier Low
     entity_id: binary_sensor.master_bedroom_humidifer_low
+    message: 'Go refil the master bedroom humidifier'
+    done_message: 'Was that so hard?'
     state: 'on'
     repeat: 120
     can_acknowledge: true
     notifiers:
       - ians_iphone
+      - mobile_app_iphone
 
 # Automations
 automation:
@@ -76,7 +79,8 @@ automation:
           unique_id: !secret panic_button_unique_id
           args:
             attribute_name: on_off
-            value: 1 # Upon release
+            # Upon release
+            value: 1
     # condition:
     action:
       # - alias: "Test"
