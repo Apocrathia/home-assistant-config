@@ -26,8 +26,8 @@
 
 The production instance of Home Assistant is running via the
 [Home Assistant Operating System](https://github.com/home-assistant/operating-system)
-on a virtual machine (VM) in a VMware vSphere cluster, with a remote instance
-running on a Raspberry Pi 4 which has multiple USB radios connected
+on an old MacBook Pro, with a remote instance
+running on another old MacBook Pro which has multiple USB radios connected
 (Currently [Zigbee](https://www.home-assistant.io/integrations/zha/),
 [Z-Wave](https://www.home-assistant.io/integrations/zwave/), and an
 RTL-SDR dongle for [433mhz devices](https://github.com/merbanan/rtl_433)).
