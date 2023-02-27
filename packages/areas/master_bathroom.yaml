@@ -1,3 +1,4 @@
+---
 ### Master Bathroom ###
 
 # There are a couple of things in here that I want to make sure I have
@@ -17,6 +18,7 @@
 # https://smile.amazon.com/gp/product/B07SKTZK6Z
 # It comes with a simple 6-button IR remote
 # The codes for the Broadlink are as follows:
+# yamllint disable rule:line-length
 # "power": "JgBQAAABJ5MUERQRFBEUEhMSExITEhQRFDYUNxM3FDYUNxM3EzcUNxQRExIUNhQ2FTYUERMSFBEUNhU2FBEUERQRFDYVNhQ2FAAFFwABKUkUAA0F"
 # "mode": "JgBQAAABKJMUERQRFBEUERURFBEUERQRFDcTNxQ2FDYUNxQ2FDYUNhURFBEUERQRFBEUEhQ2FBEUNhQ3FDYUNhQ2FDcUERQ2FAAFFwABKkkUAA0F"
 # "alarm": "JgBQAAABKJMUERQRFBEVEBURFBEUERQRFDYVNhQ2FDYVNhQ2FDYVNhQRFBEUERQ2FREUERQRFBEUNhU2FDYUERQ2FTYUNhQ2FQAFFwABKUkUAA0F"
@@ -25,6 +27,7 @@
 # "down": "JgBQAAABJ5MUERQRFBIUERQRFBEUERQRFTYUNhQ2FDcUNhQ2FDcUNhQRFDYVNhQ2FDYUERU2FBEUNhQRFREUERQRFDYVEBU2FAAFFwABKUoTAA0F"
 # "start_stop": "JgBQAAABKZIUERQRFBEUERURFBEUERQRFDYVNhQ2FDYVNhQ2FDYVNhQRFDYUERURFDYUERQ2FREUNhQRFDYVNhQRFDYUERQ3FAAFFwABKkkUAA0F"
 # "clear": "JgBQAAABKZIUERQRFBEUEhQRFBEUERQRFDYVNhQ2FDYVNhQ2FDYUNxQRFDYUERQ3FBEUERQ2FBEVNhQRFDYUERQ3FDYUERQ2FQAFFwABKUkUAA0F"
+# yamllint enable rule:line-length
 
 # Inputs
 input_number:
@@ -163,7 +166,7 @@ automation:
           entity_id: switch.master_bathroom_fan
   ################################################################################
   - id: area_master_bathroom_lighting_schedule
-    alias: 'Area - Master Bathroom - Lightinng Schedule'
+    alias: 'Area - Master Bathroom - Lighting Schedule'
     trigger:
       - platform: time
         at:
