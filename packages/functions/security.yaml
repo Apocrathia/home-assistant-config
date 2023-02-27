@@ -78,7 +78,6 @@ automation:
     trigger:
       - platform: state
         entity_id:
-          - binary_sensor.garage_motion
           - binary_sensor.garage_side_door
     condition:
       - condition: state
@@ -221,7 +220,7 @@ automation:
       - service: notify.mobile_app_ians_iphone
         data:
           title: 'Garage Open!'
-          message: 'The {{ trigger.name }} has been left open. What would you like to do?'
+          message: 'The {{ trigger.name }} has been left open.'
           data:
             push:
               category: 'garage_door'
@@ -254,7 +253,6 @@ script:
             - media_player.upstairs_thermostat
             - media_player.ian_s_echo_dot
           message: 'The alarm is armed.'
-      # HomePod announcement
 
   ################################################################################
   notification_alarm_disarmed:
@@ -276,4 +274,4 @@ script:
             - media_player.upstairs_thermostat
             - media_player.ian_s_echo_dot
           message: 'The alarm is disarmed.'
-  ################################################################################
+################################################################################
