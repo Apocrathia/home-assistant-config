@@ -35,7 +35,7 @@ RTL-SDR dongle for [433mhz devices](https://github.com/merbanan/rtl_433)).
 This is done for multiple reasons:
 
 - Allow HA to communicate directly with wireless devices without the need for an external hub.
-- Prevent having to pass USB devices through to virtual michines.
+- Prevent having to pass USB devices through to virtual machines.
 - Enable VMware to migrate the main HA VM across hosts within the cluster based upon load.
 - Place radios in a more central location with better reception.
 
