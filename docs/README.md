@@ -29,13 +29,13 @@ The production instance of Home Assistant is running via the
 on an old MacBook Pro, with a remote instance
 running on another old MacBook Pro which has multiple USB radios connected
 (Currently [Zigbee](https://www.home-assistant.io/integrations/zha/),
-[Z-Wave](https://www.home-assistant.io/integrations/zwave/), and an
+[Z-Wave](https://www.home-assistant.io/integrations/zwave_js/), and an
 RTL-SDR dongle for [433mhz devices](https://github.com/merbanan/rtl_433)).
 
 This is done for multiple reasons:
 
 - Allow HA to communicate directly with wireless devices without the need for an external hub.
-- Prevent having to pass USB devices through to virtual michines.
+- Prevent having to pass USB devices through to virtual machines.
 - Enable VMware to migrate the main HA VM across hosts within the cluster based upon load.
 - Place radios in a more central location with better reception.
 
