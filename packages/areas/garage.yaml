@@ -19,9 +19,9 @@ automation:
         entity_id:
           - binary_sensor.garage_door
           - binary_sensor.side_door
-          - binary_sensor.side_door_2
+          - binary_sensor.garage_occupancy
           - binary_sensor.garage_motion
-          - binary_sensor.garage_motion_2
+          - binary_sensor.garage_camera_motion
         from: 'off'
         to: 'on'
       - platform: event
@@ -43,21 +43,41 @@ automation:
           entity_id: switch.garage_lights
   ################################################################################
   # Turn the lights off if there's been no motion for 5 minutes
-  - id: area_garage_no_motion
-    alias: 'Area - Garage - No Motion'
+  - id: area_garage_motion_cleared
+    alias: 'Area - Garage - Motion Cleared'
     trigger:
       - platform: state
         entity_id:
           - binary_sensor.garage_motion
-          - binary_sensor.garage_motion_2
+          - binary_sensor.garage_camera_motion
+          - binary_sensor.garage_occupancy
         from: 'on'
         to: 'off'
         for:
           minutes: 5
     condition:
-      - condition: state
-        entity_id: switch.garage_lights
-        state: 'on'
+      # By ensuring all of these conditions are met, the garage lights will only
+      # turn off if all when the garage is empty and the doors are closed
+      - condition: and
+        conditions:
+          - condition: state
+            entity_id: binary_sensor.garage_door
+            state: 'off'
+          - condition: state
+            entity_id: binary_sensor.side_door
+            state: 'off'
+          - condition: state
+            entity_id: binary_sensor.garage_occupancy
+            state: 'off'
+          - condition: state
+            entity_id: cover.main_garage_door
+            state: 'closed'
+          - condition: state
+            entity_id: cover.second_garage_door
+            state: 'closed'
+          - condition: state
+            entity_id: switch.garage_lights
+            state: 'on'
     action:
       - service: switch.turn_off
         data:
