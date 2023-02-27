@@ -1,0 +1,74 @@
+---
+### Irrigation ###
+
+# Use HA to blowout my sprinklers with my wimpy 135psi air compressor
+# Jeff has done a great job documenting the process.
+# https://www.jeffgeerling.com/blog/2015/winterizing-your-irrigation-system-febco-765
+
+input_boolean:
+  function_irrigation_blowout:
+    name: 'Function - Irrigation - Blowout'
+    icon: mdi:sprinkler
+
+automation:
+  ###############################################################################
+  - id: function_irrigation_blowout
+    alias: 'Function - Irrigation - Blowout'
+    variables:
+      sprinklers:
+        - switch.back_yard_north
+        - switch.back_yard_south
+        - switch.back_yard_drip
+        - switch.front_yard
+        - switch.front_yard_drip
+        - switch.front_yard_pop_ups
+    trigger:
+      - platform: state
+        entity_id: input_boolean.function_irrigation_blowout
+        from: 'off'
+        to: 'on'
+    action:
+      - alias: 'Loop through all irrigation valves'
+        repeat:
+          sequence:
+            - alias: 'Determine current sprinkler'
+              variables:
+                sprinkler: >
+                  {{ sprinklers[ ( repeat.index % ( sprinklers | length ) - 1 ) ] }}
+            - alias: 'Turn on sprinkler'
+              service: switch.turn_on
+              target:
+                entity_id: >
+                  {{ sprinkler }}
+            - alias: 'Let the system run for 30 seconds'
+              delay:
+                seconds: 30
+            - alias: 'Turn off sprinkler'
+              service: switch.turn_off
+              target:
+                entity_id: >
+                  {{ sprinkler }}
+            - alias: 'Give the air compressor 5 minutes to recharge'
+              delay:
+                minutes: 5
+          until:
+            - alias: 'Blowout is disabled'
+              condition: state
+              entity_id: input_boolean.function_irrigation_blowout
+              state: 'off'
+  ###############################################################################
+  - id: function_irrigation_blowout_autoshutoff
+    alias: 'Function - Irrigation - Blowout (Auto-Shutoff)'
+    trigger:
+      - platform: state
+        entity_id: input_boolean.function_irrigation_blowout
+        from: 'off'
+        to: 'on'
+        for:
+          hours: 4
+    action:
+      - alias: 'Turn off blowout'
+        service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.function_irrigation_blowout
+###############################################################################
