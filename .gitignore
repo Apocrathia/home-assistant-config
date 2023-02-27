@@ -1,52 +1,68 @@
-# By default, ignore all files
-*
-# Eventually I will change this, but for now, I'll write in what I want to be shared.
-
-# Share this file
-!.gitignore
-
-# Git Modules
-!.gitmodules
-
-# Share Markdown files & images
-!*.md
-!docs/images/*.png
-!docs/images/*.jpg
-
-# Explicitly allow YAML files
-!*.yaml
-
-# Any scripts that I may write
-!*.sh
-
-# Allow the following subfolders
-!appdaemon
-!automations
-!custom_components
-!docs
-!images
-!packages
-!scenes
-!scripts
-!themes
-!www
-
-# don't include the archive subfolder 
-# (As that's from my recent migration to HassOS)
-archive
-
 # Ignore Sensitive Files
 secrets.yaml
 known_devices.yaml
 entity_registry.yaml
 ip_bans.yaml
 customize.yaml
-
-# AppDaemon
-appdaemon/__pycache__
-
-# Zwave Configurations
-zwave_device_config.yaml
-
-# Google Calendars
 google_calendars.yaml
+.google.token
+.shopping_list.json
+
+# Generic ignores
+*.log
+*.log.*
+*.db
+*.db-shm
+*.db-wal
+*.pyc
+._*
+__pycache__
+
+# Directory (contents) ignores
+.cloud
+.storage
+deps
+appdaemon
+
+# Specific file ignores
+core
+image
+www
+.HA_VERSION
+
+# Built-in configuration ignores
+automations.yaml
+scenes.yaml
+
+# Built-in blueprints ignores
+blueprints/*/homeassistant
+
+# ESPHome ignores
+esphome/.*/
+
+# Ignore add-on files
+aircast.xml
+airsonos.xml
+notebooks
+node-red
+owntone
+ps5-mqtt
+scrypted
+tts
+ui_lovelace_minimalist
+frigate.yml
+
+# Ignore files created by IDE's
+.vscode
+.theia
+.Trash*
+node_modules
+package-lock.json
+package.json
+
+# Ignore vendored stuff
+custom_components
+themes
+
+# Specific keeps
+!.gitkeep
