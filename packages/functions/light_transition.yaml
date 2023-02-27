@@ -21,9 +21,9 @@ script:
     alias: 'Function - Light - Transition'
     description: |
       This script will transition a light based upon a set of given parameters.
-      Most Z-Wave dimmer switches don't support any sort of transition effects. 
-      This script is to fix that by generating a fuckload more traffic on the 
-      Z-Wave network because this is absolutely not how this is supposed to be 
+      Most Z-Wave dimmer switches don't support any sort of transition effects.
+      This script is to fix that by generating a fuckload more traffic on the
+      Z-Wave network because this is absolutely not how this is supposed to be
       done and why it's something most Z-wave devices don't normally support.
     fields:
       entity_id:
@@ -91,18 +91,18 @@ script:
       - alias: 'Setup loop parameters'
         variables:
           starting_brightness: >
-            {{ ((( starting_brightness_pct | float * 255 ) 
+            {{ ((( starting_brightness_pct | float * 255 )
                 / 100 ) | round | int ) }}
           ending_brightness: >
-            {{ ((( ending_brightness_pct | float * 255) 
+            {{ ((( ending_brightness_pct | float * 255)
                 / 100) | round | int ) }}
           interval: >
             {{ (( interval_pct | float * 255 ) / 100 ) | int }}
           count: >
-            {{ ((( ending_brightness | float - starting_brightness | float ) 
+            {{ ((( ending_brightness | float - starting_brightness | float )
                 / interval | float ) | abs | round | int ) }}
           step: >
-            {{ ((( ending_brightness | float - starting_brightness | float ) 
+            {{ ((( ending_brightness | float - starting_brightness | float )
                 / count | float ) | round | int )  }}
           delay: >
             {{ (( transition_time | float ) / count ) | round | int }}
@@ -176,6 +176,7 @@ script:
             {{ ending_brightness_pct | float }}
 
 ###############################################################################
+# yamllint disable rule:line-length
 # Saving the testing template that I used to debug this.
 
 # {% set starting_brightness_pct = "25" %}
@@ -215,4 +216,5 @@ script:
 #         / count | float ) | round | int )  }}
 #   delay: >
 #     {{ (( transition_time | float ) / count ) | round | int }}
+# yamllint enable rule:line-length
 ###############################################################################

@@ -1,3 +1,4 @@
+---
 ### Blinds ###
 
 # This package will define the template behavior for the blinds motors
@@ -119,7 +120,8 @@ automation:
         # attrubute: azimuth
         value_template: >
           "{{ state.attributes.azimuth }}"
-        above: 150 # The intersection of my home's western face.
+        # The intersection of my home's western face.
+        above: 150
     action:
       - alias: 'Afternoon - Close'
         service: cover.set_cover_position

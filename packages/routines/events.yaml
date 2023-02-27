@@ -24,8 +24,8 @@ automation:
         - condition: template
           # on the 4th saturday of the month
           value_template: >
-            "{{ ( now().isocalendar()[2] == 6 
-                  and now().day >= 22 
+            "{{ ( now().isocalendar()[2] == 6
+                  and now().day >= 22
                   and now().day <= 28 ) }}"
     action:
       # I've copied all of the sounds from the iOS app to use across the house

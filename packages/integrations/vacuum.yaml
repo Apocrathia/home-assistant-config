@@ -118,4 +118,4 @@ automation:
             {% set entity = trigger.entity_id.split('.') %}
             vacuum/{{ entity[1] }}/AutoEmptyDockManualTriggerCapability/trigger/set
           payload: PERFORM
-  ################################################################################
+################################################################################
