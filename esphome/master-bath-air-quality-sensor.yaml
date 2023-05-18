@@ -1,10 +1,14 @@
 ---
-# Living Room Air Quality Sensor
+# Master Bathroom Air Quality Sensor
 
 esphome:
-  name: living_room_air_quality_sensor
-  platform: ESP32
+  name: master-bath-air-quality-sensor
+  friendly_name: 'Master Bathroom Air Quality Sensor'
+
+esp32:
   board: wemos_d1_mini32
+  framework:
+    type: arduino
 
 wifi:
   ssid: !secret esphome_wifi_ssid
@@ -14,16 +18,21 @@ wifi:
 
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
-    ssid: !secret esphome_living_room_air_quality_sensor_ssid
-    password: !secret esphome_living_room_air_quality_sensor_password
-
-captive_portal:
+    ssid: !secret esphome_master_bathroom_air_quality_sensor_ssid
+    password: !secret esphome_master_bathroom_air_quality_sensor_password
 
 # Enable logging
 logger:
 
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret home_assistant_api_encryption_key
+
 ota:
   password: !secret esphome_ota
+
+captive_portal:
 
 # Enable active Bluetooth proxy
 bluetooth_proxy:
@@ -37,4 +46,5 @@ uart:
 sensor:
   - platform: pm1006
     pm_2_5:
-      name: 'Living Room Air Quality'
+      id: 'master_bathroom_air_quality'
+      name: 'Master Bathroom Air Quality'

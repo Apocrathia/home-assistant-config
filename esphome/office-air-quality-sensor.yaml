@@ -2,9 +2,13 @@
 # Office Air Quality Sensor
 
 esphome:
-  name: office_air_quality_sensor
-  platform: ESP32
+  name: office-air-quality-sensor
+  friendly_name: 'Office Air Quality Sensor'
+
+esp32:
   board: wemos_d1_mini32
+  framework:
+    type: arduino
 
 wifi:
   ssid: !secret esphome_wifi_ssid
@@ -17,13 +21,18 @@ wifi:
     ssid: !secret esphome_office_air_quality_sensor_ssid
     password: !secret esphome_office_air_quality_sensor_password
 
-captive_portal:
-
 # Enable logging
 logger:
 
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret home_assistant_api_encryption_key
+
 ota:
   password: !secret esphome_ota
+
+captive_portal:
 
 # Enable active Bluetooth proxy
 bluetooth_proxy:
@@ -37,6 +46,7 @@ uart:
 sensor:
   - platform: pm1006
     pm_2_5:
+      id: 'office_air_quality'
       name: 'Office Air Quality'
 
 ###############################################################################

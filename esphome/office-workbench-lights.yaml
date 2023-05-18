@@ -1,6 +1,9 @@
 ---
+# Office Workbench Lights
+
 esphome:
   name: office-workbench-lights
+  friendly_name: 'Office Workbench Lights'
 
 esp8266:
   board: esp01_1m
@@ -21,11 +24,14 @@ captive_portal:
 # Enable logging
 logger:
 
+api:
+
 ota:
   password: !secret esphome_ota
 
 light:
   - platform: rgb
+    id: 'office_workbench_lights'
     name: 'Office Workbench Lights'
     red: red_channel
     green: green_channel

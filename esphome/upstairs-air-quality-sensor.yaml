@@ -1,0 +1,50 @@
+---
+# Upstairs Air Quality Sensor
+
+esphome:
+  name: upstairs-air-quality-sensor
+  friendly_name: 'Upstairs Air Quality Sensor'
+
+esp32:
+  board: wemos_d1_mini32
+  framework:
+    type: arduino
+
+wifi:
+  ssid: !secret esphome_wifi_ssid
+  password: !secret esphome_wifi_password
+  domain: !secret esphome_domain
+  fast_connect: !secret esphome_fast_connect
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: !secret esphome_upstairs_air_quality_sensor_ssid
+    password: !secret esphome_upstairs_air_quality_sensor_password
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret home_assistant_api_encryption_key
+
+ota:
+  password: !secret esphome_ota
+
+captive_portal:
+
+# Enable active Bluetooth proxy
+bluetooth_proxy:
+  active: true
+
+uart:
+  # D2 = IO22
+  rx_pin: GPIO22
+  baud_rate: 9600
+
+sensor:
+  - platform: pm1006
+    pm_2_5:
+      id: 'upstairs_air_quality'
+      name: 'Upstairs Air Quality'
