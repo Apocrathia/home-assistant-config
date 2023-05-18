@@ -237,7 +237,9 @@ script:
       # Ensure the doors are locked
       - service: lock.lock
         data:
-          entity_id: group.all_locks
+          entity_id:
+            - lock.front_door_lock
+            - lock.back_door_lock
       # Close the garage doors
       - service: cover.close_cover
         data:
@@ -335,31 +337,4 @@ script:
       - service: notify.notify
         data_template:
           title: 'Vacation Script (Off) Triggered'
-################################################################################
-
-# Scenes
-scene:
-  ################################################################################
-  - name: Home
-    entities:
-      light.dining_room_chandelier:
-        state: 'on'
-        brightness: 100
-      light.kitchen_chandelier:
-        state: 'on'
-        brightness: 100
-      light.sitting_room_floor_lamp:
-        state: 'on'
-        brightness: 100
-  ################################################################################
-  - name: Away
-    entities:
-      light.dining_room_chandelier:
-        state: 'off'
-      light.kitchen_chandelier:
-        state: 'off'
-      light.sitting_room_floor_lamp:
-        state: 'off'
-      light.master_bedroom_table_lamps:
-        state: 'off'
 ################################################################################

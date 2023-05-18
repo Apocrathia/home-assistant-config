@@ -1,0 +1,4 @@
+---
+# The sole purpose of this line is to load the ffmpeg integration
+# which is used for displaying camera images in the frontend.
+ffmpeg:

@@ -43,6 +43,8 @@ light:
       - light.office_floor_lamp
       - light.master_bedroom_lights
       - light.living_room_ceiling_fan
+      - light.studio_floor_lamp
+      - light.music_room_floor_lamp
 
   - platform: group
     name: Night Lights
@@ -50,8 +52,6 @@ light:
       - light.sitting_room_floor_lamp
       - light.kitchen_cabinet_lights
       - light.kitchen_sink_light
-      - light.kitchen_task_lights_left
-      - light.kitchen_task_lights_right
       - light.living_room_tv_lights
 
   - platform: group

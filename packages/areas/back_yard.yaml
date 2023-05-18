@@ -2,6 +2,52 @@
 ### Back Yard ###
 automation:
   ################################################################################
+  # Turn on the string lights around the back yard in the morning
+  - id: area_back_yard_string_lights_morning
+    alias: 'Area - Back Yard - String Lights (Morning)'
+    trigger:
+      - platform: time
+        at: input_datetime.morning
+    condition:
+      condition: state
+      entity_id: group.people
+      state: 'home'
+    action:
+      - alias: 'Turn on the back yard sting lights'
+        service: light.turn_on
+        target:
+          entity_id: light.back_yard_string_lights
+        data:
+          brightness_pct: 50
+  ################################################################################
+  # Turn off the string lights around the back yard once the sun is up
+  - id: area_back_yard_string_lights_dawn
+    alias: 'Area - Back Yard - String Lights (Dawn)'
+    trigger:
+      - platform: sun
+        event: sunrise
+        offset: '-00:15:00'
+    condition:
+      condition: state
+      entity_id: group.people
+      state: 'home'
+    action:
+      - alias: 'Ramp down lights over next 15 minutes'
+        service: script.light_transition
+        data:
+          entity_id: light.back_yard_string_lights
+          starting_brightness_pct: 50
+          ending_brightness_pct: 0
+          interval_pct: 5
+          # TODO - Use template to determine time based upon weather conditions
+          transition_time: 900
+      - delay:
+          seconds: 5
+      - alias: 'Turn off the lights'
+        service: light.turn_off
+        target:
+          entity_id: light.back_yard_string_lights
+  ################################################################################
   # Turn on the string lights around the back yard when it gets dark
   - id: area_back_yard_string_lights_dusk
     alias: 'Area - Back Yard - String Lights (Dusk)'
@@ -18,13 +64,14 @@ automation:
         data:
           entity_id: light.back_yard_string_lights
           starting_brightness_pct: 5
-          ending_brightness_pct: 100
+          ending_brightness_pct: 50
           interval_pct: 5
           # TODO - Use template to determine time based upon weather conditions
           transition_time: 3600
   ################################################################################
   # Turn off the string lights when the alarm is turned on
   # This is so that there is a clear indication that the alarm is on
+  # and it's usually a good indication that I'm in bed or it's just late af.
   - id: area_back_yard_string_lights_night
     alias: 'Area - Back Yard - String Lights (Night)'
     trigger:
@@ -36,80 +83,6 @@ automation:
       condition: state
       entity_id: group.people
       state: 'home'
-    action:
-      - service: light.turn_off
-        data:
-          entity_id: light.back_yard_string_lights
-  ################################################################################
-  # Turn on the string lights around the back yard in the morning
-  - id: area_back_yard_string_lights_morning
-    alias: 'Area - Back Yard - String Lights (Morning)'
-    trigger:
-      - platform: time
-        at: input_datetime.morning
-    condition:
-      condition: state
-      entity_id: group.people
-      state: 'home'
-    action:
-      - alias: 'Ramp up lights over next 30 minutes'
-        service: script.light_transition
-        data:
-          entity_id: light.back_yard_string_lights
-          starting_brightness_pct: 5
-          ending_brightness_pct: 100
-          interval_pct: 5
-          # TODO - Use template to determine time based upon weather conditions
-          transition_time: 1800
-  ################################################################################
-  # Turn off the string lights around the back yard once the sun is up
-  - id: area_back_yard_string_lights_dawn
-    alias: 'Area - Back Yard - String Lights (Dawn)'
-    trigger:
-      - platform: sun
-        event: sunrise
-    condition:
-      condition: state
-      entity_id: group.people
-      state: 'home'
-    action:
-      - alias: 'Ramp down lights over next 30 minutes'
-        service: script.light_transition
-        data:
-          entity_id: light.back_yard_string_lights
-          starting_brightness_pct: 100
-          ending_brightness_pct: 5
-          interval_pct: 5
-          # TODO - Use template to determine time based upon weather conditions
-          transition_time: 1800
-      - delay: 5
-      - alias: 'Turn off the lights'
-        service: light.turn_off
-        target:
-          entity_id: light.back_yard_string_lights
-  ################################################################################
-  # The switch that these are on doesn't properly report back it's state when it's
-  # turned off. So, even if it's off, the device reports 30% on. This is the fix.
-  # Currently the switch is a GE/Jasco, but I will probably replace it with an
-  # Inovelli eventually, as this is kind of a bullshit thing to have to mitigate.
-  - id: area_back_yard_string_lights_fix
-    alias: 'Area - Back Yard - String Lights (Fix)'
-    trigger:
-      - platform: numeric_state
-        entity_id:
-          - light.back_yard_string_lights
-        attribute: brightness
-        # 85/255 = 30%. Add some wiggle room to be safe.
-        above: 80
-        below: 90
-        for:
-          minutes: 5
-      - platform: template
-        value_template: >
-          '{{ ( states.light.back_yard_string_lights.attributes.brightness >= 80
-          and states.light.back_yard_string_lights.attributes.brightness <= 90 ) }}'
-        for:
-          minutes: 5
     action:
       - service: light.turn_off
         data:

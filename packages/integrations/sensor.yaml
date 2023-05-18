@@ -14,10 +14,10 @@ sensor:
       - 'date'
 
   # Weather forecast
-  - platform: darksky
-    api_key: !secret darksky_api_key
-    monitored_conditions:
-      - summary
+  # - platform: darksky
+  #   api_key: !secret darksky_api_key
+  #   monitored_conditions:
+  #     - summary
 
   # Pirate Weather
   - platform: pirateweather
@@ -71,12 +71,3 @@ sensor:
         value_template: >-
           Pupping
       # https://www.instagram.com/saganthepomsky/
-      sagan:
-        friendly_name: 'Sagan'
-        value_template: >-
-          Pupping
-      # https://www.instagram.com/hubbletheaussie/
-      hubble:
-        friendly_name: 'Hubble'
-        value_template: >-
-          Pupping
