@@ -1,0 +1,3 @@
+---
+# Load automations created in the frontend
+automation: !include ../../automations.yaml
