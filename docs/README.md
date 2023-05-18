@@ -43,7 +43,7 @@ This is done for multiple reasons:
 This is pending a refresh. The following tasks are planned:
 
 - Migrate back to a VM. (However, I have converted all of my VMware hosts to Proxmox.)
-- Migrate radios to strategically placed Raspberry Pi's. (Host management is the issue there. I haven't figured out what OS or)
+- Migrate radios to strategically placed Raspberry Pi's. (Host management is the issue there.)
 
 ![My Home Assistant Architecture](images/conceptual_architecture.png)
 
