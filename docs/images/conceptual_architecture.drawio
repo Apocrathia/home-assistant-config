@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-05-18T16:38:25.066Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36" etag="epEW_l4Ljsfs2swqkdQR" version="21.3.2" type="github">
+<mxfile host="app.diagrams.net" modified="2023-05-18T16:38:58.191Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36" etag="sOsJtH_hmZO6nRT_gRN0" version="21.3.2" type="github">
   <diagram id="TDCuqssM8piexz_-Gnl0" name="Page-1">
     <mxGraphModel dx="2074" dy="1131" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="1">
       <root>
@@ -26,7 +26,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="V9Rlgw_xiWvQEG7U__is-6" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2F6%2F6e%2FHome_Assistant_Logo.svg%2F1024px-Home_Assistant_Logo.svg.png&amp;f=1&amp;nofb=1;strokeColor=#737373;" parent="1" vertex="1">
-          <mxGeometry x="500" y="230" width="160" height="160" as="geometry" />
+          <mxGeometry x="502" y="230" width="160" height="160" as="geometry" />
         </mxCell>
         <mxCell id="V9Rlgw_xiWvQEG7U__is-27" style="edgeStyle=orthogonalEdgeStyle;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;fillColor=#f5f5f5;strokeColor=#737373;" parent="1" source="V9Rlgw_xiWvQEG7U__is-7" target="V9Rlgw_xiWvQEG7U__is-6" edge="1">
           <mxGeometry relative="1" as="geometry" />
