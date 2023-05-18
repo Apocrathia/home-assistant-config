@@ -7,7 +7,6 @@
 [![GitHub Last Commit][last-commit-shield]][commits]
 
 [![GitHub Actions][actions-shield]][actions]
-[![Black Duck Security Risk][black-duck-shield]][black-duck]
 
 ![GitHub Stars][stars-shield]
 ![GitHub Watchers][watchers-shield]
@@ -39,6 +38,13 @@ This is done for multiple reasons:
 - Enable VMware to migrate the main HA VM across hosts within the cluster based upon load.
 - Place radios in a more central location with better reception.
 
+### Update 20230518
+
+This is pending a refresh. The following tasks are planned:
+
+- Migrate back to a VM. (However, I have converted all of my VMware hosts to Proxmox.)
+- Migrate radios to strategically placed Raspberry Pi's. (Host management is the issue there. I haven't figured out what OS or)
+
 ![My Home Assistant Architecture](images/conceptual_architecture.png)
 
 Instances are linked together using
@@ -69,15 +75,11 @@ This configuration controls a couple of significant features in my smart home.
 [forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg
 [forum]: https://community.home-assistant.io/?u=Apocrathia
 [apocrathia]: https://github.com/Apocrathia
-[travis-shield]: https://travis-ci.org/Apocrathia/home-assistant-config.svg?branch=master
-[travis]: https://travis-ci.org/Apocrathia/home-assistant-config
 [home-assistant]: https://home-assistant.io
 [issue]: https://github.com/Apocrathia/home-assistant-config/issues
 [license-shield]: https://img.shields.io/badge/license-apache-brightgreen.svg
-[maintenance-shield]: https://img.shields.io/maintenance/yes/2021.svg
+[maintenance-shield]: https://img.shields.io/maintenance/yes/2023.svg
 [last-commit-shield]: https://img.shields.io/github/last-commit/Apocrathia/home-assistant-config.svg
 [stars-shield]: https://img.shields.io/github/stars/Apocrathia/home-assistant-config.svg?style=social&label=Stars
 [forks-shield]: https://img.shields.io/github/forks/Apocrathia/home-assistant-config.svg?style=social&label=Forks
 [watchers-shield]: https://img.shields.io/github/watchers/Apocrathia/home-assistant-config.svg?style=social&label=Watchers
-[black-duck-shield]: https://copilot.blackducksoftware.com/github/repos/Apocrathia/home-assistant-config/branches/master/badge-risk.svg
-[black-duck]: https://copilot.blackducksoftware.com/github/repos/Apocrathia/home-assistant-config/branches/master/
