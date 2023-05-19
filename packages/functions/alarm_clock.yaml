@@ -237,6 +237,14 @@ script:
                   command:
                     # Move to first item
                     - down
+                    # Select
+                    - select
+              - delay:
+                  seconds: 5
+              - service: remote.send_command
+                data:
+                  entity_id: remote.master_bedroom_apple_tv
+                  command:
                     # Play
                     - select
 ################################################################################
