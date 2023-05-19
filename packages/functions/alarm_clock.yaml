@@ -61,8 +61,8 @@ sensor:
 
 automation:
   ################################################################################
-  - id: function_wakeup_bedroom_light
-    alias: 'Function - Wakeup - Bedroom Light'
+  - id: function_wakeup_lights
+    alias: 'Function - Wakeup - Lights'
     trigger:
       - platform: template
         value_template: >
@@ -99,6 +99,14 @@ automation:
           interval_pct: 10
           transition_time: >
             {{ states.input_number.wakeup_duration.state | multiply(60) | int - 1 }}
+      - service: light.turn_on
+        data:
+          entity_id: light.office_floor_lamp
+          kelvin: 3000
+          brightness_pct: 100
+        data_template:
+          transition: >
+            {{ states.input_number.wakeup_duration.state | multiply(60) | int }}
   ################################################################################
   - id: function_wakeup_apple_tv
     alias: 'Function - Wakeup - Apple TV'
