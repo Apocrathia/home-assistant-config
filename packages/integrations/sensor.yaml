@@ -35,13 +35,6 @@ sensor:
       - precip_intensity
       - wind_speed
 
-  # Steam
-  - platform: steam_online
-    # entity_namespace: steam
-    api_key: !secret steam_api_key
-    accounts:
-      - !secret steam_account_id
-
   # Certification Expiration
   - platform: cert_expiry
     host: !secret hass_url
