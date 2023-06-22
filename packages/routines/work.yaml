@@ -26,16 +26,16 @@ binary_sensor:
         value_template: >
           {{ is_state('schedule.routine_work_schedule', 'on') and
           is_state('binary_sensor.workday', 'on') }}
-  # Workday
-  - platform: workday
-    name: workday
-    country: US
+  # # Workday
+  # - platform: workday
+  #   name: workday
+  #   country: US
 
-  # Worknight
-  - platform: workday
-    name: worknight
-    country: US
-    days_offset: 1
+  # # Worknight
+  # - platform: workday
+  #   name: worknight
+  #   country: US
+  #   days_offset: 1
 
 # Work Schedule
 schedule:
@@ -123,7 +123,8 @@ automation:
             - light.office_floor_lamp
             - light.office_panel_lights_south
             - light.office_panel_lights_west
-            # - light.office_workbench
+            - light.office_workbench_lights
+      - delay: 00:00:05
       - alias: 'Set brightness for office floor lamp'
         service: light.turn_on
         target:
@@ -136,7 +137,7 @@ automation:
           entity_id:
             - vacuum.downstairs
             - vacuum.upstairs
-      - delay: 00:00:01
+      - delay: 00:00:05
       - alias: 'Return vacuums to docks'
         service: vacuum.return_to_base
         target:
@@ -173,6 +174,7 @@ automation:
                   entity_id:
                     - light.office_panel_lights_south
                     - light.office_panel_lights_west
+                    - light.office_workbench_lights
           - conditions:
               - alias: 'Returned'
                 condition: state
@@ -185,6 +187,7 @@ automation:
                   entity_id:
                     - light.office_panel_lights_south
                     - light.office_panel_lights_west
+                    - light.office_workbench_lights
   ###############################################################################
   - id: routine_work_stop
     alias: Routine - Work - Stop
@@ -208,5 +211,5 @@ automation:
             - light.office_floor_lamp
             - light.office_panel_lights_south
             - light.office_panel_lights_west
-            # - light.office_workbench
+            - light.office_workbench_lights
 ###############################################################################
