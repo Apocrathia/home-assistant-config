@@ -277,7 +277,7 @@ script:
                     - light.garage_hallway_light
                     - light.evening_lights
                 data:
-                  brightness_pct: 15
+                  brightness_pct: 25
       # Execute the following every time
       # Disarm the alarm
       - service: alarm_control_panel.alarm_disarm
