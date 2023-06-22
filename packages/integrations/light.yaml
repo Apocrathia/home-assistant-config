@@ -20,6 +20,7 @@ light:
       - light.studio_floor_lamp
       - light.music_room_floor_lamp
       - light.master_bedroom_lights
+      - light.foyer_chandelier
 
   - name: Away Lights
     platform: group
