@@ -1,0 +1,76 @@
+---
+### Occupancy Simulation ###
+
+# This is something that I have tried to get working via occusim (acockburn/occusim)
+# in the past with little success. However, the following forum post revitalized my
+# my interest: https://community.home-assistant.io/t/random-light-schedule/10135/54
+
+# Automation
+automation:
+  ################################################################################
+  - id: function_occupancy_simulation_start
+    alias: Function - Occupancy Simulation - Start
+    trigger:
+      - platform: state
+        entity_id: input_boolean.away_mode
+        from: 'off'
+        to: 'on`'
+      - platform: sun
+        event: sunset
+        offset: '00:00:00'
+    condition:
+      - condition: and
+        conditions:
+          - alias: 'Away Mode On'
+            condition: state
+            entity_id: input_boolean.away_mode
+            state: 'on'
+          - alias: 'Sun Below Horizon'
+            condition: state
+            entity_id: sun.sun
+            state: 'below_horizon'
+    action:
+      - alias: 'Run Occupancy Simulation'
+        service: script.function_occupancy_simulation_main
+################################################################################
+
+# Script
+script:
+  ################################################################################
+  function_occupancy_simulation_main:
+    alias: Function - Occupancy Simulation - Main
+    sequence:
+      - alias: 'Randomly toggle lights'
+        repeat:
+          sequence:
+            - service: homeassistant.toggle
+              data:
+                entity_id: >
+                  {{ state_attr('light.away_lights','entity_id') | random }}
+            - delay:
+                minutes: >
+                  {{ range(5, 20) | random }}
+          until:
+            - condition: template
+              value_template: >
+                {{ (is_state('input_boolean.away_mode','off')
+                    or is_state('sun.sun','above_horizon')) }}
+      - alias: 'Reset all lights'
+        service: light.turn_off
+        target:
+          entity_id: light.away_lights
+          # - alias: 'Turn on Evening Lights'
+          #   choose:
+          #     - conditions:
+          #         - alias: 'Sun Below Horizon'
+          #           condition: state
+          #           entity_id: sun.sun
+          #           state: 'below_horizon'
+          #       sequence:
+          #         - alias: 'Set Evening Lights'
+          #           service: light.turn_on
+          #           data:
+          #             entity_id: light.evening_lights
+          #             profile: relax
+          #             brightness_pct: 5 # This was doubling on my presence script,
+################################################################################
