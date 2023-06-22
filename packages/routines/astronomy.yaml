@@ -19,7 +19,6 @@ automation:
           state: 'new_moon'
         - condition: state
           entity_id: sensor.pirateweather_summary
-          # entity_id: sensor.dark_sky_summary # This will be broken in 2022
           state: 'Clear'
     action:
       - service: notify.notify
@@ -42,7 +41,6 @@ automation:
           state: 'full_moon'
         - condition: state
           entity_id: sensor.pirateweather_summary
-          # entity_id: sensor.dark_sky_summary # This will be broken in 2022
           state: 'Clear'
     action:
       - service: notify.notify
