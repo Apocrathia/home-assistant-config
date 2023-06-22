@@ -47,7 +47,7 @@ binary_sensor:
         friendly_name: 'Master Bathroom Humidity High'
         value_template: >
           {{ ( float(states.input_number.master_bathroom_humidity_threshold.state)
-            < float(states.sensor.master_bathroom_climate_sensor_humidity.state) ) }}
+            < float(states.sensor.master_bathroom_climate_humidity.state) ) }}
 
 # Automations
 automation:
@@ -92,11 +92,13 @@ automation:
       for:
         seconds: 10
     condition:
-      # Only execute if the toilet door is already open
+      # Only execute if the toilet door is already open (or the sensor is offline)
       condition: state
       entity_id:
         - binary_sensor.master_bathroom_toilet_door_contact
-      state: 'on'
+      state:
+        - 'on'
+        - 'unavailable'
     action:
       - delay:
           minutes: 5
