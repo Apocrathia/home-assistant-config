@@ -68,7 +68,7 @@ automation:
           - conditions:
               - alias: 'Meeting Started'
                 condition: state
-                entity_id: calendar.work
+                entity_id: !secret google_work_calendar_entity_id
                 state: 'on'
             sequence:
               - alias: 'Turn on key lights'
@@ -85,7 +85,7 @@ automation:
           - conditions:
               - alias: 'Meeting Ended'
                 condition: state
-                entity_id: calendar.work
+                entity_id: !secret google_work_calendar_entity_id
                 state: 'off'
             sequence:
               - alias: 'Turn on key light'
