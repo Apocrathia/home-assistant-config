@@ -124,12 +124,23 @@ automation:
             - light.office_panel_lights_west
             - light.office_workbench_lights
       - delay: 00:00:05
+      # This should already be on from the morning routine
       - alias: 'Set brightness for office floor lamp'
         service: light.turn_on
         target:
           entity_id: light.office_floor_lamp
         data:
           brightness: 100%
+      # If a vacuum is docked but has a pending task, it needs to be started first.
+      - alias: 'Start the vacuums'
+        service: vacuum.start
+        target:
+          entity_id:
+            - vacuum.downstairs
+            - vacuum.upstairs
+      # Give the vacuum enough time to get off the dock
+      - delay: 00:00:15
+      # Now stop it
       - alias: 'Stop the vacuums'
         service: vacuum.stop
         target:
@@ -137,6 +148,7 @@ automation:
             - vacuum.downstairs
             - vacuum.upstairs
       - delay: 00:00:05
+      # And send it home
       - alias: 'Return vacuums to docks'
         service: vacuum.return_to_base
         target:
