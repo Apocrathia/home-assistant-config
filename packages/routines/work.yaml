@@ -66,10 +66,16 @@ automation:
       - alias: 'Status handler'
         choose:
           - conditions:
-              - alias: 'Meeting Started'
-                condition: state
-                entity_id: !secret google_work_calendar_entity_id
-                state: 'on'
+              - condition: and
+                conditions:
+                  - alias: 'Meeting Started'
+                    condition: state
+                    entity_id: !secret google_work_calendar_entity_id
+                    state: 'on'
+                  - alias: 'During work hours'
+                    condition: state
+                    entity_id: binary_sensor.routine_work_active
+                    state: 'on'
             sequence:
               - alias: 'Turn on key lights'
                 service: light.turn_on
