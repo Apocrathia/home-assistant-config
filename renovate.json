@@ -1,6 +1,9 @@
 {
+  	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"extends": ["config:base", "packages:linters", "packages:test"],
 	"enabled": true,
+	"prConcurrentLimit": 0,
+	"prHourlyLimit": 0,
 	"pre-commit": {
 		"enabled": true
 	},
@@ -12,8 +15,10 @@
 		"enabled": true
 	},
 	"automerge": true,
+	"automergeType": "merge",
 	"lockFileMaintenance": {
 		"enabled": true,
-		"extends": ["schedule:weekly"]
+		"extends": ["schedule:daily"],
+		"automerge": true
 	}
 }
