@@ -1,0 +1,104 @@
+---
+### Aquaponics ###
+
+# This is the configuration for the aquaponics project. It is a semi-automated system that
+# I am using to grow plants. The system is based on a 10 gallon fish tank with a grow bed.
+# The system is made by AquaSprouts and is called the AquaSprouts Garden. It is a great way
+# to get started with aquaponics. I have added a few things to the system to make it more
+# automated. I have added a Kasa smart power strip that enables me to turn on and off the
+# pump, filter, air pump, and lights.
+# https://aquasprouts.com/products/10gallonaquaponics
+# I plan on adding a water level sensor to the grow bed, as well as pH and temperature sensors.
+# https://microfire.co/hydroponic-kit/
+
+input_number:
+  ################################################################################
+  aquaponics_cycle_interval:
+    name: Aquaponics Cycle Interval
+    min: 5
+    max: 30
+    step: 5
+    mode: slider
+    ################################################################################
+
+automation:
+  ################################################################################
+  - id: project_aquaponics_cycle
+    alias: Project - Aquaponics - Cycle
+    trigger:
+      - platform: time_pattern
+        minutes: '0'
+      - platform: template
+        value_template: >
+          {{ now().minute % states('input_number.aquaponics_cycle_interval') | int == 0 }}
+    action:
+      - alias: Run the aquaponics cycle
+        service: script.turn_on
+        entity_id: script.project_aquaponics_cycle
+  ################################################################################
+  - id: project_aquaponics_daytime_lights
+    alias: Project - Aquaponics - Daytime Lights
+    trigger:
+      - platform: sun
+        event: sunrise
+        offset: '-00:30:00'
+    action:
+      - alias: Turn on the tank light
+        service: switch.turn_on
+        entity_id: switch.aquaponic_power_strip_tank_lights
+      - alias: Turn off the grow light
+        service: switch.turn_off
+        entity_id: switch.aquaponic_power_strip_grow_lights
+  ################################################################################
+  - id: project_aquaponics_nighttime_lights
+    alias: Project - Aquaponics - Nighttime Lights
+    trigger:
+      - platform: sun
+        event: sunset
+        offset: '-00:30:00'
+    action:
+      - alias: Turn off the tank light
+        service: switch.turn_off
+        entity_id: switch.aquaponic_power_strip_tank_lights
+      - alias: Turn on the grow light
+        service: switch.turn_on
+        entity_id: switch.aquaponic_power_strip_grow_lights
+        ##########################################################################
+
+script:
+  ################################################################################
+  # The goal of this script is to emulate the fill/empty cycle that would normally
+  # be facilitated by a bell siphon. The grow bed is filled with water from the
+  # tank, and then the water is drained back into the tank. The water level is set
+  # by standoffs for the main drains. The water level is set to be just above the
+  # grow media. After the pump stops, the remaining water drains through a 5mm hole
+  # in the bottom of the grow bed. This creates a laminar flow that keeps the system
+  # quiet while cycling.
+  project_aquaponics_cycle:
+    alias: 'Project - Aquaponics - Cycle'
+    sequence:
+      - alias: Turn off the air pump
+        service: switch.turn_off
+        entity_id: switch.aquaponic_power_strip_air_pump
+      - alias: Stop the filter
+        service: switch.turn_off
+        entity_id: switch.aquaponic_power_strip_filter
+      - alias: Let the water settle
+        delay: '00:01:00'
+      - alias: Start the pump
+        service: switch.turn_on
+        entity_id: switch.aquaponic_power_strip_pump
+      - alias: Let the grow bed fill up
+        delay: '00:01:30'
+      - alias: Turn off the pump
+        service: switch.turn_off
+        entity_id: switch.aquaponic_power_strip_pump
+      - alias: Let the water drain
+        delay: '00:02:30'
+      - alias: Turn on the filter
+        service: switch.turn_on
+        entity_id: switch.aquaponic_power_strip_filter
+      - alias: Turn on the air pump
+        service: switch.turn_on
+        entity_id: switch.aquaponic_power_strip_air_pump
+        ##########################################################################
