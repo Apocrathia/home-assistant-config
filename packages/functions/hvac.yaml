@@ -1,5 +1,38 @@
 ---
-### HVAC Sync ###
+### HVAC Functions ###
+
+input_number:
+  hvac_uv_power_threshold:
+    name: HVAC UV Power Threshold
+    icon: mdi:flash
+    min: 0
+    max: 100
+    step: 5
+    unit_of_measurement: Watts
+
+binary_sensor:
+  - platform: template
+    sensors:
+      downstairs_hvac_uv:
+        friendly_name: 'Downstairs HVAC UV'
+        value_template: >
+          {% if states.sensor.downstairs_hvac_uv_power.state == 'unavailable' %}
+            off
+          {% else %}
+            {{ ( float(states.sensor.sensor.downstairs_hvac_uv_power.state)
+              > float(states.input_number.hvac_uv_power_threshold.state) ) }}
+          {% endif %}
+  - platform: template
+    sensors:
+      upstairs_hvac_uv:
+        friendly_name: 'Upstairs HVAC UV'
+        value_template: >
+          {% if states.sensor.upstairs_hvac_uv_power.state == 'unavailable' %}
+            off
+          {% else %}
+            {{ ( float(states.sensor.sensor.upstairs_hvac_uv_power.state)
+              > float(states.input_number.hvac_uv_power_threshold.state) ) }}
+          {% endif %}
 
 automation:
   #############################################################################
@@ -88,4 +121,36 @@ automation:
                   entity_id:
                     - climate.homekit_downstairs
                     - climate.homekit_upstairs
+  ################################################################################
+  - id: function_hvac_downstairs_uv_alert
+    alias: Function - HVAC - Downstairs UV Alert
+    trigger:
+      platform: state
+      entity_id: climate.homekit_downstairs
+      to: 'on'
+      for: '00:01:00'
+    condition:
+      condition: state
+      entity_id: binary_sensor.downstairs_hvac_uv
+      state: 'off'
+    action:
+      - service: notify.notify
+        data:
+          message: 'Downstairs HVAC UV bulb may be burnt out!'
+  ################################################################################
+  - id: function_hvac_upstairs_uv_alert
+    alias: Function - HVAC - Downstairs UV Alert
+    trigger:
+      platform: state
+      entity_id: climate.homekit_upstairs
+      to: 'on'
+      for: '00:01:00'
+    condition:
+      condition: state
+      entity_id: binary_sensor.upstairs_hvac_uv
+      state: 'off'
+    action:
+      - service: notify.notify
+        data:
+          message: 'Upstairs HVAC UV bulb may be burnt out!'
 ################################################################################
