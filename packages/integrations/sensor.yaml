@@ -41,14 +41,14 @@ sensor:
     port: !secret hass_port
 
   # Twitch
-  - platform: twitch
-    client_id: !secret twitch_client_id
-    client_secret: !secret twitch_client_secret
-    token: !secret twitch_client_token
-    channels:
-      - Apocrathia
-      - PB_Undesirables
-      - NineFoot3
+  # - platform: twitch
+  #   client_id: !secret twitch_client_id
+  #   client_secret: !secret twitch_client_secret
+  #   token: !secret twitch_client_token
+  #   channels:
+  #     - Apocrathia
+  #     - PB_Undesirables
+  #     - NineFoot3
 
   # Template
   - platform: template
