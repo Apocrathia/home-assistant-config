@@ -2,20 +2,12 @@
 ### Office ###
 automation:
   ################################################################################
-  # Turn on the office floor lamp when it gets dark
-  - id: area_office_floor_lamp_dusk
-    alias: 'Area - Office - Floor Lamp (Dusk)'
+  - alias: Area - Office - Workbench Button Click
     trigger:
-      - platform: sun
-        event: sunset
-    condition:
-      - condition: and
-        conditions:
-          - condition: state
-            entity_id: person.ian
-            state: 'home'
+      - platform: state
+        entity_id: sensor.office_workbench_button_action
+        to: 'on'
     action:
-      - service: light.turn_on
-        data:
-          entity_id: light.office_floor_lamp
+      entity_id: light.office_workbench_lights
+      service: light.toggle
 ################################################################################
