@@ -131,8 +131,8 @@ sensor:
             states.input_number.doge_meal_relief.state | int * 60 * 60) |
             timestamp_custom("%H:%M",False)) }}
       # Location
-      distance_apart:
-        friendly_name: 'Distance Apart'
+      distance_from_doge:
+        friendly_name: 'Distance From Doge'
         value_template: >-
           {{ distance('device_tracker.michio_tracker','person.ian') }}
         unit_of_measurement: km
