@@ -6,7 +6,7 @@ input_number:
     name: HVAC UV Power Threshold
     icon: mdi:flash
     min: 0
-    max: 100
+    max: 50
     step: 5
     unit_of_measurement: Watts
 
@@ -19,7 +19,7 @@ binary_sensor:
           {% if states.sensor.downstairs_hvac_uv_power.state == 'unavailable' %}
             off
           {% else %}
-            {{ ( float(states.sensor.sensor.downstairs_hvac_uv_power.state)
+            {{ ( float(states.sensor.downstairs_hvac_uv_power.state)
               > float(states.input_number.hvac_uv_power_threshold.state) ) }}
           {% endif %}
   - platform: template
@@ -30,7 +30,7 @@ binary_sensor:
           {% if states.sensor.upstairs_hvac_uv_power.state == 'unavailable' %}
             off
           {% else %}
-            {{ ( float(states.sensor.sensor.upstairs_hvac_uv_power.state)
+            {{ ( float(states.sensor.upstairs_hvac_uv_power.state)
               > float(states.input_number.hvac_uv_power_threshold.state) ) }}
           {% endif %}
 
