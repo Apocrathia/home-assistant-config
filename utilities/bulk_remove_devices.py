@@ -48,7 +48,14 @@ def remove_devices_with_matching_field(file_path, field, value):
     print(f"{count} devices with matching field removed. Backup created at: {backup_file_path}")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Remove devices with matching field value from a JSON file")
+    parser = argparse.ArgumentParser(description="""
+    Remove devices with matching field value from a JSON file.
+
+    This script allows you to filter out devices from a JSON file by specifying
+    a field and its value. If the field of any device contains the specified value,
+    that device will be removed. The script will create a backup of the original
+    file before making any changes.
+    """)
     parser.add_argument("file", help="Path to the device JSON file")
     parser.add_argument("field", help="Device field to evaluate")
     parser.add_argument("value", help="Value to match within the specified device field")
