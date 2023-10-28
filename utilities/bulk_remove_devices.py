@@ -5,6 +5,22 @@ import json
 import shutil
 
 def remove_devices_with_matching_field(file_path, field, value):
+    """
+    Remove devices with a specified field containing a specified value.
+
+    Parameters:
+    - file_path (str): The path to the JSON file containing device data.
+    - field (str): The device field to be evaluated.
+    - value (str): The value to match within the specified field.
+
+    The function creates a backup of the original JSON file by appending a '.bak'
+    to the original file name. Devices in the original file with the specified field
+    containing the specified value are removed.
+
+    Returns:
+    None
+    """
+
     # Create a backup of the original file
     backup_file_path = file_path + ".bak"
     shutil.copyfile(file_path, backup_file_path)
@@ -32,10 +48,10 @@ def remove_devices_with_matching_field(file_path, field, value):
     print(f"{count} devices with matching field removed. Backup created at: {backup_file_path}")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Remove devices with matching field value")
-    parser.add_argument("file", help="Path to the device file")
-    parser.add_argument("field", help="Field to evaluate")
-    parser.add_argument("value", help="Value to match")
+    parser = argparse.ArgumentParser(description="Remove devices with matching field value from a JSON file")
+    parser.add_argument("file", help="Path to the device JSON file")
+    parser.add_argument("field", help="Device field to evaluate")
+    parser.add_argument("value", help="Value to match within the specified device field")
 
     args = parser.parse_args()
 
