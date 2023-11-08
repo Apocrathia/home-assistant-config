@@ -1,0 +1,66 @@
+---
+### Function - Light - Colorloop ###
+###############################################################################
+# Example usage:
+# service: script.light_colorloop
+# data:
+#   entity_id: light.test
+#   transition: 5
+###############################################################################
+script:
+  light_colorloop:
+    alias: Function - Light - Colorloop
+    description: |
+      This script will emulate a colorloop effect on a given light entity.
+      This is an effect that is missing in many low-cost smart bulbs.
+    fields:
+      light:
+        description: 'The light object for the script to act upon.'
+        example: 'light.smart_bulb'
+        advanced: false
+        required: true
+        # default:
+        selector:
+          entity:
+            domain: light
+      transition:
+        description: |
+          'The amount of time (in seconds) between each color.'
+        example: '5'
+        advanced: false
+        required: false
+        default: 5
+        selector:
+          number:
+            min: 1
+            max: 30
+            step: 1
+            unit_of_measurement: 'seconds'
+            mode: slider
+    variables:
+      colors:
+        - red
+        - orange
+        - yellow
+        - green
+        - blue
+        - purple
+    mode: parallel
+    sequence:
+      - repeat:
+          count: 6
+          sequence:
+            - alias: 'Change to color'
+              service: light.turn_on
+              target:
+                entity_id: >
+                  {{ light }}
+              data:
+                transition: >
+                  {{ transition }}
+                color_name: >
+                  {{ colors[(repeat.index - 1) % colors|length] }}
+            - alias: 'Wait for the next color'
+              delay:
+                seconds: >
+                  {{ transition }}
