@@ -1,0 +1,46 @@
+---
+### Basement ###
+
+# ios:
+#   ################################################################################
+#   push:
+#     categories:
+#       - name: 'Area - Basement - Leak Detected'
+#         identifier: area_basement_leak_detected
+#         actions:
+#           # Until I can install a connected shutoff valve, there's not much
+#           # else that I can do except this.
+#           - identifier: ACKNOWLEDGE_LEAK
+#             title: 'Fuck'
+#             destructive: false
+#             authenticationRequired: True
+#           - identifier: IGNORE_LEAK
+#             title: 'Fuck'
+#             destructive: true
+#             authenticationRequired: True
+################################################################################
+
+automation:
+  ################################################################################
+  - id: area_basement_leak_detected
+    alias: 'Area - Basement - Leak Detected'
+    trigger:
+      - platform: event
+        event_type: ios.notification_action_fired
+        event_data:
+          categoryName: area_basement_leak_detected
+    action:
+      choose:
+        - conditions: >
+            "{{ trigger.event.data.actionName == "ACKNOWLEDGE_LEAK" }}"
+          sequence:
+            - service: alert.turn_off
+              target:
+                entity_id: alert.area_basement_leak_detected
+        - conditions: >
+            "{{ trigger.event.data.actionName == "IGNORE_LEAK" }}"
+          sequence:
+            - service: alert.turn_off
+              target:
+                entity_id: alert.area_basement_leak_detected
+################################################################################

@@ -56,48 +56,4 @@ automation:
               data:
                 entity_id: light.kitchen_pantry_light
                 transition: 1
-  ################################################################################
-  - id: area_kitchen_dishwasher_status
-    alias: 'Area - Kitchen - Dishwasher Status'
-    trigger:
-      - platform: state
-        entity_id: binary_sensor.dishwasher_status
-    condition:
-      - alias: 'At home'
-        condition: state
-        entity_id: input_boolean.away_mode
-        state: 'off'
-    action:
-      - alias: 'State Handler'
-        choose:
-          - conditions:
-              - alias: 'Dishwasher is on'
-                condition: state
-                entity_id: binary_sensor.dishwasher_status
-                state: 'on'
-            sequence:
-              - alias: 'Announce status'
-                service: notify.alexa_media
-                data:
-                  data:
-                    type: tts
-                  target:
-                    - media_player.downstairs_thermostat
-                    - media_player.upstairs_thermostat
-                  message: 'The dishwasher is now running.'
-          - conditions:
-              - alias: 'Dishwasher is off'
-                condition: state
-                entity_id: binary_sensor.dishwasher_status
-                state: 'off'
-            sequence:
-              - alias: 'Announce status'
-                service: notify.alexa_media
-                data:
-                  data:
-                    type: tts
-                  target:
-                    - media_player.downstairs_thermostat
-                    - media_player.upstairs_thermostat
-                  message: 'The dishwasher is now finished.'
 ################################################################################
