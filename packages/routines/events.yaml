@@ -33,7 +33,7 @@ automation:
       # US-EN-Morgan-Freeman-Starting-Party-Mode.wav
       # However, it seems like the notify.alexa_media component won't do mp3s
       # Keeping this note here for later.
-      - service: script.notification_party_mode
+      # - service: script.notification_party_mode
       - service: input_boolean.turn_on
         entity_id: input_boolean.party_lights
       - delay:
@@ -41,27 +41,4 @@ automation:
           minutes: 360
       - service: input_boolean.turn_off
         entity_id: input_boolean.party_lights
-################################################################################
-
-script:
-  ################################################################################
-  notification_party_mode:
-    alias: 'Notification - Party Mode'
-    sequence:
-      - service: media_player.volume_set
-        entity_id:
-          - media_player.downstairs_thermostat
-          - media_player.upstairs_thermostat
-          - media_player.ian_s_echo_dot
-        data:
-          volume_level: '1.0'
-      - service: notify.alexa_media
-        data:
-          data:
-            type: tts
-          target:
-            - media_player.downstairs_thermostat
-            - media_player.upstairs_thermostat
-            - media_player.ian_s_echo_dot
-          message: 'Party mode activated.'
 ################################################################################

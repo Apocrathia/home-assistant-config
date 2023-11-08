@@ -170,15 +170,15 @@ automation:
             entity_id: light.master_bedroom_lights
             state: 'on'
     action:
-      - service: notify.alexa_media
-        data:
-          data:
-            type: tts
-          target:
-            - media_player.downstairs_thermostat
-            - media_player.upstairs_thermostat
-          message: 'Go the phuque to sleep!'
-          # TODO https://www.youtube.com/watch?v=Udj-o2m39NA
+      # - service: notify.alexa_media
+      #   data:
+      #     data:
+      #       type: tts
+      #     target:
+      #       - media_player.downstairs_thermostat
+      #       - media_player.upstairs_thermostat
+      #     message: 'Go the phuque to sleep!'
+      #     # TODO https://www.youtube.com/watch?v=Udj-o2m39NA
       # Turn out the lights
       - service: light.turn_off
         data:
