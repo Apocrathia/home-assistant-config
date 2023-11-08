@@ -1,0 +1,6 @@
+---
+wifi:
+  ssid: !secret esphome_wifi_ssid
+  password: !secret esphome_wifi_password
+  domain: !secret esphome_domain
+  fast_connect: !secret esphome_fast_connect

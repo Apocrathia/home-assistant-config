@@ -1,0 +1,32 @@
+---
+sensor:
+  - platform: uptime
+    name: '${friendly_name} Uptime Sensor'
+
+  - platform: wifi_signal
+    name: '${friendly_name} WiFi Signal'
+    update_interval: 60s
+
+button:
+  - platform: factory_reset
+    name: 'Restart with Factory Default Settings'
+    id: Reset
+    disabled_by_default: true
+
+  - platform: safe_mode
+    name: 'Safe Mode'
+    internal: false
+    disabled_by_default: true
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: 'IP Address'
+    ssid:
+      name: 'Connected SSID'
+    mac_address:
+      name: 'Mac Address'
+
+time:
+  - platform: sntp
+    id: sntp_time
