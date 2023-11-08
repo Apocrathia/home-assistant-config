@@ -111,6 +111,9 @@ automation:
     trigger:
       - platform: time
         at: input_datetime.routine_work_start
+      - platform: state
+        entity_id: schedule.routine_work_schedule
+        to: 'on'
     condition:
       - alias: 'Only on workdays'
         condition: state
@@ -211,6 +214,9 @@ automation:
     trigger:
       - platform: time
         at: input_datetime.routine_work_stop
+      - platform: state
+        entity_id: schedule.routine_work_schedule
+        to: 'off'
     condition:
       - alias: 'Only on workdays'
         condition: state
