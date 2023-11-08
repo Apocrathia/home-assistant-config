@@ -1,5 +1,6 @@
 ---
 # Office Workbench Lights
+<<: !include common/diagnostics.yaml
 
 esphome:
   name: office-workbench-lights

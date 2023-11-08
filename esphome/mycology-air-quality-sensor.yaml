@@ -1,5 +1,6 @@
 ---
 # Mycology Air Quality Sensor
+<<: !include common/diagnostics.yaml
 
 esphome:
   name: mycology-air-quality-sensor

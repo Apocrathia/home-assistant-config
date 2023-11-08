@@ -1,5 +1,6 @@
 ---
 # Upstairs Air Quality Sensor
+<<: !include common/diagnostics.yaml
 
 esphome:
   name: upstairs-air-quality-sensor

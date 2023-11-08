@@ -1,5 +1,6 @@
 ---
 # Master Bathroom Air Quality Sensor
+<<: !include common/diagnostics.yaml
 
 esphome:
   name: master-bath-air-quality-sensor

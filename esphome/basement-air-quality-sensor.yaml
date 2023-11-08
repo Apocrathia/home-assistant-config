@@ -1,5 +1,6 @@
 ---
 # Basement Air Quality Sensor
+<<: !include common/diagnostics.yaml
 
 esphome:
   name: basement-air-quality-sensor

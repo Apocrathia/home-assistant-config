@@ -1,5 +1,6 @@
 ---
 # Living Room Air Quality Sensor
+<<: !include common/diagnostics.yaml
 
 esphome:
   name: living-room-air-quality-sensor

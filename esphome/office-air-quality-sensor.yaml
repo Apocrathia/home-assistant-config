@@ -1,5 +1,6 @@
 ---
 # Office Air Quality Sensor
+<<: !include common/diagnostics.yaml
 
 esphome:
   name: office-air-quality-sensor
