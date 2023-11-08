@@ -77,28 +77,14 @@ script:
   project_aquaponics_cycle:
     alias: 'Project - Aquaponics - Cycle'
     sequence:
-      - alias: Turn off the air pump
-        service: switch.turn_off
-        entity_id: switch.aquaponic_power_strip_air_pump
-      - alias: Stop the filter
-        service: switch.turn_off
-        entity_id: switch.aquaponic_power_strip_filter
-      - alias: Let the water settle
-        delay: '00:01:00'
       - alias: Start the pump
         service: switch.turn_on
         entity_id: switch.aquaponic_power_strip_pump
       - alias: Let the grow bed fill up
-        delay: '00:01:30'
+        delay: '00:02:00'
       - alias: Turn off the pump
         service: switch.turn_off
         entity_id: switch.aquaponic_power_strip_pump
-      - alias: Let the water drain
-        delay: '00:02:30'
-      - alias: Turn on the filter
-        service: switch.turn_on
-        entity_id: switch.aquaponic_power_strip_filter
-      - alias: Turn on the air pump
-        service: switch.turn_on
-        entity_id: switch.aquaponic_power_strip_air_pump
+      - alias: Let the grow bed drain
+        delay: '00:03:00'
         ##########################################################################
