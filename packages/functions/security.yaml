@@ -72,6 +72,54 @@ sensor:
 ################################################################################
 automation:
   ################################################################################
+  - id: function_security_alarm_armed
+    alias: 'Function - Security - Alarm Armed'
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.home
+        to:
+          - 'armed'
+          - 'armed_home'
+    action:
+      # Lock all doors
+      - service: lock.lock
+        entity_id:
+          - lock.front_door
+          - lock.back_door
+      # Close all covers
+      - service: cover.close_cover
+        entity_id:
+          - cover.main_garage_door
+          - cover.second_garage_door
+      # Uses a scaled hue value (realHue / 360 * 255)
+      - alias: 'Set switch indicators to red'
+        service: number.set_value
+        data:
+          entity_id: >
+            {{ states.number
+                | selectattr('entity_id', 'search', '_led_indicator_color$')
+                | map(attribute='entity_id')
+                | list }}
+          value: 0
+  ################################################################################
+  - id: function_security_alarm_disarmed
+    alias: 'Function - Security - Alarm Disarmed'
+    trigger:
+      - platform: state
+        entity_id: alarm_control_panel.home
+        to: 'disarmed'
+    action:
+      # Uses a scaled hue value (realHue / 360 * 255)
+      - alias: 'Set switch indicators to blue'
+        service: number.set_value
+        data:
+          entity_id: >
+            {{ states.number
+                | selectattr('entity_id', 'search', '_led_indicator_color$')
+                | map(attribute='entity_id')
+                | list }}
+          value: 170
+  ################################################################################
   # Watch the following sensors when the alarm is on to extend the system
   - id: function_security_additional_sensors
     alias: 'Function - Security - Additional Sensors'
@@ -145,133 +193,7 @@ automation:
         data:
           title: 'Motion detected at front door'
           message: 'Who could it be?'
-  # TODO:
-  # - Send a snapshot from the front porch camera
-  # - Make this an actionable notification to start a video call
-  ################################################################################
-  - id: function_security_alarm_armed
-    alias: 'Function - Security - Alarm Armed'
-    trigger:
-      - platform: state
-        entity_id: alarm_control_panel.home
-        from: 'disarmed'
-        to:
-          - 'armed'
-          - 'armed_home'
-    action:
-      # Send an alert to all users
-      - service: script.notification_alarm_armed
-      # Lock all doors
-      - service: lock.lock
-        entity_id:
-          - lock.front_door
-          - lock.back_door
-      # Close all covers
-      - service: cover.close_cover
-        entity_id:
-          - cover.main_garage_door
-          - cover.second_garage_door
-  ################################################################################
-  - id: function_security_alarm_disarmed
-    alias: 'Function - Security - Alarm Disarmed'
-    trigger:
-      - platform: state
-        entity_id: alarm_control_panel.home
-        from:
-          - 'armed'
-          - 'armed_home'
-        to: 'disarmed'
-    action:
-      # Send an alert to all users
-      - service: script.notification_alarm_disarmed
-  ################################################################################
-  - id: function_security_alarm_warning
-    alias: 'Function - Security - Alarm Warning'
-    trigger:
-      - platform: state
-        entity_id: lock.back_door
-        from: 'locked'
-        to: 'unlocked'
-    condition:
-      - condition: state
-        entity_id: alarm_control_panel.home
-        state: 'armed_home'
-    action:
-      # Send an alert to all users
-      - service: script.notification_alarm_armed
-  ################################################################################
-  - id: function_security_garage
-    alias: 'Function - Security - Garage'
-    trigger:
-      - platform: state
-        entity_id:
-          - cover.main_garage_door
-          - cover.second_garage_door
-        from: closed
-        to: open
-        for: 00:05:00
-    condition:
-      - condition: state
-        entity_id: input_boolean.away_mode
-        # state: 'on'
-        # Condition override for testing purposes
-        state: 'off'
-    action:
-      - service: notify.mobile_app_ians_iphone
-        data:
-          title: 'Garage Open!'
-          message: 'The {{ trigger.name }} has been left open.'
-          data:
-            push:
-              category: 'garage_door'
-            action_data:
-              entity_id: >
-                {{ trigger.entity_id }}
-      - wait_for_trigger:
-          platform: event
-          event_type: ios.notification_action_fired
-################################################################################
-
-script:
-  ################################################################################
-  notification_alarm_armed:
-    alias: 'Notification - Alarm Armed'
-    sequence:
-      - service: media_player.volume_set
-        entity_id:
-          - media_player.downstairs_thermostat
-          - media_player.upstairs_thermostat
-          - media_player.ian_s_echo_dot
-        data:
-          volume_level: '1.0'
-      - service: notify.alexa_media
-        data:
-          data:
-            type: tts
-          target:
-            - media_player.downstairs_thermostat
-            - media_player.upstairs_thermostat
-            - media_player.ian_s_echo_dot
-          message: 'The alarm is armed.'
-
-  ################################################################################
-  notification_alarm_disarmed:
-    alias: 'Notification - Alarm Disarmed'
-    sequence:
-      - service: media_player.volume_set
-        entity_id:
-          - media_player.downstairs_thermostat
-          - media_player.upstairs_thermostat
-          - media_player.ian_s_echo_dot
-        data:
-          volume_level: '1.0'
-      - service: notify.alexa_media
-        data:
-          data:
-            type: tts
-          target:
-            - media_player.downstairs_thermostat
-            - media_player.upstairs_thermostat
-            - media_player.ian_s_echo_dot
-          message: 'The alarm is disarmed.'
+          # TODO:
+          # - Send a snapshot from the front porch camera
+          # - Make this an actionable notification to start a video call
 ################################################################################
