@@ -111,4 +111,5 @@ automation:
             - light.indoor_lights
             - light.outdoor_lights
             - light.back_yard_string_lights
+            - light.foyer_chandelier
 ################################################################################
