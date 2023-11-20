@@ -19,12 +19,9 @@ binary_sensor:
       dishwasher_status:
         friendly_name: 'Dishwasher Status'
         value_template: >
-          {{ ( float(states.input_number.dishwasher_energy_threshold.state)
-            < float(states.sensor.dishwasher_energy_usage.state) ) }}
-        delay_off:
-          minutes: 15
+          {{ ( float(states.sensor.dishwasher_outlet_power.state)
+            > float(states.input_number.dishwasher_energy_threshold.state) ) }}
 ################################################################################
-
 automation:
   ################################################################################
   - id: area_kitchen_pantry_light
