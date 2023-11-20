@@ -11,16 +11,7 @@ esp32:
   framework:
     type: arduino
 
-wifi:
-  ssid: !secret esphome_wifi_ssid
-  password: !secret esphome_wifi_password
-  domain: !secret esphome_domain
-  fast_connect: !secret esphome_fast_connect
-
-  # Enable fallback hotspot (captive portal) in case wifi connection fails
-  ap:
-    ssid: !secret esphome_upstairs_air_quality_sensor_ssid
-    password: !secret esphome_upstairs_air_quality_sensor_password
+wifi: !include common/wifi.yaml
 
 # Enable logging
 logger:

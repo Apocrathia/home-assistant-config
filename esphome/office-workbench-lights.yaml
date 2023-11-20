@@ -9,16 +9,7 @@ esphome:
 esp8266:
   board: esp01_1m
 
-wifi:
-  ssid: !secret esphome_wifi_ssid
-  password: !secret esphome_wifi_password
-  domain: !secret esphome_domain
-  fast_connect: !secret esphome_fast_connect
-
-  # Enable fallback hotspot (captive portal) in case wifi connection fails
-  ap:
-    ssid: !secret esphome_office_workbench_lights_ssid
-    password: !secret esphome_office_workbench_lights_password
+wifi: !include common/wifi.yaml
 
 captive_portal:
 

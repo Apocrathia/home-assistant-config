@@ -28,5 +28,5 @@ text_sensor:
       name: 'Mac Address'
 
 time:
-  - platform: sntp
-    id: sntp_time
+  - platform: homeassistant
+    id: homeassistant_time
