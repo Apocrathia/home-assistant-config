@@ -81,26 +81,38 @@ automation:
           - 'armed'
           - 'armed_home'
     action:
-      # Lock all doors
-      - service: lock.lock
+      - alias: 'Lock all doors'
+        service: lock.lock
         entity_id:
           - lock.front_door
           - lock.back_door
-      # Close all covers
-      - service: cover.close_cover
+      - alias: 'Close all covers'
+        service: cover.close_cover
         entity_id:
           - cover.main_garage_door
           - cover.second_garage_door
-      # Uses a scaled hue value (realHue / 360 * 255)
-      - alias: 'Set switch indicators to red'
-        service: number.set_value
-        data:
-          entity_id: >
+      - alias: 'Get all switch LED indicators'
+        variables:
+          lights: >
             {{ states.number
                 | selectattr('entity_id', 'search', '_led_indicator_color$')
                 | map(attribute='entity_id')
                 | list }}
-          value: 0
+      - alias: 'cycle through all lights'
+        repeat:
+          for_each: >
+            {{ lights }}
+          sequence:
+            # Uses a scaled hue value (realHue / 360 * 255)
+            - alias: 'Set switch indicator to red'
+              service: number.set_value
+              data:
+                entity_id: >
+                  {{ repeat.item }}
+                value: 0
+            - alias: 'Wait before next indicator'
+              delay:
+                seconds: 1
   ################################################################################
   - id: function_security_alarm_disarmed
     alias: 'Function - Security - Alarm Disarmed'
@@ -109,16 +121,28 @@ automation:
         entity_id: alarm_control_panel.home
         to: 'disarmed'
     action:
-      # Uses a scaled hue value (realHue / 360 * 255)
-      - alias: 'Set switch indicators to blue'
-        service: number.set_value
-        data:
-          entity_id: >
+      - alias: 'Get all switch LED indicators'
+        variables:
+          lights: >
             {{ states.number
                 | selectattr('entity_id', 'search', '_led_indicator_color$')
                 | map(attribute='entity_id')
                 | list }}
-          value: 170
+      - alias: 'cycle through all lights'
+        repeat:
+          for_each: >
+            {{ lights }}
+          sequence:
+            # Uses a scaled hue value (realHue / 360 * 255)
+            - alias: 'Set switch indicator to blue'
+              service: number.set_value
+              data:
+                entity_id: >
+                  {{ repeat.item }}
+                value: 170
+            - alias: 'Wait before next indicator'
+              delay:
+                seconds: 1
   ################################################################################
   # Watch the following sensors when the alarm is on to extend the system
   - id: function_security_additional_sensors
@@ -150,9 +174,6 @@ automation:
         - condition: state
           entity_id: binary_sensor.worknight
           state: 'on'
-        - condition: state
-          entity_id: input_boolean.away_mode
-          state: 'off'
     action:
       service: alarm_control_panel.alarm_arm_home
       data:
@@ -173,6 +194,9 @@ automation:
           state: 'on'
         - condition: state
           entity_id: input_boolean.away_mode
+          state: 'off'
+        - condition: state
+          entity_id: input_boolean.vacation_mode
           state: 'off'
     action:
       service: alarm_control_panel.alarm_disarm
