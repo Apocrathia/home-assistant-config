@@ -76,9 +76,8 @@ automation:
           percentage: 100
       - service: script.area_master_bathroom_start_timer
       - service: media_player.volume_set
-        target:
-          entity_id: media_player.master_bathroom_homepod
         data:
+          entity_id: media_player.master_bathroom_homepod
           volume_level: 0.65
   ################################################################################
   - id: area_master_bathroom_humidity_low
@@ -90,7 +89,7 @@ automation:
       from: 'on'
       to: 'off'
       for:
-        seconds: 10
+        minutes: 5
     condition:
       # Only execute if the toilet door is already open (or the sensor is offline)
       condition: state
@@ -100,33 +99,40 @@ automation:
         - 'on'
         - 'unavailable'
     action:
-      - delay:
-          minutes: 5
-      - alias: 'Ensure the humidity is still low'
-        choose:
-          - conditions:
-              condition: state
-              entity_id:
-                - binary_sensor.master_bathroom_humidity_high
-              state: 'off'
-            sequence:
-              - service: switch.turn_off
-                data:
-                  entity_id: switch.master_bathroom_fan
-              - service: light.turn_off
-                data:
-                  entity_id: light.master_bathroom_shower_lights
-              - service: fan.set_percentage
-                data:
-                  entity_id: fan.master_bedroom_ceiling_fan
-                  percentage: 33
-              - service: script.area_master_bathroom_stop_timer
-
-              - service: media_player.volume_set
-                target:
-                  entity_id: media_player.master_bathroom_homepod
-                data:
-                  volume_level: 0.50
+      - service: switch.turn_off
+        data:
+          entity_id: switch.master_bathroom_fan
+      - service: light.turn_off
+        data:
+          entity_id: light.master_bathroom_shower_lights
+      - service: fan.set_percentage
+        data:
+          entity_id: fan.master_bedroom_ceiling_fan
+          percentage: 33
+      - service: script.area_master_bathroom_stop_timer
+      - service: media_player.volume_set
+        data:
+          entity_id: media_player.master_bathroom_homepod
+          volume_level: 0.50
+  ################################################################################
+  # Bypass low humidity automation by turning off the shower lights manually
+  - id: area_master_bathroom_shower_lights_off
+    alias: 'Area - Master Bathroom - Shower Lights Off'
+    trigger:
+      platform: state
+      entity_id:
+        - light.master_bathroom_shower_lights
+      from: 'on'
+      to: 'off'
+    condition:
+      condition: state
+      entity_id:
+        - binary_sensor.master_bathroom_humidity_high
+      state: 'on'
+    action:
+      - service: automation.trigger
+        data:
+          entity_id: automation.area_master_bathroom_humidity_low
   ################################################################################
   # Turn on the fan when the shitter closet door is closed.
   - id: area_master_bathroom_toilet_door_closed
