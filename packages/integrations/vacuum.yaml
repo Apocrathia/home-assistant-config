@@ -111,11 +111,21 @@ automation:
         for:
           seconds: 10
     action:
-      - alias: vacuum_trigger_autoempty
-        service: mqtt.publish
+      - alias: Trigger dock auto-empty
+        service: button.press
         data:
-          topic: >
-            {% set entity = trigger.entity_id.split('.') %}
-            vacuum/{{ entity[1] }}/AutoEmptyDockManualTriggerCapability/trigger/set
-          payload: PERFORM
+          entity_id: >
+            {% if trigger.entity_id == 'vacuum.downstairs' %}
+              button.valetudo_downstairs_trigger_auto_empty_dock
+            {% elif trigger.entity_id == 'vacuum.upstairs' %}
+              button.valetudo_upstairs_trigger_auto_empty_dock
+            {% endif %}
+      # - alias: vacuum_trigger_autoempty
+      #   service: mqtt.publish
+      #   data:
+      #     topic: >
+      #       {% set entity = trigger.entity_id.split('.') %}
+      #       vacuum/{{ entity[1] }}/AutoEmptyDockManualTriggerCapability/trigger/set
+      #     payload: PERFORM
+
 ################################################################################
