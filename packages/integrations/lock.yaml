@@ -5,5 +5,5 @@ lock:
   - platform: group
     name: All Locks
     entities:
-      - lock.front_door
-      - lock.back_door
+      - lock.front_door_lock
+      - lock.back_door_lock
