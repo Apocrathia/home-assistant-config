@@ -9,7 +9,7 @@ light:
       - light.front_porch_lights
       - light.outdoor_garage_lights
       - light.back_door_light
-      - light.outdoor_garage_side_light
+      - light.outdoor_garage_light_side
 
   - platform: group
     name: Indoor Lights
