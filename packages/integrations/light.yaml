@@ -28,7 +28,7 @@ light:
       - light.living_room_lights
       - light.dining_room_chandelier
       - light.foyer_chandelier
-      - light.kitchen
+      - light.kitchen_lights
       - light.studio_floor_lamp
       - light.master_bedroom_table_lamps
       - light.master_bathroom_vanity_lights
@@ -101,7 +101,7 @@ light:
     name: Office Lights
     entities:
       - light.office_floor_lamp
-      - light.office_key_light
+      - light.elgato_key_light
       - light.office_light
 
   # These groups have been superceded by Areas

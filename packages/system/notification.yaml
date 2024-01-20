@@ -7,7 +7,7 @@ automation:
     alias: 'System - Notification - Update Available'
     trigger:
       platform: state
-      entity_id: updater.updater
+      entity_id: update.home_assistant_core_update
     action:
       service: notify.notify
       data:
