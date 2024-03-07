@@ -165,28 +165,3 @@ homekit:
 #         support_audio: true
 #         stream_count: 5
 # ################################################################################
-
-automation:
-  ################################################################################
-  # Start HomeKit once the Z-Wave network starts up.
-  - alias: 'HomeKit - Z-Wave Start'
-    trigger:
-      - platform: event
-        event_type: zwave.network_ready
-      - platform: event
-        event_type: zwave.network_complete
-      - platform: event
-        event_type: zwave.network_complete_some_dead
-    action:
-      - service: homekit.start
-  ################################################################################
-  # I've had issues with HomeKit being unresponsive every now and then.
-  # This should keep it on it's toes.
-  - alias: 'Homekit - Routine Reload'
-    trigger:
-      - platform: time_pattern
-        # This will become seemingly random, as 37 is prime.
-        minutes: '/37'
-    action:
-      - service: homekit.reload
-################################################################################
