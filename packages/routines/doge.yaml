@@ -43,14 +43,6 @@ input_number:
     step: 1
     unit_of_measurement: Hours
 
-proximity:
-  michio:
-    zone: home
-    devices:
-      - device_tracker.michio_tracker
-    tolerance: 50
-    unit_of_measurement: km
-
 ### Sensors ###
 sensor:
   - platform: template

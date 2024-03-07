@@ -19,17 +19,6 @@ group:
       - person.ian
 ################################################################################
 
-# This will eventually be used for the vacation status
-proximity:
-  ################################################################################
-  ian:
-    zone: home
-    devices:
-      - person.ian
-    tolerance: 50
-    unit_of_measurement: km
-################################################################################
-
 input_boolean:
   ################################################################################
   vacation_ian:
@@ -96,16 +85,16 @@ automation:
     alias: 'Function - Vacation - Ian'
     trigger:
       - platform: numeric_state
-        entity_id: proximity.ian
+        entity_id: sensor.home_ian_distance
         above: 100
         below: 100
         # set this just in case we get a fluke proximity reading
         for: 01:00:00
     action:
       - service: >
-          {% if states('proximity.ian')|float < 100 %}
+          {% if states('sensor.home_ian_distance')|float < 100 %}
             input_boolean.turn_off
-          {% elif states('proximity.ian')|float > 100 %}
+          {% elif states('sensor.home_ian_distance')|float > 100 %}
             input_boolean.turn_on
           {% endif %}
         data:
@@ -174,7 +163,7 @@ script:
           entity_id:
             - climate.downstairs
             - climate.upstairs
-          preset_mode: 'away'
+          preset_mode: 'Away'
       # Set the vacuums to turbo
       - service: vacuum.set_fan_speed
         data:
@@ -249,7 +238,15 @@ script:
           entity_id:
             - climate.downstairs
             - climate.upstairs
-          preset_mode: 'home'
+          preset_mode: 'Home'
+      # Turn the fans back down
+      - service: fan.set_percentage
+        data:
+          entity_id:
+            - fan.living_room_ceiling_fan
+            - fan.master_bedroom_ceiling_fan
+            - fan.master_bedroom_air_purifier
+          percentage: 33
       # Set the vacuums to silent
       - service: vacuum.set_fan_speed
         data:
@@ -272,14 +269,6 @@ script:
           entity_id:
             - vacuum.downstairs
             - vacuum.upstairs
-      # Turn the fans back down
-      - service: fan.set_percentage
-        data:
-          entity_id:
-            - fan.living_room_ceiling_fan
-            - fan.master_bedroom_ceiling_fan
-            - fan.master_bedroom_air_purifier
-          percentage: 33
   ################################################################################
   vacation_mode_on:
     alias: 'Function - Vacation - On'
