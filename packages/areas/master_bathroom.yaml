@@ -40,6 +40,33 @@ input_number:
     step: 5
     unit_of_measurement: Percent
 
+sensor:
+  - platform: template
+    sensors:
+      master_bathroom_humidity:
+        friendly_name: 'Master Bathroom Humidity'
+        unit_of_measurement: '%'
+        value_template: >
+          {% if states('sensor.master_bathroom_climate_humidity') not in ("unavailable", "unknown") %}
+          {% set humidity1 = states('sensor.master_bathroom_climate_humidity') | float %}
+          {% endif %}
+
+          {% if states('sensor.master_bathroom_climate_sensor_humidity') not in ("unavailable", "unknown") %}
+          {% set humidity2 = states('sensor.master_bathroom_climate_sensor_humidity') | float %}
+          {% endif %}
+
+          {% if humidity1 and humidity2 %}
+          {{ (humidity1 + humidity2) / 2 }}
+          {% elif humidity1 %}
+          {{ states('sensor.master_bathroom_climate_humidity') | default(0) }}
+          {% elif humidity2 %}
+          {{ states('sensor.master_bathroom_climate_sensor_humidity') | default(0) }}
+          {{ humidity2 | default(0) }}
+          {{ humidity2 }}
+          {% else %}
+          0 # Something went wrong
+          {% endif %}
+
 binary_sensor:
   - platform: template
     sensors:
@@ -47,7 +74,7 @@ binary_sensor:
         friendly_name: 'Master Bathroom Humidity High'
         value_template: >
           {{ ( float(states.input_number.master_bathroom_humidity_threshold.state)
-            < float(states.sensor.master_bathroom_climate_humidity.state) ) }}
+            < float(states.sensor.master_bathroom_humidity.state) ) }}
 
 # Automations
 automation:
@@ -133,6 +160,7 @@ automation:
       - service: automation.trigger
         data:
           entity_id: automation.area_master_bathroom_humidity_low
+          # Disable the humidity high automation until the humidity comes down
   ################################################################################
   # Turn on the fan when the shitter closet door is closed.
   - id: area_master_bathroom_toilet_door_closed
@@ -188,11 +216,7 @@ automation:
         data:
           device: master_bathroom_clock
           command: power
-      - alias: 'Input Toggle'
-        service: input_boolean.toggle
-        target:
-          entity_id: input_boolean.master_bathroom_clock_light
-################################################################################
+          ########################################################################
 
 script:
   ################################################################################
@@ -262,4 +286,4 @@ script:
         data:
           device: master_bathroom_clock
           command: mode
-################################################################################
+          ########################################################################
