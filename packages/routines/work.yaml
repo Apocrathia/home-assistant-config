@@ -62,6 +62,14 @@ automation:
         condition: state
         entity_id: person.ian
         state: 'home'
+      - alias: 'Only on workdays'
+        condition: state
+        entity_id: binary_sensor.workday
+        state: 'on'
+      - alias: 'Only during work hours'
+        condition: state
+        entity_id: binary_sensor.routine_work_active
+        state: 'on'
     action:
       - alias: 'Status handler'
         choose:
@@ -83,16 +91,29 @@ automation:
                   entity_id:
                     - light.office_fill_light
                     - light.elgato_key_light
+              - alias: 'Set microphone lights'
+                service: light.turn_on
+                target:
+                  entity_id: light.office_microphone_light_red
+              - alias: 'Set microphone lights'
+                service: light.turn_off
+                target:
+                  entity_id: light.office_microphone_light_blue
               - alias: 'Set doorbell message'
                 service: select.select_option
                 data:
                   entity_id: select.front_door_doorbell_text
                   option: In Meeting
-          - conditions:
+          - condition: and
+            conditions:
               - alias: 'Meeting Ended'
                 condition: state
                 entity_id: !secret google_work_calendar_entity_id
                 state: 'off'
+              - alias: 'During work hours'
+                condition: state
+                entity_id: binary_sensor.routine_work_active
+                state: 'on'
             sequence:
               - alias: 'Turn on key light'
                 service: light.turn_off
@@ -100,6 +121,14 @@ automation:
                   entity_id:
                     - light.office_fill_light
                     - light.elgato_key_light
+              - alias: 'Set microphone lights'
+                service: light.turn_on
+                target:
+                  entity_id: light.office_microphone_light_blue
+              - alias: 'Set microphone lights'
+                service: light.turn_off
+                target:
+                  entity_id: light.office_microphone_light_red
               - alias: 'Set doorbell message'
                 service: select.select_option
                 data:
@@ -115,6 +144,10 @@ automation:
         entity_id: schedule.routine_work_schedule
         to: 'on'
     condition:
+      - alias: 'Ian is home'
+        condition: state
+        entity_id: person.ian
+        state: 'home'
       - alias: 'Only on workdays'
         condition: state
         entity_id: binary_sensor.workday
@@ -132,6 +165,7 @@ automation:
             - light.office_panel_lights_south
             - light.office_panel_lights_west
             - light.office_workbench_lights
+            - light.office_microphone_light_blue
       - delay: 00:00:05
       # This should already be on from the morning routine
       - alias: 'Set brightness for office floor lamp'
@@ -195,6 +229,8 @@ automation:
                     - light.office_panel_lights_south
                     - light.office_panel_lights_west
                     - light.office_workbench_lights
+                    - light.office_microphone_light_blue
+                    - light.office_microphone_light_red
           - conditions:
               - alias: 'Returned'
                 condition: state
@@ -208,6 +244,7 @@ automation:
                     - light.office_panel_lights_south
                     - light.office_panel_lights_west
                     - light.office_workbench_lights
+                    - light.office_microphone_light_blue
   ###############################################################################
   - id: routine_work_stop
     alias: Routine - Work - Stop
@@ -218,6 +255,10 @@ automation:
         entity_id: schedule.routine_work_schedule
         to: 'off'
     condition:
+      - alias: 'Ian is home'
+        condition: state
+        entity_id: person.ian
+        state: 'home'
       - alias: 'Only on workdays'
         condition: state
         entity_id: binary_sensor.workday
@@ -235,4 +276,6 @@ automation:
             - light.office_panel_lights_south
             - light.office_panel_lights_west
             - light.office_workbench_lights
+            - light.office_microphone_light_blue
+            - light.office_microphone_light_red
 ###############################################################################
