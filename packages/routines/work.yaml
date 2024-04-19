@@ -37,17 +37,17 @@ schedule:
   routine_work_schedule:
     name: Routine - Work - Schedule
     monday:
-      - from: '09:00:00'
-        to: '15:00:00'
+      - from: "{{ states('input_datetime.routine_work_start') }}"
+        to: "{{ states('input_datetime.routine_work_stop') }}"
     tuesday:
-      - from: '09:00:00'
-        to: '15:00:00'
+      - from: "{{ states('input_datetime.routine_work_start') }}"
+        to: "{{ states('input_datetime.routine_work_stop') }}"
     wednesday:
-      - from: '09:00:00'
-        to: '15:00:00'
+      - from: "{{ states('input_datetime.routine_work_start') }}"
+        to: "{{ states('input_datetime.routine_work_stop') }}"
     thursday:
-      - from: '09:00:00'
-        to: '15:00:00'
+      - from: "{{ states('input_datetime.routine_work_start') }}"
+        to: "{{ states('input_datetime.routine_work_stop') }}"
 
 # Automations
 automation:
@@ -104,16 +104,17 @@ automation:
                 data:
                   entity_id: select.front_door_doorbell_text
                   option: In Meeting
-          - condition: and
-            conditions:
-              - alias: 'Meeting Ended'
-                condition: state
-                entity_id: !secret google_work_calendar_entity_id
-                state: 'off'
-              - alias: 'During work hours'
-                condition: state
-                entity_id: binary_sensor.routine_work_active
-                state: 'on'
+          - conditions:
+              - condition: and
+                conditions:
+                  - alias: 'Meeting Ended'
+                    condition: state
+                    entity_id: !secret google_work_calendar_entity_id
+                    state: 'off'
+                  - alias: 'During work hours'
+                    condition: state
+                    entity_id: binary_sensor.routine_work_active
+                    state: 'on'
             sequence:
               - alias: 'Turn on key light'
                 service: light.turn_off
