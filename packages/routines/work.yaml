@@ -102,7 +102,7 @@ automation:
               - alias: 'Set doorbell message'
                 service: select.select_option
                 data:
-                  entity_id: select.front_door_doorbell_text
+                  entity_id: select.front_door_camera_doorbell_text
                   option: In Meeting
           - conditions:
               - condition: and
@@ -133,7 +133,7 @@ automation:
               - alias: 'Set doorbell message'
                 service: select.select_option
                 data:
-                  entity_id: select.front_door_doorbell_text
+                  entity_id: select.front_door_camera_doorbell_text
                   option: Go Away
   ###############################################################################
   - id: routine_work_start
