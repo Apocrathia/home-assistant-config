@@ -58,21 +58,21 @@ automation:
           - conditions:
               - alias: 'Front Door Unlocked'
                 condition: state
-                entity_id: lock.front_door
+                entity_id: lock.front_door_lock
                 state: 'unlocked'
             sequence:
               - alias: 'Lock Front Door'
                 service: lock.lock
                 target:
-                  entity_id: lock.front_door
+                  entity_id: lock.front_door_lock
           - conditions:
               - alias: 'Front Door Locked'
                 condition: state
-                entity_id: lock.front_door
+                entity_id: lock.front_door_lock
                 state: 'locked'
             sequence:
               - alias: 'Unlock Front Door'
                 service: lock.unlock
                 target:
-                  entity_id: lock.front_door
+                  entity_id: lock.front_door_lock
 ################################################################################

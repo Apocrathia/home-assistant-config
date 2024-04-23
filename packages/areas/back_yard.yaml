@@ -101,21 +101,21 @@ automation:
           - conditions:
               - alias: 'Back Door Unlocked'
                 condition: state
-                entity_id: lock.back_door
+                entity_id: lock.back_door_lock
                 state: 'unlocked'
             sequence:
               - alias: 'Lock Back Door'
                 service: lock.lock
                 target:
-                  entity_id: lock.back_door
+                  entity_id: lock.back_door_lock
           - conditions:
               - alias: 'Back Door Locked'
                 condition: state
-                entity_id: lock.back_door
+                entity_id: lock.back_door_lock
                 state: 'locked'
             sequence:
               - alias: 'Unlock Back Door'
                 service: lock.unlock
                 target:
-                  entity_id: lock.back_door
+                  entity_id: lock.back_door_lock
 ################################################################################
