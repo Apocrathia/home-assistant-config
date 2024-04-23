@@ -84,8 +84,8 @@ automation:
       - alias: 'Lock all doors'
         service: lock.lock
         entity_id:
-          - lock.front_door
-          - lock.back_door
+          - lock.front_door_lock
+          - lock.back_door_lock
       - alias: 'Close all covers'
         service: cover.close_cover
         entity_id:
