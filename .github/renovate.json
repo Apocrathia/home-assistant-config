@@ -5,7 +5,7 @@
     "packages:linters",
     "packages:test",
     "security:openssf-scorecard",
-    ":automerge",
+    ":automergeAll",
     ":semanticCommits"
   ],
   "enabled": true,
