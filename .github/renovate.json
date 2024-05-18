@@ -1,0 +1,31 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    "packages:linters",
+    "packages:test",
+    "security:openssf-scorecard",
+    ":automerge",
+    ":semanticCommits"
+  ],
+  "enabled": true,
+  "prConcurrentLimit": 0,
+  "prHourlyLimit": 0,
+  "pre-commit": {
+    "enabled": true
+  },
+  "ignorePaths": [],
+  "semanticCommits": "enabled",
+  "dependencyDashboard": true,
+  "dependencyDashboardApproval": true,
+  "vulnerabilityAlerts": {
+    "enabled": true
+  },
+  "automerge": true,
+  "automergeType": "pr",
+  "lockFileMaintenance": {
+    "enabled": true,
+    "extends": ["schedule:daily"],
+    "automerge": true
+  }
+}
