@@ -1,0 +1,18 @@
+---
+### Lawn Mower Integration
+automation:
+  - alias: Lawn Mower Error Alert
+    trigger:
+      platform: state
+      entity_id:
+        - lawn_mower.front_yard
+        - lawn_mower.back_yard
+      to: 'error'
+    action:
+      service: notify.notify
+      data:
+        title: >
+          Lawn Mower Error Alert - {{ trigger.to_state.attributes.friendly_name }}
+        message: >
+          The lawn mower in {{ trigger.to_state.attributes.friendly_name }} has an error.
+          Please check the lawn mower and resolve the issue.
