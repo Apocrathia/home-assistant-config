@@ -53,7 +53,7 @@ history:
 logbook:
 
 # Enables a map showing the location of tracked devices
-map:
+# map: # Deprecated
 
 # Track the sun
 sun:
