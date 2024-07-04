@@ -80,6 +80,7 @@ automation:
         to:
           - 'armed'
           - 'armed_home'
+          - 'armed_away'
     action:
       - alias: 'Lock all doors'
         service: lock.lock
