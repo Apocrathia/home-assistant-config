@@ -163,7 +163,7 @@ script:
           entity_id:
             - climate.downstairs
             - climate.upstairs
-          preset_mode: 'Away'
+          preset_mode: 'away'
       # Set the vacuums to turbo
       - service: vacuum.set_fan_speed
         data:
@@ -238,7 +238,7 @@ script:
           entity_id:
             - climate.downstairs
             - climate.upstairs
-          preset_mode: 'Home'
+          preset_mode: 'home'
       # Turn the fans back down
       - service: fan.set_percentage
         data:
@@ -254,15 +254,6 @@ script:
             - vacuum.downstairs
             - vacuum.upstairs
           fan_speed: low
-      # Stop the vacuums
-      - service: vacuum.stop
-        data:
-          entity_id:
-            - vacuum.downstairs
-            - vacuum.upstairs
-      # wait 30 seconds for command to take effect
-      - delay:
-          seconds: 30
       # Return vacuums to dock
       - service: vacuum.return_to_base
         data:
