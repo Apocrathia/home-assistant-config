@@ -146,6 +146,23 @@ script:
               variables:
                 next_step: >
                   {{ starting_brightness + ( step * repeat.index ) }}
+                last_step: >
+                  {% if repeat.index == 1 %}
+                  {{ starting_brightness }}
+                  {% else %}
+                  {{ starting_brightness + ( step * ( repeat.index - 1 ) ) }}
+                  {% endif %}
+            - alias: 'Stop the script if the light was manually adjusted'
+              if:
+                - alias: 'Brightness does not match last_step'
+                  condition: template
+                  value_template: >
+                    {{ state_attr(entity_id, "brightness") | int != last_step }}
+              then:
+                - alias: 'Stop the script'
+                  service: script.turn_off
+                  target:
+                    entity_id: script.light_transition
             - alias: 'Change the brightness'
               service: >
                 {% if next_step <= 5 %}
