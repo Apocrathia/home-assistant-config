@@ -1,0 +1,57 @@
+---
+### Remote Dimmer Functions ###
+# This package is used to tie Phillips Hue dimmer remotes to various non-zigbee lights around the house.
+automation:
+  #############################################################################
+  - id: function_remote_back_yard
+    alias: Function - Remote - Back Yard
+    trigger:
+      - platform: state
+        entity_id: sensor.back_yard_remote_action
+        from: ''
+    action:
+      - alias: 'State Handler'
+        choose:
+          - conditions:
+              condition: template
+              value_template: >
+                {% if trigger.to_state.state.startswith('on_') %} True {% endif %}
+            sequence:
+              - alias: 'Turn on the back yard string lights'
+                service: light.turn_on
+                target:
+                  entity_id: light.back_yard_string_lights
+          - conditions:
+              condition: template
+              value_template: >
+                {% if trigger.to_state.state.startswith('off_') %} True {% endif %}
+            sequence:
+              - alias: 'Turn off the back yard string lights'
+                service: light.turn_off
+                target:
+                  entity_id: light.back_yard_string_lights
+          - conditions:
+              condition: template
+              value_template: >
+                {% if trigger.to_state.state.startswith('up_') %} True {% endif %}
+            sequence:
+              - alias: 'Turn up the back yard string lights'
+                service: light.turn_on
+                target:
+                  entity_id: light.back_yard_string_lights
+                data:
+                  brightness_step: 10
+                  transition: 1
+          - conditions:
+              condition: template
+              value_template: >
+                {% if trigger.to_state.state.startswith('down_') %} True {% endif %}
+            sequence:
+              - alias: 'Turn up the back yard string lights'
+                service: light.turn_on
+                target:
+                  entity_id: light.back_yard_string_lights
+                data:
+                  brightness_step: -10
+                  transition: 1
+#############################################################################
