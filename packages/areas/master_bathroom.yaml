@@ -82,6 +82,9 @@ automation:
   # Turn on the fan when someone is in the shower.
   - id: area_master_bathroom_humidity_high
     alias: 'Area - Master Bathroom - Humidity High'
+    # setting initial state in case HA was restarted
+    # yamllint disable rule:truthy
+    initial_state: on
     trigger:
       platform: state
       entity_id:
@@ -157,10 +160,24 @@ automation:
         - binary_sensor.master_bathroom_humidity_high
       state: 'on'
     action:
-      - service: automation.trigger
+      - alias: Disable high humidity automation
+        service: automation.turn_off
+        data:
+          entity_id: automation.area_master_bathroom_humidity_high
+      - alias: Trigger low humidity automation
+        service: automation.trigger
         data:
           entity_id: automation.area_master_bathroom_humidity_low
-          # Disable the humidity high automation until the humidity comes down
+      - alias: Wait for humidity to come back down
+        wait_for_trigger:
+          - platform: state
+            entity_id: binary_sensor.master_bathroom_humidity_high
+            to: 'off'
+        timeout: 01:00:00
+      - alias: Turn high humidity automation back on
+        service: automation.turn_on
+        data:
+          entity_id: automation.area_master_bathroom_humidity_high
   ################################################################################
   # Turn on the fan when the shitter closet door is closed.
   - id: area_master_bathroom_toilet_door_closed
