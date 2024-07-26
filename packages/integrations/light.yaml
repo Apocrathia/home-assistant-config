@@ -65,6 +65,7 @@ light:
       - light.downstairs_lights
       - light.upstairs_lights
       - light.studio_lights
+      - light.music_room_lights
 
   - platform: group
     name: Front Porch Lights
@@ -135,3 +136,8 @@ light:
     name: Studio Lights
     entities:
       - light.studio_floor_lamp
+
+  - platform: group
+    name: Music Room Lights
+    entities:
+      - light.music_room_floor_lamp
