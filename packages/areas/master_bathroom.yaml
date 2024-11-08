@@ -41,33 +41,9 @@ input_number:
     unit_of_measurement: Percent
 
 sensor:
-  # - platform: template
-  #   sensors:
-  #     master_bathroom_humidity:
-  #       friendly_name: 'Master Bathroom Humidity'
-  #       unit_of_measurement: '%'
-  #       value_template: >
-  #         {% if states('sensor.master_bathroom_climate_humidity') not in ("unavailable", "unknown") %}
-  #         {% set humidity1 = states('sensor.master_bathroom_climate_humidity') | float %}
-  #         {% endif %}
-
-  #         {% if states('sensor.master_bathroom_climate_sensor_humidity') not in ("unavailable", "unknown") %}
-  #         {% set humidity2 = states('sensor.master_bathroom_climate_sensor_humidity') | float %}
-  #         {% endif %}
-
-  #         {% if humidity1 and humidity2 %}
-  #         {{ (humidity1 + humidity2) / 2 }}
-  #         {% elif humidity1 %}
-  #         {{ states('sensor.master_bathroom_climate_humidity') | default(0) }}
-  #         {% elif humidity2 %}
-  #         {{ states('sensor.master_bathroom_climate_sensor_humidity') | default(0) }}
-  #         {{ humidity2 | default(0) }}
-  #         {{ humidity2 }}
-  #         {% else %}
-  #         0 # Something went wrong
-  #         {% endif %}
   - platform: group
     name: Master Bathroom Humidity
+    unique_id: master_bathroom_humidity
     type: mean
     ignore_non_numeric: true
     entities:
