@@ -1,0 +1,31 @@
+# Network UPS Tools
+---
+# The data provided by NUT is limited, so we have to derive a value.
+
+# Starting with the UPS, we can get a rough estimate of the current watt usage.
+template:
+  - sensor:
+      - name: Living Room UPS Power
+        unique_id: living_room_ups_power
+        state: >
+          {{ float(states('sensor.living_room_ups_nominal_real_power'))
+            * float(states('sensor.living_room_ups_load'))/100 }}
+        unit_of_measurement: W
+        device_class: power
+
+# Use a Riemann sum integral to derive the total consumption
+sensor:
+  - platform: integration
+    unique_id: living_room_ups_consumption
+    name: Living Room UPS Consumption
+    source: sensor.living_room_ups_power
+    round: 4
+
+# And customize the entity so that it appears in the energy dashboard.
+homeassistant:
+  customize:
+    sensor.living_room_ups_consumption:
+      state_class: total_increasing
+      unit_of_measurement: Wh
+      device_class: power
+# Will I have to do this for every UPS? I certainly hope not, but it wouldn't surprise me.
