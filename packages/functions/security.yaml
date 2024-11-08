@@ -8,7 +8,6 @@
 # monitoring the house when we are away.
 # Ideas:
 # Flash some lights/make some noise when the alarm is tripped
-# Make a wife idicator light for when the alarm is armed
 # integrate external sensors into the alarm
 
 ################################################################################
@@ -72,26 +71,37 @@ sensor:
 ################################################################################
 automation:
   ################################################################################
-  - id: function_security_alarm_armed
-    alias: 'Function - Security - Alarm Armed'
+  - id: function_security_alarm_state_change
+    alias: 'Function - Security - Alarm State Change'
     trigger:
       - platform: state
         entity_id: alarm_control_panel.home
-        to:
-          - 'armed'
-          - 'armed_home'
-          - 'armed_away'
     action:
-      - alias: 'Lock all doors'
-        service: lock.lock
-        entity_id:
-          - lock.front_door_lock
-          - lock.back_door_lock
-      - alias: 'Close all covers'
-        service: cover.close_cover
-        entity_id:
-          - cover.main_garage_door
-          - cover.second_garage_door
+      - variables:
+          color: > # red, green, blue
+            {% if trigger.to_state.state == 'armed_away' %}
+              0
+            {% elif trigger.to_state.state in ['armed_home', 'armed_night'] %}
+              85
+            {% else %}
+              170
+            {% endif %}
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: >
+                  {{ trigger.to_state.state in ['armed', 'armed_home', 'armed_away'] }}
+            sequence:
+              - alias: 'Lock all doors'
+                service: lock.lock
+                entity_id:
+                  - lock.front_door_lock
+                  - lock.back_door_lock
+              - alias: 'Close all covers'
+                service: cover.close_cover
+                entity_id:
+                  - cover.main_garage_door
+                  - cover.second_garage_door
       - alias: 'Get all switch LED indicators'
         variables:
           lights: >
@@ -99,51 +109,18 @@ automation:
                 | selectattr('entity_id', 'search', '_led_indicator_color$')
                 | map(attribute='entity_id')
                 | list }}
-      - alias: 'cycle through all lights'
+      - alias: 'Cycle through all lights'
         repeat:
           for_each: >
             {{ lights }}
           sequence:
-            # Uses a scaled hue value (realHue / 360 * 255)
-            - alias: 'Set switch indicator to red'
+            - alias: 'Set switch indicator to color'
               service: number.set_value
               data:
                 entity_id: >
                   {{ repeat.item }}
-                value: 0
-            - alias: 'Wait before next indicator'
-              delay:
-                seconds: 1
-  ################################################################################
-  - id: function_security_alarm_disarmed
-    alias: 'Function - Security - Alarm Disarmed'
-    trigger:
-      - platform: state
-        entity_id: alarm_control_panel.home
-        to: 'disarmed'
-    action:
-      - alias: 'Get all switch LED indicators'
-        variables:
-          lights: >
-            {{ states.number
-                | selectattr('entity_id', 'search', '_led_indicator_color$')
-                | map(attribute='entity_id')
-                | list }}
-      - alias: 'cycle through all lights'
-        repeat:
-          for_each: >
-            {{ lights }}
-          sequence:
-            # Uses a scaled hue value (realHue / 360 * 255)
-            - alias: 'Set switch indicator to blue'
-              service: number.set_value
-              data:
-                entity_id: >
-                  {{ repeat.item }}
-                value: 170
-            - alias: 'Wait before next indicator'
-              delay:
-                seconds: 1
+                value: >
+                  {{ color }}
   ################################################################################
   # Watch the following sensors when the alarm is on to extend the system
   - id: function_security_additional_sensors
