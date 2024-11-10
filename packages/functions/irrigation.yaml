@@ -71,4 +71,42 @@ automation:
         service: input_boolean.turn_off
         target:
           entity_id: input_boolean.function_irrigation_blowout
+  ###############################################################################
+  - id: function_irrigation_freeze_protection
+    alias: 'Function - Irrigation - Freeze Protection'
+    trigger:
+      - platform: numeric_state
+        entity_id: weather.pirateweather
+        below: 0
+        attribute: temperature
+      - platform: numeric_state
+        entity_id: weather.pirateweather
+        above: 0
+        attribute: temperature
+    condition:
+      - condition: state
+        entity_id: switch.rachio_in_standby_mode
+        state: 'off'
+    action:
+      - choose:
+          - conditions:
+              - condition: numeric_state
+                entity_id: weather.pirateweather
+                below: 0
+                attribute: temperature
+            sequence:
+              - alias: 'Turn on blowout'
+                service: input_boolean.turn_on
+                target:
+                  entity_id: input_boolean.function_irrigation_blowout
+          - conditions:
+              - condition: numeric_state
+                entity_id: weather.pirateweather
+                above: 0
+                attribute: temperature
+            sequence:
+              - alias: 'Turn off blowout'
+                service: input_boolean.turn_off
+                target:
+                  entity_id: input_boolean.function_irrigation_blowout
 ###############################################################################
