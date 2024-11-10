@@ -63,6 +63,7 @@ package.json
 # Ignore vendored stuff
 custom_components
 themes
+blueprints
 
 # Specific keeps
 !.gitkeep
