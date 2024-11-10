@@ -22,6 +22,7 @@ api:
     key: !secret home_assistant_api_encryption_key
 
 ota:
+  platform: esphome
   password: !secret esphome_ota
 
 captive_portal:
@@ -34,7 +35,7 @@ substitutions:
   friendly_name: Downstairs Air Quality Sensor
   # yamllint disable rule:line-length
   # renovate: datasource=github-releases depName=MallocArray/airgradient_esphome versioning=semver
-  config_version: 2.0.4
+  config_version: 4.0.1
   # Must have quotes around value
   name_add_mac_suffix: 'false'
 

@@ -22,6 +22,7 @@ api:
     key: !secret home_assistant_api_encryption_key
 
 ota:
+  platform: esphome
   password: !secret esphome_ota
 
 captive_portal:
@@ -59,12 +60,12 @@ light:
 # Output entry
 output:
   - platform: ledc
-    id: output_red
+    id: output_blue
     # D5 = IO18
     pin: GPIO18
     inverted: true
   - platform: ledc
-    id: output_blue
+    id: output_red
     # D6 = IO19
     pin: GPIO19
     inverted: true

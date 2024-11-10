@@ -8,3 +8,4 @@
 **/src/
 **/platformio.ini
 /secrets.yaml
+trash/
