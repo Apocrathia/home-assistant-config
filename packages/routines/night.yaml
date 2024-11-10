@@ -80,7 +80,8 @@ automation:
       - platform: sun
         event: sunset
     action:
-      - service: light.turn_on
+      - alias: 'Turn on the lights'
+        service: light.turn_on
         data:
           entity_id: light.outdoor_lights
           profile: relax
@@ -92,7 +93,8 @@ automation:
       - platform: sun
         event: sunset
     action:
-      - service: light.turn_on
+      - alias: 'Turn on the lights'
+        service: light.turn_on
         data:
           entity_id: light.night_lights
           profile: relax
@@ -104,16 +106,12 @@ automation:
       - platform: sun
         event: sunset
     condition:
-      condition: and
-      conditions:
-        - condition: state
-          entity_id: binary_sensor.worknight
-          state: 'on'
-        - condition: state
-          entity_id: light.master_bedroom_lights
-          state: 'off'
+      - condition: state
+        entity_id: input_boolean.away_mode
+        state: 'off'
     action:
-      - service: light.turn_on
+      - alias: 'Turn on the lights'
+        service: light.turn_on
         data:
           entity_id: light.master_bedroom_lights
           brightness_pct: 100
@@ -129,7 +127,8 @@ automation:
         entity_id: input_boolean.away_mode
         state: 'off'
     action:
-      - service: light.turn_on
+      - alias: 'Turn on the lights'
+        service: light.turn_on
         data:
           entity_id:
             - light.upstairs_hallway_lights
@@ -148,7 +147,8 @@ automation:
       entity_id: binary_sensor.worknight
       state: 'on'
     action:
-      - service: light.turn_off
+      - alias: 'Turn off the lights'
+        service: light.turn_off
         data:
           entity_id:
             # - light.living_room_ceiling_fan
@@ -180,7 +180,8 @@ automation:
       #     message: 'Go the phuque to sleep!'
       #     # TODO https://www.youtube.com/watch?v=Udj-o2m39NA
       # Turn out the lights
-      - service: light.turn_off
+      - alias: 'Turn off the lights'
+        service: light.turn_off
         data:
           entity_id:
             - light.master_bedroom_lights
