@@ -189,27 +189,23 @@ script:
                   entity_id: media_player.master_bedroom_apple_tv
               - delay:
                   seconds: 15
-              # Select Apocrathia user account
-              - service: remote.send_command
-                data:
-                  entity_id: remote.master_bedroom_apple_tv
-                  command:
-                    - select
-              - delay:
-                  seconds: 5
-              # Go to news
+              # Go to alarm clock playlist and shuffle
               - service: remote.send_command
                 data:
                   entity_id: remote.master_bedroom_apple_tv
                   delay_secs: 0.75
                   command:
+                    - left
+                    - down
+                    - down
+                    - down
+                    - down
+                    - down
+                    - down
+                    - select
+                    - select
+                    - up
                     - right
-                    - down
-                    - down
-                    - down
-                    - down
-                    - down
-                    - down
                     - select
           ############
           ### News ###
