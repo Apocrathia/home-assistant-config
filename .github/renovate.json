@@ -10,6 +10,7 @@
   ],
   "enabled": true,
   "timezone": "America/Denver",
+  "configMigration": true,
   "prConcurrentLimit": 0,
   "prHourlyLimit": 0,
   "rebaseWhen": "conflicted",
