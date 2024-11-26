@@ -16,6 +16,12 @@
   "pre-commit": {
     "enabled": true
   },
+  "packageRules": [
+    {
+      "matchPaths": ["^packages/", "^esphome/"],
+      "enabled": true
+    }
+  ],
   "customManagers": [
     {
       "customType": "regex",
