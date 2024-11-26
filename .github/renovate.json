@@ -17,12 +17,6 @@
   "pre-commit": {
     "enabled": true
   },
-  "packageRules": [
-    {
-      "matchFileNames": ["^packages/", "^esphome/"],
-      "enabled": true
-    }
-  ],
   "customManagers": [
     {
       "customType": "regex",
