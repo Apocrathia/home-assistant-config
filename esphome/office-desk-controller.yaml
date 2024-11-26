@@ -3,6 +3,7 @@ substitutions:
   name: office-desk-controller
   friendly_name: Office Desk Controller
 packages:
+  # renovate: datasource=github-tags depName=tjhorner/upsy-desky
   tj_horner.upsy_desky: github://tjhorner/upsy-desky/firmware/stock.yaml@v4.0.0
 esphome:
   name: ${name}
