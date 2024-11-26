@@ -19,7 +19,7 @@
   },
   "packageRules": [
     {
-      "matchPaths": ["^packages/", "^esphome/"],
+      "matchFileNames": ["^packages/", "^esphome/"],
       "enabled": true
     }
   ],
