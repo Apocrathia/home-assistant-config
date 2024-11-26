@@ -12,9 +12,6 @@
 #
 # Notes on usage:
 # - Don't use 0 as a starting brightness.
-#
-# TODO
-# - Stop script if brightness was manually changed
 ###############################################################################
 script:
   light_transition:
@@ -144,20 +141,25 @@ script:
           sequence:
             - alias: 'Loop-local Variables'
               variables:
+                brightness: >
+                  {{ state_attr(entity_id, "brightness") | int }}
                 next_step: >
                   {{ starting_brightness + ( step * repeat.index ) }}
                 last_step: >
                   {% if repeat.index == 1 %}
                   {{ starting_brightness }}
                   {% else %}
-                  {{ starting_brightness + ( step * ( repeat.index - 1 ) ) }}
+                  {{ starting_brightness + ( step * ( repeat.index - 1 ) ) + 1 }}
                   {% endif %}
             - alias: 'Stop the script if the light was manually adjusted'
               if:
                 - alias: 'Brightness does not match last_step'
                   condition: template
+                  # Because the brightness value is an 8-bit integer,
+                  # we need to account for variance due to rounding and how the light responds.
+                  # +/- 5 is aggressive, but will ensure functionality while I'm testing this.
                   value_template: >
-                    {{ state_attr(entity_id, "brightness") | int != last_step }}
+                    {{ state_attr(entity_id, "brightness") | int not in range(last_step - 5, last_step + 5) }}
               then:
                 - alias: 'Stop the script'
                   service: script.turn_off
@@ -173,7 +175,8 @@ script:
               target:
                 entity_id: '{{ entity_id }}'
               data:
-                brightness_step: '{{ step }}'
+                # brightness_step: '{{ step }}'
+                brightness: '{{ next_step }}'
             - alias: 'And now we wait...'
               delay:
                 seconds: >
