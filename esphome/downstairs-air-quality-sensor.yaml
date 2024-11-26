@@ -34,8 +34,8 @@ substitutions:
   name: downstairs-air-quality-sensor
   friendly_name: Downstairs Air Quality Sensor
   # yamllint disable rule:line-length
-  # renovate: datasource=github-releases depName=MallocArray/airgradient_esphome versioning=semver
-  config_version: 4.0.1
+  # renovate: datasource=github-releases depName=MallocArray/airgradient_esphome
+  config_version: 4.0.7
   # Must have quotes around value
   name_add_mac_suffix: 'false'
 
