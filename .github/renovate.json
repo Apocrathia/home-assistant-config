@@ -20,8 +20,9 @@
   },
   "packageRules": [
     {
-      "matchFileNames": ["^packages/", "^esphome/"],
-      "enabled": true
+      "description": "Group all esphome dependencies",
+      "groupName": "esphome",
+      "matchPackageNames": ["esphome"]
     }
   ],
   "customManagers": [
