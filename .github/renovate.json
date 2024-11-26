@@ -20,9 +20,7 @@
     {
       "customType": "regex",
       "fileMatch": ["^.+\\.ya?ml$"],
-      "matchStrings": [
-        "# renovate: datasource=(?<datasource>[a-z-.]+) depName=(?<depName>[^\\s]+)(?: (?:lookupName|packageName)=(?<packageName>[^\\s]+))?(?: versioning=(?<versioning>[^\\s]+))?(?: extractVersion=(?<extractVersion>[^\\s]+))?(?: currentValue=(?<currentValue>[^\\s]+))?\\s*"
-      ]
+      "matchStrings": ["# renovate: datasource=(?<datasource>[a-z-.]+) depName=(?<depName>[^\\s]+)"]
     }
   ],
   "ignorePaths": [],
