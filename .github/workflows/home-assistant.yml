@@ -24,18 +24,18 @@ jobs:
       - name: ⤵️ Check out configuration from GitHub
         uses: actions/checkout@v4.2.2
       - name: Running Remark lint
-        uses: "docker://pipelinecomponents/remark-lint:latest"
+        uses: 'docker://pipelinecomponents/remark-lint:latest'
         continue-on-error: true
         with:
-          args: "remark --no-stdout --color --frail --use preset-lint-recommended ."
+          args: 'remark --no-stdout --color --frail --use preset-lint-recommended .'
 
   home-assistant:
-    name: "Home Assistant Core ${{ matrix.version }} Configuration Check"
+    name: 'Home Assistant Core ${{ matrix.version }} Configuration Check'
     needs: [yamllint]
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: ["stable", "beta", "dev"]
+        version: ['stable', 'beta', 'dev']
     steps:
       - name: ⤵️ Check out configuration from GitHub
         uses: actions/checkout@v4.2.2
@@ -46,9 +46,9 @@ jobs:
       - name: 🚀 Run Home Assistant Configuration Check
         uses: frenck/action-home-assistant@v1.4
         with:
-          path: "."
+          path: '.'
           secrets: ./.stubs/secrets.yaml
-          version: "${{ matrix.version }}"
+          version: '${{ matrix.version }}'
 
   esphome:
     runs-on: ubuntu-latest
@@ -56,10 +56,10 @@ jobs:
     steps:
       - name: ⤵️ Check out configuration from GitHub
         uses: actions/checkout@v4.2.2
-      - name: Set up Python 3.7
+      - name: Set up Python 3.13
         uses: actions/setup-python@v5
         with:
-          python-version: 3.7
+          python-version: 3.13
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip setuptools wheel
