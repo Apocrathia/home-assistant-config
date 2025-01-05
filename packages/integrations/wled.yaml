@@ -2,17 +2,18 @@
 ### WLED ###
 
 automation:
-  - alias: "Integration - WLED - Restart"
-    description: "Automatically restarts all WLED devices every 4 hours to prevent any potential issues"
+  - alias: 'Integration - WLED - Restart'
+    description: 'Automatically restarts all WLED devices every 4 hours to prevent any potential issues'
     trigger:
       - platform: time_pattern
-        hours: "/4"  # Run every 4 hours
+        # Run every 4 hours
+        hours: '/4'
     action:
       - service: button.press
         target:
           entity_id: >
-            {{ states.button 
+            {{ states.button
               | selectattr('entity_id', 'match', '.*_restart$')
               | selectattr('entity_id', 'search', 'lights')
-              | map(attribute='entity_id') 
+              | map(attribute='entity_id')
               | list }}
