@@ -36,9 +36,9 @@ sensor:
       - wind_speed
 
   # Certification Expiration
-  - platform: cert_expiry
-    host: !secret hass_url
-    port: !secret hass_port
+  # - platform: cert_expiry
+  #   host: !secret hass_url
+  #   port: !secret hass_port
 
   # Twitch
   # - platform: twitch
