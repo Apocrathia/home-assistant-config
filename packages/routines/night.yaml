@@ -197,91 +197,91 @@ scene:
     entities:
       # Outdoor Lights (50% brightness, relax profile)
       light.front_porch_light_left:
-        state: "on"
+        state: 'on'
         brightness_pct: 50
         profile: relax
       light.front_porch_light_right:
-        state: "on"
+        state: 'on'
         brightness_pct: 50
         profile: relax
       light.outdoor_garage_light_right:
-        state: "on"
+        state: 'on'
         brightness_pct: 50
         profile: relax
       light.outdoor_garage_light_left:
-        state: "on"
+        state: 'on'
         brightness_pct: 50
         profile: relax
       light.outdoor_garage_light_side:
-        state: "on"
+        state: 'on'
         brightness_pct: 50
         profile: relax
       light.back_door_light:
-        state: "on"
+        state: 'on'
         brightness_pct: 50
         profile: relax
-      
+
       # Night Lights (50% brightness, relax profile)
       light.sitting_room_floor_lamp:
-        state: "on"
+        state: 'on'
         brightness_pct: 50
         profile: relax
       light.kitchen_cabinet_lights:
-        state: "on"
+        state: 'on'
         brightness_pct: 50
         profile: relax
       light.kitchen_sink_light:
-        state: "on"
+        state: 'on'
         brightness_pct: 50
         profile: relax
       light.living_room_tv_lights:
-        state: "on"
+        state: 'on'
         brightness_pct: 50
         profile: relax
-      
+
       # Master Bedroom Lights (100% brightness, relax profile)
       light.master_bedroom_floor_lamp:
-        state: "on"
+        state: 'on'
         brightness_pct: 100
         profile: relax
       light.master_bedroom_table_lamps:
-        state: "on"
+        state: 'on'
         brightness_pct: 100
         profile: relax
-      
+
       # Evening Lights (25% brightness, relax profile)
       light.back_yard_string_lights:
-        state: "on"
+        state: 'on'
         brightness_pct: 25
         profile: relax
       light.downstairs_hallway_lights:
-        state: "on"
+        state: 'on'
         brightness_pct: 25
         profile: relax
       light.upstairs_hallway_lights:
-        state: "on"
+        state: 'on'
         brightness_pct: 25
         profile: relax
       light.office_floor_lamp:
-        state: "on"
+        state: 'on'
         brightness_pct: 25
         profile: relax
       light.living_room_ceiling_fan:
-        state: "on"
+        state: 'on'
         brightness_pct: 25
         profile: relax
       light.studio_floor_lamp:
-        state: "on"
+        state: 'on'
         brightness_pct: 25
         profile: relax
       light.music_room_floor_lamp:
-        state: "on"
+        state: 'on'
         brightness_pct: 25
         profile: relax
-      
+
       # Hyperion Lights
       light.hyperion_living_room_tv:
-        state: "on"
+        state: 'on'
       light.hyperion_kitchen_cabinet_lights:
-        state: "on"
+        state: 'on'
 ################################################################################
