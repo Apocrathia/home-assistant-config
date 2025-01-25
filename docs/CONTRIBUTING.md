@@ -1,8 +1,6 @@
 # Disclaimer
 
-This is the configuration for my personal Home Assistnat instance, but it is
-[listed as an official configuration example](https://www.home-assistant.io/cookbook/).
-Becuase of this, there are a lot of people who see this repository. As the sole maintainer of
+This is the configuration for my personal Home Assistant instance. As the sole maintainer of
 everything here, there are going to be errors. The configuration you see is the one that I'm
 currently running, and it has to pass a configuration check before I push it to GitHub. (Even
 if the Home Assistant CI says it's broken. Sometimes I forget to make sure that's working.)
