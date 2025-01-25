@@ -21,47 +21,55 @@
 
 ![My Home Assistant Default View](images/default_view.png)
 
+## Documentation
+
+- [Package Structure](packages.md) - Organization and structure of Home Assistant packages
+- [Special Projects](projects.md) - Documentation for mycology, aquaponics, and other special integrations
+- [Contributing Guidelines](CONTRIBUTING.md) - How to contribute to this project
+- [License Information](LICENSE.md) - Project license details
+
 ## Architecture
 
-The production instance of Home Assistant is running via the
-[Home Assistant Operating System](https://github.com/home-assistant/operating-system)
-on an old MacBook Pro, with a remote instance
-running on another old MacBook Pro which has multiple USB radios connected
-(Currently [Zigbee](https://www.home-assistant.io/integrations/zha/),
-[Z-Wave](https://www.home-assistant.io/integrations/zwave_js/), and an
-RTL-SDR dongle for [433mhz devices](https://github.com/merbanan/rtl_433)).
+The Home Assistant setup consists of several integrated components:
 
-This is done for multiple reasons:
+### Core System
 
-- Allow HA to communicate directly with wireless devices without the need for an external hub.
-- Prevent having to pass USB devices through to virtual machines.
-- Enable VMware to migrate the main HA VM across hosts within the cluster based upon load.
-- Place radios in a more central location with better reception.
+- Main Home Assistant instance runs on Proxmox virtualization
+- Backed by Synology NAS for storage and data persistence
+- Uses MariaDB for the database backend
 
-### Update 20230518
+### Device Integration
 
-This is pending a refresh. The following tasks are planned:
+- Raspberry Pi nodes for distributed radio connectivity:
+  - Z-Wave network management
+  - Zigbee device control (via Zigbee2MQTT)
+  - LoRa connectivity for long-range sensors
 
-- Migrate back to a VM. (However, I have converted all of my VMware hosts to Proxmox.)
-- Migrate radios to strategically placed Raspberry Pi's. (Host management is the issue there.)
+### Smart Home Integration
+
+- HomeKit integration for Apple device compatibility
+- Support for various smart speakers and mobile devices
+- Integration with security systems (Envisalink)
+
+### System Management
+
+- Weekly maintenance routines for system health
+- Automated certificate renewal via Let's Encrypt
+- Comprehensive backup strategy
+- GitHub Actions for configuration testing
 
 ![My Home Assistant Architecture](images/conceptual_architecture.png)
 
-Instances are linked together using
-[Lukas Hetzenecker's home-assistant-remote custom_component](https://github.com/lukas-hetzenecker/home-assistant-remote),
-which allows for all configuration to be completed within Home Assistant,
-without the need to worry about using USB/IP or socat to push the devices over the network.
-I've looked into using MQTT discovery, but the issue is advertisement intervals.
-Devices show up instantly with the homeassistant-remote component, even after restarts.
-
 ## General Information
 
-This configuration controls a couple of significant features in my smart home.
+This configuration controls several key features in my smart home:
 
-- Alarm Clock using my bedroom lights and TV
-- Turning on/off lights at sunset/sunrise
-- Arming the alarm system when nobody is home
-- Security lighting when motion is detected at my front door
+- Alarm Clock using bedroom lights and TV
+- Automated lighting based on sun events
+- Security system integration and automation
+- Motion-activated security lighting
+- Special project monitoring (mycology, aquaponics)
+- Automated blind control
 
 **Note: Private information is stored in secrets.yaml (not uploaded)**
 
