@@ -19,6 +19,7 @@ light:
       - light.kitchen_chandelier
       - light.studio_floor_lamp
       - light.music_room_floor_lamp
+      - light.studio_floor_lamp
       - light.master_bedroom_lights
       - light.foyer_chandelier
 
@@ -96,7 +97,6 @@ light:
     name: Living Room Lights
     entities:
       - light.living_room_ceiling_fan
-      # - light.living_room_floor_lamp # Coming soon
 
   - platform: group
     name: Office Lights
