@@ -98,9 +98,3 @@ automation:
           entity_id: alarm_control_panel.home
           code: !secret alarm_code
 ################################################################################
-# - id: area_master_bedroom_humidifier_alert
-#   alias: Area - Master Bedroom - Humidifier Alert
-#   trigger:
-#   condition:
-#   action:
-################################################################################
