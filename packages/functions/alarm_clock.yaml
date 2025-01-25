@@ -193,7 +193,7 @@ script:
               - service: remote.send_command
                 data:
                   entity_id: remote.master_bedroom_apple_tv
-                  delay_secs: 0.75
+                  delay_secs: 1
                   command:
                     - left
                     - down
