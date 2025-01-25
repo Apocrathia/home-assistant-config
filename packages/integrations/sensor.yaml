@@ -53,14 +53,7 @@ sensor:
   # Template
   - platform: template
     sensors:
-      # Because we love our pets
       serenity:
         friendly_name: 'Serenity'
         value_template: >-
           Catting
-      # https://www.instagram.com/michiothedoge/
-      michio:
-        friendly_name: 'Michio'
-        value_template: >-
-          Pupping
-      # https://www.instagram.com/saganthepomsky/
