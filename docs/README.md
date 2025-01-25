@@ -86,7 +86,7 @@ This configuration controls several key features in my smart home:
 [home-assistant]: https://home-assistant.io
 [issue]: https://github.com/Apocrathia/home-assistant-config/issues
 [license-shield]: https://img.shields.io/badge/license-apache-brightgreen.svg
-[maintenance-shield]: https://img.shields.io/maintenance/yes/2023.svg
+[maintenance-shield]: https://img.shields.io/maintenance/yes/2025.svg
 [last-commit-shield]: https://img.shields.io/github/last-commit/Apocrathia/home-assistant-config.svg
 [stars-shield]: https://img.shields.io/github/stars/Apocrathia/home-assistant-config.svg?style=social&label=Stars
 [forks-shield]: https://img.shields.io/github/forks/Apocrathia/home-assistant-config.svg?style=social&label=Forks
