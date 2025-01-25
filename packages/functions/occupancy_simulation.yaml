@@ -49,7 +49,7 @@ script:
                   {{ state_attr('light.away_lights','entity_id') | random }}
             - delay:
                 minutes: >
-                  {{ range(5, 20) | random }}
+                  {{ range(3, 7) | random }}
           until:
             - condition: template
               value_template: >
@@ -59,18 +59,4 @@ script:
         service: light.turn_off
         target:
           entity_id: light.away_lights
-          # - alias: 'Turn on Evening Lights'
-          #   choose:
-          #     - conditions:
-          #         - alias: 'Sun Below Horizon'
-          #           condition: state
-          #           entity_id: sun.sun
-          #           state: 'below_horizon'
-          #       sequence:
-          #         - alias: 'Set Evening Lights'
-          #           service: light.turn_on
-          #           data:
-          #             entity_id: light.evening_lights
-          #             profile: relax
-          #             brightness_pct: 5 # This was doubling on my presence script,
 ################################################################################
