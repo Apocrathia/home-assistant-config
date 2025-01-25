@@ -176,7 +176,7 @@ automation:
       - platform: state
         entity_id:
           - binary_sensor.downstairs_co2_high
-          - bianry_sensor.upstairs_co2_high
+          - binary_sensor.upstairs_co2_high
     action:
       choose:
         - conditions:
@@ -185,60 +185,60 @@ automation:
               value_template: >
                 {{ trigger.entity_id == 'binary_sensor.downstairs_co2_high' }}
           sequence:
-            choose:
-              - conditions:
-                  - alias: Downstairs CO2 High
-                    condition: state
-                    entity_id: binary_sensor.downstairs_co2_high
-                    state: 'on'
-                sequence:
-                  - alias: Turn on Downstairs HVAC fan
-                    service: climate.set_fan_mode
-                    target:
-                      entity_id: climate.homekit_downstairs
-                    data:
-                      fan_mode: 'on'
-              - conditions:
-                  - alias: Downstairs CO2 Low
-                    condition: state
-                    entity_id: binary_sensor.downstairs_co2_high
-                    state: 'off'
-                sequence:
-                  - alias: Turn off Downstairs HVAC fan
-                    service: climate.set_fan_mode
-                    target:
-                      entity_id: climate.homekit_downstairs
-                    data:
-                      fan_mode: auto
+            - choose:
+                - conditions:
+                    - alias: Downstairs CO2 High
+                      condition: state
+                      entity_id: binary_sensor.downstairs_co2_high
+                      state: 'on'
+                  sequence:
+                    - alias: Turn on Downstairs HVAC fan
+                      service: climate.set_fan_mode
+                      target:
+                        entity_id: climate.homekit_downstairs
+                      data:
+                        fan_mode: 'on'
+                - conditions:
+                    - alias: Downstairs CO2 Low
+                      condition: state
+                      entity_id: binary_sensor.downstairs_co2_high
+                      state: 'off'
+                  sequence:
+                    - alias: Turn off Downstairs HVAC fan
+                      service: climate.set_fan_mode
+                      target:
+                        entity_id: climate.homekit_downstairs
+                      data:
+                        fan_mode: auto
         - conditions:
             - alias: Upstairs CO2
               condition: template
               value_template: >
                 {{ trigger.entity_id == 'binary_sensor.upstairs_co2_high' }}
           sequence:
-            choose:
-              - conditions:
-                  - alias: Upstairs CO2 High
-                    condition: state
-                    entity_id: binary_sensor.upstairs_co2_high
-                    state: 'on'
-                sequence:
-                  - alias: Turn on Upstairs HVAC fan
-                    service: climate.set_fan_mode
-                    target:
-                      entity_id: climate.homekit_upstairs
-                    data:
-                      fan_mode: 'on'
-              - conditions:
-                  - alias: Upstairs CO2 Low
-                    condition: state
-                    entity_id: binary_sensor.upstairs_co2_high
-                    state: 'off'
-                sequence:
-                  - alias: Turn off Upstairs HVAC fan
-                    service: climate.set_fan_mode
-                    target:
-                      entity_id: climate.homekit_upstairs
-                    data:
-                      fan_mode: auto
+            - choose:
+                - conditions:
+                    - alias: Upstairs CO2 High
+                      condition: state
+                      entity_id: binary_sensor.upstairs_co2_high
+                      state: 'on'
+                  sequence:
+                    - alias: Turn on Upstairs HVAC fan
+                      service: climate.set_fan_mode
+                      target:
+                        entity_id: climate.homekit_upstairs
+                      data:
+                        fan_mode: 'on'
+                - conditions:
+                    - alias: Upstairs CO2 Low
+                      condition: state
+                      entity_id: binary_sensor.upstairs_co2_high
+                      state: 'off'
+                  sequence:
+                    - alias: Turn off Upstairs HVAC fan
+                      service: climate.set_fan_mode
+                      target:
+                        entity_id: climate.homekit_upstairs
+                      data:
+                        fan_mode: auto
 ################################################################################
