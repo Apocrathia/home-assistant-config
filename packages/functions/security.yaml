@@ -102,6 +102,10 @@ automation:
                 entity_id:
                   - cover.main_garage_door
                   - cover.second_garage_door
+              - alias: 'Turn off fireplace'
+                service: switch.turn_off
+                target:
+                  entity_id: switch.fireplace
       - alias: 'Get all switch LED indicators'
         variables:
           lights: >
