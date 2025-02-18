@@ -78,7 +78,19 @@ automation:
         data:
           entity_id: light.outdoor_lights
   ################################################################################
-
+  - id: routine_day_morning_lights
+    alias: 'Routine - Day - Morning Lights'
+    trigger:
+      - platform: sun
+        event: sunrise
+    condition:
+      - condition: state
+        entity_id: light.morning_lights
+        state: 'on'
+    action:
+      - service: light.turn_off
+        data:
+          entity_id: light.morning_lights
   ################################################################################
   - id: routine_day_night_lights
     alias: 'Routine - Day - Night Lights'
