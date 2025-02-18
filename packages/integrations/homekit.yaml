@@ -32,6 +32,7 @@ homekit:
         - fan.living_room_ceiling_fan
         - switch.fireplace
         - switch.garage_lights
+        - scene.routine_night_goodnight
   ################################################################################
   # Moving door locks to separate accessory bridges
   # https://github.com/home-assistant/core/issues/48843#issuecomment-817447652

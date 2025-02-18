@@ -252,7 +252,7 @@ scene:
       # Evening Lights (25% brightness, relax profile)
       light.back_yard_string_lights:
         state: 'on'
-        brightness_pct: 25
+        brightness_pct: 50
         profile: relax
       light.downstairs_hallway_lights:
         state: 'on'
@@ -284,4 +284,57 @@ scene:
         state: 'on'
       light.hyperion_kitchen_cabinet_lights:
         state: 'on'
+  ################################################################################
+  - name: Routine - Night - Goodnight
+    id: routine_night_goodnight
+    entities:
+      # Living Room
+      light.living_room_lights:
+        state: 'off'
+      light.living_room_tv_lights:
+        state: 'off'
+      light.hyperion_living_room_tv:
+        state: 'off'
+
+      # Kitchen
+      light.kitchen_lights:
+        state: 'off'
+      light.kitchen_cabinet_lights:
+        state: 'off'
+      light.kitchen_chandelier:
+        state: 'off'
+      light.hyperion_kitchen_cabinet_lights:
+        state: 'off'
+
+      # Dining Room
+      light.dining_room_chandelier:
+        state: 'off'
+
+      # Office
+      light.office_lights:
+        state: 'off'
+      light.office_floor_lamp:
+        state: 'off'
+
+      # Downstairs and Upstairs
+      light.downstairs_hallway_lights:
+        state: 'off'
+      light.upstairs_hallway_lights:
+        state: 'off'
+
+      # Studio and Music Room
+      light.studio_floor_lamp:
+        state: 'off'
+      light.music_room_floor_lamp:
+        state: 'off'
+
+      # Master Bedroom
+      light.master_bedroom_floor_lamp:
+        state: 'off'
+      light.master_bedroom_table_lamps:
+        state: 'off'
+
+      # Back Yard
+      light.back_yard_string_lights:
+        state: 'off'
 ################################################################################
