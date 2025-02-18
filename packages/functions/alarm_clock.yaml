@@ -83,15 +83,14 @@ automation:
           entity_id: group.people
           state: home
     action:
-      - service: light.turn_on
+      - alias: 'Turn on master bedroom floor lamp'
+        service: light.turn_on
         data:
           entity_id: light.master_bedroom_floor_lamp
           profile: energize
           brightness_pct: 100
-        data_template:
-          transition: >
-            {{ states.input_number.wakeup_duration.state | multiply(60) | int }}
-      - service: script.light_transition
+      - alias: 'Transition master bedroom table lamps'
+        service: script.light_transition
         data:
           entity_id: light.master_bedroom_table_lamps
           starting_brightness_pct: 10
@@ -99,14 +98,23 @@ automation:
           interval_pct: 10
           transition_time: >
             {{ states.input_number.wakeup_duration.state | multiply(60) | int - 1 }}
-      - service: light.turn_on
+      - alias: 'Turn on the master bathroom vanity lights'
+        service: light.turn_on
+        data:
+          entity_id: light.master_bathroom_vanity_lights
+          profile: relax
+          brightness_pct: 100
+      - alias: 'Turn on morning lights'
+        service: light.turn_on
+        data:
+          entity_id: light.morning_lights
+          brightness_pct: 50
+      - alias: 'Set office floor lamp to 100% brightness'
+        service: light.turn_on
         data:
           entity_id: light.office_floor_lamp
           kelvin: 3000
           brightness_pct: 100
-        data_template:
-          transition: >
-            {{ states.input_number.wakeup_duration.state | multiply(60) | int }}
   ################################################################################
   - id: function_wakeup_apple_tv
     alias: 'Function - Wakeup - Apple TV'
