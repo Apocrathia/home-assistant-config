@@ -125,3 +125,36 @@ automation:
             - light.back_yard_string_lights
             - light.foyer_chandelier
 ################################################################################
+
+################################################################################
+# Scenes
+################################################################################
+scene:
+  - name: Routine - Day - Morning Lights
+    id: routine_day_morning_lights
+    entities:
+      # Living Areas
+      light.living_room_ceiling_fan:
+        state: 'on'
+
+      # Hallways (moderate lighting for safety)
+      light.downstairs_hallway_lights:
+        state: 'on'
+        brightness_pct: 50
+      light.upstairs_hallway_lights:
+        state: 'on'
+        brightness_pct: 50
+
+  - name: Routine - Day - Full Daylight
+    id: routine_day_full_daylight
+    entities:
+      # Turn off all indoor lights to save energy during full daylight
+      light.indoor_lights:
+        state: 'off'
+      light.outdoor_lights:
+        state: 'off'
+      light.back_yard_string_lights:
+        state: 'off'
+      light.foyer_chandelier:
+        state: 'off'
+################################################################################
