@@ -36,6 +36,13 @@ light:
       - light.music_room_floor_lamp
       - light.office_light
 
+  - name: Morning Lights
+    platform: group
+    entities:
+      - light.downstairs_hallway_lights
+      - light.upstairs_hallway_lights
+      - light.living_room_lights
+
   - name: Evening Lights
     platform: group
     entities:
@@ -97,47 +104,3 @@ light:
     name: Living Room Lights
     entities:
       - light.living_room_ceiling_fan
-
-  - platform: group
-    name: Office Lights
-    entities:
-      - light.office_floor_lamp
-      - light.elgato_key_light
-      - light.office_light
-
-  # These groups have been superceded by Areas
-  # - platform: group
-  #   name: Kitchen Lights
-  #   entities:
-  #     - light.kitchen
-  #     - light.kitchen_chandelier
-
-  - platform: group
-    name: Dining Room Lights
-    entities:
-      - light.dining_room_chandelier
-      # - light.dining_room_cabinet_lights # Coming Soon
-
-  - platform: group
-    name: Downstairs Lights
-    entities:
-      - light.downstairs_hallway_lights
-      - light.foyer_chandelier
-      - light.garage_hallway_light
-
-  - platform: group
-    name: Upstairs Lights
-    entities:
-      - light.stairwell_lights
-      - light.upstairs_hallway_lights
-      - light.upstairs_desk_light
-
-  - platform: group
-    name: Studio Lights
-    entities:
-      - light.studio_floor_lamp
-
-  - platform: group
-    name: Music Room Lights
-    entities:
-      - light.music_room_floor_lamp
