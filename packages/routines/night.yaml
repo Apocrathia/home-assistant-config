@@ -323,6 +323,14 @@ scene:
         state: 'off'
       light.master_bedroom_table_lamps:
         state: 'off'
+      light.master_bathroom_closet_light:
+        state: 'off'
+      light.master_bathroom_vanity_lights:
+        state: 'off'
+      light.master_bathroom_shower_lights:
+        state: 'off'
+      light.master_bathroom_toilet_light:
+        state: 'off'
 
       # Back Yard
       light.back_yard_string_lights:
