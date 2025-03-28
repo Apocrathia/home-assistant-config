@@ -71,10 +71,11 @@ light:
       - light.kitchen_lights
       - light.dining_room_lights
       - light.office_lights
-      - light.downstairs_lights
-      - light.upstairs_lights
-      - light.studio_lights
-      - light.music_room_lights
+      - light.downstairs_hallway_lights
+      - light.upstairs_hallway_lights
+      - light.garage_hallway_light
+      - light.studio_floor_lamp
+      - light.music_room_floor_lamp
 
   - platform: group
     name: Front Porch Lights
