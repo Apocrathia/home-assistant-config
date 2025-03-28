@@ -283,8 +283,6 @@ scene:
         state: 'off'
       light.living_room_tv_lights:
         state: 'off'
-      light.hyperion_living_room_tv:
-        state: 'off'
 
       # Kitchen
       light.kitchen_lights:
@@ -292,8 +290,6 @@ scene:
       light.kitchen_cabinet_lights:
         state: 'off'
       light.kitchen_chandelier:
-        state: 'off'
-      light.hyperion_kitchen_cabinet_lights:
         state: 'off'
 
       # Dining Room
@@ -308,6 +304,8 @@ scene:
 
       # Downstairs and Upstairs
       light.downstairs_hallway_lights:
+        state: 'off'
+      light.garage_hallway_light:
         state: 'off'
       light.upstairs_hallway_lights:
         state: 'off'
