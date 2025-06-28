@@ -35,8 +35,20 @@ def remove_devices_with_matching_field(file_path, field, value):
 
     for device in devices:
         field_value = device.get(field)
-        if field_value and isinstance(field_value, list) and any(value in item for item in field_value):
-            count += 1
+        if field_value:
+            # Handle both string and list field values
+            if isinstance(field_value, list):
+                # If it's a list, check if any item contains the value
+                if any(value in str(item) for item in field_value):
+                    count += 1
+                else:
+                    filtered_devices.append(device)
+            else:
+                # If it's a string (or other type), check if the value is in it
+                if value in str(field_value):
+                    count += 1
+                else:
+                    filtered_devices.append(device)
         else:
             filtered_devices.append(device)
 
