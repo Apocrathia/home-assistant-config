@@ -8,6 +8,7 @@
 config:
 system_health:
 sun:
+mobile_app:
 
 # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
 # http:
