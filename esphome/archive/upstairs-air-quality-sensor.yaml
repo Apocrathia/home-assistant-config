@@ -1,0 +1,17 @@
+---
+substitutions:
+  name: upstairs-air-quality-sensor-2
+  friendly_name: Upstairs Air Quality Sensor
+packages:
+  mallocarray.airgradient: github://MallocArray/airgradient_esphome/airgradient-one.yaml
+esphome:
+  name: ${name}
+  name_add_mac_suffix: false
+  friendly_name: ${friendly_name}
+api:
+  encryption:
+    key: H+bh0J6RWkyp7bFiHUBoDX1l8CLeNaKDcHdzg+yRVbg=
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password

@@ -1,10 +1,10 @@
 ---
-# Living Room Air Quality Sensor
+# Mycology Air Quality Sensor
 <<: !include common/diagnostics.yaml
 
 esphome:
-  name: living-room-air-quality-sensor
-  friendly_name: 'Living Room Air Quality Sensor'
+  name: mycology-air-quality-sensor
+  friendly_name: 'Mycology Air Quality Sensor'
 
 esp32:
   board: wemos_d1_mini32
@@ -27,9 +27,9 @@ ota:
 
 captive_portal:
 
-# Enable passive Bluetooth proxy
+# Enable active Bluetooth proxy
 bluetooth_proxy:
-  active: false
+  active: true
 
 uart:
   # D2 = IO22
@@ -39,5 +39,5 @@ uart:
 sensor:
   - platform: pm1006
     pm_2_5:
-      id: 'living_room_air_quality'
-      name: 'Living Room Air Quality'
+      id: 'mycology_air_quality'
+      name: 'Mycology Air Quality'

@@ -1,5 +1,5 @@
 ---
-# Office Air Quality Sensor
+# Office Air Quality Sensor - AirGradient ONE v9
 <<: !include common/diagnostics.yaml
 
 esphome:
@@ -7,7 +7,7 @@ esphome:
   friendly_name: 'Office Air Quality Sensor'
 
 esp32:
-  board: wemos_d1_mini32
+  board: esp32-c3-devkitm-1
   framework:
     type: esp-idf
 
@@ -27,24 +27,40 @@ ota:
 
 captive_portal:
 
-# Enable active Bluetooth proxy
-bluetooth_proxy:
-  active: true
+# AirGradient ONE - Board v9
+# https://www.airgradient.com/open-airgradient/instructions/overview/
 
-uart:
-  # D2 = IO22
-  rx_pin: GPIO22
-  baud_rate: 9600
+substitutions:
+  name: office-air-quality-sensor
+  friendly_name: Office Air Quality Sensor
+  # renovate: datasource=github-releases depName=MallocArray/airgradient_esphome
+  config_version: 5.2.1
+  # Must have quotes around value
+  name_add_mac_suffix: 'false'
 
-sensor:
-  - platform: pm1006
-    pm_2_5:
-      id: 'office_air_quality'
-      name: 'Office Air Quality'
+dashboard_import:
+  package_import_url: github://MallocArray/airgradient_esphome/airgradient-one.yaml
+  import_full_config: false
+
+packages:
+  board: github://MallocArray/airgradient_esphome/packages/airgradient_esp32-c3_board.yaml
+  pm_2.5: github://MallocArray/airgradient_esphome/packages/sensor_pms5003.yaml
+  co2: github://MallocArray/airgradient_esphome/packages/sensor_s8.yaml
+  temp_humidity: github://MallocArray/airgradient_esphome/packages/sensor_sht40.yaml
+  tvoc: github://MallocArray/airgradient_esphome/packages/sensor_sgp41.yaml
+  display: github://MallocArray/airgradient_esphome/packages/display_sh1106_multi_page.yaml
+  led: github://MallocArray/airgradient_esphome/packages/led.yaml
+  led_co2: github://MallocArray/airgradient_esphome/packages/led_co2.yaml
+  airgradient_api: github://MallocArray/airgradient_esphome/packages/airgradient_api_esp32-c3.yaml
+  hardware_watchdog: github://MallocArray/airgradient_esphome/packages/watchdog.yaml
+  config_button: github://MallocArray/airgradient_esphome/packages/config_button.yaml
+  wifi: github://MallocArray/airgradient_esphome/packages/sensor_wifi.yaml
+  uptime: github://MallocArray/airgradient_esphome/packages/sensor_uptime.yaml
+  safe_mode: github://MallocArray/airgradient_esphome/packages/switch_safe_mode.yaml
 
 ###############################################################################
-# I got this microphone arm for my office, and it has an LED. The controller
-# sucked, so I replaced it with an ESP.
+# Office Microphone Light Control via Available GPIO Pins
+# Using GPIO pins that should be available on the AirGradient ONE v9
 # https://gatorframeworks.com/products/broadcast-boom-mic-stand-with-led-indicator-light-gfwmicbcbm4000/
 ###############################################################################
 
@@ -57,15 +73,20 @@ light:
     name: 'Office Microphone Light (Blue)'
     output: output_blue
 
-# Output entry
+# Output entry - Using available IO pins with JST connector
 output:
   - platform: ledc
     id: output_blue
-    # D5 = IO18
-    pin: GPIO18
-    inverted: true
+    # Using IO3 - available on board with JST connector
+    pin: GPIO3
   - platform: ledc
     id: output_red
-    # D6 = IO19
-    pin: GPIO19
-    inverted: true
+    # Using IO4 - available on board with JST connector
+    pin: GPIO4
+
+binary_sensor:
+  - id: !extend config_button
+    pin:
+      # Acknowledging that this is a strapping pin and should not have external pullup/down resistors
+      # https://esphome.io/guides/faq.html#why-am-i-getting-a-warning-about-strapping-pins
+      ignore_strapping_warning: true

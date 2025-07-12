@@ -1,0 +1,32 @@
+---
+esphome:
+  name: master-bedroom-air-quality-sensor
+  friendly_name: Master Bedroom Air Quality Sensor
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: esp-idf
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: 're+C1PpYU13BzvKHjrCcPI7oLVRftB35XJ2JZxSIFME='
+
+ota:
+  - platform: esphome
+    password: '6627fca464c3cf2125489039937a1e15'
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: 'Master-Bedroom-Air-Quality-Sensor'
+    password: '41YMbdAEiC9v'
+
+captive_portal:

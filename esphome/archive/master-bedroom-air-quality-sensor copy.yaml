@@ -1,10 +1,10 @@
 ---
-# Upstairs Air Quality Sensor
+# Downstairs Air Quality Sensor
 <<: !include common/diagnostics.yaml
 
 esphome:
-  name: upstairs-air-quality-sensor
-  friendly_name: Upstairs Air Quality Sensor
+  name: master-bedroom-air-quality-sensor
+  friendly_name: Master Bedroom Air Quality Sensor
 
 esp32:
   board: esp32-c3-devkitm-1
@@ -31,10 +31,10 @@ captive_portal:
 # https://www.airgradient.com/open-airgradient/instructions/overview/
 
 substitutions:
-  name: uptairs-air-quality-sensor
-  friendly_name: Upstairs Air Quality Sensor
+  name: master-bedroom-air-quality-sensor
+  friendly_name: Master Bedroom Air Quality Sensor
   # renovate: datasource=github-releases depName=MallocArray/airgradient_esphome
-  config_version: 5.1.0
+  config_version: 5.2.1
   # Must have quotes around value
   name_add_mac_suffix: 'false'
 

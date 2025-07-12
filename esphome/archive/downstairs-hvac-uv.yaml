@@ -1,0 +1,14 @@
+---
+substitutions:
+  name: downstairs-hvac-uv
+  device_name: downstairs-hvac-uv
+  friendly_name: 'Downstairs HVAC UV'
+  relay_restore_mode: RESTORE_DEFAULT_ON
+packages:
+  athom.smart-plug-v2: github://athom-tech/athom-configs/athom-smart-plug-v2.yaml
+wifi: !include common/wifi.yaml
+esphome:
+  name_add_mac_suffix: false
+api:
+  encryption:
+    key: !secret home_assistant_api_encryption_key

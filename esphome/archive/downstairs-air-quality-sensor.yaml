@@ -1,0 +1,31 @@
+---
+esphome:
+  name: downstairs-air-quality-sensor
+  friendly_name: Downstairs Air Quality Sensor
+
+esp32:
+  board: esp32-c3-devkitm-1
+  framework:
+    type: arduino
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: 'GgoEh7K7yAy7QuT8jl6OaJPrDBYdc33LGpy0UjxKzFo='
+
+ota:
+  password: '6a84d4cf514ee90ddb35094208690c6f'
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: 'Downstairs-Air-Quality-Sensor'
+    password: 'X4bEAvORJi70'
+
+captive_portal:
