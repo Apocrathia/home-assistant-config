@@ -18,7 +18,7 @@ automation:
           entity_id: sensor.moon
           state: 'new_moon'
         - condition: state
-          entity_id: sensor.pirateweather_summary
+          entity_id: sensor.pirate_weather_summary
           state: 'Clear'
     action:
       - service: notify.notify
@@ -40,7 +40,7 @@ automation:
           entity_id: sensor.moon
           state: 'full_moon'
         - condition: state
-          entity_id: sensor.pirateweather_summary
+          entity_id: sensor.pirate_weather_summary
           state: 'Clear'
     action:
       - service: notify.notify
