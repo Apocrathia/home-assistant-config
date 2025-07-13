@@ -34,7 +34,7 @@ substitutions:
   name: master-bedroom-air-quality-sensor
   friendly_name: Master Bedroom Air Quality Sensor
   # renovate: datasource=github-releases depName=MallocArray/airgradient_esphome
-  config_version: 5.2.1
+  config_version: 5.3.0
   # Must have quotes around value
   name_add_mac_suffix: 'false'
 
