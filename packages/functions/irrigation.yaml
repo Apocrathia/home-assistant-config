@@ -76,11 +76,11 @@ automation:
     alias: 'Function - Irrigation - Freeze Protection'
     trigger:
       - platform: numeric_state
-        entity_id: weather.pirateweather
+        entity_id: weather.pirate_weather
         below: 0
         attribute: temperature
       - platform: numeric_state
-        entity_id: weather.pirateweather
+        entity_id: weather.pirate_weather
         above: 0
         attribute: temperature
     condition:
@@ -91,7 +91,7 @@ automation:
       - choose:
           - conditions:
               - condition: numeric_state
-                entity_id: weather.pirateweather
+                entity_id: weather.pirate_weather
                 below: 0
                 attribute: temperature
             sequence:
@@ -101,7 +101,7 @@ automation:
                   entity_id: input_boolean.function_irrigation_blowout
           - conditions:
               - condition: numeric_state
-                entity_id: weather.pirateweather
+                entity_id: weather.pirate_weather
                 above: 0
                 attribute: temperature
             sequence:
