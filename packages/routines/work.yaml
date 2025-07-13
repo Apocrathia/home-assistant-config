@@ -115,12 +115,11 @@ automation:
                     entity_id: binary_sensor.routine_work_active
                     state: 'on'
             sequence:
-              - alias: 'Turn on key lights'
+              - alias: 'Turn on camera lights'
                 service: light.turn_on
                 target:
                   entity_id:
-                    - light.office_fill_light
-                    - light.elgato_key_light
+                    - light.office_camera_lights
               - alias: 'Set microphone lights'
                 service: light.turn_on
                 target:
@@ -146,12 +145,11 @@ automation:
                     entity_id: binary_sensor.routine_work_active
                     state: 'on'
             sequence:
-              - alias: 'Turn on key light'
+              - alias: 'Turn on camera lights'
                 service: light.turn_off
                 target:
                   entity_id:
-                    - light.office_fill_light
-                    - light.elgato_key_light
+                    - light.office_camera_lights
               - alias: 'Set microphone lights'
                 service: light.turn_on
                 target:
@@ -193,9 +191,7 @@ automation:
         target:
           entity_id:
             - light.office_floor_lamp
-            - light.office_panel_lights_south
-            - light.office_panel_lights_west
-            - light.office_workbench_lights
+            - light.office_stream_lights
             - light.office_microphone_light_blue
       - delay: 00:00:05
       # This should already be on from the morning routine
@@ -257,9 +253,7 @@ automation:
                 service: light.turn_off
                 target:
                   entity_id:
-                    - light.office_panel_lights_south
-                    - light.office_panel_lights_west
-                    - light.office_workbench_lights
+                    - light.office_stream_lights
                     - light.office_microphone_light_blue
                     - light.office_microphone_light_red
           - conditions:
@@ -272,9 +266,7 @@ automation:
                 service: light.turn_on
                 target:
                   entity_id:
-                    - light.office_panel_lights_south
-                    - light.office_panel_lights_west
-                    - light.office_workbench_lights
+                    - light.office_stream_lights
                     - light.office_microphone_light_blue
   ###############################################################################
   - id: routine_work_stop
@@ -304,11 +296,8 @@ automation:
         target:
           entity_id:
             - light.office_floor_lamp
-            - light.office_panel_lights_south
-            - light.office_panel_lights_west
-            - light.office_workbench_lights
+            - light.office_stream_lights
+            - light.office_camera_lights
             - light.office_microphone_light_blue
             - light.office_microphone_light_red
-            - light.office_fill_light
-            - light.elgato_key_light
 ###############################################################################
