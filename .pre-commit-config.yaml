@@ -29,6 +29,6 @@ repos:
       - id: prettier
 
   - repo: https://github.com/commitizen-tools/commitizen
-    rev: v4.1.0
+    rev: v4.8.3
     hooks:
       - id: commitizen
