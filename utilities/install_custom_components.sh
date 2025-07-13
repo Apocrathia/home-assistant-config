@@ -12,22 +12,12 @@ cd custom_components
 
 # Install custom components
 
-# alexa_media
-git clone https://github.com/custom-components/alexa_media_player
-mv alexa_media_player/custom_components/alexa_media alexa_media
-rm -rfv alexa_media_player
-
-# auto_backup
-git clone https://github.com/jcwillox/hass-auto-backup
-mv hass-auto-backup/custom_components/auto_backup auto_backup
-rm -rfv hass-auto-backup
-
-# remote_homeassistant
-git clone https://github.com/lukas-hetzenecker/home-assistant-remote
-mv home-assistant-remote/custom_components/remote_homeassistant remote_homeassistant
-rm -rfv home-assistant-remote
-
 # pirateweather
-git clone https://github.com/alexander0042/pirate-weather-ha
+git clone https://github.com/Pirate-Weather/pirate-weather-ha
 mv pirate-weather-ha/custom_components/pirateweather pirateweather
 rm -rfv pirate-weather-ha
+
+# battery notes
+git clone https://github.com/andrew-codechimp/HA-Battery-Notes
+mv HA-Battery-Notes/custom_components/battery_notes battery_notes
+rm -rfv HA-Battery-Notes
