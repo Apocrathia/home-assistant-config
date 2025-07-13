@@ -97,4 +97,72 @@ automation:
         data:
           entity_id: alarm_control_panel.home
           code: !secret alarm_code
+  ################################################################################
+  - id: area_master_bedroom_bedjet_preconditioning
+    alias: Area - Master Bedroom - BedJet Preconditioning
+    trigger:
+      - platform: time
+        at: input_datetime.bedtime
+    condition:
+      - alias: 'House is occupied'
+        condition: state
+        entity_id: group.people
+        state: 'home'
+    action:
+      - alias: 'Get overnight low temperature'
+        variables:
+          overnight_low: >
+            {{ state_attr('weather.pirate_weather', 'forecast')[0].templow | float }}
+      - alias: 'Set BedJet based on conditions'
+        choose:
+          - conditions:
+              - alias: 'Very cold night - extended heat'
+                condition: template
+                value_template: '{{ overnight_low < 0 }}'
+            sequence:
+              - alias: 'Set extended heat preset'
+                service: climate.set_preset_mode
+                target:
+                  entity_id: climate.ians_bedjet
+                data:
+                  preset_mode: extended heat
+          - conditions:
+              - alias: 'Cold night - pre-heat the bed'
+                condition: template
+                value_template: '{{ overnight_low < 10 }}'
+            sequence:
+              - alias: 'Heat the bed to 25°C'
+                service: climate.set_temperature
+                target:
+                  entity_id: climate.ians_bedjet
+                data:
+                  temperature: 25
+                  hvac_mode: heat
+          - conditions:
+              - alias: 'Warm night - pre-cool the bed'
+                condition: template
+                value_template: '{{ overnight_low > 25 }}'
+            sequence:
+              - alias: 'Cool the bed to 15°C'
+                service: climate.set_temperature
+                target:
+                  entity_id: climate.ians_bedjet
+                data:
+                  temperature: 15
+                  hvac_mode: cool
+          - conditions:
+              - alias: 'Room is warm but moderate night - just use fan'
+                condition: numeric_state
+                entity_id: sensor.ians_bedjet_ambient_temperature
+                above: 25
+            sequence:
+              - alias: 'Turn on BedJet fan'
+                service: fan.turn_on
+                target:
+                  entity_id: fan.ians_bedjet
+        default:
+          - alias: 'Moderate temperature - turn off BedJet'
+            service: climate.turn_off
+            target:
+              entity_id: climate.ians_bedjet
 ################################################################################
