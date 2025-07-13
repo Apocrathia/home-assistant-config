@@ -87,9 +87,39 @@ automation:
             sequence:
               - delay:
                   minutes: 30
+              - condition: state
+                entity_id: switch.fireplace
+                state: 'off'
               - service: switch.turn_off
                 entity_id: switch.fireplace_blower
-# In case anyone is looking at this and is curious how I set this up:
-# The fireplace is a pretty typical millivolt valve being controlled by a Shelly
-# and the blower switch is just an Inovelli LZW30-SN.
-################################################################################
+  # In case anyone is looking at this and is curious how I set this up:
+  # The fireplace is a pretty typical millivolt valve being controlled by a Shelly
+  # and the blower switch is just an Inovelli LZW30-SN.
+  ################################################################################
+  # Toggle Hyperion power with TV state
+  - id: area_living_room_hyperion_power
+    alias: 'Area - Living Room - Hyperion Power'
+    trigger:
+      - platform: state
+        entity_id: media_player.living_room_tv
+        to:
+          - 'on'
+          - 'off'
+    action:
+      - choose:
+          - conditions:
+              - condition: state
+                entity_id: media_player.living_room_tv
+                state: 'on'
+            sequence:
+              - service: switch.turn_on
+                target:
+                  entity_id: group.hyperion_led_outputs
+          - conditions:
+              - condition: state
+                entity_id: media_player.living_room_tv
+                state: 'off'
+            sequence:
+              - service: switch.turn_off
+                target:
+                  entity_id: group.hyperion_led_outputs
