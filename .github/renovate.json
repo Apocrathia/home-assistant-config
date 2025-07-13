@@ -44,7 +44,9 @@
   "osvVulnerabilityAlerts": true,
   "automerge": true,
   "automergeType": "pr",
-  "pinDigest": false,
+  "pinDigest": {
+    "enabled": false
+  },
   "lockFileMaintenance": {
     "enabled": true,
     "extends": ["schedule:daily"],
