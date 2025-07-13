@@ -1,7 +1,5 @@
 ---
 http:
-  # Deprecated
-  # base_url: !secret hass_url
   ssl_certificate: !secret http_certificate
   ssl_key: !secret http_key
   ip_ban_enabled: true
