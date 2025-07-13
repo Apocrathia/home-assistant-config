@@ -69,8 +69,8 @@ light:
     entities:
       - light.living_room_lights
       - light.kitchen_lights
-      - light.dining_room_lights
-      - light.office_lights
+      - light.dining_room_chandelier
+      - light.office_light
       - light.downstairs_hallway_lights
       - light.upstairs_hallway_lights
       - light.garage_hallway_light
