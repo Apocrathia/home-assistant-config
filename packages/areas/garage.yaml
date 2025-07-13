@@ -18,7 +18,7 @@ automation:
       - platform: state
         entity_id:
           - binary_sensor.garage_door
-          - binary_sensor.side_door
+          - binary_sensor.garage_side_door
           - binary_sensor.garage_occupancy
           - binary_sensor.garage_motion
           - binary_sensor.garage_camera_motion
@@ -64,7 +64,7 @@ automation:
             entity_id: binary_sensor.garage_door
             state: 'off'
           - condition: state
-            entity_id: binary_sensor.side_door
+            entity_id: binary_sensor.garage_side_door
             state: 'off'
           - condition: state
             entity_id: binary_sensor.garage_occupancy
