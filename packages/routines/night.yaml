@@ -297,7 +297,7 @@ scene:
         state: 'off'
 
       # Office
-      light.office_lights:
+      light.office_light:
         state: 'off'
       light.office_floor_lamp:
         state: 'off'
@@ -321,7 +321,7 @@ scene:
         state: 'off'
       light.master_bedroom_table_lamps:
         state: 'off'
-      light.master_bathroom_closet_light:
+      light.master_bedroom_closet_light:
         state: 'off'
       light.master_bathroom_vanity_lights:
         state: 'off'
