@@ -1,39 +1,7 @@
 ---
 ### Hyperion Automations ###
-automation:
-  # It's a little too bright during the day to see the lights.
-  # We'll turn this off to conserve energy.
-  - id: routine_hyperion_auto-shutoff
-    alias: Routine - Hyperion - Auto-Shutoff
-    trigger:
-      - platform: state
-        entity_id: sun.sun
-      - platform: homeassistant
-        event: start
-    action:
-      - alias: 'State Handdler'
-        choose:
-          - conditions:
-              - alias: 'Sun is up'
-                condition: state
-                entity_id: sun.sun
-                state: 'above_horizon'
-            sequence:
-              - alias: 'Disable the lights'
-                service: light.turn_off
-                target:
-                  entity_id:
-                    - light.hyperion_living_room_tv
-                    - light.hyperion_kitchen_cabinet_lights
-          - conditions:
-              - alias: 'Sun is down'
-                condition: state
-                entity_id: sun.sun
-                state: 'below_horizon'
-            sequence:
-              - alias: 'Enable the lights'
-                service: light.turn_on
-                target:
-                  entity_id:
-                    - light.hyperion_living_room_tv
-                    - light.hyperion_kitchen_cabinet_lights
+group:
+  hyperion_led_outputs:
+    name: Hyperion LED Outputs
+    entities:
+      - switch.kitchen_cabinet_lights_component_led_device
