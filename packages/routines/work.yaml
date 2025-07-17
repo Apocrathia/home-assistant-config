@@ -18,7 +18,7 @@ input_boolean:
 
 # Sensors
 binary_sensor:
-  - platform: template
+  - trigger: template
     sensors:
       routine_work_active:
         friendly_name: Routine - Work - Active
@@ -64,10 +64,10 @@ automation:
   ###############################################################################
   - id: routine_work_mornings
     alias: Routine - Work - Morning
-    trigger:
-      - platform: time
+    triggers:
+      - trigger: time
         at: '05:00:00'
-    condition:
+    conditions:
       - alias: 'Ian is home'
         condition: state
         entity_id: person.ian
@@ -76,18 +76,18 @@ automation:
         condition: state
         entity_id: binary_sensor.workday
         state: 'on'
-    action:
+    actions:
       - alias: 'Raise desk to standing position'
-        service: button.press
+        action: button.press
         target:
           entity_id: button.office_desk_controller_preset_1
   ###############################################################################
   - id: routine_work_meetings
     alias: Routine - Work - Meetings
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: !secret google_work_calendar_entity_id
-    condition:
+    conditions:
       - alias: 'Ian is home'
         condition: state
         entity_id: person.ian
@@ -100,7 +100,7 @@ automation:
         condition: state
         entity_id: binary_sensor.routine_work_active
         state: 'on'
-    action:
+    actions:
       - alias: 'Status handler'
         choose:
           - conditions:
@@ -116,20 +116,20 @@ automation:
                     state: 'on'
             sequence:
               - alias: 'Turn on camera lights'
-                service: light.turn_on
+                action: light.turn_on
                 target:
                   entity_id:
                     - light.office_camera_lights
               - alias: 'Set microphone lights'
-                service: light.turn_on
+                action: light.turn_on
                 target:
                   entity_id: light.office_microphone_light_red
               - alias: 'Set microphone lights'
-                service: light.turn_off
+                action: light.turn_off
                 target:
                   entity_id: light.office_microphone_light_blue
               - alias: 'Set doorbell message'
-                service: select.select_option
+                action: select.select_option
                 data:
                   entity_id: select.front_door_camera_doorbell_text
                   option: In Meeting
@@ -146,33 +146,33 @@ automation:
                     state: 'on'
             sequence:
               - alias: 'Turn on camera lights'
-                service: light.turn_off
+                action: light.turn_off
                 target:
                   entity_id:
                     - light.office_camera_lights
               - alias: 'Set microphone lights'
-                service: light.turn_on
+                action: light.turn_on
                 target:
                   entity_id: light.office_microphone_light_blue
               - alias: 'Set microphone lights'
-                service: light.turn_off
+                action: light.turn_off
                 target:
                   entity_id: light.office_microphone_light_red
               - alias: 'Set doorbell message'
-                service: select.select_option
+                action: select.select_option
                 data:
                   entity_id: select.front_door_camera_doorbell_text
                   option: Go Away
   ###############################################################################
   - id: routine_work_start
     alias: Routine - Work - Start
-    trigger:
-      - platform: time
+    triggers:
+      - trigger: time
         at: input_datetime.routine_work_start
-      - platform: state
+      - trigger: state
         entity_id: schedule.routine_work_schedule
         to: 'on'
-    condition:
+    conditions:
       - alias: 'Ian is home'
         condition: state
         entity_id: person.ian
@@ -185,9 +185,9 @@ automation:
         condition: state
         entity_id: binary_sensor.routine_work_active
         state: 'on'
-    action:
+    actions:
       - alias: 'Turn on office lights'
-        service: light.turn_on
+        action: light.turn_on
         target:
           entity_id:
             - light.office_floor_lamp
@@ -196,14 +196,14 @@ automation:
       - delay: 00:00:05
       # This should already be on from the morning routine
       - alias: 'Set brightness for office floor lamp'
-        service: light.turn_on
+        action: light.turn_on
         target:
           entity_id: light.office_floor_lamp
         data:
           brightness: 100%
       # If a vacuum is docked but has a pending task, it needs to be started first.
       - alias: 'Start the vacuums'
-        service: vacuum.start
+        action: vacuum.start
         target:
           entity_id:
             - vacuum.downstairs
@@ -212,7 +212,7 @@ automation:
       - delay: 00:00:15
       # Now stop it
       - alias: 'Stop the vacuums'
-        service: vacuum.stop
+        action: vacuum.stop
         target:
           entity_id:
             - vacuum.downstairs
@@ -220,7 +220,7 @@ automation:
       - delay: 00:00:05
       # And send it home
       - alias: 'Return vacuums to docks'
-        service: vacuum.return_to_base
+        action: vacuum.return_to_base
         target:
           entity_id:
             - vacuum.downstairs
@@ -228,10 +228,10 @@ automation:
   ###############################################################################
   - id: routine_work_break
     alias: Routine - Work - Break
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: input_boolean.away_mode
-    condition:
+    conditions:
       - alias: 'Only on workdays'
         condition: state
         entity_id: binary_sensor.workday
@@ -240,7 +240,7 @@ automation:
         condition: state
         entity_id: binary_sensor.routine_work_active
         state: 'on'
-    action:
+    actions:
       - alias: 'State Handler'
         choose:
           - conditions:
@@ -250,7 +250,7 @@ automation:
                 state: 'on'
             sequence:
               - alias: 'Turn off office lights'
-                service: light.turn_off
+                action: light.turn_off
                 target:
                   entity_id:
                     - light.office_stream_lights
@@ -263,7 +263,7 @@ automation:
                 state: 'off'
             sequence:
               - alias: 'Turn on office lights'
-                service: light.turn_on
+                action: light.turn_on
                 target:
                   entity_id:
                     - light.office_stream_lights
@@ -271,13 +271,13 @@ automation:
   ###############################################################################
   - id: routine_work_stop
     alias: Routine - Work - Stop
-    trigger:
-      - platform: time
+    triggers:
+      - trigger: time
         at: input_datetime.routine_work_stop
-      - platform: state
+      - trigger: state
         entity_id: schedule.routine_work_schedule
         to: 'off'
-    condition:
+    conditions:
       - alias: 'Ian is home'
         condition: state
         entity_id: person.ian
@@ -290,9 +290,9 @@ automation:
         condition: state
         entity_id: binary_sensor.routine_work_active
         state: 'on'
-    action:
+    actions:
       - alias: 'Turn off office lights'
-        service: light.turn_off
+        action: light.turn_off
         target:
           entity_id:
             - light.office_floor_lamp

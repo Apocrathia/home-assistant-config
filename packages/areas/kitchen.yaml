@@ -14,7 +14,7 @@ input_number:
 
 binary_sensor:
   ################################################################################
-  - platform: template
+  - trigger: template
     sensors:
       dishwasher_status:
         friendly_name: 'Dishwasher Status'
@@ -26,10 +26,10 @@ automation:
   ################################################################################
   - id: area_kitchen_pantry_light
     alias: 'Area - Kitchen - Pantry Light'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: binary_sensor.kitchen_pantry_door_contact
-    action:
+    actions:
       - alias: 'State Handler'
         choose:
           - conditions:
@@ -38,7 +38,7 @@ automation:
                 entity_id: binary_sensor.kitchen_pantry_door_contact
                 state: 'on'
             sequence:
-              service: light.turn_on
+              action: light.turn_on
               data:
                 entity_id: light.kitchen_pantry_light
                 transition: 3
@@ -49,7 +49,7 @@ automation:
                 entity_id: binary_sensor.kitchen_pantry_door_contact
                 state: 'off'
             sequence:
-              service: light.turn_off
+              action: light.turn_off
               data:
                 entity_id: light.kitchen_pantry_light
                 transition: 1

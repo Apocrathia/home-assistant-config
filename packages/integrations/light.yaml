@@ -3,7 +3,7 @@
 
 light:
   # Groups
-  - platform: group
+  - trigger: group
     name: Outdoor Lights
     entities:
       - light.front_porch_lights
@@ -11,7 +11,7 @@ light:
       - light.back_door_light
       - light.outdoor_garage_light_side
 
-  - platform: group
+  - trigger: group
     name: Indoor Lights
     entities:
       - light.sitting_room_floor_lamp
@@ -56,7 +56,7 @@ light:
       - light.studio_floor_lamp
       - light.music_room_floor_lamp
 
-  - platform: group
+  - trigger: group
     name: Night Lights
     entities:
       - light.sitting_room_floor_lamp
@@ -64,7 +64,7 @@ light:
       - light.kitchen_sink_light
       - light.living_room_tv_lights
 
-  - platform: group
+  - trigger: group
     name: Lights Out!
     entities:
       - light.living_room_lights
@@ -77,32 +77,32 @@ light:
       - light.studio_floor_lamp
       - light.music_room_floor_lamp
 
-  - platform: group
+  - trigger: group
     name: Front Porch Lights
     entities:
       - light.front_porch_light_left
       - light.front_porch_light_right
 
-  - platform: group
+  - trigger: group
     name: Outdoor Garage Lights
     entities:
       - light.outdoor_garage_light_right
       - light.outdoor_garage_light_left
       - light.outdoor_garage_light_side
 
-  - platform: group
+  - trigger: group
     name: Master Bedroom Lights
     entities:
       - light.master_bedroom_floor_lamp
       - light.master_bedroom_table_lamps
 
-  - platform: group
+  - trigger: group
     name: Living Room Ceiling Fan
     entities:
       - light.living_room_ceiling_fan_down_light
       - light.living_room_ceiling_fan_up_light
 
-  - platform: group
+  - trigger: group
     name: Living Room Lights
     entities:
       - light.living_room_ceiling_fan

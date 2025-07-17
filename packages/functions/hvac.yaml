@@ -18,7 +18,7 @@ input_number:
     unit_of_measurement: ppm
 
 binary_sensor:
-  - platform: template
+  - trigger: template
     sensors:
       downstairs_hvac_uv:
         friendly_name: 'Downstairs HVAC UV'
@@ -54,12 +54,12 @@ automation:
   # keep both HVAC units set temperature synchronized
   - id: function_hvac_sync
     alias: 'Function - HVAC Sync'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id:
           - climate.homekit_downstairs
           - climate.homekit_upstairs
-    action:
+    actions:
       - alias: 'State Handler'
         choose:
           - conditions:
@@ -68,7 +68,7 @@ automation:
               value_template: >
                 {{ trigger.entity_id == 'climate.homekit_upstairs' }}
             sequence:
-              service: climate.set_temperature
+              action: climate.set_temperature
               target:
                 entity_id: climate.homekit_downstairs
               data:
@@ -82,7 +82,7 @@ automation:
               value_template: >
                 {{ trigger.entity_id == 'climate.homekit_downstairs' }}
             sequence:
-              service: climate.set_temperature
+              action: climate.set_temperature
               target:
                 entity_id: climate.homekit_upstairs
               data:
@@ -94,8 +94,8 @@ automation:
   # Turn off HVAC if an outside door has been left open for 60 seconds
   - id: function_hvac_efficiency_doors
     alias: Function - HVAC - Efficency (Doors)
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id:
           - binary_sensor.front_door
           - binary_sensor.back_door
@@ -104,14 +104,14 @@ automation:
         to: 'open'
         for:
           seconds: 60
-      - platform: state
+      - trigger: state
         entity_id:
           - binary_sensor.front_door
           - binary_sensor.back_door
           - binary_sensor.garage_door
         from: 'open'
         to: 'closed'
-    action:
+    actions:
       - alias: 'State Handler'
         choose:
           - conditions:
@@ -120,7 +120,7 @@ automation:
                 value_template: "{{ trigger.to_state == 'open' }}"
             sequence:
               - alias: 'Turn off HVAC'
-                service: climate.turn_off
+                action: climate.turn_off
                 target:
                   entity_id:
                     - climate.homekit_downstairs
@@ -131,7 +131,7 @@ automation:
                 value_template: "{{ trigger.to_state == 'closed' }}"
             sequence:
               - alias: 'Turn on HVAC'
-                service: climate.turn_on
+                action: climate.turn_on
                 target:
                   entity_id:
                     - climate.homekit_downstairs
@@ -139,32 +139,32 @@ automation:
   ################################################################################
   - id: function_hvac_downstairs_uv_alert
     alias: Function - HVAC - Downstairs UV Alert
-    trigger:
+    triggers:
       platform: state
       entity_id: climate.homekit_downstairs
       to: 'on'
       for: '00:01:00'
-    condition:
+    conditions:
       condition: state
       entity_id: binary_sensor.downstairs_hvac_uv
       state: 'off'
-    action:
+    actions:
       - service: notify.notify
         data:
           message: 'Downstairs HVAC UV bulb may be burnt out!'
   ################################################################################
   - id: function_hvac_upstairs_uv_alert
     alias: Function - HVAC - Downstairs UV Alert
-    trigger:
+    triggers:
       platform: state
       entity_id: climate.homekit_upstairs
       to: 'on'
       for: '00:01:00'
-    condition:
+    conditions:
       condition: state
       entity_id: binary_sensor.upstairs_hvac_uv
       state: 'off'
-    action:
+    actions:
       - service: notify.notify
         data:
           message: 'Upstairs HVAC UV bulb may be burnt out!'
@@ -172,12 +172,12 @@ automation:
   - id: function_hvac_co2
     alias: Function - HVAC - CO2
     description: Turn on the HVAC fan if CO2 reaches > 500 ppm
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id:
           - binary_sensor.downstairs_co2_high
           - binary_sensor.upstairs_co2_high
-    action:
+    actions:
       choose:
         - conditions:
             - alias: Downstairs CO2
@@ -193,7 +193,7 @@ automation:
                       state: 'on'
                   sequence:
                     - alias: Turn on Downstairs HVAC fan
-                      service: climate.set_fan_mode
+                      action: climate.set_fan_mode
                       target:
                         entity_id: climate.homekit_downstairs
                       data:
@@ -205,7 +205,7 @@ automation:
                       state: 'off'
                   sequence:
                     - alias: Turn off Downstairs HVAC fan
-                      service: climate.set_fan_mode
+                      action: climate.set_fan_mode
                       target:
                         entity_id: climate.homekit_downstairs
                       data:
@@ -224,7 +224,7 @@ automation:
                       state: 'on'
                   sequence:
                     - alias: Turn on Upstairs HVAC fan
-                      service: climate.set_fan_mode
+                      action: climate.set_fan_mode
                       target:
                         entity_id: climate.homekit_upstairs
                       data:
@@ -236,7 +236,7 @@ automation:
                       state: 'off'
                   sequence:
                     - alias: Turn off Upstairs HVAC fan
-                      service: climate.set_fan_mode
+                      action: climate.set_fan_mode
                       target:
                         entity_id: climate.homekit_upstairs
                       data:

@@ -36,7 +36,7 @@ input_select:
 
 ### Sensors ###
 sensor:
-  - platform: template
+  - trigger: template
     sensors:
       wakeup_time:
         friendly_name: Wakeup Time
@@ -63,14 +63,14 @@ automation:
   ################################################################################
   - id: function_wakeup_lights
     alias: 'Function - Wakeup - Lights'
-    trigger:
-      - platform: template
+    triggers:
+      - trigger: template
         value_template: >
           {{ (states.sensor.time.state ==
               states.sensor.wakeup_alarm_start_time.state) }}
-      - platform: time
+      - trigger: time
         at: input_datetime.wakeup_time
-    condition:
+    conditions:
       condition: and
       conditions:
         - condition: state
@@ -82,15 +82,15 @@ automation:
         - condition: state
           entity_id: group.people
           state: home
-    action:
+    actions:
       - alias: 'Turn on master bedroom floor lamp'
-        service: light.turn_on
+        action: light.turn_on
         data:
           entity_id: light.master_bedroom_floor_lamp
           profile: energize
           brightness_pct: 100
       - alias: 'Transition master bedroom table lamps'
-        service: script.light_transition
+        action: script.light_transition
         data:
           entity_id: light.master_bedroom_table_lamps
           starting_brightness_pct: 10
@@ -99,18 +99,18 @@ automation:
           transition_time: >
             {{ states.input_number.wakeup_duration.state | multiply(60) | int - 1 }}
       - alias: 'Turn on the master bathroom vanity lights'
-        service: light.turn_on
+        action: light.turn_on
         data:
           entity_id: light.master_bathroom_vanity_lights
           profile: relax
           brightness_pct: 100
       - alias: 'Turn on morning lights'
-        service: light.turn_on
+        action: light.turn_on
         data:
           entity_id: light.morning_lights
           brightness_pct: 50
       - alias: 'Set office floor lamp to 100% brightness'
-        service: light.turn_on
+        action: light.turn_on
         data:
           entity_id: light.office_floor_lamp
           kelvin: 3000
@@ -118,32 +118,32 @@ automation:
   ################################################################################
   - id: function_wakeup_apple_tv
     alias: 'Function - Wakeup - Apple TV'
-    trigger:
-      - platform: template
+    triggers:
+      - trigger: template
         value_template: >
           {{ (states.sensor.time.state ==
               states.sensor.wakeup_alarm_midpoint.state) }}
-    condition:
+    conditions:
       condition: and
       conditions:
         - condition: state
           entity_id: binary_sensor.workday
           state: 'on'
-    action:
-      service: script.function_wakeup_apple_tv
+    actions:
+      action: script.function_wakeup_apple_tv
   ################################################################################
   - id: function_wakeup_vacuum
     alias: 'Function - Wakeup - Vacuum'
-    trigger:
-      - platform: time
+    triggers:
+      - trigger: time
         at: input_datetime.wakeup_time
-    condition:
+    conditions:
       condition: and
       conditions:
         - condition: state
           entity_id: binary_sensor.workday
           state: 'on'
-    action:
+    actions:
       - service: vacuum.start
         data:
           entity_id:

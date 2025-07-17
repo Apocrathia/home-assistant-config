@@ -41,7 +41,7 @@ input_number:
     unit_of_measurement: Percent
 
 sensor:
-  - platform: group
+  - trigger: group
     name: Master Bathroom Humidity
     unique_id: master_bathroom_humidity
     type: mean
@@ -51,7 +51,7 @@ sensor:
       - sensor.master_bathroom_climate_sensor_humidity
 
 binary_sensor:
-  - platform: template
+  - trigger: template
     sensors:
       master_bathroom_humidity_high:
         friendly_name: 'Master Bathroom Humidity High'
@@ -68,7 +68,7 @@ automation:
     # setting initial state in case HA was restarted
     # yamllint disable rule:truthy
     initial_state: on
-    trigger:
+    triggers:
       platform: state
       entity_id:
         - binary_sensor.master_bathroom_humidity_high
@@ -76,7 +76,7 @@ automation:
       to: 'on'
       for:
         seconds: 10
-    action:
+    actions:
       - service: switch.turn_on
         data:
           entity_id: switch.master_bathroom_fan
@@ -95,7 +95,7 @@ automation:
   ################################################################################
   - id: area_master_bathroom_humidity_low
     alias: 'Area - Master Bathroom - Humidity Low'
-    trigger:
+    triggers:
       platform: state
       entity_id:
         - binary_sensor.master_bathroom_humidity_high
@@ -103,7 +103,7 @@ automation:
       to: 'off'
       for:
         minutes: 5
-    condition:
+    conditions:
       # Only execute if the toilet door is already open (or the sensor is offline)
       condition: state
       entity_id:
@@ -111,7 +111,7 @@ automation:
       state:
         - 'on'
         - 'unavailable'
-    action:
+    actions:
       - service: switch.turn_off
         data:
           entity_id: switch.master_bathroom_fan
@@ -131,41 +131,41 @@ automation:
   # Bypass low humidity automation by turning off the shower lights manually
   - id: area_master_bathroom_shower_lights_off
     alias: 'Area - Master Bathroom - Shower Lights Off'
-    trigger:
+    triggers:
       platform: state
       entity_id:
         - light.master_bathroom_shower_lights
       from: 'on'
       to: 'off'
-    condition:
+    conditions:
       condition: state
       entity_id:
         - binary_sensor.master_bathroom_humidity_high
       state: 'on'
-    action:
+    actions:
       - alias: Disable high humidity automation
-        service: automation.turn_off
+        action: automation.turn_off
         data:
           entity_id: automation.area_master_bathroom_humidity_high
       - alias: Trigger low humidity automation
-        service: automation.trigger
+        action: automation.trigger
         data:
           entity_id: automation.area_master_bathroom_humidity_low
       - alias: Wait for humidity to come back down
         wait_for_trigger:
-          - platform: state
+          - trigger: state
             entity_id: binary_sensor.master_bathroom_humidity_high
             to: 'off'
         timeout: 01:00:00
       - alias: Turn high humidity automation back on
-        service: automation.turn_on
+        action: automation.turn_on
         data:
           entity_id: automation.area_master_bathroom_humidity_high
   ################################################################################
   # Turn on the fan when the shitter closet door is closed.
   - id: area_master_bathroom_toilet_door_closed
     alias: 'Area - Master Bathroom - Toilet Door Closed'
-    trigger:
+    triggers:
       platform: state
       entity_id:
         - binary_sensor.master_bathroom_toilet_door_contact
@@ -173,14 +173,14 @@ automation:
       to: 'off'
       for:
         seconds: 10
-    action:
+    actions:
       - service: switch.turn_on
         data:
           entity_id: switch.master_bathroom_fan
   ################################################################################
   - id: area_master_bathroom_toilet_door_open
     alias: 'Area - Master Bathroom - Toilet Door Open'
-    trigger:
+    triggers:
       platform: state
       entity_id:
         - binary_sensor.master_bathroom_toilet_door_contact
@@ -188,13 +188,13 @@ automation:
       to: 'on'
       for:
         seconds: 10
-    condition:
+    conditions:
       # Only execute if someone isn't in the shower
       condition: state
       entity_id:
         - binary_sensor.master_bathroom_humidity_high
       state: 'off'
-    action:
+    actions:
       - delay:
           minutes: 5
       - service: switch.turn_off
@@ -203,14 +203,14 @@ automation:
   ################################################################################
   - id: area_master_bathroom_lighting_schedule
     alias: 'Area - Master Bathroom - Lighting Schedule'
-    trigger:
-      - platform: time
+    triggers:
+      - trigger: time
         at:
           - '05:00:00'
           - '22:00:00'
-    action:
+    actions:
       - alias: 'Power Toggle'
-        service: remote.send_command
+        action: remote.send_command
         target:
           entity_id: remote.master_bathroom_ir_blaster
         data:

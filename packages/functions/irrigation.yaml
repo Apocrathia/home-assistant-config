@@ -22,12 +22,12 @@ automation:
         - switch.front_yard
         - switch.front_yard_drip
         - switch.front_yard_pop_ups
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: input_boolean.function_irrigation_blowout
         from: 'off'
         to: 'on'
-    action:
+    actions:
       - alias: 'Loop through all irrigation valves'
         repeat:
           sequence:
@@ -36,7 +36,7 @@ automation:
                 sprinkler: >
                   {{ sprinklers[ ( repeat.index % ( sprinklers | length ) - 1 ) ] }}
             - alias: 'Turn on sprinkler'
-              service: switch.turn_on
+              action: switch.turn_on
               target:
                 entity_id: >
                   {{ sprinkler }}
@@ -44,7 +44,7 @@ automation:
               delay:
                 seconds: 30
             - alias: 'Turn off sprinkler'
-              service: switch.turn_off
+              action: switch.turn_off
               target:
                 entity_id: >
                   {{ sprinkler }}
@@ -59,35 +59,35 @@ automation:
   ###############################################################################
   - id: function_irrigation_blowout_autoshutoff
     alias: 'Function - Irrigation - Blowout (Auto-Shutoff)'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: input_boolean.function_irrigation_blowout
         from: 'off'
         to: 'on'
         for:
           hours: 4
-    action:
+    actions:
       - alias: 'Turn off blowout'
-        service: input_boolean.turn_off
+        action: input_boolean.turn_off
         target:
           entity_id: input_boolean.function_irrigation_blowout
   ###############################################################################
   - id: function_irrigation_freeze_protection
     alias: 'Function - Irrigation - Freeze Protection'
-    trigger:
-      - platform: numeric_state
+    triggers:
+      - trigger: numeric_state
         entity_id: weather.pirate_weather
         below: 0
         attribute: temperature
-      - platform: numeric_state
+      - trigger: numeric_state
         entity_id: weather.pirate_weather
         above: 0
         attribute: temperature
-    condition:
+    conditions:
       - condition: state
         entity_id: switch.rachio_in_standby_mode
         state: 'off'
-    action:
+    actions:
       - choose:
           - conditions:
               - condition: numeric_state
@@ -96,7 +96,7 @@ automation:
                 attribute: temperature
             sequence:
               - alias: 'Turn on blowout'
-                service: input_boolean.turn_on
+                action: input_boolean.turn_on
                 target:
                   entity_id: input_boolean.function_irrigation_blowout
           - conditions:
@@ -106,7 +106,7 @@ automation:
                 attribute: temperature
             sequence:
               - alias: 'Turn off blowout'
-                service: input_boolean.turn_off
+                action: input_boolean.turn_off
                 target:
                   entity_id: input_boolean.function_irrigation_blowout
 ###############################################################################

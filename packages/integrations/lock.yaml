@@ -2,7 +2,7 @@
 ### Lock ###
 
 lock:
-  - platform: group
+  - trigger: group
     name: All Locks
     entities:
       - lock.front_door_lock

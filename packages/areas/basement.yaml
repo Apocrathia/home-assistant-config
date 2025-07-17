@@ -24,12 +24,12 @@ automation:
   ################################################################################
   - id: area_basement_leak_detected
     alias: 'Area - Basement - Leak Detected'
-    trigger:
-      - platform: event
+    triggers:
+      - trigger: event
         event_type: ios.notification_action_fired
         event_data:
           categoryName: area_basement_leak_detected
-    action:
+    actions:
       choose:
         - conditions: >
             "{{ trigger.event.data.actionName == "ACKNOWLEDGE_LEAK" }}"

@@ -25,43 +25,43 @@ automation:
   ################################################################################
   - id: project_aquaponics_cycle
     alias: Project - Aquaponics - Cycle
-    trigger:
-      - platform: time_pattern
+    triggers:
+      - trigger: time_pattern
         minutes: '0'
-      - platform: template
+      - trigger: template
         value_template: >
           {{ now().minute % states('input_number.aquaponics_cycle_interval') | int == 0 }}
-    action:
+    actions:
       - alias: Run the aquaponics cycle
-        service: script.turn_on
+        action: script.turn_on
         entity_id: script.project_aquaponics_cycle
   ################################################################################
   - id: project_aquaponics_daytime_lights
     alias: Project - Aquaponics - Daytime Lights
-    trigger:
-      - platform: sun
+    triggers:
+      - trigger: sun
         event: sunrise
         offset: '-00:30:00'
-    action:
+    actions:
       - alias: Turn on the tank light
-        service: switch.turn_on
+        action: switch.turn_on
         entity_id: switch.aquaponic_power_strip_tank_lights
       - alias: Turn off the grow light
-        service: switch.turn_off
+        action: switch.turn_off
         entity_id: switch.aquaponic_power_strip_grow_lights
   ################################################################################
   - id: project_aquaponics_nighttime_lights
     alias: Project - Aquaponics - Nighttime Lights
-    trigger:
-      - platform: sun
+    triggers:
+      - trigger: sun
         event: sunset
         offset: '-00:30:00'
-    action:
+    actions:
       - alias: Turn off the tank light
-        service: switch.turn_off
+        action: switch.turn_off
         entity_id: switch.aquaponic_power_strip_tank_lights
       - alias: Turn on the grow light
-        service: switch.turn_on
+        action: switch.turn_on
         entity_id: switch.aquaponic_power_strip_grow_lights
         ##########################################################################
 
@@ -78,12 +78,12 @@ script:
     alias: 'Project - Aquaponics - Cycle'
     sequence:
       - alias: Start the pump
-        service: switch.turn_on
+        action: switch.turn_on
         entity_id: switch.aquaponic_power_strip_pump
       - alias: Let the grow bed fill up
         delay: '00:02:00'
       - alias: Turn off the pump
-        service: switch.turn_off
+        action: switch.turn_off
         entity_id: switch.aquaponic_power_strip_pump
       - alias: Let the grow bed drain
         delay: '00:03:00'

@@ -46,20 +46,20 @@ automation:
   # There are two triggers here so that the
   - id: function_presence_detection
     alias: 'Function - Presence - Detection'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: group.people
         from: 'home'
         # Ensure this is > the iOS app location reporting interval.
         for: 00:05:00
-      - platform: state
+      - trigger: state
         entity_id: group.people
         to: 'home'
         # Keep this value lower to disable away mode quickly
         for: 00:01:30
-    action:
+    actions:
       - alias: 'Set the away mode input boolean'
-        service: >
+        action: >
           {% if is_state('group.people', 'home') %}
             input_boolean.turn_off
           {% elif is_state('group.people', 'not_home') %}
@@ -69,12 +69,12 @@ automation:
   ################################################################################
   - id: function_presence_scripts
     alias: 'Function - Presence - Scripts'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: input_boolean.away_mode
-    action:
+    actions:
       - alias: 'Execute the appropriate script'
-        service: >
+        action: >
           {% if is_state('input_boolean.away_mode', 'on') %}
             script.location_away
           {% elif is_state('input_boolean.away_mode', 'off') %}
@@ -83,14 +83,14 @@ automation:
   ################################################################################
   - id: function_vacation_ian
     alias: 'Function - Vacation - Ian'
-    trigger:
-      - platform: numeric_state
+    triggers:
+      - trigger: numeric_state
         entity_id: sensor.home_ian_distance
         above: 100
         below: 100
         # set this just in case we get a fluke proximity reading
         for: 01:00:00
-    action:
+    actions:
       - service: >
           {% if states('sensor.home_ian_distance')|float < 100 %}
             input_boolean.turn_off
@@ -102,10 +102,10 @@ automation:
   ################################################################################
   - id: function_vacation_detection
     alias: 'Function - Vacation - Detection'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: group.vacation
-    action:
+    actions:
       - alias: 'Set the vacation mode input boolean'
         service_template: >
           {% if is_state('group.vacation', 'off') %}
@@ -117,12 +117,12 @@ automation:
   ################################################################################
   - id: function_vacation_scripts
     alias: 'Function - Vacation - Scripts'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: input_boolean.vacation_mode
-    action:
+    actions:
       - alias: 'Execute the appropriate script'
-        service: >
+        action: >
           {% if is_state('input_boolean.vacation_mode', 'on') %}
             script.vacation_mode_on
           {% elif is_state('input_boolean.vacation_mode', 'off') %}
@@ -144,7 +144,7 @@ script:
                 state: 'below_horizon'
             sequence:
               - alias: 'Turn off evening lights'
-                service: light.turn_off
+                action: light.turn_off
                 target:
                   entity_id: light.evening_lights
       # Execute the following every time
@@ -219,7 +219,7 @@ script:
                 state: 'below_horizon'
             sequence:
               - alias: 'Turn on some lights'
-                service: light.turn_on
+                action: light.turn_on
                 target:
                   entity_id:
                     - light.garage_hallway_light

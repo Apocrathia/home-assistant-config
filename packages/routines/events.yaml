@@ -12,10 +12,10 @@ automation:
   ################################################################################
   - id: routine_events_game_night
     alias: 'Routine - Events - Game Night'
-    trigger:
-      - platform: time
+    triggers:
+      - trigger: time
         at: '18:00:00'
-    condition:
+    conditions:
       condition: and
       conditions:
         - condition: state
@@ -27,7 +27,7 @@ automation:
             "{{ ( now().isocalendar()[2] == 6
                   and now().day >= 22
                   and now().day <= 28 ) }}"
-    action:
+    actions:
       # I've copied all of the sounds from the iOS app to use across the house
       # https://github.com/home-assistant/iOS/tree/master/HomeAssistant/Sounds
       # US-EN-Morgan-Freeman-Starting-Party-Mode.wav

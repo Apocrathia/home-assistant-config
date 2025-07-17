@@ -33,7 +33,7 @@ input_number:
 
 sensor:
   ################################################################################
-  - platform: template
+  - trigger: template
     sensors:
       morning:
         friendly_name: Morning
@@ -66,42 +66,42 @@ automation:
   ################################################################################
   - id: routine_day_outdoor_lights
     alias: 'Routine - Day - Outdoor Lights'
-    trigger:
-      - platform: sun
+    triggers:
+      - trigger: sun
         event: sunrise
-    condition:
+    conditions:
       - condition: state
         entity_id: light.outdoor_lights
         state: 'on'
-    action:
+    actions:
       - service: light.turn_off
         data:
           entity_id: light.outdoor_lights
   ################################################################################
   - id: routine_day_morning_lights
     alias: 'Routine - Day - Morning Lights'
-    trigger:
-      - platform: sun
+    triggers:
+      - trigger: sun
         event: sunrise
-    condition:
+    conditions:
       - condition: state
         entity_id: light.morning_lights
         state: 'on'
-    action:
+    actions:
       - service: light.turn_off
         data:
           entity_id: light.morning_lights
   ################################################################################
   - id: routine_day_night_lights
     alias: 'Routine - Day - Night Lights'
-    trigger:
-      - platform: sun
+    triggers:
+      - trigger: sun
         event: sunrise
-    condition:
+    conditions:
       - condition: state
         entity_id: light.night_lights
         state: 'on'
-    action:
+    actions:
       - service: light.turn_off
         data:
           entity_id: light.night_lights
@@ -112,11 +112,11 @@ automation:
   ################################################################################
   - id: routine_day_lighting_off
     alias: 'Routine - Day - Turn Off Lights After Sunrise'
-    trigger:
-      - platform: sun
+    triggers:
+      - trigger: sun
         event: sunrise
         offset: '01:00:00'
-    action:
+    actions:
       - service: light.turn_off
         data:
           entity_id:

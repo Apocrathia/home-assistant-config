@@ -6,22 +6,22 @@ automation:
   # Automatically reboot Home Assistant VM once a week. Just in case.
   - id: system_maintenance_reboot
     alias: 'System - Maintenance - Reboot'
-    trigger:
+    triggers:
       platform: time
       at: '08:00:00'
-    condition:
+    conditions:
       condition: time
       weekday: sun
-    action:
-      service: hassio.host_reboot
+    actions:
+      action: hassio.host_reboot
   ################################################################################
   # Check for certificate renewals daily
   - id: system_maintenance_certificate_renewal
     alias: 'System - Maintenance - Certificate Renewal'
-    trigger:
+    triggers:
       platform: time
       at: '08:00:00'
-    action:
+    actions:
       - alias: 'Wait a random amount of time'
         delay:
           minutes: >
@@ -29,7 +29,7 @@ automation:
           seconds: >
             {{ range(1, 59) | random | float }}
       - alias: "Start the Let's Encrypt container"
-        service: hassio.addon_start
+        action: hassio.addon_start
         data:
           addon: core_letsencrypt
 ################################################################################

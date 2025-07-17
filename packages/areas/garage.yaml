@@ -6,8 +6,8 @@ automation:
   # Turn on the lights if the garage door is opened
   - id: area_garage_motion
     alias: 'Area - Garage - Motion'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id:
           - cover.main_garage_door
           - cover.second_garage_door
@@ -15,7 +15,7 @@ automation:
         to:
           - 'open'
           - 'opening'
-      - platform: state
+      - trigger: state
         entity_id:
           - binary_sensor.garage_door
           - binary_sensor.garage_side_door
@@ -24,20 +24,20 @@ automation:
           - binary_sensor.garage_camera_motion
         from: 'off'
         to: 'on'
-      - platform: event
+      - trigger: event
         event_type: call_service
         event_data:
           domain: cover
-          service: open_cover
+          action: open_cover
           service_data:
             entity_id:
               - cover.main_garage_door
               - cover.second_garage_door
-    condition:
+    conditions:
       - condition: state
         entity_id: switch.garage_lights
         state: 'off'
-    action:
+    actions:
       - service: switch.turn_on
         data:
           entity_id: switch.garage_lights
@@ -45,8 +45,8 @@ automation:
   # Turn the lights off if there's been no motion for 5 minutes
   - id: area_garage_motion_cleared
     alias: 'Area - Garage - Motion Cleared'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id:
           - binary_sensor.garage_motion
           - binary_sensor.garage_camera_motion
@@ -55,7 +55,7 @@ automation:
         to: 'off'
         for:
           minutes: 5
-    condition:
+    conditions:
       # By ensuring all of these conditions are met, the garage lights will only
       # turn off if all when the garage is empty and the doors are closed
       - condition: and
@@ -78,19 +78,19 @@ automation:
           - condition: state
             entity_id: switch.garage_lights
             state: 'on'
-    action:
+    actions:
       - service: switch.turn_off
         data:
           entity_id: switch.garage_lights
   ################################################################################
   - id: area_garage_main_door_nfc
     alias: 'Area - Garage - Main Door NFC'
-    trigger:
+    triggers:
       platform: event
       event_type: tag_scanned
       event_data:
         tag_id: !secret nfc_main_garage_door
-    action:
+    actions:
       - alias: 'State handler'
         choose:
           - conditions:
@@ -100,7 +100,7 @@ automation:
                 state: 'open'
             sequence:
               - alias: 'Close Main Garage Door'
-                service: cover.close_cover
+                action: cover.close_cover
                 target:
                   entity_id: cover.main_garage_door
           - conditions:
@@ -110,18 +110,18 @@ automation:
                 state: 'closed'
             sequence:
               - alias: 'Open Main Garage Door'
-                service: cover.open_cover
+                action: cover.open_cover
                 target:
                   entity_id: cover.main_garage_door
   ################################################################################
   - id: area_garage_second_door_nfc
     alias: 'Area - Garage - Second Door NFC'
-    trigger:
+    triggers:
       platform: event
       event_type: tag_scanned
       event_data:
         tag_id: !secret nfc_second_garage_door
-    action:
+    actions:
       - alias: 'State handler'
         choose:
           - conditions:
@@ -131,7 +131,7 @@ automation:
                 state: 'open'
             sequence:
               - alias: 'Close Second Garage Door'
-                service: cover.close_cover
+                action: cover.close_cover
                 target:
                   entity_id: cover.second_garage_door
           - conditions:
@@ -141,7 +141,7 @@ automation:
                 state: 'closed'
             sequence:
               - alias: 'Open Second Garage Door'
-                service: cover.open_cover
+                action: cover.open_cover
                 target:
                   entity_id: cover.second_garage_door
 ################################################################################

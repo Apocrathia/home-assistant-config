@@ -5,16 +5,16 @@ automation:
   # Turn on the string lights around the back yard in the morning
   - id: area_back_yard_string_lights_morning
     alias: 'Area - Back Yard - String Lights (Morning)'
-    trigger:
-      - platform: time
+    triggers:
+      - trigger: time
         at: input_datetime.morning
-    condition:
+    conditions:
       condition: state
       entity_id: group.people
       state: 'home'
-    action:
+    actions:
       - alias: 'Turn on the back yard sting lights'
-        service: light.turn_on
+        action: light.turn_on
         target:
           entity_id: light.back_yard_string_lights
         data:
@@ -23,17 +23,17 @@ automation:
   # Turn off the string lights around the back yard once the sun is up
   - id: area_back_yard_string_lights_dawn
     alias: 'Area - Back Yard - String Lights (Dawn)'
-    trigger:
-      - platform: sun
+    triggers:
+      - trigger: sun
         event: sunrise
         offset: '-00:15:00'
-    condition:
+    conditions:
       condition: state
       entity_id: group.people
       state: 'home'
-    action:
+    actions:
       - alias: 'Ramp down lights over next 15 minutes'
-        service: script.light_transition
+        action: script.light_transition
         data:
           entity_id: light.back_yard_string_lights
           starting_brightness_pct: 50
@@ -44,23 +44,23 @@ automation:
       - delay:
           seconds: 5
       - alias: 'Turn off the lights'
-        service: light.turn_off
+        action: light.turn_off
         target:
           entity_id: light.back_yard_string_lights
   ################################################################################
   # Turn on the string lights around the back yard when it gets dark
   - id: area_back_yard_string_lights_dusk
     alias: 'Area - Back Yard - String Lights (Dusk)'
-    trigger:
-      - platform: sun
+    triggers:
+      - trigger: sun
         event: sunset
-    condition:
+    conditions:
       condition: state
       entity_id: group.people
       state: 'home'
-    action:
+    actions:
       - alias: 'Ramp up lights over next hour'
-        service: script.light_transition
+        action: script.light_transition
         data:
           entity_id: light.back_yard_string_lights
           starting_brightness_pct: 5
@@ -74,28 +74,28 @@ automation:
   # and it's usually a good indication that I'm in bed or it's just late af.
   - id: area_back_yard_string_lights_night
     alias: 'Area - Back Yard - String Lights (Night)'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id:
           - alarm_control_panel.home
         to: 'armed_home'
-    condition:
+    conditions:
       condition: state
       entity_id: group.people
       state: 'home'
-    action:
+    actions:
       - service: light.turn_off
         data:
           entity_id: light.back_yard_string_lights
   ################################################################################
   - id: area_back_yard_back_door_nfc
     alias: 'Area - Back Yard - Back Door NFC'
-    trigger:
+    triggers:
       platform: event
       event_type: tag_scanned
       event_data:
         tag_id: !secret nfc_back_door
-    action:
+    actions:
       - alias: 'State handler'
         choose:
           - conditions:
@@ -105,7 +105,7 @@ automation:
                 state: 'unlocked'
             sequence:
               - alias: 'Lock Back Door'
-                service: lock.lock
+                action: lock.lock
                 target:
                   entity_id: lock.back_door_lock
           - conditions:
@@ -115,7 +115,7 @@ automation:
                 state: 'locked'
             sequence:
               - alias: 'Unlock Back Door'
-                service: lock.unlock
+                action: lock.unlock
                 target:
                   entity_id: lock.back_door_lock
 ################################################################################

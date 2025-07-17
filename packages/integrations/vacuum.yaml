@@ -22,8 +22,8 @@ automation:
   # To work around this, we just tell the vacuum to keep going.
   - id: function_vacuum_restart
     alias: 'Function - Vacuum - Restart'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id:
           - vacuum.downstairs
           - vacuum.upstairs
@@ -36,7 +36,7 @@ automation:
           - idle
         for:
           minutes: 5
-    action:
+    actions:
       #  This hasn't seemed to work, so let me make sure the template works
       - service: notify.notify
         data_template:
@@ -71,8 +71,8 @@ automation:
   # reached a full charge. This may or may not end well.
   - id: function_vacuum_continue
     alias: 'Function - Vacuum - Continue'
-    trigger:
-      - platform: numeric_state
+    triggers:
+      - trigger: numeric_state
         entity_id:
           - vacuum.downstairs
           - vacuum.upstairs
@@ -82,7 +82,7 @@ automation:
         for:
           # if it's been charged for this long, it's finished it's last cleaning.
           minutes: 30
-    condition:
+    conditions:
       condition: and
       conditions:
         - condition: state
@@ -91,7 +91,7 @@ automation:
         - condition: template
           value_template: >
             {{ state_attr(trigger.entity_id, 'state') == "docked" }}
-    action:
+    actions:
       - delay: 00:00:30
       - service: 'vacuum.start'
         data_template:
@@ -100,17 +100,17 @@ automation:
   # Empty the vacuum every time it goes on the dock. Not just after each cleaning.
   - id: function_vacuum_autoempty
     alias: Function - Vacuum - Auto-Empty
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id:
           - vacuum.downstairs
           - vacuum.upstairs
         to: 'docked'
         for:
           seconds: 10
-    action:
+    actions:
       - alias: Trigger dock auto-empty
-        service: button.press
+        action: button.press
         data:
           entity_id: >
             {% if trigger.entity_id == 'vacuum.downstairs' %}

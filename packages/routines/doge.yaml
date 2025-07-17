@@ -45,7 +45,7 @@ input_number:
 
 ### Sensors ###
 sensor:
-  - platform: template
+  - trigger: template
     sensors:
       # Breakfast
       doge_meal_breakfast:
@@ -132,16 +132,16 @@ automation:
   ################################################################################
   - id: routine_doge_breakfast
     alias: Routine - Doge - Breakfast
-    trigger:
-      - platform: template
+    triggers:
+      - trigger: template
         value_template: >
           {{ (states.sensor.time.state
             == states.sensor.doge_meal_breakfast.state) }}
-    condition:
+    conditions:
       - condition: state
         entity_id: input_boolean.away_mode
         state: 'off'
-    action:
+    actions:
       - service: notify.notify
         data:
           title: It's Breakfast Time!
@@ -149,16 +149,16 @@ automation:
   ################################################################################
   - id: routine_doge_breakfast_upcoming
     alias: Routine - Doge - Breakfast (Upcoming)
-    trigger:
-      - platform: template
+    triggers:
+      - trigger: template
         value_template: >
           {{ (states.sensor.time.state
             == states.sensor.doge_meal_breakfast_advance.state) }}
-    condition:
+    conditions:
       - condition: state
         entity_id: input_boolean.away_mode
         state: 'off'
-    action:
+    actions:
       - service: notify.notify
         data:
           title: It's Almost Breakfast Time!
@@ -166,16 +166,16 @@ automation:
   ################################################################################
   - id: routine_doge_breakfast_relief
     alias: Routine - Doge - Breakfast (Relief)
-    trigger:
-      - platform: template
+    triggers:
+      - trigger: template
         value_template: >
           {{ (states.sensor.time.state
             == states.sensor.doge_meal_breakfast_relief.state) }}
-    condition:
+    conditions:
       - condition: state
         entity_id: input_boolean.away_mode
         state: 'off'
-    action:
+    actions:
       - service: notify.notify
         data:
           title: Take The Doge Out!
@@ -183,16 +183,16 @@ automation:
   ################################################################################
   - id: routine_doge_lunch
     alias: Routine - Doge - Lunch
-    trigger:
-      - platform: template
+    triggers:
+      - trigger: template
         value_template: >
           {{ (states.sensor.time.state
             == states.sensor.doge_meal_lunch.state) }}
-    condition:
+    conditions:
       - condition: state
         entity_id: input_boolean.away_mode
         state: 'off'
-    action:
+    actions:
       - service: notify.notify
         data:
           title: It's Lunch Time!
@@ -200,16 +200,16 @@ automation:
   ################################################################################
   - id: routine_doge_lunch_upcoming
     alias: Routine - Doge - Lunch (Upcoming)
-    trigger:
-      - platform: template
+    triggers:
+      - trigger: template
         value_template: >
           {{ (states.sensor.time.state
             == states.sensor.doge_meal_advance.state) }}
-    condition:
+    conditions:
       - condition: state
         entity_id: input_boolean.away_mode
         state: 'off'
-    action:
+    actions:
       - service: notify.notify
         data:
           title: It's Almost Lunch Time!
@@ -217,16 +217,16 @@ automation:
   ################################################################################
   - id: routine_doge_lunch_relief
     alias: Routine - Doge - Lunch (Relief)
-    trigger:
-      - platform: template
+    triggers:
+      - trigger: template
         value_template: >
           {{ (states.sensor.time.state
             == states.sensor.doge_meal_lunch_relief.state) }}
-    condition:
+    conditions:
       - condition: state
         entity_id: input_boolean.away_mode
         state: 'off'
-    action:
+    actions:
       - service: notify.notify
         data:
           title: Take The Doge Out!
@@ -234,16 +234,16 @@ automation:
   ################################################################################
   - id: routine_doge_dinner
     alias: Routine - Doge - Dinner
-    trigger:
-      - platform: template
+    triggers:
+      - trigger: template
         value_template: >
           {{ (states.sensor.time.state
             == states.sensor.doge_meal_dinner.state) }}
-    condition:
+    conditions:
       - condition: state
         entity_id: input_boolean.away_mode
         state: 'off'
-    action:
+    actions:
       - service: notify.notify
         data:
           title: It's Dinner Time!
@@ -251,16 +251,16 @@ automation:
   ################################################################################
   - id: routine_doge_dinner_upcoming
     alias: Routine - Doge - Dinner (Upcoming)
-    trigger:
-      - platform: template
+    triggers:
+      - trigger: template
         value_template: >
           {{ (states.sensor.time.state
             == states.sensor.doge_meal_dinner_advance.state) }}
-    condition:
+    conditions:
       - condition: state
         entity_id: input_boolean.away_mode
         state: 'off'
-    action:
+    actions:
       - service: notify.notify
         data:
           title: It's Almost Dinner Time!
@@ -268,16 +268,16 @@ automation:
   ################################################################################
   - id: routine_doge_dinner_relief
     alias: Routine - Doge - Dinner (Relief)
-    trigger:
-      - platform: template
+    triggers:
+      - trigger: template
         value_template: >
           {{ (states.sensor.time.state
             == states.sensor.doge_meal_dinner_relief.state) }}
-    condition:
+    conditions:
       - condition: state
         entity_id: input_boolean.away_mode
         state: 'off'
-    action:
+    actions:
       - service: notify.notify
         data:
           title: Take The Doge Out!
@@ -285,16 +285,16 @@ automation:
   ################################################################################
   - id: routine_doge_collar_light
     alias: Routine - Doge - Collar Light
-    trigger:
-      - platform: sun
+    triggers:
+      - trigger: sun
         event: sunset
-      - platform: sun
+      - trigger: sun
         event: sunrise
-      - platform: state
+      - trigger: state
         entity_id:
           - input_boolean.away_mode
           - light.michio_collar_light
-    action:
+    actions:
       - alias: 'State Handler'
         choose:
           - conditions:
@@ -304,7 +304,7 @@ automation:
                 state: 'off'
             sequence:
               - alias: 'Turn off Light'
-                service: light.turn_off
+                action: light.turn_off
                 target:
                   entity_id: light.michio_collar_light
           - conditions:
@@ -322,7 +322,7 @@ automation:
                         state: 'above_horizon'
                     sequence:
                       - alias: 'Turn off Light'
-                        service: light.turn_off
+                        action: light.turn_off
                         target:
                           entity_id: light.michio_collar_light
                   - conditions:
@@ -332,7 +332,7 @@ automation:
                         state: 'below_horizon'
                     sequence:
                       - alias: 'Turn on Light'
-                        service: light.turn_on
+                        action: light.turn_on
                         target:
                           entity_id: light.michio_collar_light
 ################################################################################

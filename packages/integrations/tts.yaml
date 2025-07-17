@@ -1,5 +1,5 @@
 ---
 # Text to speech
 tts:
-  - platform: google_translate
-  - platform: picotts
+  - trigger: google_translate
+  - trigger: picotts

@@ -5,16 +5,16 @@ automation:
   ################################################################################
   - id: area_front_porch_motion_initial
     alias: 'Area - Front Porch - Motion (Initial)'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: binary_sensor.front_door_camera_motion
         from: 'off'
         to: 'on'
-    condition:
+    conditions:
       condition: state
       entity_id: sun.sun
       state: 'below_horizon'
-    action:
+    actions:
       # Transition to this profile, even if on
       - service: light.turn_on
         data:
@@ -25,18 +25,18 @@ automation:
   ################################################################################
   - id: area_front_porch_motion_motion_idle
     alias: 'Area - Front Porch - Motion (Idle)'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: binary_sensor.front_door_camera_motion
         from: 'on'
         to: 'off'
         for:
           seconds: 150
-    condition:
+    conditions:
       condition: state
       entity_id: sun.sun
       state: 'below_horizon'
-    action:
+    actions:
       # Transition back to a preset profile/scene
       - service: light.turn_on
         data:
@@ -47,12 +47,12 @@ automation:
   ################################################################################
   - id: area_front_porch_front_door_nfc
     alias: 'Area - Front Porch - Front Door NFC'
-    trigger:
+    triggers:
       platform: event
       event_type: tag_scanned
       event_data:
         tag_id: !secret nfc_front_door
-    action:
+    actions:
       - alias: 'State handler'
         choose:
           - conditions:
@@ -62,7 +62,7 @@ automation:
                 state: 'unlocked'
             sequence:
               - alias: 'Lock Front Door'
-                service: lock.lock
+                action: lock.lock
                 target:
                   entity_id: lock.front_door_lock
           - conditions:
@@ -72,7 +72,7 @@ automation:
                 state: 'locked'
             sequence:
               - alias: 'Unlock Front Door'
-                service: lock.unlock
+                action: lock.unlock
                 target:
                   entity_id: lock.front_door_lock
 ################################################################################

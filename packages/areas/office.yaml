@@ -3,14 +3,14 @@
 
 light:
   ################################################################################
-  - platform: group
+  - trigger: group
     name: Office Stream Lights
     unique_id: office_stream_lights
     entities:
       - light.office_panel_lights_south
       - light.office_panel_lights_west
       - light.office_workbench_lights
-  - platform: group
+  - trigger: group
     name: Office Camera Lights
     unique_id: office_camera_lights
     entities:
@@ -21,11 +21,11 @@ light:
 automation:
   ################################################################################
   - alias: Area - Office - Workbench Button Click
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: sensor.office_workbench_button_action
         to: 'on'
-    action:
+    actions:
       entity_id: light.office_workbench_lights
-      service: light.toggle
+      action: light.toggle
 ################################################################################

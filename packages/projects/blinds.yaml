@@ -40,15 +40,15 @@ automation:
   ################################################################################
   - id: project_blinds_lock
     alias: Project - Blinds - Lock
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: input_boolean.away_mode
-      - platform: numeric_state
+      - trigger: numeric_state
         entity_id: weather.dark_sky
         attribute: temperature
         above: 0
         below: 0
-    action:
+    actions:
       - alias: 'State Handler'
         choose:
           - conditions:
@@ -69,7 +69,7 @@ automation:
                     state: 'disarmed'
             sequence:
               - alias: 'Disable Lock'
-                service: input_boolean.turn_off
+                action: input_boolean.turn_off
                 target:
                   entity_id: input_boolean.blinds_lock
           - conditions:
@@ -90,23 +90,23 @@ automation:
                     state: 'armed'
             sequence:
               - alias: 'Enable Lock'
-                service: input_boolean.turn_on
+                action: input_boolean.turn_on
                 target:
                   entity_id: input_boolean.blinds_lock
   ################################################################################
   - id: project_blinds_morning
     alias: Project - Blinds - Morning
-    trigger:
-      - platform: sun
+    triggers:
+      - trigger: sun
         event: sunrise
-    condition:
+    conditions:
       - alias: 'Blinds Unlocked'
         condition: state
         entity_id: input_boolean.blinds_lock
         state: 'off'
-    action:
+    actions:
       - alias: 'Morning - Open'
-        service: cover.set_cover_position
+        action: cover.set_cover_position
         target:
           entity_id: cover.blinds
         data:
@@ -114,17 +114,17 @@ automation:
   ################################################################################
   - id: project_blinds_afternoon
     alias: Project - Blinds - Afternoon
-    trigger:
-      - platform: numeric_state
+    triggers:
+      - trigger: numeric_state
         entity_id: sun.sun
         # attrubute: azimuth
         value_template: >
           "{{ state.attributes.azimuth }}"
         # The intersection of my home's western face.
         above: 150
-    action:
+    actions:
       - alias: 'Afternoon - Close'
-        service: cover.set_cover_position
+        action: cover.set_cover_position
         target:
           entity_id: cover.blinds
         data:
@@ -132,19 +132,19 @@ automation:
   ################################################################################
   - id: project_blinds_sunset
     alias: Project - Blinds - Sunset
-    trigger:
-      - platform: sun
+    triggers:
+      - trigger: sun
         event: sunset
         # 5 Minutes before. Enjoy the sunset.
         offset: '-00:05:00'
-    condition:
+    conditions:
       - alias: 'Blinds Unlocked'
         condition: state
         entity_id: input_boolean.blinds_lock
         state: 'off'
-    action:
+    actions:
       - alias: 'Sunset - Open'
-        service: cover.set_cover_position
+        action: cover.set_cover_position
         target:
           entity_id: cover.blinds
         data:
@@ -152,13 +152,13 @@ automation:
   ################################################################################
   - id: project_blinds_night
     alias: Project - Blinds - Night
-    trigger:
+    triggers:
       # Close blinds at night
-      - platform: time
+      - trigger: time
         at: '23:00:00'
-    action:
+    actions:
       - alias: 'Night - Close'
-        service: cover.set_cover_position
+        action: cover.set_cover_position
         target:
           entity_id: cover.blinds
         data:
@@ -166,20 +166,20 @@ automation:
   ################################################################################
   - id: project_blinds_close
     alias: Project - Blinds - Away
-    trigger:
+    triggers:
       # Close blinds when alarm is armed
-      - platform: state
+      - trigger: state
         entity_id: alarm_control_panel.home
         from: 'disarmed'
         to: 'armed'
       # Close blinds when the house is empty
-      - platform: state
+      - trigger: state
         entity_id: input_boolean.away_mode
         from: 'off'
         to: 'on'
-    action:
+    actions:
       - alias: 'Blinds Close'
-        service: cover.set_cover_position
+        action: cover.set_cover_position
         target:
           entity_id: cover.blinds
         data:

@@ -5,7 +5,7 @@ automation:
   ################################################################################
   - id: routine_notification_trash
     alias: 'Routine - Notification - Trash Pickup'
-    trigger:
+    triggers:
       platform: template
       value_template: >
         {{
@@ -13,8 +13,8 @@ automation:
           (now().time().hour == 19) and
           (now().time().minute == 0)
         }}
-    action:
-      service: notify.notify
+    actions:
+      action: notify.notify
       data:
         message: 'Trash pickup is tomorrow! Pull the bin to the curb!'
 ################################################################################

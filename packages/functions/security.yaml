@@ -52,7 +52,7 @@ input_datetime:
 
 sensor:
   ################################################################################
-  - platform: template
+  - trigger: template
     sensors:
       alarm_auto_arm:
         friendly_name: 'Alarm Auto Arm'
@@ -73,10 +73,10 @@ automation:
   ################################################################################
   - id: function_security_alarm_state_change
     alias: 'Function - Security - Alarm State Change'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: alarm_control_panel.home
-    action:
+    actions:
       - variables:
           color: > # red, green, blue
             {% if trigger.to_state.state == 'armed_away' %}
@@ -93,17 +93,17 @@ automation:
                   {{ trigger.to_state.state in ['armed', 'armed_home', 'armed_away'] }}
             sequence:
               - alias: 'Lock all doors'
-                service: lock.lock
+                action: lock.lock
                 entity_id:
                   - lock.front_door_lock
                   - lock.back_door_lock
               - alias: 'Close all covers'
-                service: cover.close_cover
+                action: cover.close_cover
                 entity_id:
                   - cover.main_garage_door
                   - cover.second_garage_door
               - alias: 'Turn off fireplace'
-                service: switch.turn_off
+                action: switch.turn_off
                 target:
                   entity_id: switch.fireplace
       - alias: 'Get all switch LED indicators'
@@ -119,7 +119,7 @@ automation:
             {{ lights }}
           sequence:
             - alias: 'Set switch indicator to color'
-              service: number.set_value
+              action: number.set_value
               data:
                 entity_id: >
                   {{ repeat.item }}
@@ -129,46 +129,46 @@ automation:
   # Watch the following sensors when the alarm is on to extend the system
   - id: function_security_additional_sensors
     alias: 'Function - Security - Additional Sensors'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id:
           - binary_sensor.garage_side_door
-    condition:
+    conditions:
       - condition: state
         entity_id:
           - alarm_control_panel.home
         state:
           - armed
           - armed_home
-    action:
+    actions:
       - service: alarm_control_panel.alarm_trigger
         entity_id: alarm_control_panel.home
   ################################################################################
   - id: function_security_alarm_auto_arm
     alias: 'Function - Security - Alarm Auto Arm'
-    trigger:
-      - platform: template
+    triggers:
+      - trigger: template
         value_template: >
           {{ states.sensor.time.state == states.sensor.alarm_auto_arm.state }}
-    condition:
+    conditions:
       condition: and
       conditions:
         - condition: state
           entity_id: binary_sensor.worknight
           state: 'on'
-    action:
-      service: alarm_control_panel.alarm_arm_home
+    actions:
+      action: alarm_control_panel.alarm_arm_home
       data:
         entity_id: alarm_control_panel.home
         code: !secret alarm_code
   ################################################################################
   - id: function_security_alarm_auto_disarm
     alias: 'Function - Security - Alarm Auto Disarm'
-    trigger:
-      - platform: template
+    triggers:
+      - trigger: template
         value_template: >
           {{ states.sensor.time.state == states.sensor.alarm_auto_disarm.state }}
-    condition:
+    conditions:
       condition: and
       conditions:
         - condition: state
@@ -180,20 +180,20 @@ automation:
         - condition: state
           entity_id: input_boolean.vacation_mode
           state: 'off'
-    action:
-      service: alarm_control_panel.alarm_disarm
+    actions:
+      action: alarm_control_panel.alarm_disarm
       data:
         entity_id: alarm_control_panel.home
         code: !secret alarm_code
   ################################################################################
   - id: function_security_front_porch_motion
     alias: 'Function - Security - Front Porch Motion'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: binary_sensor.front_porch_motion
         from: 'off'
         to: 'on'
-    action:
+    actions:
       # Send an alert to all users
       - service: notify.notify
         data:

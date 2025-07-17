@@ -5,11 +5,11 @@ automation:
   ################################################################################
   - id: system_notification_update
     alias: 'System - Notification - Update Available'
-    trigger:
+    triggers:
       platform: state
       entity_id: update.home_assistant_core_update
-    action:
-      service: notify.notify
+    actions:
+      action: notify.notify
       data:
         message: 'An update for Home Assistant is available.'
   ################################################################################
@@ -17,10 +17,10 @@ automation:
   ################################################################################
   - id: system_notification_new_device
     alias: 'System - Notification - New Device'
-    trigger:
-      - platform: event
+    triggers:
+      - trigger: event
         event_type: device_tracker_new_device
-    action:
+    actions:
       - service: notify.notify
         data_template:
           message: >
@@ -32,11 +32,11 @@ automation:
   ################################################################################
   - id: system_notification_start
     alias: 'System - Notification - Home Assistant Start'
-    trigger:
+    triggers:
       platform: homeassistant
       event: start
-    action:
-      service: notify.notify
+    actions:
+      action: notify.notify
       data:
         message: 'Home Assistant has Started!'
   ################################################################################
@@ -44,16 +44,16 @@ automation:
   ################################################################################
   - id: system_notification_certification_expiration
     alias: 'System - Notification - Home Assistant Certificate'
-    trigger:
+    triggers:
       platform: template
       value_template: >
         {{ states.sensor.ssl_certificate_expiry.state | int  <= 14 }}
-    condition:
+    conditions:
       condition: template
       value_template: >
         {{ states.sensor.ssl_certificate_expiry.state != "unknown" }}
-    action:
-      service: notify.notify
+    actions:
+      action: notify.notify
       data_template:
         message: >
           Home Assistant's certificate expires in {{ states.sensor.ssl_certificate_expiry.state }} days.
