@@ -21,3 +21,8 @@ rm -rfv pirate-weather-ha
 git clone https://github.com/andrew-codechimp/HA-Battery-Notes
 mv HA-Battery-Notes/custom_components/battery_notes battery_notes
 rm -rfv HA-Battery-Notes
+
+# ban_allowlist
+git clone https://github.com/palfrey/ban_allowlist
+mv ban_allowlist/custom_components/ban_allowlist ban_allowlist
+rm -rfv ban_allowlist
