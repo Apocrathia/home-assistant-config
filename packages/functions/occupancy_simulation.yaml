@@ -10,15 +10,15 @@ automation:
   ################################################################################
   - id: function_occupancy_simulation_start
     alias: Function - Occupancy Simulation - Start
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: input_boolean.away_mode
         from: 'off'
         to: 'on`'
-      - platform: sun
+      - trigger: sun
         event: sunset
         offset: '00:00:00'
-    condition:
+    conditions:
       - condition: and
         conditions:
           - alias: 'Away Mode On'
@@ -29,9 +29,9 @@ automation:
             condition: state
             entity_id: sun.sun
             state: 'below_horizon'
-    action:
+    actions:
       - alias: 'Run Occupancy Simulation'
-        service: script.function_occupancy_simulation_main
+        action: script.function_occupancy_simulation_main
 ################################################################################
 
 # Script
@@ -56,7 +56,7 @@ script:
                 {{ (is_state('input_boolean.away_mode','off')
                     or is_state('sun.sun','above_horizon')) }}
       - alias: 'Reset all lights'
-        service: light.turn_off
+        action: light.turn_off
         target:
           entity_id: light.away_lights
 ################################################################################

@@ -5,10 +5,10 @@ automation:
   # Turn on the living room light when it gets dark
   - id: area_living_room_ceiling_fan_light_dusk
     alias: 'Area - Living Room - Ceiling Fan Light (Dusk)'
-    trigger:
-      - platform: sun
+    triggers:
+      - trigger: sun
         event: sunset
-    condition:
+    conditions:
       - condition: and
         conditions:
           - condition: state
@@ -20,8 +20,8 @@ automation:
           - condition: state
             entity_id: light.living_room_ceiling_fan
             state: 'off'
-    action:
-      - service: light.turn_on
+    actions:
+      - action: light.turn_on
         data:
           entity_id: light.living_room_ceiling_fan
   ################################################################################
@@ -29,12 +29,12 @@ automation:
   # This is so that there is a clear indication that the alarm is on
   - id: area_living_room_ceiling_fan_light_night
     alias: 'Area - Living Room - Ceiling Fan Light (Night)'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id:
           - alarm_control_panel.home
         to: 'armed_home'
-    condition:
+    conditions:
       - condition: and
         conditions:
           - condition: state
@@ -43,11 +43,11 @@ automation:
           - condition: state
             entity_id: light.living_room_ceiling_fan
             state: 'on'
-    action:
+    actions:
       # Wait a few minutes before shutting the light off in case we're still up.
       - delay:
           minutes: 5
-      - service: light.turn_off
+      - action: light.turn_off
         data:
           entity_id: light.living_room_ceiling_fan
   ################################################################################
@@ -56,20 +56,20 @@ automation:
   # to allow the fireplace to cool down.
   - id: area_living_room_fireplace_blower
     alias: 'Area - Living Room - Fireplace Blower'
-    trigger:
+    triggers:
       # Specifying specific state changes from on <-> off because the shelly
       # that's installed here keeps going 'unavailable' and triggering this.
-      - platform: state
+      - trigger: state
         entity_id:
           - switch.fireplace
         to: 'on'
         from: 'off'
-      - platform: state
+      - trigger: state
         entity_id:
           - switch.fireplace
         to: 'off'
         from: 'on'
-    action:
+    actions:
       - choose:
           - conditions:
               - condition: state
@@ -77,7 +77,7 @@ automation:
                   - switch.fireplace
                 state: 'on'
             sequence:
-              - service: switch.turn_on
+              - action: switch.turn_on
                 entity_id: switch.fireplace_blower
           - conditions:
               - condition: state
@@ -90,7 +90,7 @@ automation:
               - condition: state
                 entity_id: switch.fireplace
                 state: 'off'
-              - service: switch.turn_off
+              - action: switch.turn_off
                 entity_id: switch.fireplace_blower
   # In case anyone is looking at this and is curious how I set this up:
   # The fireplace is a pretty typical millivolt valve being controlled by a Shelly
@@ -99,20 +99,20 @@ automation:
   # Toggle Hyperion power with TV state
   - id: area_living_room_hyperion_power
     alias: 'Area - Living Room - Hyperion Power'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: media_player.living_room_tv
         to:
           - 'on'
           - 'off'
-    action:
+    actions:
       - choose:
           - conditions:
               - condition: state
                 entity_id: media_player.living_room_tv
                 state: 'on'
             sequence:
-              - service: switch.turn_on
+              - action: switch.turn_on
                 target:
                   entity_id: group.hyperion_led_outputs
           - conditions:
@@ -120,6 +120,6 @@ automation:
                 entity_id: media_player.living_room_tv
                 state: 'off'
             sequence:
-              - service: switch.turn_off
+              - action: switch.turn_off
                 target:
                   entity_id: group.hyperion_led_outputs

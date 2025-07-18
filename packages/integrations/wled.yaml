@@ -4,11 +4,11 @@
 automation:
   - alias: 'Integration - WLED - Restart'
     description: 'Automatically restarts all WLED devices every 4 hours to prevent any potential issues'
-    trigger:
-      - platform: time_pattern
+    triggers:
+      - trigger: time_pattern
         # Run every 4 hours
         hours: '/4'
-    action:
+    actions:
       - service: button.press
         target:
           entity_id: >
