@@ -52,7 +52,7 @@ input_datetime:
 
 sensor:
   ################################################################################
-  - trigger: template
+  - platform: template
     sensors:
       alarm_auto_arm:
         friendly_name: 'Alarm Auto Arm'
@@ -147,7 +147,7 @@ automation:
   - id: function_security_alarm_auto_arm
     alias: 'Function - Security - Alarm Auto Arm'
     triggers:
-      - trigger: template
+      - platform: template
         value_template: >
           {{ states.sensor.time.state == states.sensor.alarm_auto_arm.state }}
     conditions:
@@ -165,7 +165,7 @@ automation:
   - id: function_security_alarm_auto_disarm
     alias: 'Function - Security - Alarm Auto Disarm'
     triggers:
-      - trigger: template
+      - platform: template
         value_template: >
           {{ states.sensor.time.state == states.sensor.alarm_auto_disarm.state }}
     conditions:

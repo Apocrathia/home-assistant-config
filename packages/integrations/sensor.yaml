@@ -8,7 +8,7 @@ sensor:
   # - platform: moon
 
   # Time & Date
-  - trigger: time_date
+  - platform: time_date
     display_options:
       - 'time'
       - 'date'
@@ -20,7 +20,7 @@ sensor:
   #     - summary
 
   # Pirate Weather
-  - trigger: pirateweather
+  - platform: pirateweather
     api_key: !secret pirateweather_api_key
     # Use a prime number to simulate randomness
     scan_interval: '00:17:17'
@@ -51,7 +51,7 @@ sensor:
   #     - NineFoot3
 
   # Template
-  - trigger: template
+  - platform: template
     sensors:
       serenity:
         friendly_name: 'Serenity'

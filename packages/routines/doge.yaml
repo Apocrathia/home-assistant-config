@@ -45,7 +45,7 @@ input_number:
 
 ### Sensors ###
 sensor:
-  - trigger: template
+  - platform: template
     sensors:
       # Breakfast
       doge_meal_breakfast:
@@ -133,7 +133,7 @@ automation:
   - id: routine_doge_breakfast
     alias: Routine - Doge - Breakfast
     triggers:
-      - trigger: template
+      - platform: template
         value_template: >
           {{ (states.sensor.time.state
             == states.sensor.doge_meal_breakfast.state) }}
@@ -150,7 +150,7 @@ automation:
   - id: routine_doge_breakfast_upcoming
     alias: Routine - Doge - Breakfast (Upcoming)
     triggers:
-      - trigger: template
+      - platform: template
         value_template: >
           {{ (states.sensor.time.state
             == states.sensor.doge_meal_breakfast_advance.state) }}
@@ -167,7 +167,7 @@ automation:
   - id: routine_doge_breakfast_relief
     alias: Routine - Doge - Breakfast (Relief)
     triggers:
-      - trigger: template
+      - platform: template
         value_template: >
           {{ (states.sensor.time.state
             == states.sensor.doge_meal_breakfast_relief.state) }}
@@ -184,7 +184,7 @@ automation:
   - id: routine_doge_lunch
     alias: Routine - Doge - Lunch
     triggers:
-      - trigger: template
+      - platform: template
         value_template: >
           {{ (states.sensor.time.state
             == states.sensor.doge_meal_lunch.state) }}
@@ -201,7 +201,7 @@ automation:
   - id: routine_doge_lunch_upcoming
     alias: Routine - Doge - Lunch (Upcoming)
     triggers:
-      - trigger: template
+      - platform: template
         value_template: >
           {{ (states.sensor.time.state
             == states.sensor.doge_meal_advance.state) }}
@@ -218,7 +218,7 @@ automation:
   - id: routine_doge_lunch_relief
     alias: Routine - Doge - Lunch (Relief)
     triggers:
-      - trigger: template
+      - platform: template
         value_template: >
           {{ (states.sensor.time.state
             == states.sensor.doge_meal_lunch_relief.state) }}
@@ -235,7 +235,7 @@ automation:
   - id: routine_doge_dinner
     alias: Routine - Doge - Dinner
     triggers:
-      - trigger: template
+      - platform: template
         value_template: >
           {{ (states.sensor.time.state
             == states.sensor.doge_meal_dinner.state) }}
@@ -252,7 +252,7 @@ automation:
   - id: routine_doge_dinner_upcoming
     alias: Routine - Doge - Dinner (Upcoming)
     triggers:
-      - trigger: template
+      - platform: template
         value_template: >
           {{ (states.sensor.time.state
             == states.sensor.doge_meal_dinner_advance.state) }}
@@ -269,7 +269,7 @@ automation:
   - id: routine_doge_dinner_relief
     alias: Routine - Doge - Dinner (Relief)
     triggers:
-      - trigger: template
+      - platform: template
         value_template: >
           {{ (states.sensor.time.state
             == states.sensor.doge_meal_dinner_relief.state) }}

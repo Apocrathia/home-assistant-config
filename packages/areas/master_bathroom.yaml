@@ -41,7 +41,7 @@ input_number:
     unit_of_measurement: Percent
 
 sensor:
-  - trigger: group
+  - platform: group
     name: Master Bathroom Humidity
     unique_id: master_bathroom_humidity
     type: mean
@@ -51,7 +51,7 @@ sensor:
       - sensor.master_bathroom_climate_sensor_humidity
 
 binary_sensor:
-  - trigger: template
+  - platform: template
     sensors:
       master_bathroom_humidity_high:
         friendly_name: 'Master Bathroom Humidity High'

@@ -28,7 +28,7 @@ automation:
         event_type: call_service
         event_data:
           domain: cover
-          action: open_cover
+          service: open_cover
           service_data:
             entity_id:
               - cover.main_garage_door

@@ -14,7 +14,7 @@ input_number:
 
 binary_sensor:
   ################################################################################
-  - trigger: template
+  - platform: template
     sensors:
       dishwasher_status:
         friendly_name: 'Dishwasher Status'

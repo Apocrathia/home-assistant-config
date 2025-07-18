@@ -36,7 +36,7 @@ input_select:
 
 ### Sensors ###
 sensor:
-  - trigger: template
+  - platform: template
     sensors:
       wakeup_time:
         friendly_name: Wakeup Time
@@ -64,7 +64,7 @@ automation:
   - id: function_wakeup_lights
     alias: 'Function - Wakeup - Lights'
     triggers:
-      - trigger: template
+      - platform: template
         value_template: >
           {{ (states.sensor.time.state ==
               states.sensor.wakeup_alarm_start_time.state) }}
@@ -119,7 +119,7 @@ automation:
   - id: function_wakeup_apple_tv
     alias: 'Function - Wakeup - Apple TV'
     triggers:
-      - trigger: template
+      - platform: template
         value_template: >
           {{ (states.sensor.time.state ==
               states.sensor.wakeup_alarm_midpoint.state) }}

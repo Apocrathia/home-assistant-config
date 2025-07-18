@@ -37,7 +37,7 @@ input_number:
 
 sensor:
   ################################################################################
-  - trigger: template
+  - platform: template
     sensors:
       bedtime:
         friendly_name: Bedtime
@@ -139,7 +139,7 @@ automation:
   - id: routine_night_bedtime
     alias: 'Routine - Night - Bedtime'
     triggers:
-      - trigger: template
+      - platform: template
         value_template: >
           {{ states.sensor.time.state == states.sensor.nighttime_start.state }}
     conditions:
@@ -157,7 +157,7 @@ automation:
   - id: routine_night_last_call
     alias: 'Routine - Night - Last Call'
     triggers:
-      - trigger: template
+      - platform: template
         value_template: >
           {{ states.sensor.time.state == states.sensor.last_call.state }}
     conditions:

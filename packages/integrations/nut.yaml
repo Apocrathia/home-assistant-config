@@ -15,7 +15,7 @@ template:
 
 # Use a Riemann sum integral to derive the total consumption
 sensor:
-  - trigger: integration
+  - platform: integration
     unique_id: living_room_ups_consumption
     name: Living Room UPS Consumption
     source: sensor.living_room_ups_power

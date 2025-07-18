@@ -18,7 +18,7 @@ input_number:
     unit_of_measurement: ppm
 
 binary_sensor:
-  - trigger: template
+  - platform: template
     sensors:
       downstairs_hvac_uv:
         friendly_name: 'Downstairs HVAC UV'

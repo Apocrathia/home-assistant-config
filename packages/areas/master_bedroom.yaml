@@ -11,7 +11,7 @@ input_number:
 
 # Template Sensors
 binary_sensor:
-  - trigger: template
+  - platform: template
     sensors:
       master_bedroom_humidifer_low:
         friendly_name: 'Master Bedroom Humidier Low'

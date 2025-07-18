@@ -1,7 +1,7 @@
 ### Energy ###
 ---
 switch:
-  - trigger: group
+  - platform: group
     name: Energy - Heavy Consumers
     entities:
       - switch.dishwasher_outlet
@@ -16,7 +16,7 @@ input_number:
     unit_of_measurement: W
 
 binary_sensor:
-  - trigger: template
+  - platform: template
     sensors:
       # This sensor will turn on when the solar array is generating >= 1kw
       solar_production:

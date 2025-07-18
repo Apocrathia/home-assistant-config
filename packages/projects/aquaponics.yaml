@@ -28,7 +28,7 @@ automation:
     triggers:
       - trigger: time_pattern
         minutes: '0'
-      - trigger: template
+      - platform: template
         value_template: >
           {{ now().minute % states('input_number.aquaponics_cycle_interval') | int == 0 }}
     actions:

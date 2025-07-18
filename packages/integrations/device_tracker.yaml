@@ -12,7 +12,7 @@
 #       - 2016 Subaru Crosstrek
 
 device_tracker:
-  - trigger: aprs
+  - platform: aprs
     username: !secret aprs_username
     callsigns:
       - !secret aprs_callsign_ian_ht

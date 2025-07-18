@@ -33,7 +33,7 @@ input_number:
 
 sensor:
   ################################################################################
-  - trigger: template
+  - platform: template
     sensors:
       morning:
         friendly_name: Morning

@@ -3,14 +3,14 @@
 
 light:
   ################################################################################
-  - trigger: group
+  - platform: group
     name: Office Stream Lights
     unique_id: office_stream_lights
     entities:
       - light.office_panel_lights_south
       - light.office_panel_lights_west
       - light.office_workbench_lights
-  - trigger: group
+  - platform: group
     name: Office Camera Lights
     unique_id: office_camera_lights
     entities:
