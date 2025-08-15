@@ -36,6 +36,41 @@ alert:
 # Automations
 automation:
   ################################################################################
+  - id: area_master_bedroom_bed_sensor_night_lights
+    alias: Area - Master Bedroom - Bed Sensor Night Lights
+    description: Turn on under-bed lights when getting out of bed at night
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.bed_presence_2bd444_bed_occupied_either
+    condition:
+      - alias: 'Sun is down (night time)'
+        condition: sun
+        after: sunset
+        before: sunrise
+    action:
+      - alias: 'Status handler'
+        choose:
+          - conditions:
+              - alias: 'Got out of bed'
+                condition: state
+                entity_id: binary_sensor.bed_presence_2bd444_bed_occupied_either
+                state: 'off'
+            sequence:
+              - alias: 'Turn on under-bed safety lights'
+                service: switch.turn_on
+                target:
+                  entity_id: switch.ians_bed_safety_lights
+          - conditions:
+              - alias: 'Got back in bed'
+                condition: state
+                entity_id: binary_sensor.bed_presence_2bd444_bed_occupied_either
+                state: 'on'
+            sequence:
+              - alias: 'Turn off under-bed safety lights'
+                service: switch.turn_off
+                target:
+                  entity_id: switch.ians_bed_safety_lights
+  ################################################################################
   - id: area_master_bedroom_closet_motion
     alias: Area - Master Bedroom - Closet Motion
     trigger:
