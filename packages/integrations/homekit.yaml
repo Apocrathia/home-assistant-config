@@ -5,9 +5,6 @@
 homekit:
   ################################################################################
   - name: Home Assistant Bridge
-    # Deprecated as on 2021.4.0
-    # https://www.home-assistant.io/blog/2021/04/07/release-20214/#breaking-changes
-    # auto_start: true
     mode: bridge
     pincode: !secret homekit_pin
     port: 51827
@@ -76,4 +73,53 @@ homekit:
     filter:
       include_entities:
         - cover.second_garage_door
+  ################################################################################
+  - name: Front Door Camera
+    mode: accessory
+    pincode: !secret homekit_pin
+    port: 51833
+    filter:
+      include_entities:
+        - camera.front_door_camera_high_insecure
+        - binary_sensor.front_door_camera_doorbell
+  ################################################################################
+  - name: Dining Room Camera
+    mode: accessory
+    pincode: !secret homekit_pin
+    port: 51834
+    filter:
+      include_entities:
+        - camera.dining_room_camera_high_insecure
+  ################################################################################
+  - name: Garage Camera
+    mode: accessory
+    pincode: !secret homekit_pin
+    port: 51835
+    filter:
+      include_entities:
+        - camera.garage_camera_high_insecure
+  ################################################################################
+  - name: Kitchen Camera
+    mode: accessory
+    pincode: !secret homekit_pin
+    port: 51836
+    filter:
+      include_entities:
+        - camera.kitchen_camera_high_insecure
+  ################################################################################
+  - name: Office Camera
+    mode: accessory
+    pincode: !secret homekit_pin
+    port: 51837
+    filter:
+      include_entities:
+        - camera.office_camera_high_insecure
+  ################################################################################
+  - name: Living Room Camera
+    mode: accessory
+    pincode: !secret homekit_pin
+    port: 51838
+    filter:
+      include_entities:
+        - camera.living_room_camera_high_insecure
         ################################################################################
