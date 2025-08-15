@@ -149,6 +149,22 @@ automation:
           entity_id:
             - vacuum.downstairs
             - vacuum.upstairs
+  ################################################################################
+  - id: function_wakeup_bed_reset
+    alias: 'Function - Wakeup - Bed Reset'
+    trigger:
+      - platform: time
+        at: input_datetime.wakeup_time
+    condition:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.workday
+          state: 'on'
+    action:
+      - service: button.press
+        target:
+          entity_id: button.ians_bed_preset_flat
 ################################################################################
 
 script:
@@ -164,7 +180,6 @@ script:
             - menu
       - delay:
           seconds: 15
-      # Go to the home menu
       - service: remote.send_command
         data:
           entity_id: remote.master_bedroom_apple_tv
@@ -189,32 +204,27 @@ script:
                 entity_id: input_select.alarm_type
                 state: 'Plex'
             sequence:
-              # Open Plex
-              - service: media_player.select_source
+              - alias: 'Open Plex'
+                service: media_player.select_source
                 data:
                   source: Plex
                 target:
                   entity_id: media_player.master_bedroom_apple_tv
               - delay:
-                  seconds: 15
-              # Go to alarm clock playlist and shuffle
-              - service: remote.send_command
+                  seconds: 10
+              - alias: 'Scan for Plex clients'
+                service: button.press
+                target:
+                  entity_id: button.scan_clients_apocrathia
+              - delay:
+                  seconds: 2
+              - alias: 'Shuffle Alarm Clock Playlist'
+                service: media_player.play_media
+                target:
+                  entity_id: media_player.plex_apple_tv_master_bedroom
                 data:
-                  entity_id: remote.master_bedroom_apple_tv
-                  delay_secs: 1
-                  command:
-                    - left
-                    - down
-                    - down
-                    - down
-                    - down
-                    - down
-                    - down
-                    - select
-                    - select
-                    - up
-                    - right
-                    - select
+                  media_content_type: playlist
+                  media_content_id: '{ "playlist_name": "Alarm Clock", "shuffle": "1" }'
           ############
           ### News ###
           ############
