@@ -217,13 +217,17 @@ script:
                 target:
                   entity_id: button.scan_clients_apocrathia
               - delay:
-                  seconds: 2
-              - alias: 'Shuffle Alarm Clock Playlist'
+                  seconds: 5
+              - alias: 'Wait for Plex client to be available'
+                wait_template: "{{ not is_state('media_player.plex_apple_tv_master_bedroom', 'unavailable') }}"
+                timeout:
+                  seconds: 30
+              - alias: 'Open Plex with Alarm Clock Playlist'
                 service: media_player.play_media
                 target:
                   entity_id: media_player.plex_apple_tv_master_bedroom
                 data:
-                  media_content_type: playlist
+                  media_content_type: 'PLAYLIST'
                   media_content_id: '{ "playlist_name": "Alarm Clock", "shuffle": "1" }'
           ############
           ### News ###
