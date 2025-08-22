@@ -6,14 +6,14 @@ automation:
   - id: area_downstairs_bathroom_fan
     alias: Area - Downstairs Bathroom - Fan
     description: Turn on bathroom fan when motion is detected, turn off when no motion is detected
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: binary_sensor.downstairs_bathroom_motion_occupancy
-    condition:
+    conditions:
       - condition: state
         entity_id: input_boolean.away_mode
         state: 'off'
-    action:
+    actions:
       - alias: State Handler
         choose:
           - conditions:
@@ -23,7 +23,7 @@ automation:
                 state: 'on'
             sequence:
               - alias: Turn on the fan
-                service: switch.turn_on
+                action: switch.turn_on
                 target:
                   entity_id: switch.downstairs_bathroom_fan
           - conditions:
@@ -33,7 +33,7 @@ automation:
                 state: 'off'
             sequence:
               - alias: Turn off the fan
-                service: switch.turn_off
+                action: switch.turn_off
                 target:
                   entity_id: switch.downstairs_bathroom_fan
 ################################################################################

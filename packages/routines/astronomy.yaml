@@ -6,12 +6,12 @@ automation:
   ## Send a notification on new moon nights
   - id: routine_astronomy_dark_sky
     alias: 'Routine - Astronomy - Dark Sky'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: sun.sun
         from: 'above_horizon'
         to: 'below_horizon'
-    condition:
+    conditions:
       condition: and
       conditions:
         - condition: state
@@ -20,7 +20,7 @@ automation:
         - condition: state
           entity_id: sensor.pirate_weather_summary
           state: 'Clear'
-    action:
+    actions:
       - service: notify.notify
         data:
           message: 'New moon tonight.'
@@ -28,12 +28,12 @@ automation:
   ## Send a notification on full moon nights
   - id: routine_astronomy_full moon
     alias: 'Routine - Astronomy - Full Moon'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: sun.sun
         from: 'above_horizon'
         to: 'below_horizon'
-    condition:
+    conditions:
       condition: and
       conditions:
         - condition: state
@@ -42,7 +42,7 @@ automation:
         - condition: state
           entity_id: sensor.pirate_weather_summary
           state: 'Clear'
-    action:
+    actions:
       - service: notify.notify
         data:
           message: 'Full moon tonight.'
