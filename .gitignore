@@ -29,6 +29,7 @@ core
 image
 www
 .HA_VERSION
+.ha_run.locl
 
 # Built-in configuration ignores
 automations.yaml
