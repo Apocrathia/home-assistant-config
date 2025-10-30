@@ -14,6 +14,7 @@
 
 [![Discord][discord-shield]][discord]
 [![Community Forum][forum-shield]][forum]
+[![Ask DeepWiki][deepwiki-shield]][deepwiki]
 
 <a href="https://www.buymeacoffee.com/apocrathia" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/arial-violet.png" alt="Buy Me A Coffee" style="height: 30px !important;width: 117px !important;" ></a>
 
@@ -91,3 +92,5 @@ This configuration controls several key features in my smart home:
 [stars-shield]: https://img.shields.io/github/stars/Apocrathia/home-assistant-config.svg?style=social&label=Stars
 [forks-shield]: https://img.shields.io/github/forks/Apocrathia/home-assistant-config.svg?style=social&label=Forks
 [watchers-shield]: https://img.shields.io/github/watchers/Apocrathia/home-assistant-config.svg?style=social&label=Watchers
+[deepwiki-shield]: https://deepwiki.com/badge.svg
+[deepwiki]: https://deepwiki.com/Apocrathia/home-assistant-config
