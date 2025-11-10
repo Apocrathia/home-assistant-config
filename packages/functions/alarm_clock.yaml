@@ -215,20 +215,39 @@ script:
               - alias: 'Scan for Plex clients'
                 service: button.press
                 target:
-                  entity_id: button.scan_clients_apocrathia
+                  entity_id: button.apocrathia_scan_clients
               - delay:
                   seconds: 5
               - alias: 'Wait for Plex client to be available'
-                wait_template: "{{ not is_state('media_player.plex_apple_tv_master_bedroom', 'unavailable') }}"
+                wait_template: "{{ not is_state('media_player.plex_master_bedroom_apple_tv', 'unavailable') }}"
                 timeout:
                   seconds: 30
-              - alias: 'Open Plex with Alarm Clock Playlist'
-                service: media_player.play_media
-                target:
-                  entity_id: media_player.plex_apple_tv_master_bedroom
+              - alias: 'Navigate to Plex Live TV'
+                # This is a bit of a hack, but it works.
+                service: remote.send_command
                 data:
-                  media_content_type: 'PLAYLIST'
-                  media_content_id: '{ "playlist_name": "Alarm Clock", "shuffle": "1" }'
+                  entity_id: remote.master_bedroom_apple_tv
+                  command:
+                    # Navigate to Live TV section in Plex app
+                    - left
+                    - down
+                    - down
+                    - down
+                    - down
+                    - down
+                    - down
+                    - down
+                    - down
+                    - select
+              - delay:
+                  seconds: 5
+              - alias: 'Select Live TV Channel'
+                service: remote.send_command
+                data:
+                  entity_id: remote.master_bedroom_apple_tv
+                  command:
+                    # Navigate to specific channel (adjust based on channel position)
+                    - select
           ############
           ### News ###
           ############
