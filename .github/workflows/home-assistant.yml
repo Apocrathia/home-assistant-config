@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⤵️ Check out configuration from GitHub
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.1
       - name: 🚀 Run yamllint
         uses: frenck/action-yamllint@v1.5.0
 
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⤵️ Check out configuration from GitHub
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.1
       - name: Running Remark lint
         uses: 'docker://pipelinecomponents/remark-lint:latest'
         continue-on-error: true
@@ -38,7 +38,7 @@ jobs:
         version: ['stable', 'beta', 'dev']
     steps:
       - name: ⤵️ Check out configuration from GitHub
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.1
       - name: Copy stub files into configuration folder
         run: cp -R ./.stubs/* .
       - name: Install custom components
@@ -55,7 +55,7 @@ jobs:
     needs: [yamllint]
     steps:
       - name: ⤵️ Check out configuration from GitHub
-        uses: actions/checkout@v5.0.0
+        uses: actions/checkout@v6.0.1
       - name: Set up Python 3.13
         uses: actions/setup-python@v5
         with:
