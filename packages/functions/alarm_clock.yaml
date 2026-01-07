@@ -222,6 +222,8 @@ script:
                 wait_template: "{{ not is_state('media_player.plex_master_bedroom_apple_tv', 'unavailable') }}"
                 timeout:
                   seconds: 30
+              - delay:
+                  seconds: 10
               - alias: 'Navigate to Plex Live TV'
                 # This is a bit of a hack, but it works.
                 service: remote.send_command
@@ -236,11 +238,9 @@ script:
                     - down
                     - down
                     - down
-                    - down
-                    - down
                     - select
               - delay:
-                  seconds: 5
+                  seconds: 15
               - alias: 'Select Live TV Channel'
                 service: remote.send_command
                 data:
