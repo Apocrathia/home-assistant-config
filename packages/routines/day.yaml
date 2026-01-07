@@ -90,9 +90,9 @@ automation:
       - service: light.turn_off
         data:
           entity_id: light.morning_lights
-      - service: light.turn_off
+      - service: switch.turn_off
         data:
-          entity_id: light.ians_bed_safety_lights
+          entity_id: switch.ians_bed_safety_lights
   ################################################################################
   - id: routine_day_night_lights
     alias: 'Routine - Day - Night Lights'
@@ -125,7 +125,9 @@ automation:
             - light.indoor_lights
             - light.outdoor_lights
             - light.back_yard_string_lights
-            - light.ians_bed_safety_lights
+      - service: switch.turn_off
+        data:
+          entity_id: switch.ians_bed_safety_lights
 ################################################################################
 
 ################################################################################
