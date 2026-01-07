@@ -33,24 +33,24 @@ automation:
     description: 'Turns the heater on or off based on the temperature setpoint'
     trigger:
       - platform: state
-        entity_id: sensor.mycology_climate_temperature
+        entity_id: sensor.mycology_air_quality_sensor_temperature
       - platform: state
         entity_id: input_number.mycology_temperature_threshold
     condition:
       - condition: or
         conditions:
           - condition: numeric_state
-            entity_id: sensor.mycology_climate_temperature
+            entity_id: sensor.mycology_air_quality_sensor_temperature
             below: input_number.mycology_temperature_threshold
           - condition: numeric_state
-            entity_id: sensor.mycology_climate_temperature
+            entity_id: sensor.mycology_air_quality_sensor_temperature
             above: input_number.mycology_temperature_threshold
     action:
       - choose:
           - conditions:
               - alias: 'Temperature is below threshold'
                 condition: numeric_state
-                entity_id: sensor.mycology_climate_temperature
+                entity_id: sensor.mycology_air_quality_sensor_temperature
                 below: input_number.mycology_temperature_threshold
             sequence:
               - service: switch.turn_on
@@ -58,7 +58,7 @@ automation:
           - conditions:
               - alias: 'Temperature is above threshold'
                 condition: numeric_state
-                entity_id: sensor.mycology_climate_temperature
+                entity_id: sensor.mycology_air_quality_sensor_temperature
                 above: input_number.mycology_temperature_threshold
             sequence:
               - service: switch.turn_off
@@ -69,24 +69,24 @@ automation:
     description: 'Turns the humidifier on or off based on the humidity setpoint'
     trigger:
       - platform: state
-        entity_id: sensor.mycology_climate_humidity
+        entity_id: sensor.mycology_air_quality_sensor_humidity
       - platform: state
         entity_id: input_number.mycology_humidity_threshold
     condition:
       - condition: or
         conditions:
           - condition: numeric_state
-            entity_id: sensor.mycology_climate_humidity
+            entity_id: sensor.mycology_air_quality_sensor_humidity
             above: input_number.mycology_humidity_threshold
           - condition: numeric_state
-            entity_id: sensor.mycology_climate_humidity
+            entity_id: sensor.mycology_air_quality_sensor_humidity
             below: input_number.mycology_humidity_threshold
     action:
       - choose:
           - conditions:
               - alias: 'Humidity is below threshold'
                 condition: numeric_state
-                entity_id: sensor.mycology_climate_humidity
+                entity_id: sensor.mycology_air_quality_sensor_humidity
                 below: input_number.mycology_humidity_threshold
             sequence:
               - service: switch.turn_on
@@ -94,7 +94,7 @@ automation:
           - conditions:
               - alias: 'Humidity is above threshold'
                 condition: numeric_state
-                entity_id: sensor.mycology_climate_humidity
+                entity_id: sensor.mycology_air_quality_sensor_humidity
                 above: input_number.mycology_humidity_threshold
             sequence:
               - service: switch.turn_off
@@ -155,7 +155,7 @@ automation:
                 target:
                   entity_id: input_number.mycology_humidity_threshold
                 data:
-                  value: 90
+                  value: 75
               - alias: 'Enable lighting cycle'
                 service: automation.turn_on
                 target:
@@ -177,7 +177,7 @@ automation:
                 target:
                   entity_id: input_number.mycology_humidity_threshold
                 data:
-                  value: 80
+                  value: 50
               - alias: 'Disable lighting cycle'
                 service: automation.turn_off
                 target:
