@@ -2,22 +2,11 @@
 ### Sensors ###
 
 sensor:
-  # Weather prediction
-  #  - platform: yr
-
-  # - platform: moon
-
   # Time & Date
   - platform: time_date
     display_options:
       - 'time'
       - 'date'
-
-  # Weather forecast
-  # - platform: darksky
-  #   api_key: !secret darksky_api_key
-  #   monitored_conditions:
-  #     - summary
 
   # Pirate Weather
   - platform: pirateweather
@@ -35,25 +24,9 @@ sensor:
       - precip_intensity
       - wind_speed
 
-  # Certification Expiration
-  # - platform: cert_expiry
-  #   host: !secret hass_url
-  #   port: !secret hass_port
-
-  # Twitch
-  # - platform: twitch
-  #   client_id: !secret twitch_client_id
-  #   client_secret: !secret twitch_client_secret
-  #   token: !secret twitch_client_token
-  #   channels:
-  #     - Apocrathia
-  #     - PB_Undesirables
-  #     - NineFoot3
-
-  # Template
-  - platform: template
-    sensors:
-      serenity:
-        friendly_name: 'Serenity'
-        value_template: >-
-          Catting
+# Template
+template:
+  - sensor:
+      - default_entity_id: sensor.serenity
+        name: Serenity
+        state: Catting

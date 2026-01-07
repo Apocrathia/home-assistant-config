@@ -12,13 +12,12 @@ input_number:
     unit_of_measurement: Watts
 ################################################################################
 
-binary_sensor:
+template:
   ################################################################################
-  - platform: template
-    sensors:
-      washing_machine_status:
-        friendly_name: 'Washing Machine Status'
-        value_template: >
+  - binary_sensor:
+      - default_entity_id: binary_sensor.washing_machine_status
+        name: Washing Machine Status
+        state: >
           {{ ( float(states.input_number.washing_machine_energy_threshold.state)
             < float(states.sensor.laundry_room_outlet_power.state) ) }}
         delay_off:

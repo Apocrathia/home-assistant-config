@@ -17,37 +17,36 @@ input_number:
     step: 100
     unit_of_measurement: ppm
 
-binary_sensor:
-  - platform: template
-    sensors:
-      downstairs_hvac_uv:
-        friendly_name: 'Downstairs HVAC UV'
-        value_template: >
+template:
+  - binary_sensor:
+      - default_entity_id: binary_sensor.downstairs_hvac_uv
+        name: Downstairs HVAC UV
+        state: >
           {% if states.sensor.downstairs_hvac_uv_power.state == 'unavailable' %}
             off
           {% else %}
-            {{ ( float(states.sensor.downstairs_hvac_uv_power.state)
-              > float(states.input_number.hvac_uv_power_threshold.state) ) }}
+            {{ ( float(states.sensor.downstairs_hvac_uv_power.state) >
+                float(states.input_number.hvac_uv_power_threshold.state) ) }}
           {% endif %}
-      upstairs_hvac_uv:
-        friendly_name: 'Upstairs HVAC UV'
-        value_template: >
+      - default_entity_id: binary_sensor.upstairs_hvac_uv
+        name: Upstairs HVAC UV
+        state: >
           {% if states.sensor.upstairs_hvac_uv_power.state == 'unavailable' %}
             off
           {% else %}
-            {{ ( float(states.sensor.upstairs_hvac_uv_power.state)
-              > float(states.input_number.hvac_uv_power_threshold.state) ) }}
+            {{ ( float(states.sensor.upstairs_hvac_uv_power.state) >
+                float(states.input_number.hvac_uv_power_threshold.state) ) }}
           {% endif %}
-      downstairs_co2_high:
-        friendly_name: 'Downstairs CO2 High'
-        value_template: >
-          {{ ( float(states.sensor.downstairs_air_quality_sensor_co2.state)
-            > float(states.input_number.hvac_co2_threshold.state) ) }}
-      upstairs_co2_high:
-        friendly_name: 'Upstairs CO2 High'
-        value_template: >
-          {{ ( float(states.sensor.upstairs_air_quality_sensor_co2.state)
-            > float(states.input_number.hvac_co2_threshold.state) ) }}
+      - default_entity_id: binary_sensor.downstairs_co2_high
+        name: Downstairs CO2 High
+        state: >
+          {{ ( float(states.sensor.downstairs_air_quality_sensor_co2.state) >
+              float(states.input_number.hvac_co2_threshold.state) ) }}
+      - default_entity_id: binary_sensor.upstairs_co2_high
+        name: Upstairs CO2 High
+        state: >
+          {{ ( float(states.sensor.upstairs_air_quality_sensor_co2.state) >
+              float(states.input_number.hvac_co2_threshold.state) ) }}
 
 automation:
   #############################################################################

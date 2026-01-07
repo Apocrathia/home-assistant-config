@@ -50,22 +50,19 @@ input_datetime:
 #             behavior: 'default'
 ################################################################################
 
-sensor:
+template:
   ################################################################################
-  - platform: template
-    sensors:
-      alarm_auto_arm:
-        friendly_name: 'Alarm Auto Arm'
-        icon_template: mdi:clock-outline
-        # entity_id: input_datetime.alarm_auto_arm
-        value_template: >
+  - sensor:
+      - default_entity_id: sensor.alarm_auto_arm
+        name: Alarm Auto Arm
+        icon: mdi:clock-outline
+        state: >
           {{ (states.input_datetime.alarm_auto_arm.attributes.timestamp |
               int | timestamp_custom("%H:%M",False)) }}
-      alarm_auto_disarm:
-        friendly_name: 'Alarm Auto Disarm'
-        icon_template: mdi:clock-outline
-        # entity_id: input_datetime.alarm_auto_disarm
-        value_template: >
+      - default_entity_id: sensor.alarm_auto_disarm
+        name: Alarm Auto Disarm
+        icon: mdi:clock-outline
+        state: >
           {{ (states.input_datetime.alarm_auto_disarm.attributes.timestamp |
               int | timestamp_custom("%H:%M",False)) }}
 ################################################################################

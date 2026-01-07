@@ -15,13 +15,11 @@ input_number:
     step: 100
     unit_of_measurement: W
 
-binary_sensor:
-  - platform: template
-    sensors:
-      # This sensor will turn on when the solar array is generating >= 1kw
-      solar_production:
-        friendly_name: 'Solar Production'
-        value_template: >-
+template:
+  - binary_sensor:
+      - default_entity_id: binary_sensor.solar_production
+        name: Solar Production
+        state: >
           {% if states('sensor.solaredge_ac_power')|float >
                 states('input_number.solar_threshold')|float %}
             on

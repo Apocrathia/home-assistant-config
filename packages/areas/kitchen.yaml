@@ -12,13 +12,12 @@ input_number:
     unit_of_measurement: Watts
 ################################################################################
 
-binary_sensor:
+template:
   ################################################################################
-  - platform: template
-    sensors:
-      dishwasher_status:
-        friendly_name: 'Dishwasher Status'
-        value_template: >
+  - binary_sensor:
+      - default_entity_id: binary_sensor.dishwasher_status
+        name: Dishwasher Status
+        state: >
           {{ ( float(states.sensor.dishwasher_outlet_power.state)
             > float(states.input_number.dishwasher_energy_threshold.state) ) }}
 ################################################################################

@@ -17,14 +17,12 @@ input_boolean:
     name: Routine - Work - Friday
 
 # Sensors
-binary_sensor:
-  - platform: template
-    sensors:
-      routine_work_active:
-        friendly_name: Routine - Work - Active
-        value_template: >
-          {{ is_state('schedule.routine_work_schedule', 'on') and
-          is_state('binary_sensor.workday', 'on') }}
+template:
+  - binary_sensor:
+      - default_entity_id: binary_sensor.routine_work_active
+        name: Routine - Work - Active
+        state: >
+          {{ is_state('schedule.routine_work_schedule', 'on') and is_state('binary_sensor.workday', 'on') }}
 
   # These sensors are defined in integrations/sensor.yaml
   # Configuration is show here for reference

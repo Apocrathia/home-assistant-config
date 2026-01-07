@@ -10,14 +10,13 @@ input_number:
     step: 10
 
 # Template Sensors
-binary_sensor:
-  - platform: template
-    sensors:
-      master_bedroom_humidifer_low:
-        friendly_name: 'Master Bedroom Humidier Low'
-        value_template: >
+template:
+  - binary_sensor:
+      - default_entity_id: binary_sensor.master_bedroom_humidifer_low
+        name: Master Bedroom Humidier Low
+        state: >
           {{ ( float(states('sensor.master_bedroom_humidifier_water_level')) <
-          float(states('input_number.master_bedroom_humidifer_threshold')) ) }}
+            float(states('input_number.master_bedroom_humidifer_threshold')) ) }}
 
 # Alerts
 alert:

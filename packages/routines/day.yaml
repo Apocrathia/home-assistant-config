@@ -31,36 +31,35 @@ input_number:
     unit_of_measurement: Minutes
 ################################################################################
 
-sensor:
+template:
   ################################################################################
-  - platform: template
-    sensors:
-      morning:
-        friendly_name: Morning
-        icon_template: mdi:clock-outline
-        value_template: >
-          {{ states.input_datetime.morning.attributes.timestamp | int |
-              timestamp_custom("%H:%M",False) }}
-      morning_start:
-        friendly_name: Morning Start
-        icon_template: mdi:clock-outline
-        value_template: >
-          {{ (((states.input_datetime.morning.attributes.timestamp | int)
-              - (states.input_number.morning_advance.state | int * 60)) |
-              timestamp_custom("%H:%M",False)) }}
-      daytime_lighting_transition:
-        friendly_name: Day Time Lighting Transition
-        icon_template: mdi:transition-masked
+  - sensor:
+      - default_entity_id: sensor.morning
+        name: Morning
+        icon: mdi:clock-outline
+        state: >
+          {{ states.input_datetime.morning.attributes.timestamp |
+              int | timestamp_custom("%H:%M",False) }}
+      - default_entity_id: sensor.morning_start
+        name: Morning Start
+        icon: mdi:clock-outline
+        state: >
+          {{ (((states.input_datetime.morning.attributes.timestamp |
+              int) - (states.input_number.morning_advance.state |
+              int * 60)) | timestamp_custom("%H:%M",False)) }}
+      - default_entity_id: sensor.daytime_lighting_transition
+        name: Day Time Lighting Transition
+        icon: mdi:transition-masked
         unit_of_measurement: 'Seconds'
-        value_template: >
+        state: >
           {{ ((states.input_number.daytime_lighting_transition.state |
               int) * 60) }}
-      next_sunrise:
-        friendly_name: Next Sunrise
-        icon_template: mdi:weather-sunset-up
-        value_template: >
-          {{ (as_timestamp(states.sun.sun.attributes.next_dawn) | int |
-              timestamp_custom("%H:%M", True)) }}
+      - default_entity_id: sensor.next_sunrise
+        name: Next Sunrise
+        icon: mdi:weather-sunset-up
+        state: >
+          {{ (as_timestamp(states.sun.sun.attributes.next_dawn) |
+              int | timestamp_custom("%H:%M", True)) }}
 ################################################################################
 automation:
   ################################################################################
@@ -126,6 +125,7 @@ automation:
             - light.indoor_lights
             - light.outdoor_lights
             - light.back_yard_string_lights
+            - light.ians_bed_safety_lights
 ################################################################################
 
 ################################################################################

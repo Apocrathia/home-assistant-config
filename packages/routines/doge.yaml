@@ -44,88 +44,87 @@ input_number:
     unit_of_measurement: Hours
 
 ### Sensors ###
-sensor:
-  - platform: template
-    sensors:
+template:
+  - sensor:
       # Breakfast
-      doge_meal_breakfast:
-        friendly_name: Doge - Meal - Breakfast
-        value_template: >
+      - default_entity_id: sensor.doge_meal_breakfast
+        name: Doge - Meal - Breakfast
+        state: >
           {{ (states.input_datetime.doge_meal_breakfast.attributes.timestamp |
               int | timestamp_custom("%H:%M",False)) }}
-      doge_meal_breakfast_advance:
-        friendly_name: Doge - Meal - Breakfast (Advance)
-        value_template: >
+      - default_entity_id: sensor.doge_meal_breakfast_advance
+        name: Doge - Meal - Breakfast (Advance)
+        state: >
           {{ ((states.input_datetime.doge_meal_breakfast.attributes.timestamp |
-              int - states.input_number.doge_meal_advance.state | int * 60) |
+              int - states.input_number.doge_meal_advance.state |
+              int * 60) | timestamp_custom("%H:%M",False)) }}
+      - default_entity_id: sensor.doge_meal_breakfast_end
+        name: Doge - Meal - Breakfast (End)
+        state: >
+          {{ ((states.input_datetime.doge_meal_breakfast.attributes.timestamp |
+              int + states.input_number.doge_meal_duration.state |
+              int * 60) | timestamp_custom("%H:%M",False)) }}
+      - default_entity_id: sensor.doge_meal_breakfast_relief
+        name: Doge - Meal - Breakfast (Relief)
+        state: >
+          {{ ((states.input_datetime.doge_meal_breakfast.attributes.timestamp |
+              int + states.input_number.doge_meal_duration.state | int * 60 +
+              states.input_number.doge_meal_relief.state | int * 60 * 60) |
               timestamp_custom("%H:%M",False)) }}
-      doge_meal_breakfast_end:
-        friendly_name: Doge - Meal - Breakfast (End)
-        value_template: >
-          {{ ((states.input_datetime.doge_meal_breakfast.attributes.timestamp |
-            int + states.input_number.doge_meal_duration.state |
-            int * 60) | timestamp_custom("%H:%M",False)) }}
-      doge_meal_breakfast_relief:
-        friendly_name: Doge - Meal - Breakfast (Relief)
-        value_template: >
-          {{ ((states.input_datetime.doge_meal_breakfast.attributes.timestamp |
-            int + states.input_number.doge_meal_duration.state | int * 60 +
-            states.input_number.doge_meal_relief.state | int * 60 * 60) |
-            timestamp_custom("%H:%M",False)) }}
       # Lunch
-      doge_meal_lunch:
-        friendly_name: Doge - Meal - Lunch
-        value_template: >
+      - default_entity_id: sensor.doge_meal_lunch
+        name: Doge - Meal - Lunch
+        state: >
           {{ (states.input_datetime.doge_meal_lunch.attributes.timestamp |
               int | timestamp_custom("%H:%M",False)) }}
-      doge_meal_lunch_advance:
-        friendly_name: Doge - Meal - Lunch (Advance)
-        value_template: >
+      - default_entity_id: sensor.doge_meal_lunch_advance
+        name: Doge - Meal - Lunch (Advance)
+        state: >
           {{ ((states.input_datetime.doge_meal_lunch.attributes.timestamp |
-              int - states.input_number.doge_meal_advance.state | int * 60) |
+              int - states.input_number.doge_meal_advance.state |
+              int * 60) | timestamp_custom("%H:%M",False)) }}
+      - default_entity_id: sensor.doge_meal_lunch_end
+        name: Doge - Meal - Lunch (End)
+        state: >
+          {{ ((states.input_datetime.doge_meal_lunch.attributes.timestamp |
+              int + states.input_number.doge_meal_duration.state |
+              int * 60) | timestamp_custom("%H:%M",False)) }}
+      - default_entity_id: sensor.doge_meal_lunch_relief
+        name: Doge - Meal - Lunch (Relief)
+        state: >
+          {{ ((states.input_datetime.doge_meal_lunch.attributes.timestamp |
+              int + states.input_number.doge_meal_duration.state | int * 60 +
+              states.input_number.doge_meal_relief.state | int * 60 * 60) |
               timestamp_custom("%H:%M",False)) }}
-      doge_meal_lunch_end:
-        friendly_name: Doge - Meal - Lunch (End)
-        value_template: >
-          {{ ((states.input_datetime.doge_meal_lunch.attributes.timestamp |
-            int + states.input_number.doge_meal_duration.state |
-            int * 60) | timestamp_custom("%H:%M",False)) }}
-      doge_meal_lunch_relief:
-        friendly_name: Doge - Meal - Lunch (Relief)
-        value_template: >
-          {{ ((states.input_datetime.doge_meal_lunch.attributes.timestamp |
-            int + states.input_number.doge_meal_duration.state | int * 60 +
-            states.input_number.doge_meal_relief.state | int * 60 * 60) |
-            timestamp_custom("%H:%M",False)) }}
       # Dinner
-      doge_meal_dinner:
-        friendly_name: Doge - Meal - Dinner
-        value_template: >
+      - default_entity_id: sensor.doge_meal_dinner
+        name: Doge - Meal - Dinner
+        state: >
           {{ (states.input_datetime.doge_meal_dinner.attributes.timestamp |
               int | timestamp_custom("%H:%M",False)) }}
-      doge_meal_dinner_advance:
-        friendly_name: Doge - Meal - Dinner (Advance)
-        value_template: >
+      - default_entity_id: sensor.doge_meal_dinner_advance
+        name: Doge - Meal - Dinner (Advance)
+        state: >
           {{ ((states.input_datetime.doge_meal_dinner.attributes.timestamp |
-              int - states.input_number.doge_meal_advance.state | int * 60) |
+              int - states.input_number.doge_meal_advance.state |
+              int * 60) | timestamp_custom("%H:%M",False)) }}
+      - default_entity_id: sensor.doge_meal_dinner_end
+        name: Doge - Meal - Dinner (End)
+        state: >
+          {{ ((states.input_datetime.doge_meal_dinner.attributes.timestamp |
+              int + states.input_number.doge_meal_duration.state |
+              int * 60) | timestamp_custom("%H:%M",False)) }}
+      - default_entity_id: sensor.doge_meal_dinner_relief
+        name: Doge - Meal - Dinner (Relief)
+        state: >
+          {{ ((states.input_datetime.doge_meal_dinner.attributes.timestamp |
+              int + states.input_number.doge_meal_duration.state | int * 60 +
+              states.input_number.doge_meal_relief.state | int * 60 * 60) |
               timestamp_custom("%H:%M",False)) }}
-      doge_meal_dinner_end:
-        friendly_name: Doge - Meal - Dinner (End)
-        value_template: >
-          {{ ((states.input_datetime.doge_meal_dinner.attributes.timestamp |
-            int + states.input_number.doge_meal_duration.state |
-            int * 60) | timestamp_custom("%H:%M",False)) }}
-      doge_meal_dinner_relief:
-        friendly_name: Doge - Meal - Dinner (Relief)
-        value_template: >
-          {{ ((states.input_datetime.doge_meal_dinner.attributes.timestamp |
-            int + states.input_number.doge_meal_duration.state | int * 60 +
-            states.input_number.doge_meal_relief.state | int * 60 * 60) |
-            timestamp_custom("%H:%M",False)) }}
       # Location
-      distance_from_doge:
-        friendly_name: 'Distance From Doge'
-        value_template: >-
+      - default_entity_id: sensor.distance_from_doge
+        name: Distance From Doge
+        state: >
           {{ distance('device_tracker.michio_tracker','person.ian') }}
         unit_of_measurement: km
 automation:
