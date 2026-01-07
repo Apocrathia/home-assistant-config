@@ -1,0 +1,305 @@
+---
+# Office WiFi Duck
+
+# This project uses the DSTIKE WiFiDuck
+# https://github.com/SpacehuhnTech/WiFiDuck
+# Inspired by the following project:
+# https://github.com/jensweimann/esphome_ducky
+
+<<: !include common/diagnostics.yaml
+
+substitutions:
+  friendly_name: 'Office WiFi Duck'
+  unit_name: office-wifi-duck
+
+esphome:
+  name: ${unit_name}
+  friendly_name: ${friendly_name}
+  # on_boot:
+  #   then:
+  #     # Reset arduino on boot
+  #     - switch.turn_on: arduino_reset
+  #     - delay: 50ms
+  #     - switch.turn_off: arduino_reset
+  #     - delay: 2000ms # Wait for Arduino to boot
+
+esp8266:
+  board: esp01_1m
+
+wifi: !include common/wifi.yaml
+
+# Enable logging - move to UART1 so UART0 is free for Arduino
+logger:
+  hardware_uart: UART1
+  baud_rate: 0 # Disable hardware logging
+  level: INFO
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret home_assistant_api_encryption_key
+
+ota:
+  platform: esphome
+  password: !secret esphome_ota
+
+captive_portal:
+
+globals:
+  # global variable for the hostmachine power state
+  - id: last_host_state
+    type: std::string
+    restore_value: false
+    initial_value: ''
+
+# I2C communication with Arduino (WiFiDuck firmware)
+i2c:
+  sda: GPIO4
+  scl: GPIO5
+  scan: true
+  id: ducky_i2c
+  frequency: 100kHz
+
+# Status LED
+status_led:
+  pin:
+    number: GPIO2
+    inverted: true
+
+# Arduino reset pin
+switch:
+  - platform: gpio
+    pin:
+      number: GPIO16
+      inverted: true
+    id: arduino_reset
+    internal: true
+    on_turn_on:
+      - delay: 50ms
+      - switch.turn_off: arduino_reset
+
+text_sensor:
+  # Arduino status via I2C - reads status from Arduino
+  - platform: template
+    name: 'Arduino Status'
+    id: ducky_response
+    update_interval: 2s
+    lambda: |-
+      auto i2c = id(ducky_i2c);
+
+      // Read status from Arduino (4 bytes: version, wait, repeat)
+      uint8_t status_data[4];
+      auto err = i2c->read(0x31, status_data, 4);
+
+      if (err == esphome::i2c::ERROR_OK) {
+        uint8_t version = status_data[0];
+        uint16_t wait = (status_data[2] << 8) | status_data[1]; // Little endian
+        uint8_t repeat = status_data[3];
+
+        char status_str[64];
+        snprintf(status_str, sizeof(status_str),
+                  "v%d wait:%d repeat:%d", version, wait, repeat);
+
+        return std::string(status_str);
+      } else {
+        return std::string("No response");
+      }
+
+  # host machine's usb port power state - derived from connection and Arduino status
+  - platform: template
+    id: ducky_host_state
+    name: 'USB Connection Status'
+    update_interval: 5s
+    lambda: |-
+      // Check if Arduino is responding
+      auto i2c = id(ducky_i2c);
+      uint8_t status_data[4];
+      auto err = i2c->read(0x31, status_data, 4);
+
+      if (err == esphome::i2c::ERROR_OK) {
+        // Arduino is responding, check connection pin
+        bool connected = id(ducky_connection).state;
+        if (connected) {
+          return std::string("Connected & Powered");
+        } else {
+          return std::string("Powered (No Host)");
+        }
+      } else {
+        return std::string("Not Powered");
+      }
+
+  # last command sent to Arduino - shows recent activity
+  - platform: template
+    id: ducky_usb_input
+    name: 'Last Command Sent'
+    update_interval: 1s
+    lambda: |-
+      // Show the last command sent to Arduino
+      std::string last_command = id(ducky_command).state;
+      if (last_command.length() > 0) {
+        return last_command;
+      } else {
+        return std::string("No recent commands");
+      }
+
+# Text input for DuckyScript commands
+text:
+  - platform: template
+    name: 'Command'
+    id: ducky_command
+    mode: text
+    icon: 'mdi:keyboard'
+    optimistic: true
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda: 'return x.length() > 0;'
+            then:
+              - script.execute:
+                  id: send_ducky_command
+                  command: !lambda |-
+                    return id(ducky_command).state;
+              - delay: 100ms
+
+# Scripts for I2C communication with Arduino
+script:
+  - id: send_ducky_command
+    parameters:
+      command: string
+    then:
+      - logger.log: 'Sending DuckyScript via I2C...'
+      - lambda: |-
+          // WiFiDuck I2C protocol implementation
+          auto i2c = id(ducky_i2c);
+          std::string cmd = command;
+
+          if (cmd.length() > 0) {
+            const size_t PACKET_SIZE = 32;
+            size_t sent = 0;
+            size_t i = 0;
+
+            // Add newline to command (required for key release)
+            std::string full_command = cmd;
+            if (full_command.empty() || (full_command.back() != '\n' && full_command.back() != '\r')) {
+              full_command += '\n';
+            }
+
+            // Send SOT
+            std::vector<uint8_t> sot_data;
+            sot_data.push_back(0x01); // SOT (Start of Transmission)
+            auto err = i2c->write(0x31, sot_data.data(), sot_data.size());
+            if (err != esphome::i2c::ERROR_OK) {
+              ESP_LOGE("main", "I2C SOT write failed");
+              return;
+            }
+            ++sent;
+
+            // Send command data in packets
+            while (i < full_command.length()) {
+              std::vector<uint8_t> data;
+              size_t j = 0; // bytes sent for current packet
+
+              while (i < full_command.length() && j < PACKET_SIZE) {
+                data.push_back(static_cast<uint8_t>(full_command[i]));
+                ++i;
+                ++j;
+                ++sent;
+              }
+
+              // Send packet
+              err = i2c->write(0x31, data.data(), data.size());
+              if (err == esphome::i2c::ERROR_OK) {
+                ESP_LOGI("main", "Sent packet %zu bytes", j);
+              } else {
+                ESP_LOGE("main", "I2C write failed");
+                break;
+              }
+            }
+
+            // Send EOT
+            std::vector<uint8_t> eot_data;
+            eot_data.push_back(0x04); // EOT (End of Transmission)
+            err = i2c->write(0x31, eot_data.data(), eot_data.size());
+            if (err == esphome::i2c::ERROR_OK) {
+              ESP_LOGI("main", "Sent EOT, total: %zu bytes", sent);
+            } else {
+              ESP_LOGE("main", "I2C EOT write failed");
+            }
+
+            // Clear the text input after sending command
+            id(ducky_command).publish_state("");
+          }
+
+  - id: send_test_command
+    then:
+      - logger.log: 'Sending test command via I2C...'
+      - script.execute:
+          id: send_ducky_command
+          command: 'STRING Hello from WiFi Duck!'
+
+  - id: test_i2c_scan
+    then:
+      - logger.log: 'Testing I2C scan...'
+      - lambda: |-
+          auto i2c = id(ducky_i2c);
+          ESP_LOGI("main", "I2C scan test - trying different addresses");
+
+          // Try common I2C addresses
+          std::vector<uint8_t> addresses = {0x31, 0x30, 0x32, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F};
+
+          for (uint8_t addr : addresses) {
+            uint8_t data;
+            auto err = i2c->read(addr, &data, 1);
+            if (err == esphome::i2c::ERROR_OK) {
+              ESP_LOGI("main", "Found device at address 0x%02X, got: 0x%02X", addr, data);
+            } else {
+              ESP_LOGD("main", "No device at address 0x%02X", addr);
+            }
+          }
+
+# Connection monitoring
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode: INPUT_PULLUP
+    name: 'Connected'
+    id: ducky_connection
+    on_state:
+      then:
+        - logger.log:
+            level: INFO
+            format: 'Ducky connection state changed to: %s'
+            args: ['x ? "connected" : "disconnected"']
+
+# Test button
+button:
+  - platform: template
+    name: 'Test Command'
+    icon: 'mdi:test-tube'
+    on_press:
+      - logger.log: 'Testing DuckyScript...'
+      - script.execute: send_test_command
+  - platform: template
+    name: 'Lock macOS'
+    icon: 'mdi:apple'
+    on_press:
+      - logger.log: 'Locking macOS...'
+      - script.execute:
+          id: send_ducky_command
+          command: 'GUI CTRL q'
+  - platform: template
+    name: 'Lock Windows'
+    icon: 'mdi:microsoft-windows'
+    on_press:
+      - logger.log: 'Locking Windows...'
+      - script.execute:
+          id: send_ducky_command
+          command: 'GUI l'
+  - platform: template
+    name: 'I2C Scan Test'
+    icon: 'mdi:memory'
+    on_press:
+      - logger.log: 'Testing I2C communication...'
+      - script.execute: test_i2c_scan
