@@ -194,6 +194,12 @@ script:
             - top_menu
       - delay:
           seconds: 1
+      # Close all applications before opening new content
+      - service: script.function_apple_tv_close_all_applications
+        data:
+          entity_id: remote.master_bedroom_apple_tv
+      - delay:
+          seconds: 2
       # Now figure out what we're doing
       - choose:
           ############

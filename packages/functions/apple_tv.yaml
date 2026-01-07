@@ -1,0 +1,69 @@
+---
+### Apple TV Functions ###
+script:
+  function_apple_tv_close_all_applications:
+    alias: 'Function - Apple TV - Close All Applications'
+    description: 'Closes all applications on the specified Apple TV.'
+    fields:
+      entity_id:
+        description: 'The Apple TV to close all applications on.'
+        example: 'remote.master_bedroom_apple_tv'
+        advanced: false
+        required: true
+        selector:
+          entity:
+            domain: remote
+    sequence:
+      - alias: 'Go to home screen'
+        service: remote.send_command
+        data:
+          entity_id: '{{ entity_id }}'
+          command:
+            - home
+      - delay:
+          seconds: 0.5
+      - alias: 'Open application switcher'
+        service: remote.send_command
+        data:
+          entity_id: '{{ entity_id }}'
+          delay_secs: 0.2
+          command:
+            - top_menu
+            - top_menu
+      - delay:
+          seconds: 1.5
+      - alias: 'Go to the beginning of the list'
+        repeat:
+          count: 10
+          sequence:
+            - service: remote.send_command
+              data:
+                entity_id: '{{ entity_id }}'
+                command:
+                  - left
+            - delay:
+                seconds: 0.2
+      - delay:
+          seconds: 1
+      - alias: 'Close all applications'
+        repeat:
+          count: 10
+          sequence:
+            - service: remote.send_command
+              data:
+                entity_id: '{{ entity_id }}'
+                delay_secs: 0.1
+                command:
+                  - up
+                  - up
+                  - up
+            - delay:
+                seconds: 0.5
+      - alias: 'Close the application switcher'
+        delay:
+          seconds: 1
+      - service: remote.send_command
+        data:
+          entity_id: '{{ entity_id }}'
+          command:
+            - top_menu
