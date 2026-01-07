@@ -203,7 +203,7 @@ automation:
       - platform: template
         value_template: >
           {{ (states.sensor.time.state
-            == states.sensor.doge_meal_advance.state) }}
+            == states.sensor.doge_meal_lunch_advance.state) }}
     condition:
       - condition: state
         entity_id: input_boolean.away_mode
