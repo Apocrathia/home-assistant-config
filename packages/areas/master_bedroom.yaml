@@ -144,9 +144,16 @@ automation:
         state: 'home'
     action:
       - alias: 'Get overnight low temperature'
+        service: weather.get_forecasts
+        data:
+          type: daily
+        target:
+          entity_id: weather.pirate_weather
+        response_variable: forecast_data
+      - alias: 'Extract overnight low temperature'
         variables:
           overnight_low: >
-            {{ state_attr('weather.pirate_weather', 'forecast')[0].templow | float }}
+            {{ forecast_data['weather.pirate_weather'].forecast[0].templow | float }}
       - alias: 'Set BedJet based on conditions'
         choose:
           - conditions:
@@ -159,7 +166,7 @@ automation:
                 target:
                   entity_id: climate.ians_bedjet
                 data:
-                  preset_mode: extended heat
+                  preset_mode: Extended Heat
           - conditions:
               - alias: 'Cold night - pre-heat the bed'
                 condition: template
