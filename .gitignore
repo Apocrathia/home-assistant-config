@@ -19,6 +19,7 @@ google_calendars.yaml
 __pycache__
 
 # Directory (contents) ignores
+.cache
 .cloud
 .storage
 deps
