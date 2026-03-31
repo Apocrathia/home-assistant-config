@@ -109,7 +109,7 @@ automation:
         service: light.turn_on
         data:
           entity_id: light.office_floor_lamp
-          kelvin: 3000
+          color_temp_kelvin: 3000
           brightness_pct: 100
   ################################################################################
   - id: function_wakeup_apple_tv
