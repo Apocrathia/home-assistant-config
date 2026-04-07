@@ -108,6 +108,27 @@ automation:
         data:
           entity_id: light.night_lights
   ################################################################################
+  - id: routine_day_airgradient_displays_and_leds
+    alias: 'Routine - Day - AirGradient Displays And LEDs'
+    trigger:
+      - platform: sun
+        event: sunrise
+    action:
+      - service: switch.turn_off
+        data:
+          entity_id:
+            - switch.downstairs_air_quality_sensor_display_blank_page
+            - switch.upstairs_air_quality_sensor_display_blank_page
+            - switch.master_bedroom_air_quality_display_blank_page
+            - switch.office_air_quality_sensor_display_blank_page
+      - service: light.turn_on
+        data:
+          entity_id:
+            - light.downstairs_air_quality_sensor_led_strip
+            - light.upstairs_air_quality_sensor_led_strip
+            - light.master_bedroom_air_quality_led_strip
+            - light.office_air_quality_sensor_led_strip
+  ################################################################################
 
   # I realize this automation will be a little redundant, but it's just in case I
   # forget to turn shit off, or another automation fails.

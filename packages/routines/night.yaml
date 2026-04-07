@@ -135,6 +135,27 @@ automation:
           brightness_pct: 25
           profile: relax
   ################################################################################
+  - id: routine_night_airgradient_displays_and_leds
+    alias: 'Routine - Night - AirGradient Displays And LEDs'
+    trigger:
+      - platform: sun
+        event: sunset
+    action:
+      - service: light.turn_off
+        data:
+          entity_id:
+            - light.downstairs_air_quality_sensor_led_strip
+            - light.upstairs_air_quality_sensor_led_strip
+            - light.master_bedroom_air_quality_led_strip
+            - light.office_air_quality_sensor_led_strip
+      - service: switch.turn_on
+        data:
+          entity_id:
+            - switch.downstairs_air_quality_sensor_display_blank_page
+            - switch.upstairs_air_quality_sensor_display_blank_page
+            - switch.master_bedroom_air_quality_display_blank_page
+            - switch.office_air_quality_sensor_display_blank_page
+  ################################################################################
   - id: routine_night_bedtime
     alias: 'Routine - Night - Bedtime'
     trigger:
