@@ -1,0 +1,194 @@
+---
+################################################################################
+# Awtrix (Ulanzi TC001 / Awtrix3) Integration – Living Room Clock
+################################################################################
+# Device: Ulanzi TC001 Smart Pixel Clock, firmware Awtrix3, connected via MQTT.
+# HA integration: ha-awtrix (https://github.com/MiguelAngelLV/ha-awtrix)
+# Awtrix3 API: https://blueforcer.github.io/awtrix3/
+# Icons: LaMetric numeric IDs. Download via the Awtrix built-in web interface by entering each icon id.
+#   Climate: 2056 (temperature), 3359 (humidity)
+#   Weather: 2282 (clear), 2284 (rain), 2289 (snow), 2283 (cloudy), 2158 (fog), 11428 (thunderstorm)
+#   Notifications: 18576 (trash can), 2314 (moon / clear night)
+#   Other: 2282 (sun), 27464 (solar)
+################################################################################
+
+automation:
+  ################################################################################
+  # Control device brightness
+  ################################################################################
+  - id: integration_awtrix_living_room_brightness
+    alias: 'Integration - Awtrix - Living Room Clock Brightness'
+    description: 'Set the brightness of the Living Room Clock.'
+    trigger:
+      - platform: state
+        entity_id:
+          - sensor.living_room_clock_illuminance
+          - sensor.time
+          - sensor.morning_start
+          - sensor.nighttime_start
+      - platform: homeassistant
+        event: start
+    action:
+      - alias: 'Calculate brightness'
+        variables:
+          raw: '{{ states.sensor.living_room_clock_illuminance.state | int(0) }}'
+          awake: '{{ states.sensor.time.state >= states.sensor.morning_start.state and states.sensor.time.state < states.sensor.nighttime_start.state }}'
+          brightness: "{{ [0, [255, (raw | int + (1 if awake | lower == 'true' else 0))] | min] | max }}"
+      - service: awtrix.settings
+        data:
+          device: '039ec645765634d11bba9ae96840a922'
+          BRI: '{{ brightness }}'
+
+  ################################################################################
+  # Custom app: Living room temp and humidity (Downstairs Air Quality Sensor)
+  # Two pages: temp then humidity. Color is dynamic (temp: cold/comfort/hot;
+  # humidity: low/ok/high).
+  ################################################################################
+  - id: integration_awtrix_living_room_climate
+    alias: 'Integration - Awtrix - Living Room Climate Custom App'
+    description: 'Push living room temp and humidity to Awtrix custom app (downstairs air quality sensor).'
+    trigger:
+      - platform: state
+        entity_id:
+          - sensor.downstairs_air_quality_sensor_temperature
+          - sensor.downstairs_air_quality_sensor_humidity
+      - platform: homeassistant
+        event: start
+    action:
+      - service: awtrix.custom_app
+        data:
+          device: '039ec645765634d11bba9ae96840a922'
+          app: 'climate_temp'
+          text: "{{ states('sensor.downstairs_air_quality_sensor_temperature') | float | round(1) }}°C"
+          duration: 3
+          icon: '2056' # temperature
+          color: "{% set t = states('sensor.downstairs_air_quality_sensor_temperature') | float(20) %}{% if t < 17 %}#00BFFF{% elif t > 26 %}#FF4500{% else %}#00FF7F{% endif %}"
+      - service: awtrix.custom_app
+        data:
+          device: '039ec645765634d11bba9ae96840a922'
+          app: 'climate_humidity'
+          text: "{{ states('sensor.downstairs_air_quality_sensor_humidity') | float | round(0) }}%"
+          duration: 3
+          icon: '3359' # humidity
+          color: "{% set h = states('sensor.downstairs_air_quality_sensor_humidity') | float(35) %}{% if h < 20 %}#FFA500{% elif h > 45 %}#1E90FF{% else %}#00FF7F{% endif %}"
+
+  ################################################################################
+  # Custom app: Outdoor conditions (Pirate Weather until local weather station)
+  ################################################################################
+  - id: integration_awtrix_outdoor_weather
+    alias: 'Integration - Awtrix - Outdoor Weather Custom App'
+    description: 'Push outdoor temp, humidity, and condition to Awtrix (Pirate Weather).'
+    trigger:
+      - platform: state
+        entity_id:
+          - sensor.pirate_weather_temperature
+          - sensor.pirate_weather_humidity
+          - sensor.pirate_weather_summary
+      - platform: homeassistant
+        event: start
+    action:
+      - service: awtrix.custom_app
+        data:
+          device: '039ec645765634d11bba9ae96840a922'
+          app: 'Outdoor'
+          text: "{{ states('sensor.pirate_weather_temperature') | float | round(1) }}°C  {{ states('sensor.pirate_weather_humidity') | float | round(0) }}%  {{ states('sensor.pirate_weather_summary') }}"
+          duration: 3
+          # 2282=clear, 2284=rain, 2289=snow, 2283=cloudy, 2158=fog, 11428=thunderstorm
+          icon: "{% set s = states('sensor.pirate_weather_summary') | lower %}{% if 'rain' in s or 'drizzle' in s %}2284{% elif 'snow' in s %}2289{% elif 'thunder' in s or 'storm' in s %}11428{% elif 'fog' in s or 'mist' in s %}2158{% elif 'cloud' in s or 'overcast' in s %}2283{% else %}2282{% endif %}"
+          color: "{% set t = states('sensor.pirate_weather_temperature') | float(20) %}{% if t < 5 %}#00BFFF{% elif t > 30 %}#FF4500{% else %}#00FF7F{% endif %}"
+
+  ################################################################################
+  # Trash reminder: show on Living Room Clock (Tuesday night and Wednesday morning)
+  ################################################################################
+  - id: integration_awtrix_notification_trash
+    alias: 'Integration - Awtrix - Trash Pickup Reminder'
+    description: 'Display trash reminder on Living Room Clock.'
+    trigger:
+      - platform: template # Tuesday Night
+        value_template: >
+          {{
+            (now().weekday() == 1) and
+            (now().time().hour == 19) and
+            (now().time().minute == 0)
+          }}
+      - platform: template # Wednesday Morning
+        value_template: >
+          {{
+            (now().weekday() == 2) and
+            (now().time().hour == 7) and
+            (now().time().minute == 0)
+          }}
+    action:
+      - service: awtrix.notification
+        data:
+          device: '039ec645765634d11bba9ae96840a922'
+          text: 'Pull the trash bin to the curb!'
+          duration: 10
+          icon: '18576' # trash can
+          sound: 'alert'
+          stack: false
+          rainbow: true
+  ################################################################################
+  # Last call reminder: notify on Living Room Clock 5 minutes before last call
+  # make this multiple triggers, at differnt times. then add a variable action to
+  # calculate the time remaining
+  ################################################################################
+  - id: integration_awtrix_notification_last_call_reminder
+    alias: 'Integration - Awtrix - Last Call Reminder'
+    description: 'Show lights-out reminder on Living Room Clock 5 min before last call.'
+    trigger:
+      - platform: template
+        value_template: >
+          {{ states.sensor.time.state == states.sensor.last_call.state }}
+      - platform: template
+        value_template: >
+          {{ states.sensor.time.state == states.sensor.last_call.state - 5 }}
+      - platform: template
+        value_template: >
+          {{ states.sensor.time.state == states.sensor.last_call.state - 15 }}
+      - platform: template
+        value_template: >
+          {{ states.sensor.time.state == states.sensor.last_call.state - 30 }}
+      - platform: template
+        value_template: >
+          {{ states.sensor.time.state == states.sensor.last_call.state - 60 }}
+    condition:
+      - condition: state
+        entity_id: binary_sensor.worknight
+        state: 'on'
+    action:
+      - alias: 'Calculate time remaining'
+        variables:
+          last_call_time: "{{ states.sensor.last_call.state | timestamp_custom('%H:%M', False) }}"
+          current_time: "{{ now().time().strftime('%H:%M') }}"
+          time_remaining: '{{ (last_call_time - current_time) | int }}'
+      - service: awtrix.notification
+        data:
+          device: '039ec645765634d11bba9ae96840a922'
+          text: 'Lights out in {{ time_remaining }} minutes'
+          duration: 30
+          icon: '2314' # moon / clear night
+          rtttl: 'two_short:d=4,o=5,b=100:16e6,16e6'
+          stack: false
+  ################################################################################
+  # Custom app: solar (Solaredge)
+  # GetLiveContext shows no sensor.solaredge_energy_today; using sensor.solaredge_dc_power (current W).
+  # If you add Solaredge API site sensors, sensor.solaredge_energy_today can be used for "kWh today".
+  ################################################################################
+  - id: integration_awtrix_solar_power
+    alias: 'Integration - Awtrix - Solar Power Custom App'
+    description: 'Show solar current power on Awtrix.'
+    trigger:
+      - platform: state
+        entity_id: sensor.solaredge_dc_power
+      - platform: homeassistant
+        event: start
+    action:
+      - service: awtrix.custom_app
+        data:
+          device: '039ec645765634d11bba9ae96840a922'
+          app: 'Solar'
+          text: "{{ states('sensor.solaredge_dc_power') | float(0) | round(0) }} W"
+          duration: 5
+          icon: '27464' # solar
+          color: '#FFFFFF'
