@@ -5,6 +5,7 @@ switch:
     name: Energy - Heavy Consumers
     entities:
       - switch.dishwasher_outlet
+      - switch.washing_machine_outlet
 
 input_number:
   solar_threshold:
