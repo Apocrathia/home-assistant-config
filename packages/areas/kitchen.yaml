@@ -12,6 +12,13 @@ input_number:
     unit_of_measurement: Watts
 ################################################################################
 
+input_boolean:
+  ################################################################################
+  kitchen_dishwasher_complete_alert:
+    name: Kitchen Dishwasher Complete Alert
+    icon: mdi:dishwasher-alert
+################################################################################
+
 template:
   ################################################################################
   - binary_sensor:
@@ -20,7 +27,34 @@ template:
         state: >
           {{ ( float(states.sensor.dishwasher_outlet_power.state)
             > float(states.input_number.dishwasher_energy_threshold.state) ) }}
+        delay_off:
+          minutes: 5
 ################################################################################
+
+alert:
+  ################################################################################
+  kitchen_dishwasher_complete:
+    name: Kitchen Dishwasher Complete
+    message: Dishwasher cycle complete.
+    done_message: clear_notification
+    entity_id: input_boolean.kitchen_dishwasher_complete_alert
+    state: 'on'
+    repeat:
+      - 15
+      - 30
+      - 60
+    can_acknowledge: true
+    skip_first: false
+    notifiers:
+      - mobile_app_ians_iphone
+      - mobile_app_ians_ipad_pro
+    data:
+      tag: kitchen-dishwasher-complete
+      group: kitchen-appliances
+      push:
+        interruption-level: active
+################################################################################
+
 automation:
   ################################################################################
   - id: area_kitchen_pantry_light
@@ -52,4 +86,28 @@ automation:
               data:
                 entity_id: light.kitchen_pantry_light
                 transition: 1
+  ################################################################################
+  - id: area_kitchen_dishwasher_complete_alert_set
+    alias: 'Area - Kitchen - Dishwasher Complete Alert Set'
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.dishwasher_status
+        from: 'on'
+        to: 'off'
+    action:
+      - service: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.kitchen_dishwasher_complete_alert
+  ################################################################################
+  - id: area_kitchen_dishwasher_complete_alert_reset
+    alias: 'Area - Kitchen - Dishwasher Complete Alert Reset'
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.dishwasher_status
+        from: 'off'
+        to: 'on'
+    action:
+      - service: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.kitchen_dishwasher_complete_alert
 ################################################################################
