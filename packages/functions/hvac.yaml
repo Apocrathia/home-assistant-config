@@ -47,6 +47,60 @@ template:
         state: >
           {{ ( float(states.sensor.upstairs_air_quality_sensor_co2.state) >
               float(states.input_number.hvac_co2_threshold.state) ) }}
+      - default_entity_id: binary_sensor.downstairs_hvac_uv_bulb_out
+        name: Downstairs HVAC UV Bulb Out
+        state: >
+          {{ states('climate.homekit_downstairs') != 'off'
+             and is_state('binary_sensor.downstairs_hvac_uv', 'off') }}
+      - default_entity_id: binary_sensor.upstairs_hvac_uv_bulb_out
+        name: Upstairs HVAC UV Bulb Out
+        state: >
+          {{ states('climate.homekit_upstairs') != 'off'
+             and is_state('binary_sensor.upstairs_hvac_uv', 'off') }}
+
+alert:
+  ################################################################################
+  function_hvac_downstairs_uv_bulb_out:
+    name: HVAC Downstairs UV Bulb Out
+    message: Downstairs HVAC UV bulb appears to be out.
+    done_message: clear_notification
+    entity_id: binary_sensor.downstairs_hvac_uv_bulb_out
+    state: 'on'
+    repeat:
+      - 30
+      - 60
+      - 120
+    can_acknowledge: true
+    skip_first: false
+    notifiers:
+      - mobile_app_ians_iphone
+      - mobile_app_ians_ipad_pro
+    data:
+      tag: hvac-downstairs-uv-bulb-out
+      group: hvac-uv
+      push:
+        interruption-level: active
+
+  function_hvac_upstairs_uv_bulb_out:
+    name: HVAC Upstairs UV Bulb Out
+    message: Upstairs HVAC UV bulb appears to be out.
+    done_message: clear_notification
+    entity_id: binary_sensor.upstairs_hvac_uv_bulb_out
+    state: 'on'
+    repeat:
+      - 30
+      - 60
+      - 120
+    can_acknowledge: true
+    skip_first: false
+    notifiers:
+      - mobile_app_ians_iphone
+      - mobile_app_ians_ipad_pro
+    data:
+      tag: hvac-upstairs-uv-bulb-out
+      group: hvac-uv
+      push:
+        interruption-level: active
 
 automation:
   #############################################################################
@@ -135,38 +189,6 @@ automation:
                   entity_id:
                     - climate.homekit_downstairs
                     - climate.homekit_upstairs
-  ################################################################################
-  - id: function_hvac_downstairs_uv_alert
-    alias: Function - HVAC - Downstairs UV Alert
-    trigger:
-      platform: state
-      entity_id: climate.homekit_downstairs
-      to: 'on'
-      for: '00:01:00'
-    condition:
-      condition: state
-      entity_id: binary_sensor.downstairs_hvac_uv
-      state: 'off'
-    action:
-      - service: notify.notify
-        data:
-          message: 'Downstairs HVAC UV bulb may be burnt out!'
-  ################################################################################
-  - id: function_hvac_upstairs_uv_alert
-    alias: Function - HVAC - Downstairs UV Alert
-    trigger:
-      platform: state
-      entity_id: climate.homekit_upstairs
-      to: 'on'
-      for: '00:01:00'
-    condition:
-      condition: state
-      entity_id: binary_sensor.upstairs_hvac_uv
-      state: 'off'
-    action:
-      - service: notify.notify
-        data:
-          message: 'Upstairs HVAC UV bulb may be burnt out!'
   ################################################################################
   - id: function_hvac_co2
     alias: Function - HVAC - CO2
