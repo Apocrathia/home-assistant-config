@@ -144,4 +144,104 @@ automation:
                 service: cover.open_cover
                 target:
                   entity_id: cover.second_garage_door
+  ################################################################################
+  - id: area_garage_door_left_open_actionable_alert
+    alias: 'Area - Garage - Door Left Open Actionable Alert'
+    description: Send actionable alert when a garage door is left open
+    trigger:
+      - platform: state
+        entity_id:
+          - cover.main_garage_door
+          - cover.second_garage_door
+        to: 'open'
+        for:
+          minutes: 10
+    condition:
+      - condition: state
+        entity_id: binary_sensor.garage_motion
+        state: 'off'
+        for:
+          minutes: 5
+      - condition: state
+        entity_id: binary_sensor.garage_camera_motion
+        state: 'off'
+        for:
+          minutes: 5
+      - condition: state
+        entity_id: binary_sensor.garage_occupancy
+        state: 'off'
+        for:
+          minutes: 5
+    variables:
+      door_name: >
+        {% if trigger.entity_id == 'cover.main_garage_door' %}
+          Main garage door
+        {% else %}
+          Second garage door
+        {% endif %}
+      door_tag: >
+        {% if trigger.entity_id == 'cover.main_garage_door' %}
+          garage-main-door-open
+        {% else %}
+          garage-second-door-open
+        {% endif %}
+      action_close: "{{ 'CLOSE_GARAGE_DOOR_' ~ context.id }}"
+      action_ignore: "{{ 'IGNORE_GARAGE_DOOR_' ~ context.id }}"
+    action:
+      - service: notify.mobile_app_ians_iphone
+        data:
+          title: Garage Alert
+          message: '{{ door_name }} has been open for 10 minutes.'
+          data:
+            tag: '{{ door_tag }}'
+            group: garage-doors
+            push:
+              interruption-level: time-sensitive
+            actions:
+              - action: '{{ action_close }}'
+                title: Close Door
+                destructive: true
+              - action: '{{ action_ignore }}'
+                title: Ignore
+      - service: notify.mobile_app_ians_ipad_pro
+        data:
+          title: Garage Alert
+          message: '{{ door_name }} has been open for 10 minutes.'
+          data:
+            tag: '{{ door_tag }}'
+            group: garage-doors
+            push:
+              interruption-level: time-sensitive
+            actions:
+              - action: '{{ action_close }}'
+                title: Close Door
+                destructive: true
+              - action: '{{ action_ignore }}'
+                title: Ignore
+      - wait_for_trigger:
+          - platform: event
+            event_type: mobile_app_notification_action
+            event_data:
+              action: '{{ action_close }}'
+          - platform: event
+            event_type: mobile_app_notification_action
+            event_data:
+              action: '{{ action_ignore }}'
+        timeout:
+          minutes: 30
+      - choose:
+          - conditions:
+              - condition: template
+                value_template: '{{ wait.trigger is not none and wait.trigger.event.data.action == action_close }}'
+              - condition: template
+                value_template: "{{ is_state(trigger.entity_id, 'open') }}"
+            sequence:
+              - service: cover.close_cover
+                target:
+                  entity_id: '{{ trigger.entity_id }}'
+          - conditions:
+              - condition: template
+                value_template: '{{ wait.trigger is not none and wait.trigger.event.data.action == action_ignore }}'
+            sequence:
+              - stop: User chose to ignore the garage door alert.
 ################################################################################
