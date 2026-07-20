@@ -22,22 +22,10 @@ homeassistant:
     - type: trusted_networks
       trusted_networks: !secret trusted_networks
 
-# Checks for available updates
-# Note: This component will send some information about your system to
-# the developers to assist with development of Home Assistant.
-# For more information, please see:
-# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
-# updater:
-# Deprecated with 2021.4.0
-# Optional, allows Home Assistant developers to focus on popular components.
-# include_used_components: true
-
 # Use MariaDB Add-on for Database
 recorder:
   db_url: !secret mysql_uri
   purge_keep_days: 7
-  # Deprecated
-  # purge_interval: 1
 
 # Enable logging
 logger:
@@ -52,13 +40,8 @@ history:
 # View all events in a logbook
 logbook:
 
-# Enables a map showing the location of tracked devices
-# map: # Deprecated
-
 # Track the sun
 sun:
 
 # Home Assistant Cloud
 cloud:
-# Universal Plug and Play
-# upnp: # DEPRECATED
