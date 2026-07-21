@@ -2,4 +2,3 @@
 # Text to speech
 tts:
   - platform: google_translate
-  - platform: picotts
