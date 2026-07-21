@@ -11,6 +11,13 @@ input_datetime:
     has_time: true
     # initial: '05:00'
 
+  good_morning_earliest:
+    name: Good Morning Earliest
+    icon: mdi:weather-sunset-up
+    has_date: false
+    has_time: true
+    initial: '05:00:00'
+
 input_number:
   morning_advance:
     name: Morning Advance
@@ -29,6 +36,16 @@ input_number:
     max: 30
     step: 5
     unit_of_measurement: Minutes
+
+  good_morning_bed_empty_delay:
+    name: Good Morning Bed Empty Delay
+    icon: mdi:bed-empty
+    initial: 5
+    min: 1
+    max: 30
+    step: 1
+    unit_of_measurement: Minutes
+
 ################################################################################
 
 template:
@@ -129,6 +146,89 @@ automation:
             - light.master_bedroom_air_quality_led_strip
             - light.office_air_quality_sensor_led_strip
   ################################################################################
+  - id: routine_day_good_morning_alarm
+    alias: 'Routine - Day - Good Morning Alarm'
+    description: Disarm a home-armed alarm when the Good Morning scene is activated
+    trigger:
+      - trigger: scene.activated
+        target:
+          entity_id: scene.routine_day_good_morning
+    condition:
+      - condition: state
+        entity_id: alarm_control_panel.home
+        state: 'armed_home'
+      - condition: state
+        entity_id: input_boolean.away_mode
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.vacation_mode
+        state: 'off'
+    action:
+      - alias: 'Disarm the alarm'
+        service: alarm_control_panel.alarm_disarm
+        data:
+          entity_id: alarm_control_panel.home
+          code: !secret alarm_code
+    mode: single
+  ################################################################################
+  - id: routine_day_good_morning_wake
+    alias: 'Routine - Day - Good Morning Wake Detection'
+    description: Activate Good Morning after weekend bed-exit and bedroom motion
+    trigger:
+      - platform: state
+        entity_id: binary_sensor.bed_presence_2bd444_bed_occupied_either
+        from: 'on'
+        to: 'off'
+        for:
+          minutes: >
+            {{ states('input_number.good_morning_bed_empty_delay') | int(5) }}
+      - platform: state
+        entity_id: binary_sensor.master_bedroom_motion
+        from: 'off'
+        to: 'on'
+      - platform: time
+        at: input_datetime.good_morning_earliest
+    condition:
+      - alias: 'Today is not a workday'
+        condition: state
+        entity_id: binary_sensor.workday
+        state: 'off'
+      - alias: 'Earliest wake time has passed'
+        condition: template
+        value_template: >
+          {{ now().strftime('%H:%M:%S') >=
+             states('input_datetime.good_morning_earliest') }}
+      - alias: 'Bed has remained empty'
+        condition: template
+        value_template: >
+          {% set bed =
+             states.binary_sensor.bed_presence_2bd444_bed_occupied_either %}
+          {{ bed.state == 'off' and
+             (as_timestamp(now()) - as_timestamp(bed.last_changed)) >=
+             (states('input_number.good_morning_bed_empty_delay') |
+              float(5) * 60) }}
+      - alias: 'Master bedroom motion was detected recently'
+        condition: template
+        value_template: >
+          {% set motion = states.binary_sensor.master_bedroom_motion %}
+          {{ motion.state in ['on', 'off'] and
+             (as_timestamp(now()) - as_timestamp(motion.last_changed)) <= 600 }}
+      - condition: state
+        entity_id: alarm_control_panel.home
+        state: 'armed_home'
+      - condition: state
+        entity_id: input_boolean.away_mode
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.vacation_mode
+        state: 'off'
+    action:
+      - alias: 'Activate Good Morning'
+        service: scene.turn_on
+        target:
+          entity_id: scene.routine_day_good_morning
+    mode: single
+  ################################################################################
 
   # I realize this automation will be a little redundant, but it's just in case I
   # forget to turn shit off, or another automation fails.
@@ -155,8 +255,8 @@ automation:
 # Scenes
 ################################################################################
 scene:
-  - name: Routine - Day - Morning Lights
-    id: routine_day_morning_lights
+  - name: Routine - Day - Good Morning
+    id: routine_day_good_morning
     entities:
       # Living Areas
       light.living_room_ceiling_fan:

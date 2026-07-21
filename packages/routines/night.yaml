@@ -33,6 +33,7 @@ input_number:
     max: 30
     step: 5
     unit_of_measurement: Minutes
+
 ################################################################################
 
 template:
@@ -206,6 +207,34 @@ automation:
           entity_id:
             - light.master_bedroom_lights
             - light.lights_out
+  ################################################################################
+  - id: routine_night_goodnight_alarm
+    alias: 'Routine - Night - Goodnight Alarm'
+    description: Arm the alarm at home when the Goodnight scene is activated
+    trigger:
+      - trigger: scene.activated
+        target:
+          entity_id: scene.routine_night_goodnight
+    condition:
+      - condition: state
+        entity_id: alarm_control_panel.home
+        state: 'disarmed'
+      - condition: state
+        entity_id: group.people
+        state: 'home'
+      - condition: state
+        entity_id: input_boolean.away_mode
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.vacation_mode
+        state: 'off'
+    action:
+      - alias: 'Arm the alarm in home mode'
+        service: alarm_control_panel.alarm_arm_home
+        data:
+          entity_id: alarm_control_panel.home
+          code: !secret alarm_code
+    mode: single
 ################################################################################
 
 ################################################################################

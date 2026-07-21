@@ -29,6 +29,7 @@ homekit:
         - fan.living_room_ceiling_fan
         - switch.fireplace
         - switch.garage_lights
+        - scene.routine_day_good_morning
         - scene.routine_night_goodnight
   ################################################################################
   # Moving door locks to separate accessory bridges
