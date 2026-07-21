@@ -288,12 +288,6 @@ scene:
         state: 'on'
         brightness_pct: 50
         profile: relax
-
-      # Hyperion Lights
-      light.hyperion_living_room_tv:
-        state: 'on'
-      light.hyperion_kitchen_cabinet_lights:
-        state: 'on'
   ################################################################################
   - name: Routine - Night - Goodnight
     id: routine_night_goodnight

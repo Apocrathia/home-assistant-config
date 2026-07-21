@@ -1,7 +1,0 @@
----
-### Hyperion Automations ###
-group:
-  hyperion_led_outputs:
-    name: Hyperion LED Outputs
-    entities:
-      - switch.kitchen_cabinet_lights_component_led_device
