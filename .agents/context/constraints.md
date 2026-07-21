@@ -1,0 +1,64 @@
+# Constraints — Home Assistant Homelab
+
+## Hard Limits
+
+### What You Can Do Freely
+
+- Read files, explore, search the configuration
+- Run validation, linting, YAML syntax checks
+- Propose changes and present options
+- Use `.scratch/` for throwaways (prefer over `/tmp`)
+
+### Requires Explicit Permission
+
+- Modify `configuration.yaml` or any file in `packages/`
+- Edit files in `.storage/` (JSON — runtime state, never edit directly)
+- Create or modify automations that affect critical systems (security, safety, HVAC)
+- Change secrets.yaml or any credential-related configuration
+- Modify integrations that connect to external services
+
+### Never Do
+
+- Commit changes — the operator handles git operations
+- Push to remote repositories
+- Edit `.storage/` files directly (they are managed by Home Assistant)
+- Hardcode credentials, API keys, or secrets
+- Modify the UniFi or other infrastructure controllers directly
+
+## Protected Paths
+
+The following paths require confirmation before any edit:
+
+- `.agents/` — Agent context and skills (don't break the routing)
+- `configuration.yaml` — Main entry point
+- `secrets.yaml` — All credentials
+- `.storage/` — Runtime state
+- `packages/system/` — Core HA system management
+
+## Domain-Specific Constraints
+
+### YAML Configuration
+
+- Always validate indentation (2 spaces, no tabs)
+- Use `secrets.yaml` for sensitive values, reference with `!secret`
+- Follow package organization: `areas/`, `functions/`, `integrations/`, `projects/`, `routines/`, `system/`, `toys/`
+- Use descriptive naming with prefixes: `routine_morning`, `function_presence`, `light_kitchen`, `sensor_bedroom_temperature`
+
+### Automations
+
+- Always include trigger, condition, and action sections
+- Use `variables` for reusable values within actions
+- Include proper error handling and logging where applicable
+- Avoid tight loops or high-frequency polling
+
+### Entities
+
+- Use consistent naming: `<type>_<area>_<description>` (e.g., `light_kitchen_counter`)
+- Group related entities by area and function
+- Assign proper `area_id`, `device_class`, and `entity_category` where applicable
+
+## Performance
+
+- Stop after 3 failed attempts at the same approach — escalate or change strategy
+- Don't suggest configurations that would cause excessive API calls or polling
+- Consider database and history impact when configuring sensors and loggers
