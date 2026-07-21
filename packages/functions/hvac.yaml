@@ -50,13 +50,17 @@ template:
       - default_entity_id: binary_sensor.downstairs_hvac_uv_bulb_out
         name: Downstairs HVAC UV Bulb Out
         state: >
-          {{ states('climate.homekit_downstairs') != 'off'
+          {{ states('sensor.downstairs_hvac_uv_power') not in ['unavailable', 'unknown']
              and is_state('binary_sensor.downstairs_hvac_uv', 'off') }}
+        delay_on:
+          minutes: 2
       - default_entity_id: binary_sensor.upstairs_hvac_uv_bulb_out
         name: Upstairs HVAC UV Bulb Out
         state: >
-          {{ states('climate.homekit_upstairs') != 'off'
+          {{ states('sensor.upstairs_hvac_uv_power') not in ['unavailable', 'unknown']
              and is_state('binary_sensor.upstairs_hvac_uv', 'off') }}
+        delay_on:
+          minutes: 2
 
 alert:
   ################################################################################
