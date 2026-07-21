@@ -22,6 +22,7 @@ __pycache__
 .cache
 .cloud
 .storage
+.stfolder
 deps
 appdaemon
 
@@ -69,3 +70,4 @@ blueprints
 
 # Specific keeps
 !.gitkeep
+appdaemon/secrets.yaml
