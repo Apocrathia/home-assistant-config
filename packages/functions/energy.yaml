@@ -27,6 +27,51 @@ template:
           {% else %}
             off
           {% endif %}
+      - default_entity_id: binary_sensor.energy_door_open_outside_comfort
+        name: Energy - Door Open Outside Comfort
+        delay_on:
+          minutes: 10
+        state: >
+          {% set outside_temp = states('sensor.back_yard_weather_station_temperature') | float(none) %}
+          {% set door_open = is_state('binary_sensor.front_door', 'open')
+             or is_state('binary_sensor.back_door', 'open')
+             or is_state('binary_sensor.garage_door', 'open') %}
+          {{ outside_temp is not none and door_open and (outside_temp < 18 or outside_temp > 22) }}
+
+alert:
+  function_energy_door_open_outside_comfort:
+    name: Energy - Door Open Outside Comfort
+    message: >
+      {% set outside_temp = states('sensor.back_yard_weather_station_temperature') | float(none) %}
+      {% set doors = [] %}
+      {% if is_state('binary_sensor.front_door', 'open') %}
+        {% set doors = doors + ['front door'] %}
+      {% endif %}
+      {% if is_state('binary_sensor.back_door', 'open') %}
+        {% set doors = doors + ['back door'] %}
+      {% endif %}
+      {% if is_state('binary_sensor.garage_door', 'open') %}
+        {% set doors = doors + ['garage door'] %}
+      {% endif %}
+      {{ doors | join(', ') | title }} has been open for over 10 minutes while outside
+      temperature is {{ outside_temp | round(1) }}C (comfort range 18-22C).
+    done_message: clear_notification
+    entity_id: binary_sensor.energy_door_open_outside_comfort
+    state: 'on'
+    repeat:
+      - 15
+      - 30
+      - 60
+    can_acknowledge: true
+    skip_first: false
+    notifiers:
+      - mobile_app_ians_iphone
+      - mobile_app_ians_ipad_pro
+    data:
+      tag: energy-door-open-outside-comfort
+      group: energy
+      push:
+        interruption-level: active
 
 automation:
   - id: function_energy_solar_production
