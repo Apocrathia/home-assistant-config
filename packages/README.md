@@ -1,24 +1,43 @@
 # Packages
 
-In order to keep my configuration organized and easy to work with, I have opted
-to use Home Assistant's
-[Packages](https://www.home-assistant.io/docs/configuration/packages/)
-functionality. This allows me to keep all of my code pretaining to something
-together.
+Home Assistant [packages](https://www.home-assistant.io/docs/configuration/packages/)
+keep related config together. `configuration.yaml` loads them with:
 
-## Naming Convention
+```yaml
+homeassistant:
+  packages: !include_dir_named packages
+```
 
-Although the `package: !include_dir_named` statement will recursively
-search a directory, there is no indication withing HASS as to what folder it
-actually came from. To make my files organized, I have prefixed them with a
-function idenfier. That way they are grouped together in a logical manner. Most
-of this follows the nomenclature outlined in the [Home Assistant Glossary](https://www.home-assistant.io/docs/glossary/).
+`!include_dir_named` loads YAML recursively. The package id is the **filename
+stem** (e.g. `packages/routines/doge.yaml` → package `doge`). Folder names are
+for humans only — they do not appear in Home Assistant.
 
-| Prefix      | Description                                                                | Example            |
-| ----------- | -------------------------------------------------------------------------- | ------------------ |
-| area        | Configurations related to an area of the home                              | area_back_yard     |
-| integration | Configurations specific to core functionality of Home Assistant            | integration_ecobee |
-| routine     | Configurations to perform tasks which happen on a routine basis            | routine_morning    |
-| function    | Configurations that can be bundled together to perform a specific function | function_presence  |
-| system      | Things that work specifically with the management of Home Assistant        | system_backup      |
-| toy         | Things that have no real use, but are just for fun.                        | toy_annoy          |
+## Directory layout
+
+```
+packages/
+├── areas/          # One file per location
+├── functions/      # Cross-area functionality
+├── integrations/   # Integration / platform config
+├── projects/       # Multi-device projects
+├── routines/       # Time / event routines
+├── system/         # HA system management
+├── test/           # Experimental / scratch packages
+└── toys/           # Non-essential / fun
+```
+
+## Naming
+
+| Layer         | Convention                                      | Example                       |
+| ------------- | ----------------------------------------------- | ----------------------------- |
+| File          | `snake_case.yaml` in the matching directory     | `packages/routines/doge.yaml` |
+| Automation id | `routine_*`, `function_*`, `area_*`, `system_*` | `routine_doge_meals`          |
+| Entity id     | `<type>_<area>_<description>` where applicable  | `light.kitchen_counter`       |
+
+See `.agents/context/nomenclature.md` and `.agents/skills/package-organize/SKILL.md`
+for entity prefixes, section order, and file size limits.
+
+## Related docs
+
+- [docs/packages.md](../docs/packages.md) — package types and practices
+- [Home Assistant Packages](https://www.home-assistant.io/docs/configuration/packages/)

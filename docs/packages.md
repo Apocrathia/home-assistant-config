@@ -1,102 +1,77 @@
-# Home Assistant Packages Documentation
+# Home Assistant Packages
 
-## Overview
+Modular YAML packages under `packages/`, loaded via
+`homeassistant.packages: !include_dir_named packages` in `configuration.yaml`.
 
-This document describes the organization and structure of our Home Assistant packages. The configuration uses a modular approach through Home Assistant's packages feature, allowing for better organization and maintenance of the configuration.
+The package id is the filename stem. Subdirectory names organize the repo; they
+are not part of the package id.
 
-## Directory Structure
+## Directory structure
 
 ```
 packages/
-├── areas/         # Location-specific configurations
-├── functions/     # Specific functionality modules
-├── integrations/  # Core HA integration configs
-├── projects/      # Special project configurations
-├── routines/      # Time-based and routine tasks
-├── scripts/       # Reusable script definitions
-├── system/        # Core system management
-├── test/          # Testing configurations
-└── toys/          # Fun and experimental features
+├── areas/          # Location-specific config
+├── functions/      # Cross-area functionality
+├── integrations/   # Core / integration config
+├── projects/       # Multi-device projects
+├── routines/       # Time- and event-based routines
+├── system/         # HA system management
+├── test/           # Experimental packages
+└── toys/           # Non-essential / fun
 ```
 
-## Package Types
+## Package types
 
 ### Areas (`areas/`)
 
-Location-specific configurations for different spaces in the home. Each area package contains:
-
-- Light configurations
-- Room-specific automations
-- Area-specific sensors
-- Scene definitions
+One file per location: lights, room automations, sensors, scenes.
 
 Examples: `back_yard.yaml`, `office.yaml`, `master_bathroom.yaml`
 
 ### Functions (`functions/`)
 
-Modules that handle specific types of functionality across different areas:
+Cross-cutting behavior: energy, HVAC, presence, security, dimmers.
 
-- Energy management
-- HVAC control
-- Dimmer and remote control systems
-- Security features
+Examples: `energy.yaml`, `hvac.yaml`, `presence.yaml`
 
-Examples: `energy.yaml`, `hvac.yaml`, `dimmer_remote.yaml`
+### Integrations (`integrations/`)
+
+Platform and integration settings (HomeKit, InfluxDB, Awtrix, etc.).
 
 ### Projects (`projects/`)
 
-Special integrations for specific projects:
-
-- Mycology monitoring
-- Aquaponics system
-- Automated blinds
-- Each project package contains all related sensors, automations, and configurations
+Self-contained multi-device projects (mycology, aquaponics, blinds).
 
 ### Routines (`routines/`)
 
-Time-based and routine task configurations:
-
-- Morning routines
-- Work schedules
-- Evening sequences
-- Vacation modes
+Schedules and recurring flows (day, night, work, doge, events).
 
 ### System (`system/`)
 
-Core system management features:
+Core management: areas registry helpers, Lovelace, maintenance, shell commands.
 
-- Backup configurations
-- System health monitoring
-- Maintenance automations
-- Core service configurations
+### Toys (`toys/`)
 
-## Best Practices
+Optional / seasonal behavior (halloween, party lights).
 
-1. Keep each package focused on a single responsibility
-2. Use clear, descriptive names for all entities
-3. Document dependencies between packages
-4. Include comments for complex automations
-5. Test configurations before deploying to production
+## Practices
 
-## Adding New Packages
+1. One concern per package file
+2. Prefer entity ids and automation ids from `.agents/context/nomenclature.md`
+3. Follow section order and size limits in `.agents/skills/package-organize/SKILL.md`
+4. Document non-obvious dependencies in-file with comments
+5. Validate config after changes (Developer Tools → YAML, or config-validate skill)
 
-To add a new package:
+## Adding a package
 
-1. Identify the appropriate category
-2. Create a new YAML file in the corresponding directory
-3. Follow the naming convention: `<category>_<description>.yaml`
-4. Include necessary documentation within the file
-5. Test the configuration before deploying
+1. Pick the directory that matches the concern
+2. Add `snake_case.yaml` (filename stem becomes the package id)
+3. Use the package-organize section headers and naming prefixes
+4. Validate before relying on it in production
 
-## Common Patterns
+## Related
 
-- Use `!include` statements for shared configurations
-- Leverage templates for reusable logic
-- Implement proper error handling
-- Use meaningful names for entities and automations
-
-## Related Documentation
-
-- [Home Assistant Packages Documentation](https://www.home-assistant.io/docs/configuration/packages/)
-- [YAML Configuration Basics](https://www.home-assistant.io/docs/configuration/yaml/)
-- [Automation Documentation](https://www.home-assistant.io/docs/automation/)
+- [packages/README.md](../packages/README.md)
+- [Home Assistant Packages](https://www.home-assistant.io/docs/configuration/packages/)
+- [YAML configuration](https://www.home-assistant.io/docs/configuration/yaml/)
+- [Automations](https://www.home-assistant.io/docs/automation/)

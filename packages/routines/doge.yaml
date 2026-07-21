@@ -1,18 +1,12 @@
 ---
 ### Doge ###
+# Breakfast and dinner meal reminders (lunch removed).
+# Template sensors compute feed / advance / relief clock times from helpers.
 
-# Feed the doge (@ & 15 minutes before 0800, 1200, & 1600)
-# Add inputs for this later.
-# 3 input datetime's & 1 input number
-# This could be done as a single automation with a template
 ### Inputs ###
 input_datetime:
   doge_meal_breakfast:
     name: Doge - Breakfast
-    has_date: false
-    has_time: true
-  doge_meal_lunch:
-    name: Doge - Lunch
     has_date: false
     has_time: true
   doge_meal_dinner:
@@ -46,292 +40,108 @@ input_number:
 ### Sensors ###
 template:
   - sensor:
-      # Breakfast
       - default_entity_id: sensor.doge_meal_breakfast
         name: Doge - Meal - Breakfast
         state: >
           {{ (states.input_datetime.doge_meal_breakfast.attributes.timestamp |
-              int | timestamp_custom("%H:%M",False)) }}
+              int | timestamp_custom("%H:%M", false)) }}
       - default_entity_id: sensor.doge_meal_breakfast_advance
         name: Doge - Meal - Breakfast (Advance)
         state: >
           {{ ((states.input_datetime.doge_meal_breakfast.attributes.timestamp |
               int - states.input_number.doge_meal_advance.state |
-              int * 60) | timestamp_custom("%H:%M",False)) }}
-      - default_entity_id: sensor.doge_meal_breakfast_end
-        name: Doge - Meal - Breakfast (End)
-        state: >
-          {{ ((states.input_datetime.doge_meal_breakfast.attributes.timestamp |
-              int + states.input_number.doge_meal_duration.state |
-              int * 60) | timestamp_custom("%H:%M",False)) }}
+              int * 60) | timestamp_custom("%H:%M", false)) }}
       - default_entity_id: sensor.doge_meal_breakfast_relief
         name: Doge - Meal - Breakfast (Relief)
         state: >
           {{ ((states.input_datetime.doge_meal_breakfast.attributes.timestamp |
               int + states.input_number.doge_meal_duration.state | int * 60 +
               states.input_number.doge_meal_relief.state | int * 60 * 60) |
-              timestamp_custom("%H:%M",False)) }}
-      # Lunch
-      - default_entity_id: sensor.doge_meal_lunch
-        name: Doge - Meal - Lunch
-        state: >
-          {{ (states.input_datetime.doge_meal_lunch.attributes.timestamp |
-              int | timestamp_custom("%H:%M",False)) }}
-      - default_entity_id: sensor.doge_meal_lunch_advance
-        name: Doge - Meal - Lunch (Advance)
-        state: >
-          {{ ((states.input_datetime.doge_meal_lunch.attributes.timestamp |
-              int - states.input_number.doge_meal_advance.state |
-              int * 60) | timestamp_custom("%H:%M",False)) }}
-      - default_entity_id: sensor.doge_meal_lunch_end
-        name: Doge - Meal - Lunch (End)
-        state: >
-          {{ ((states.input_datetime.doge_meal_lunch.attributes.timestamp |
-              int + states.input_number.doge_meal_duration.state |
-              int * 60) | timestamp_custom("%H:%M",False)) }}
-      - default_entity_id: sensor.doge_meal_lunch_relief
-        name: Doge - Meal - Lunch (Relief)
-        state: >
-          {{ ((states.input_datetime.doge_meal_lunch.attributes.timestamp |
-              int + states.input_number.doge_meal_duration.state | int * 60 +
-              states.input_number.doge_meal_relief.state | int * 60 * 60) |
-              timestamp_custom("%H:%M",False)) }}
-      # Dinner
+              timestamp_custom("%H:%M", false)) }}
       - default_entity_id: sensor.doge_meal_dinner
         name: Doge - Meal - Dinner
         state: >
           {{ (states.input_datetime.doge_meal_dinner.attributes.timestamp |
-              int | timestamp_custom("%H:%M",False)) }}
+              int | timestamp_custom("%H:%M", false)) }}
       - default_entity_id: sensor.doge_meal_dinner_advance
         name: Doge - Meal - Dinner (Advance)
         state: >
           {{ ((states.input_datetime.doge_meal_dinner.attributes.timestamp |
               int - states.input_number.doge_meal_advance.state |
-              int * 60) | timestamp_custom("%H:%M",False)) }}
-      - default_entity_id: sensor.doge_meal_dinner_end
-        name: Doge - Meal - Dinner (End)
-        state: >
-          {{ ((states.input_datetime.doge_meal_dinner.attributes.timestamp |
-              int + states.input_number.doge_meal_duration.state |
-              int * 60) | timestamp_custom("%H:%M",False)) }}
+              int * 60) | timestamp_custom("%H:%M", false)) }}
       - default_entity_id: sensor.doge_meal_dinner_relief
         name: Doge - Meal - Dinner (Relief)
         state: >
           {{ ((states.input_datetime.doge_meal_dinner.attributes.timestamp |
               int + states.input_number.doge_meal_duration.state | int * 60 +
               states.input_number.doge_meal_relief.state | int * 60 * 60) |
-              timestamp_custom("%H:%M",False)) }}
-      # Location
-      - default_entity_id: sensor.distance_from_doge
-        name: Distance From Doge
-        state: >
-          {{ distance('device_tracker.michio_tracker','person.ian') }}
-        unit_of_measurement: km
+              timestamp_custom("%H:%M", false)) }}
+
+### Automations ###
 automation:
-  ################################################################################
-  - id: routine_doge_breakfast
-    alias: Routine - Doge - Breakfast
+  - id: routine_doge_meals
+    alias: Routine - Doge - Meals
+    description: >
+      Notify for breakfast/dinner upcoming, feed, and relief times when home.
+    mode: queued
     triggers:
       - trigger: template
+        id: breakfast_upcoming
         value_template: >
-          {{ (states.sensor.time.state
-            == states.sensor.doge_meal_breakfast.state) }}
+          {{ states('sensor.time') == states('sensor.doge_meal_breakfast_advance') }}
+      - trigger: template
+        id: breakfast
+        value_template: >
+          {{ states('sensor.time') == states('sensor.doge_meal_breakfast') }}
+      - trigger: template
+        id: breakfast_relief
+        value_template: >
+          {{ states('sensor.time') == states('sensor.doge_meal_breakfast_relief') }}
+      - trigger: template
+        id: dinner_upcoming
+        value_template: >
+          {{ states('sensor.time') == states('sensor.doge_meal_dinner_advance') }}
+      - trigger: template
+        id: dinner
+        value_template: >
+          {{ states('sensor.time') == states('sensor.doge_meal_dinner') }}
+      - trigger: template
+        id: dinner_relief
+        value_template: >
+          {{ states('sensor.time') == states('sensor.doge_meal_dinner_relief') }}
     conditions:
       - condition: state
         entity_id: input_boolean.away_mode
         state: 'off'
     actions:
-      - action: notify.notify
-        data:
-          title: It's Breakfast Time!
-          message: Get up and go feed the doge!
-  ################################################################################
-  - id: routine_doge_breakfast_upcoming
-    alias: Routine - Doge - Breakfast (Upcoming)
-    triggers:
-      - trigger: template
-        value_template: >
-          {{ (states.sensor.time.state
-            == states.sensor.doge_meal_breakfast_advance.state) }}
-    conditions:
-      - condition: state
-        entity_id: input_boolean.away_mode
-        state: 'off'
-    actions:
-      - action: notify.notify
-        data:
-          title: It's Almost Breakfast Time!
-          message: Get ready to get up and go feed the doge!
-  ################################################################################
-  - id: routine_doge_breakfast_relief
-    alias: Routine - Doge - Breakfast (Relief)
-    triggers:
-      - trigger: template
-        value_template: >
-          {{ (states.sensor.time.state
-            == states.sensor.doge_meal_breakfast_relief.state) }}
-    conditions:
-      - condition: state
-        entity_id: input_boolean.away_mode
-        state: 'off'
-    actions:
-      - action: notify.notify
-        data:
-          title: Take The Doge Out!
-          message: Time to empty the doge!
-  ################################################################################
-  - id: routine_doge_lunch
-    alias: Routine - Doge - Lunch
-    triggers:
-      - trigger: template
-        value_template: >
-          {{ (states.sensor.time.state
-            == states.sensor.doge_meal_lunch.state) }}
-    conditions:
-      - condition: state
-        entity_id: input_boolean.away_mode
-        state: 'off'
-    actions:
-      - action: notify.notify
-        data:
-          title: It's Lunch Time!
-          message: Get up and go feed the doge!
-  ################################################################################
-  - id: routine_doge_lunch_upcoming
-    alias: Routine - Doge - Lunch (Upcoming)
-    triggers:
-      - trigger: template
-        value_template: >
-          {{ (states.sensor.time.state
-            == states.sensor.doge_meal_lunch_advance.state) }}
-    conditions:
-      - condition: state
-        entity_id: input_boolean.away_mode
-        state: 'off'
-    actions:
-      - action: notify.notify
-        data:
-          title: It's Almost Lunch Time!
-          message: Get ready to get up and go feed the doge!
-  ################################################################################
-  - id: routine_doge_lunch_relief
-    alias: Routine - Doge - Lunch (Relief)
-    triggers:
-      - trigger: template
-        value_template: >
-          {{ (states.sensor.time.state
-            == states.sensor.doge_meal_lunch_relief.state) }}
-    conditions:
-      - condition: state
-        entity_id: input_boolean.away_mode
-        state: 'off'
-    actions:
-      - action: notify.notify
-        data:
-          title: Take The Doge Out!
-          message: Time to empty the doge!
-  ################################################################################
-  - id: routine_doge_dinner
-    alias: Routine - Doge - Dinner
-    triggers:
-      - trigger: template
-        value_template: >
-          {{ (states.sensor.time.state
-            == states.sensor.doge_meal_dinner.state) }}
-    conditions:
-      - condition: state
-        entity_id: input_boolean.away_mode
-        state: 'off'
-    actions:
-      - action: notify.notify
-        data:
-          title: It's Dinner Time!
-          message: Get up and go feed the doge!
-  ################################################################################
-  - id: routine_doge_dinner_upcoming
-    alias: Routine - Doge - Dinner (Upcoming)
-    triggers:
-      - trigger: template
-        value_template: >
-          {{ (states.sensor.time.state
-            == states.sensor.doge_meal_dinner_advance.state) }}
-    conditions:
-      - condition: state
-        entity_id: input_boolean.away_mode
-        state: 'off'
-    actions:
-      - action: notify.notify
-        data:
-          title: It's Almost Dinner Time!
-          message: Get ready to get up and go feed the doge!
-  ################################################################################
-  - id: routine_doge_dinner_relief
-    alias: Routine - Doge - Dinner (Relief)
-    triggers:
-      - trigger: template
-        value_template: >
-          {{ (states.sensor.time.state
-            == states.sensor.doge_meal_dinner_relief.state) }}
-    conditions:
-      - condition: state
-        entity_id: input_boolean.away_mode
-        state: 'off'
-    actions:
-      - action: notify.notify
-        data:
-          title: Take The Doge Out!
-          message: Time to empty the doge!
-  ################################################################################
-  - id: routine_doge_collar_light
-    alias: Routine - Doge - Collar Light
-    triggers:
-      - trigger: sun
-        event: sunset
-      - trigger: sun
-        event: sunrise
-      - trigger: state
-        entity_id:
-          - input_boolean.away_mode
-          - light.michio_collar_light
-    actions:
-      - alias: 'State Handler'
-        choose:
+      - variables:
+          meal: "{{ trigger.id.replace('_upcoming', '').replace('_relief', '') }}"
+          phase: >
+            {% if trigger.id.endswith('_upcoming') %}upcoming
+            {% elif trigger.id.endswith('_relief') %}relief
+            {% else %}feed{% endif %}
+      - choose:
           - conditions:
-              - alias: 'Home'
-                condition: state
-                entity_id: input_boolean.away_mode
-                state: 'off'
+              - condition: template
+                value_template: "{{ phase == 'upcoming' }}"
             sequence:
-              - alias: 'Turn off Light'
-                action: light.turn_off
-                target:
-                  entity_id: light.michio_collar_light
+              - action: notify.notify
+                data:
+                  title: "It's Almost {{ meal | title }} Time!"
+                  message: Get ready to get up and go feed the doge!
           - conditions:
-              - alias: 'Away'
-                condition: state
-                entity_id: input_boolean.away_mode
-                state: 'on'
+              - condition: template
+                value_template: "{{ phase == 'relief' }}"
             sequence:
-              - alias: 'Time'
-                choose:
-                  - conditions:
-                      - alias: 'Day'
-                        condition: state
-                        entity_id: sun.sun
-                        state: 'above_horizon'
-                    sequence:
-                      - alias: 'Turn off Light'
-                        action: light.turn_off
-                        target:
-                          entity_id: light.michio_collar_light
-                  - conditions:
-                      - alias: 'Night'
-                        condition: state
-                        entity_id: sun.sun
-                        state: 'below_horizon'
-                    sequence:
-                      - alias: 'Turn on Light'
-                        action: light.turn_on
-                        target:
-                          entity_id: light.michio_collar_light
-################################################################################
+              - action: notify.notify
+                data:
+                  title: Take The Doge Out!
+                  message: Time to empty the doge!
+          - conditions:
+              - condition: template
+                value_template: "{{ phase == 'feed' }}"
+            sequence:
+              - action: notify.notify
+                data:
+                  title: "It's {{ meal | title }} Time!"
+                  message: Get up and go feed the doge!
