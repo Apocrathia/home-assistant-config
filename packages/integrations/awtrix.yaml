@@ -282,8 +282,8 @@ automation:
 
   ################################################################################
   # House-wide notification: last call reminder
-  # make this multiple triggers, at differnt times. then add a variable action to
-  # calculate the time remaining
+  # sensor.time and sensor.last_call are both HH:MM strings. Convert to minutes
+  # past midnight, fire at T-60 / T-30 / T-15 / T-5 / T-0, then announce remaining.
   ################################################################################
   - id: integration_awtrix_notification_last_call_reminder
     alias: 'Integration - Awtrix - Last Call Reminder'
@@ -291,19 +291,16 @@ automation:
     trigger:
       - platform: template
         value_template: >
-          {{ states.sensor.time.state == states.sensor.last_call.state }}
-      - platform: template
-        value_template: >
-          {{ states.sensor.time.state == states.sensor.last_call.state - 5 }}
-      - platform: template
-        value_template: >
-          {{ states.sensor.time.state == states.sensor.last_call.state - 15 }}
-      - platform: template
-        value_template: >
-          {{ states.sensor.time.state == states.sensor.last_call.state - 30 }}
-      - platform: template
-        value_template: >
-          {{ states.sensor.time.state == states.sensor.last_call.state - 60 }}
+          {% set t = states('sensor.time').split(':') %}
+          {% set lc = states('sensor.last_call').split(':') %}
+          {% if t|length < 2 or lc|length < 2 %}
+            false
+          {% else %}
+            {% set now_m = t[0]|int(0) * 60 + t[1]|int(0) %}
+            {% set call_m = lc[0]|int(0) * 60 + lc[1]|int(0) %}
+            {% set rem = (call_m - now_m) % 1440 %}
+            {{ rem in [0, 5, 15, 30, 60] }}
+          {% endif %}
     condition:
       - condition: state
         entity_id: binary_sensor.worknight
@@ -311,12 +308,21 @@ automation:
     action:
       - alias: 'Calculate time remaining'
         variables:
-          last_call_time: "{{ states.sensor.last_call.state | timestamp_custom('%H:%M', False) }}"
-          current_time: "{{ now().time().strftime('%H:%M') }}"
-          time_remaining: '{{ (last_call_time - current_time) | int }}'
+          time_remaining: >
+            {% set t = states('sensor.time').split(':') %}
+            {% set lc = states('sensor.last_call').split(':') %}
+            {% set now_m = t[0]|int(0) * 60 + t[1]|int(0) %}
+            {% set call_m = lc[0]|int(0) * 60 + lc[1]|int(0) %}
+            {{ (call_m - now_m) % 1440 }}
+          reminder_text: >
+            {% if time_remaining | int(0) == 0 %}
+              Lights out!
+            {% else %}
+              Lights out in {{ time_remaining }} minutes
+            {% endif %}
       - service: script.awtrix_broadcast_notification
         data:
-          text: 'Lights out in {{ time_remaining }} minutes'
+          text: '{{ reminder_text }}'
           duration: 30
           icon: '2314' # moon / clear night
           rtttl: 'two_short:d=4,o=5,b=100:16e6,16e6'
