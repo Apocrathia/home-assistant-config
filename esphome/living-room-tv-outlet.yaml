@@ -1,5 +1,6 @@
+---
 substitutions:
-  name: "living-room-tv-outlet"
+  name: 'living-room-tv-outlet'
   friendly_name: Living Room TV Outlet
 
 packages:

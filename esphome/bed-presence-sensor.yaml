@@ -1,5 +1,6 @@
+---
 esphome:
-  name: "bed-presence-sensor"
+  name: 'bed-presence-sensor'
   friendly_name: Bed Presence Sensor
   min_version: 2024.6.0
   name_add_mac_suffix: false
@@ -34,7 +35,7 @@ captive_portal:
 
 # Enable esphome OTA updates
 ota:
-- platform: esphome
+  - platform: esphome
 
 ################################################################################
 packages:
@@ -43,9 +44,8 @@ packages:
     ref: main
     refresh: 1s
     files:
-    - bed-presence-mk1/base.yaml
-    - esphome-common/bluetooth-proxy.yaml
-
+      - bed-presence-mk1/base.yaml
+      - esphome-common/bluetooth-proxy.yaml
 # See https://github.com/ElevatedSensors/sensor-configs/blob/main/bed-presence-mk1/sensor.yaml for a detailed
 # description of available substitutions.
 #
