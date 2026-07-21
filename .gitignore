@@ -23,6 +23,7 @@ __pycache__
 .cloud
 .storage
 .stfolder
+.stignore
 deps
 appdaemon
 
