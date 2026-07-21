@@ -1,7 +1,7 @@
 ---
 ### Doge ###
 # Breakfast and dinner meal reminders (lunch removed).
-# Template sensors compute feed / advance / relief clock times from helpers.
+# Template sensors compute feed / advance / end / relief clock times from helpers.
 
 ### Inputs ###
 input_datetime:
@@ -51,6 +51,12 @@ template:
           {{ ((states.input_datetime.doge_meal_breakfast.attributes.timestamp |
               int - states.input_number.doge_meal_advance.state |
               int * 60) | timestamp_custom("%H:%M", false)) }}
+      - default_entity_id: sensor.doge_meal_breakfast_end
+        name: Doge - Meal - Breakfast (End)
+        state: >
+          {{ ((states.input_datetime.doge_meal_breakfast.attributes.timestamp |
+              int + states.input_number.doge_meal_duration.state |
+              int * 60) | timestamp_custom("%H:%M", false)) }}
       - default_entity_id: sensor.doge_meal_breakfast_relief
         name: Doge - Meal - Breakfast (Relief)
         state: >
@@ -69,6 +75,12 @@ template:
           {{ ((states.input_datetime.doge_meal_dinner.attributes.timestamp |
               int - states.input_number.doge_meal_advance.state |
               int * 60) | timestamp_custom("%H:%M", false)) }}
+      - default_entity_id: sensor.doge_meal_dinner_end
+        name: Doge - Meal - Dinner (End)
+        state: >
+          {{ ((states.input_datetime.doge_meal_dinner.attributes.timestamp |
+              int + states.input_number.doge_meal_duration.state |
+              int * 60) | timestamp_custom("%H:%M", false)) }}
       - default_entity_id: sensor.doge_meal_dinner_relief
         name: Doge - Meal - Dinner (Relief)
         state: >
@@ -82,7 +94,7 @@ automation:
   - id: routine_doge_meals
     alias: Routine - Doge - Meals
     description: >
-      Notify for breakfast/dinner upcoming, feed, and relief times when home.
+      Notify for breakfast/dinner upcoming, feed, end, and relief times when home.
     mode: queued
     triggers:
       - trigger: template
@@ -93,6 +105,10 @@ automation:
         id: breakfast
         value_template: >
           {{ states('sensor.time') == states('sensor.doge_meal_breakfast') }}
+      - trigger: template
+        id: breakfast_end
+        value_template: >
+          {{ states('sensor.time') == states('sensor.doge_meal_breakfast_end') }}
       - trigger: template
         id: breakfast_relief
         value_template: >
@@ -106,6 +122,10 @@ automation:
         value_template: >
           {{ states('sensor.time') == states('sensor.doge_meal_dinner') }}
       - trigger: template
+        id: dinner_end
+        value_template: >
+          {{ states('sensor.time') == states('sensor.doge_meal_dinner_end') }}
+      - trigger: template
         id: dinner_relief
         value_template: >
           {{ states('sensor.time') == states('sensor.doge_meal_dinner_relief') }}
@@ -115,10 +135,11 @@ automation:
         state: 'off'
     actions:
       - variables:
-          meal: "{{ trigger.id.replace('_upcoming', '').replace('_relief', '') }}"
+          meal: "{{ trigger.id.replace('_upcoming', '').replace('_relief', '').replace('_end', '') }}"
           phase: >
             {% if trigger.id.endswith('_upcoming') %}upcoming
             {% elif trigger.id.endswith('_relief') %}relief
+            {% elif trigger.id.endswith('_end') %}end
             {% else %}feed{% endif %}
       - choose:
           - conditions:
@@ -129,6 +150,14 @@ automation:
                 data:
                   title: "It's Almost {{ meal | title }} Time!"
                   message: Get ready to get up and go feed the doge!
+          - conditions:
+              - condition: template
+                value_template: "{{ phase == 'end' }}"
+            sequence:
+              - action: notify.notify
+                data:
+                  title: '{{ meal | title }} Is Over!'
+                  message: Time to pick up the doge's bowl!
           - conditions:
               - condition: template
                 value_template: "{{ phase == 'relief' }}"
