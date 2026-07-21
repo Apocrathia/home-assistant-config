@@ -14,18 +14,18 @@ Load context modules in this order. Each file is a thin module that loads on dem
 
 ## When to Load What
 
-| If you're…                       | Then read                              |
-| -------------------------------- | -------------------------------------- |
-| New / unsure                     | `README.md` only                       |
-| Starting non-trivial work        | `traps.md` + `constraints.md`          |
-| Creating entities or automations | `nomenclature.md`                      |
-| Scope is fuzzy                   | `questions.md`                         |
-| Writing docs or agent tone       | `voice.md` + `output.md`               |
-| Validating YAML configs          | `skills/config-validate/SKILL.md`      |
-| Restructuring packages           | `skills/package-organize/SKILL.md`     |
-| Fixing broken automations        | `skills/automation-debug/SKILL.md`     |
-| Deep HA config knowledge needed  | `agents/ha-config-expert/agent.md`     |
-| Complex automation design needed | `agents/automation-architect/agent.md` |
+| If you're…                       | Then read                                          |
+| -------------------------------- | -------------------------------------------------- |
+| New / unsure                     | `README.md` only                                   |
+| Starting non-trivial work        | `traps.md` + `constraints.md`                      |
+| Creating entities or automations | `nomenclature.md` + `output.md` + `constraints.md` |
+| Scope is fuzzy                   | `questions.md`                                     |
+| Writing docs or agent tone       | `voice.md` + `output.md`                           |
+| Validating YAML configs          | `skills/config-validate/SKILL.md`                  |
+| Restructuring packages           | `skills/package-organize/SKILL.md`                 |
+| Fixing broken automations        | `skills/automation-debug/SKILL.md`                 |
+| Deep HA config knowledge needed  | `agents/ha-config-expert/agent.md`                 |
+| Complex automation design needed | `agents/automation-architect/agent.md`             |
 
 ## Rules
 

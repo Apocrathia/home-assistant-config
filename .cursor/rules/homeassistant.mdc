@@ -19,4 +19,7 @@ Key directories:
 - `esphome/` — ESPHome device definitions
 - `utilities/` — Helper scripts
 
-When reviewing configurations: check YAML syntax, entity references, security, and suggest optimizations.
+When reviewing or writing automations: use current YAML keys (`triggers` /
+`conditions` / `actions`; item keys `trigger:` and `action:` — see
+`.agents/context/output.md` and `traps.md`). Also check entity references,
+security, and suggest optimizations.

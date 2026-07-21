@@ -118,7 +118,7 @@ automation:
     # condition:
     actions:
       # - alias: "Test"
-      #   service: notify.alexa_media
+      #   action: notify.alexa_media
       #   data:
       #     data:
       #       type: tts

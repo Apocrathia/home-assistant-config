@@ -33,7 +33,7 @@ automation:
       # US-EN-Morgan-Freeman-Starting-Party-Mode.wav
       # However, it seems like the notify.alexa_media component won't do mp3s
       # Keeping this note here for later.
-      # - service: script.notification_party_mode
+      # - action: script.notification_party_mode
       - action: input_boolean.turn_on
         entity_id: input_boolean.party_lights
       - delay:

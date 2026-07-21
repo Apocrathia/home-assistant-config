@@ -142,5 +142,5 @@ FIX:
 ## Notes
 
 - Always test changes in Developer Tools → YAML Configuration → Reload before restarting
-- Use `automation.trigger` service to test without waiting for real conditions
+- Call `action: automation.trigger` to test without waiting for real conditions
 - Template debugging is the #1 source of automation issues — test templates in isolation first

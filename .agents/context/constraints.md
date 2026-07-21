@@ -46,7 +46,9 @@ The following paths require confirmation before any edit:
 
 ### Automations
 
-- Always include trigger, condition, and action sections
+- Use current automation YAML keys: `triggers:`, `conditions:`, `actions:`
+- Inside a trigger item use `trigger:` (not `platform:`); inside an action item use `action:` (not `service:`)
+- Nested condition type keys stay singular (`condition: state`, `condition: time`, etc.)
 - Use `variables` for reusable values within actions
 - Include proper error handling and logging where applicable
 - Avoid tight loops or high-frequency polling

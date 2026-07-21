@@ -14,8 +14,8 @@
 
 # automation:
 #   - alias: "System - Lovelace - Update"
-#     trigger:
-#       platform: state
-#       entity_id: sensor.lovelace
-#     action:
-#       service: shell_command.convert_lovelace
+#     triggers:
+#       - trigger: state
+#         entity_id: sensor.lovelace
+#     actions:
+#       - action: shell_command.convert_lovelace

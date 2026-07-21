@@ -1,0 +1,25 @@
+# ---
+### Safety Routines ###
+# automation:
+# Reminder to check fire extinguishers quarterly.
+# Source: https://www.instructables.com/Fire-Extinguisher-Inspection/
+################################################################################
+# - id: routine_safety_fire_extinguisher_inspection
+#   alias: Routine - Safety - Fire Extinguisher Inspection
+#   triggers:
+#     - trigger: template
+#       value_template: >
+#         '{{ ((now().strftime("%m") | int) % 3 == 0 }}'
+#   actions:
+#     - action: notify.notify
+#       data:
+#         title: Safety Check
+#         message: |
+#           Please inspect the fire extinguishers throughout the house.
+#           Verify the following:
+#             1: Gauge in green zone
+#             2: Safety pin is free
+#             3: Slosh contents of container
+#             4: Inspect for damage
+#             4: Wall mount secured
+################################################################################

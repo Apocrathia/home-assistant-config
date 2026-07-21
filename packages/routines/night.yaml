@@ -191,7 +191,7 @@ automation:
             entity_id: light.master_bedroom_lights
             state: 'on'
     actions:
-      # - service: notify.alexa_media
+      # - action: notify.alexa_media
       #   data:
       #     data:
       #       type: tts

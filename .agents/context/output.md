@@ -39,33 +39,32 @@ New file: packages/areas/guest_room.yaml
 # Guest Room Configuration
 # Last updated: 2026-07-20
 
-light:
-  - platform: template
-    lights:
-      guest_lamp:
-        name: "Guest Lamp"
+input_boolean:
+  guest_room_occupied:
+    name: Guest Room Occupied
 ````
 
 ````
 
 ### Automation Output
 
-When presenting automations, include all sections in order:
+When presenting automations, include all sections in order. Use current HA YAML keys
+(`triggers` / `conditions` / `actions`, plus `trigger:` and `action:` on list items):
 
 ```yaml
 automation:
   - alias: "Kitchen Motion Light On"
     description: "Turn on kitchen lights when motion detected at night"
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: binary_sensor.kitchen_motion
         to: "on"
-    condition:
+    conditions:
       - condition: time
         after: "sunset - 00:30:00"
         before: "sunrise + 00:15:00"
-    action:
-      - service: light.turn_on
+    actions:
+      - action: light.turn_on
         target:
           entity_id: light.kitchen_ceiling
         data:

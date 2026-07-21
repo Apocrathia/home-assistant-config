@@ -2,7 +2,7 @@
 ### Function - Light - Colorloop ###
 ###############################################################################
 # Example usage:
-# service: script.light_colorloop
+# action: script.light_colorloop
 # data:
 #   entity_id: light.test
 #   transition: 5

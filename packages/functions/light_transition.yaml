@@ -2,7 +2,7 @@
 ### Function - Light - Transition ###
 ###############################################################################
 # Example usage:
-# service: script.light_transition
+# action: script.light_transition
 # data:
 #   entity_id: light.test
 #   starting_brightness_pct: 100

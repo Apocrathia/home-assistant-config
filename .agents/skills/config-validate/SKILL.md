@@ -23,15 +23,16 @@ Validate Home Assistant YAML configurations for syntax, structure, and best prac
 
 ## Common Validation Checks
 
-| Check                    | Severity | Example                                                   |
-| ------------------------ | -------- | --------------------------------------------------------- |
-| Indentation              | Error    | Mixed tabs/spaces, wrong indent level                     |
-| Duplicate entity_id      | Error    | Two entities with same ID                                 |
-| Missing required field   | Error    | `service:` without `service:` value                       |
-| Invalid entity reference | Warning  | `entity_id: light.nonexistent`                            |
-| Hardcoded secret         | Warning  | `api_key: "my-secret-key"` instead of `!secret`           |
-| Deprecated option        | Info     | Using old-style `latitude:` instead of `recorder:` config |
-| Missing description      | Info     | Automation without `description:` field                   |
+| Check                    | Severity | Example                                                                                                             |
+| ------------------------ | -------- | ------------------------------------------------------------------------------------------------------------------- |
+| Indentation              | Error    | Mixed tabs/spaces, wrong indent level                                                                               |
+| Duplicate entity_id      | Error    | Two entities with same ID                                                                                           |
+| Missing required field   | Error    | `action:` without a service/action value                                                                            |
+| Legacy automation keys   | Error    | `trigger:`/`action:`/`condition:`/`service:`/`platform:` (use `triggers`/`actions`/`conditions`/`action`/`trigger`) |
+| Invalid entity reference | Warning  | `entity_id: light.nonexistent`                                                                                      |
+| Hardcoded secret         | Warning  | `api_key: "my-secret-key"` instead of `!secret`                                                                     |
+| Deprecated option        | Info     | Using old-style `latitude:` instead of `recorder:` config                                                           |
+| Missing description      | Info     | Automation without `description:` field                                                                             |
 
 ## Output Format
 
@@ -45,7 +46,8 @@ Validation Results for packages/areas/kitchen.yaml:
 
 ## Tools
 
-- `ha config check` — Built-in Home Assistant YAML validator
+- `POST /api/config/core/check_config` — Home Assistant config validator (Bearer token)
+- Developer Tools → YAML — UI config check / reload
 - `yamllint` — External YAML linting tool
 - `pre-commit` — Git hook for pre-commit validation
 

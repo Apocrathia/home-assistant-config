@@ -1,0 +1,29 @@
+# ---
+## Private Routines ##
+
+# These won't go to github
+
+# automation:
+################################################################################
+# - id: routine_private_epley_reminder
+#   alias: "Routine - Private - Epley Reminder"
+#   triggers:
+#     - trigger: time
+#       at: '21:00:00'
+#   actions:
+#     - action: notify.notify
+#       data:
+#         title: Do the Epley Manuver
+#         message: Ian needs to get rid of his vertigo
+################################################################################
+# Stubs
+
+# Take out the trash
+# Daily tasks
+# M - School
+# T - Indoor Chores
+# W - Projects
+# T - Outdoor Chores
+# F - Rest
+# S - Go Outside
+# S - Projects

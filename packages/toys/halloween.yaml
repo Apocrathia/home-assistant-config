@@ -1,0 +1,49 @@
+# ### Halloween ###
+# ---
+
+# # To traumatize children this year, we're going to leverage HA.
+
+# # Planned automations
+# # When doorbell is pressed, run fog machine, turn on a strobe?
+# # The following automations need to be disabled
+# # area_front_porch_motion_initial
+# automation:
+# ################################################################################
+#   - id: toys_halloween_doorbell_scare
+#     alias: Toys - Halloween - Doorbell Scare
+#     triggers:
+#       - trigger: state
+#         entity_id: binary_sensor.doorbell_front_door
+#         from: 'off'
+#         to: 'on'
+#     actions:
+#       - alias: 'Turn on fog machine'
+#         action: switch.turn_on
+#         target:
+#           entity_id: switch.fog_machine
+#       - alias: 'Hold'
+#         delay:
+#           seconds: 5
+#       - alias: 'Turn off fog machine'
+#         action: switch.turn_off
+#         target:
+#           entity_id: switch.fog_machine
+# ################################################################################
+#   - id: toys_halloween_continuous_fog
+#     alias: 'Toys - Halloween - Continuous Fog'
+#     triggers:
+#       - trigger: time_pattern
+#         minutes: "/5"
+#     actions:
+#       - alias: 'Turn on fog machine'
+#         action: switch.turn_on
+#         target:
+#           entity_id: switch.fog_machine
+#       - alias: 'Hold'
+#         delay:
+#           seconds: 1
+#       - alias: 'Turn off fog machine'
+#         action: switch.turn_off
+#         target:
+#           entity_id: switch.fog_machine
+# ################################################################################

@@ -119,7 +119,7 @@ automation:
               button.valetudo_upstairs_trigger_auto_empty_dock
             {% endif %}
       # - alias: vacuum_trigger_autoempty
-      #   service: mqtt.publish
+      #   action: mqtt.publish
       #   data:
       #     topic: >
       #       {% set entity = trigger.entity_id.split('.') %}
