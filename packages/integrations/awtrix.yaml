@@ -1,10 +1,20 @@
 ---
 ################################################################################
-# Awtrix (Ulanzi TC001 / Awtrix3) Integration – Living Room Clock
+# Awtrix (Ulanzi TC001 / Awtrix3) Integration – House-Wide Pixel Clocks
 ################################################################################
-# Device: Ulanzi TC001 Smart Pixel Clock, firmware Awtrix3, connected via MQTT.
+# Devices: Ulanzi TC001 Smart Pixel Clocks, firmware Awtrix3, connected via MQTT.
 # HA integration: ha-awtrix (https://github.com/MiguelAngelLV/ha-awtrix)
 # Awtrix3 API: https://blueforcer.github.io/awtrix3/
+#
+# Device registry (HA device IDs, used by the awtrix.* services):
+#   039ec645765634d11bba9ae96840a922  Living Room Clock    (mqtt 140808720dbc)
+#   ef32274bca923d98274c073f0df1b7ac  Garage Clock         (mqtt d4e9f4cef85c)
+#   3344753e4f1e7a6fbacb3b7c700b14ca  Dining Room Clock    (mqtt 20e7c82dd9dc)
+#   e01ad3a982951bafca7f2712681fa6b0  Master Bedroom Clock (mqtt 9451dc967618)
+#
+# House-wide apps and notifications fan out through the broadcast scripts below.
+# Device-local behavior (brightness, room climate) stays pinned to its device.
+#
 # Icons: LaMetric numeric IDs. Download via the Awtrix built-in web interface by entering each icon id.
 #   Climate: 2056 (temperature), 3359 (humidity)
 #   Weather: 2282 (clear), 2284 (rain), 2289 (snow), 2283 (cloudy), 2158 (fog), 11428 (thunderstorm)
@@ -12,9 +22,130 @@
 #   Other: 2282 (sun), 27464 (solar)
 ################################################################################
 
+# ============================
+# Scripts — broadcast helpers
+# ============================
+script:
+  awtrix_broadcast_custom_app:
+    alias: 'Awtrix - Broadcast Custom App'
+    description: 'Push (or refresh) a custom app on every Awtrix clock in the house.'
+    icon: 'mdi:clock-digital'
+    mode: parallel
+    max: 10
+    fields:
+      app:
+        description: 'Custom app slot name (stable identifier on the device).'
+        required: true
+      text:
+        description: 'Text to display.'
+        required: true
+      icon:
+        description: 'LaMetric icon ID.'
+        required: false
+      color:
+        description: 'Text color as hex (default #FFFFFF).'
+        required: false
+      duration:
+        description: 'Seconds the app is shown per rotation (default 5).'
+        required: false
+    variables:
+      awtrix_devices:
+        - '039ec645765634d11bba9ae96840a922' # Living Room Clock
+        - 'ef32274bca923d98274c073f0df1b7ac' # Garage Clock
+        - '3344753e4f1e7a6fbacb3b7c700b14ca' # Dining Room Clock
+        - 'e01ad3a982951bafca7f2712681fa6b0' # Master Bedroom Clock
+    sequence:
+      - repeat:
+          for_each: '{{ awtrix_devices }}'
+          sequence:
+            - service: awtrix.custom_app
+              data:
+                device: '{{ repeat.item }}'
+                app: '{{ app }}'
+                text: '{{ text }}'
+                icon: "{{ icon | default('') }}"
+                duration: '{{ duration | default(5) }}'
+                color: "{{ color | default('#FFFFFF') }}"
+
+  awtrix_broadcast_notification:
+    alias: 'Awtrix - Broadcast Notification'
+    description: 'Send a one-shot notification to every Awtrix clock in the house.'
+    icon: 'mdi:bell-ring'
+    mode: parallel
+    max: 10
+    fields:
+      text:
+        description: 'Notification text.'
+        required: true
+      icon:
+        description: 'LaMetric icon ID.'
+        required: false
+      duration:
+        description: 'Seconds the notification is shown (default 10).'
+        required: false
+      sound:
+        description: 'Built-in sound name (mutually exclusive with rtttl).'
+        required: false
+      rtttl:
+        description: 'RTTTL melody string (mutually exclusive with sound).'
+        required: false
+      rainbow:
+        description: 'Rainbow text effect (default false).'
+        required: false
+      stack:
+        description: 'Stack behind other notifications (default false).'
+        required: false
+    variables:
+      awtrix_devices:
+        - '039ec645765634d11bba9ae96840a922' # Living Room Clock
+        - 'ef32274bca923d98274c073f0df1b7ac' # Garage Clock
+        - '3344753e4f1e7a6fbacb3b7c700b14ca' # Dining Room Clock
+        - 'e01ad3a982951bafca7f2712681fa6b0' # Master Bedroom Clock
+    sequence:
+      - repeat:
+          for_each: '{{ awtrix_devices }}'
+          sequence:
+            # Sound and rtttl payload keys can't be sent empty, so branch on
+            # which (if either) was provided.
+            - choose:
+                - conditions: "{{ sound | default('') != '' }}"
+                  sequence:
+                    - service: awtrix.notification
+                      data:
+                        device: '{{ repeat.item }}'
+                        text: '{{ text }}'
+                        icon: "{{ icon | default('') }}"
+                        duration: '{{ duration | default(10) }}'
+                        sound: '{{ sound }}'
+                        rainbow: '{{ rainbow | default(false) }}'
+                        stack: '{{ stack | default(false) }}'
+                - conditions: "{{ rtttl | default('') != '' }}"
+                  sequence:
+                    - service: awtrix.notification
+                      data:
+                        device: '{{ repeat.item }}'
+                        text: '{{ text }}'
+                        icon: "{{ icon | default('') }}"
+                        duration: '{{ duration | default(10) }}'
+                        rtttl: '{{ rtttl }}'
+                        rainbow: '{{ rainbow | default(false) }}'
+                        stack: '{{ stack | default(false) }}'
+              default:
+                - service: awtrix.notification
+                  data:
+                    device: '{{ repeat.item }}'
+                    text: '{{ text }}'
+                    icon: "{{ icon | default('') }}"
+                    duration: '{{ duration | default(10) }}'
+                    rainbow: '{{ rainbow | default(false) }}'
+                    stack: '{{ stack | default(false) }}'
+
+# ============================
+# Automations
+# ============================
 automation:
   ################################################################################
-  # Control device brightness
+  # Device-local: Living Room Clock brightness (driven by its own light sensor)
   ################################################################################
   - id: integration_awtrix_living_room_brightness
     alias: 'Integration - Awtrix - Living Room Clock Brightness'
@@ -40,13 +171,13 @@ automation:
           BRI: '{{ brightness }}'
 
   ################################################################################
-  # Custom app: Living room temp and humidity (Downstairs Air Quality Sensor)
+  # Device-local: Living room temp and humidity (Downstairs Air Quality Sensor)
   # Two pages: temp then humidity. Color is dynamic (temp: cold/comfort/hot;
   # humidity: low/ok/high).
   ################################################################################
   - id: integration_awtrix_living_room_climate
     alias: 'Integration - Awtrix - Living Room Climate Custom App'
-    description: 'Push living room temp and humidity to Awtrix custom app (downstairs air quality sensor).'
+    description: 'Push living room temp and humidity to the Living Room Clock (downstairs air quality sensor).'
     trigger:
       - platform: state
         entity_id:
@@ -73,36 +204,57 @@ automation:
           color: "{% set h = states('sensor.downstairs_air_quality_sensor_humidity') | float(35) %}{% if h < 20 %}#FFA500{% elif h > 45 %}#1E90FF{% else %}#00FF7F{% endif %}"
 
   ################################################################################
-  # Custom app: Outdoor conditions (Pirate Weather until local weather station)
+  # House-wide app: Outdoor conditions (local Tempest readings and cloud summary)
   ################################################################################
   - id: integration_awtrix_outdoor_weather
     alias: 'Integration - Awtrix - Outdoor Weather Custom App'
-    description: 'Push outdoor temp, humidity, and condition to Awtrix (Pirate Weather).'
+    description: 'Push local outdoor temperature and humidity with cloud weather condition to all Awtrix clocks.'
     trigger:
       - platform: state
         entity_id:
-          - sensor.pirate_weather_temperature
-          - sensor.pirate_weather_humidity
+          - sensor.back_yard_weather_station_temperature
+          - sensor.back_yard_weather_station_humidity
           - sensor.pirate_weather_summary
       - platform: homeassistant
         event: start
     action:
-      - service: awtrix.custom_app
+      - service: script.awtrix_broadcast_custom_app
         data:
-          device: '039ec645765634d11bba9ae96840a922'
           app: 'Outdoor'
-          text: "{{ states('sensor.pirate_weather_temperature') | float | round(1) }}°C  {{ states('sensor.pirate_weather_humidity') | float | round(0) }}%  {{ states('sensor.pirate_weather_summary') }}"
+          text: "{{ states('sensor.back_yard_weather_station_temperature') | float | round(1) }}°C  {{ states('sensor.back_yard_weather_station_humidity') | float | round(0) }}%  {{ states('sensor.pirate_weather_summary') }}"
           duration: 3
           # 2282=clear, 2284=rain, 2289=snow, 2283=cloudy, 2158=fog, 11428=thunderstorm
           icon: "{% set s = states('sensor.pirate_weather_summary') | lower %}{% if 'rain' in s or 'drizzle' in s %}2284{% elif 'snow' in s %}2289{% elif 'thunder' in s or 'storm' in s %}11428{% elif 'fog' in s or 'mist' in s %}2158{% elif 'cloud' in s or 'overcast' in s %}2283{% else %}2282{% endif %}"
-          color: "{% set t = states('sensor.pirate_weather_temperature') | float(20) %}{% if t < 5 %}#00BFFF{% elif t > 30 %}#FF4500{% else %}#00FF7F{% endif %}"
+          color: "{% set t = states('sensor.back_yard_weather_station_temperature') | float(20) %}{% if t < 5 %}#00BFFF{% elif t > 30 %}#FF4500{% else %}#00FF7F{% endif %}"
 
   ################################################################################
-  # Trash reminder: show on Living Room Clock (Tuesday night and Wednesday morning)
+  # House-wide app: solar (Solaredge)
+  # GetLiveContext shows no sensor.solaredge_energy_today; using sensor.solaredge_dc_power (current W).
+  # If you add Solaredge API site sensors, sensor.solaredge_energy_today can be used for "kWh today".
+  ################################################################################
+  - id: integration_awtrix_solar_power
+    alias: 'Integration - Awtrix - Solar Power Custom App'
+    description: 'Show solar current power on all Awtrix clocks.'
+    trigger:
+      - platform: state
+        entity_id: sensor.solaredge_dc_power
+      - platform: homeassistant
+        event: start
+    action:
+      - service: script.awtrix_broadcast_custom_app
+        data:
+          app: 'Solar'
+          text: "{{ states('sensor.solaredge_dc_power') | float(0) | round(0) }} W"
+          duration: 5
+          icon: '27464' # solar
+          color: '#FFFFFF'
+
+  ################################################################################
+  # House-wide notification: trash reminder (Tuesday night and Wednesday morning)
   ################################################################################
   - id: integration_awtrix_notification_trash
     alias: 'Integration - Awtrix - Trash Pickup Reminder'
-    description: 'Display trash reminder on Living Room Clock.'
+    description: 'Display trash reminder on all Awtrix clocks.'
     trigger:
       - platform: template # Tuesday Night
         value_template: >
@@ -119,23 +271,23 @@ automation:
             (now().time().minute == 0)
           }}
     action:
-      - service: awtrix.notification
+      - service: script.awtrix_broadcast_notification
         data:
-          device: '039ec645765634d11bba9ae96840a922'
           text: 'Pull the trash bin to the curb!'
           duration: 10
           icon: '18576' # trash can
           sound: 'alert'
           stack: false
           rainbow: true
+
   ################################################################################
-  # Last call reminder: notify on Living Room Clock 5 minutes before last call
+  # House-wide notification: last call reminder
   # make this multiple triggers, at differnt times. then add a variable action to
   # calculate the time remaining
   ################################################################################
   - id: integration_awtrix_notification_last_call_reminder
     alias: 'Integration - Awtrix - Last Call Reminder'
-    description: 'Show lights-out reminder on Living Room Clock 5 min before last call.'
+    description: 'Show lights-out reminder on all Awtrix clocks ahead of last call.'
     trigger:
       - platform: template
         value_template: >
@@ -162,33 +314,10 @@ automation:
           last_call_time: "{{ states.sensor.last_call.state | timestamp_custom('%H:%M', False) }}"
           current_time: "{{ now().time().strftime('%H:%M') }}"
           time_remaining: '{{ (last_call_time - current_time) | int }}'
-      - service: awtrix.notification
+      - service: script.awtrix_broadcast_notification
         data:
-          device: '039ec645765634d11bba9ae96840a922'
           text: 'Lights out in {{ time_remaining }} minutes'
           duration: 30
           icon: '2314' # moon / clear night
           rtttl: 'two_short:d=4,o=5,b=100:16e6,16e6'
           stack: false
-  ################################################################################
-  # Custom app: solar (Solaredge)
-  # GetLiveContext shows no sensor.solaredge_energy_today; using sensor.solaredge_dc_power (current W).
-  # If you add Solaredge API site sensors, sensor.solaredge_energy_today can be used for "kWh today".
-  ################################################################################
-  - id: integration_awtrix_solar_power
-    alias: 'Integration - Awtrix - Solar Power Custom App'
-    description: 'Show solar current power on Awtrix.'
-    trigger:
-      - platform: state
-        entity_id: sensor.solaredge_dc_power
-      - platform: homeassistant
-        event: start
-    action:
-      - service: awtrix.custom_app
-        data:
-          device: '039ec645765634d11bba9ae96840a922'
-          app: 'Solar'
-          text: "{{ states('sensor.solaredge_dc_power') | float(0) | round(0) }} W"
-          duration: 5
-          icon: '27464' # solar
-          color: '#FFFFFF'
