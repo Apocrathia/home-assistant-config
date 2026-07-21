@@ -44,9 +44,10 @@ automation:
       - trigger: state
         entity_id: input_boolean.away_mode
       - trigger: numeric_state
-        entity_id: weather.dark_sky
-        attribute: temperature
+        entity_id: sensor.back_yard_weather_station_temperature
         above: 0
+      - trigger: numeric_state
+        entity_id: sensor.back_yard_weather_station_temperature
         below: 0
     actions:
       - alias: 'State Handler'
@@ -56,8 +57,7 @@ automation:
                 conditions:
                   - alias: 'Above Freezing'
                     condition: numeric_state
-                    entity_id: weather.pirateweather
-                    attribute: temperature
+                    entity_id: sensor.back_yard_weather_station_temperature
                     above: 0
                   - alias: 'Someone is home'
                     condition: state
@@ -77,8 +77,7 @@ automation:
                 conditions:
                   - alias: 'Below Freezing'
                     condition: numeric_state
-                    entity_id: weather.pirateweather
-                    attribute: temperature
+                    entity_id: sensor.back_yard_weather_station_temperature
                     below: 0
                   - alias: 'Nobody is home'
                     condition: state
