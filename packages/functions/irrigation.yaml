@@ -76,13 +76,11 @@ automation:
     alias: 'Function - Irrigation - Freeze Protection'
     trigger:
       - platform: numeric_state
-        entity_id: weather.pirate_weather
+        entity_id: sensor.back_yard_weather_station_temperature
         below: 0
-        attribute: temperature
       - platform: numeric_state
-        entity_id: weather.pirate_weather
+        entity_id: sensor.back_yard_weather_station_temperature
         above: 0
-        attribute: temperature
     condition:
       - condition: state
         entity_id: switch.rachio_in_standby_mode
@@ -91,9 +89,8 @@ automation:
       - choose:
           - conditions:
               - condition: numeric_state
-                entity_id: weather.pirate_weather
+                entity_id: sensor.back_yard_weather_station_temperature
                 below: 0
-                attribute: temperature
             sequence:
               - alias: 'Turn on blowout'
                 service: input_boolean.turn_on
@@ -101,9 +98,8 @@ automation:
                   entity_id: input_boolean.function_irrigation_blowout
           - conditions:
               - condition: numeric_state
-                entity_id: weather.pirate_weather
+                entity_id: sensor.back_yard_weather_station_temperature
                 above: 0
-                attribute: temperature
             sequence:
               - alias: 'Turn off blowout'
                 service: input_boolean.turn_off
