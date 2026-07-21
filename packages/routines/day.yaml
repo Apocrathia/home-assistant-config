@@ -82,63 +82,63 @@ automation:
   ################################################################################
   - id: routine_day_outdoor_lights
     alias: 'Routine - Day - Outdoor Lights'
-    trigger:
-      - platform: sun
+    triggers:
+      - trigger: sun
         event: sunrise
-    condition:
+    conditions:
       - condition: state
         entity_id: light.outdoor_lights
         state: 'on'
-    action:
-      - service: light.turn_off
+    actions:
+      - action: light.turn_off
         data:
           entity_id: light.outdoor_lights
   ################################################################################
   - id: routine_day_morning_lights
     alias: 'Routine - Day - Morning Lights'
-    trigger:
-      - platform: sun
+    triggers:
+      - trigger: sun
         event: sunrise
-    condition:
+    conditions:
       - condition: state
         entity_id: light.morning_lights
         state: 'on'
-    action:
-      - service: light.turn_off
+    actions:
+      - action: light.turn_off
         data:
           entity_id: light.morning_lights
-      - service: switch.turn_off
+      - action: switch.turn_off
         data:
           entity_id: switch.ians_bed_safety_lights
   ################################################################################
   - id: routine_day_night_lights
     alias: 'Routine - Day - Night Lights'
-    trigger:
-      - platform: sun
+    triggers:
+      - trigger: sun
         event: sunrise
-    condition:
+    conditions:
       - condition: state
         entity_id: light.night_lights
         state: 'on'
-    action:
-      - service: light.turn_off
+    actions:
+      - action: light.turn_off
         data:
           entity_id: light.night_lights
   ################################################################################
   - id: routine_day_airgradient_displays_and_leds
     alias: 'Routine - Day - AirGradient Displays And LEDs'
-    trigger:
-      - platform: sun
+    triggers:
+      - trigger: sun
         event: sunrise
-    action:
-      - service: switch.turn_off
+    actions:
+      - action: switch.turn_off
         data:
           entity_id:
             - switch.downstairs_air_quality_sensor_display_blank_page
             - switch.upstairs_air_quality_sensor_display_blank_page
             - switch.master_bedroom_air_quality_display_blank_page
             - switch.office_air_quality_sensor_display_blank_page
-      - service: light.turn_on
+      - action: light.turn_on
         data:
           entity_id:
             - light.downstairs_air_quality_sensor_led_strip
@@ -149,11 +149,11 @@ automation:
   - id: routine_day_good_morning_alarm
     alias: 'Routine - Day - Good Morning Alarm'
     description: Disarm a home-armed alarm when the Good Morning scene is activated
-    trigger:
+    triggers:
       - trigger: scene.activated
         target:
           entity_id: scene.routine_day_good_morning
-    condition:
+    conditions:
       - condition: state
         entity_id: alarm_control_panel.home
         state: 'armed_home'
@@ -163,9 +163,9 @@ automation:
       - condition: state
         entity_id: input_boolean.vacation_mode
         state: 'off'
-    action:
+    actions:
       - alias: 'Disarm the alarm'
-        service: alarm_control_panel.alarm_disarm
+        action: alarm_control_panel.alarm_disarm
         data:
           entity_id: alarm_control_panel.home
           code: !secret alarm_code
@@ -174,21 +174,21 @@ automation:
   - id: routine_day_good_morning_wake
     alias: 'Routine - Day - Good Morning Wake Detection'
     description: Activate Good Morning after weekend bed-exit and bedroom motion
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: binary_sensor.bed_presence_2bd444_bed_occupied_either
         from: 'on'
         to: 'off'
         for:
           minutes: >
             {{ states('input_number.good_morning_bed_empty_delay') | int(5) }}
-      - platform: state
+      - trigger: state
         entity_id: binary_sensor.master_bedroom_motion
         from: 'off'
         to: 'on'
-      - platform: time
+      - trigger: time
         at: input_datetime.good_morning_earliest
-    condition:
+    conditions:
       - alias: 'Today is not a workday'
         condition: state
         entity_id: binary_sensor.workday
@@ -222,9 +222,9 @@ automation:
       - condition: state
         entity_id: input_boolean.vacation_mode
         state: 'off'
-    action:
+    actions:
       - alias: 'Activate Good Morning'
-        service: scene.turn_on
+        action: scene.turn_on
         target:
           entity_id: scene.routine_day_good_morning
     mode: single
@@ -235,18 +235,18 @@ automation:
   ################################################################################
   - id: routine_day_lighting_off
     alias: 'Routine - Day - Turn Off Lights After Sunrise'
-    trigger:
-      - platform: sun
+    triggers:
+      - trigger: sun
         event: sunrise
         offset: '01:00:00'
-    action:
-      - service: light.turn_off
+    actions:
+      - action: light.turn_off
         data:
           entity_id:
             - light.indoor_lights
             - light.outdoor_lights
             - light.back_yard_string_lights
-      - service: switch.turn_off
+      - action: switch.turn_off
         data:
           entity_id: switch.ians_bed_safety_lights
 ################################################################################

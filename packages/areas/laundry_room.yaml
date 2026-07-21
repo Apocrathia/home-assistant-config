@@ -83,51 +83,51 @@ automation:
   ################################################################################
   - id: area_laundry_washing_machine_complete_alert_set
     alias: 'Area - Laundry Room - Washing Machine Complete Alert Set'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: binary_sensor.washing_machine_status
         from: 'on'
         to: 'off'
-    action:
-      - service: input_boolean.turn_on
+    actions:
+      - action: input_boolean.turn_on
         target:
           entity_id: input_boolean.laundry_washing_machine_complete_alert
 
   - id: area_laundry_washing_machine_complete_alert_reset
     alias: 'Area - Laundry Room - Washing Machine Complete Alert Reset'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: binary_sensor.washing_machine_status
         from: 'off'
         to: 'on'
-    action:
-      - service: input_boolean.turn_off
+    actions:
+      - action: input_boolean.turn_off
         target:
           entity_id: input_boolean.laundry_washing_machine_complete_alert
 
   - id: area_laundry_dryer_complete_alert_set
     alias: 'Area - Laundry Room - Dryer Complete Alert Set'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: binary_sensor.dryer_vibration_sensor_vibration
         from: 'on'
         to: 'off'
         for:
           minutes: 2
-    action:
-      - service: input_boolean.turn_on
+    actions:
+      - action: input_boolean.turn_on
         target:
           entity_id: input_boolean.laundry_dryer_complete_alert
 
   - id: area_laundry_dryer_complete_alert_reset
     alias: 'Area - Laundry Room - Dryer Complete Alert Reset'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: binary_sensor.dryer_vibration_sensor_vibration
         from: 'off'
         to: 'on'
-    action:
-      - service: input_boolean.turn_off
+    actions:
+      - action: input_boolean.turn_off
         target:
           entity_id: input_boolean.laundry_dryer_complete_alert
 ################################################################################

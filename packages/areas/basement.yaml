@@ -24,23 +24,23 @@ automation:
   ################################################################################
   - id: area_basement_leak_detected
     alias: 'Area - Basement - Leak Detected'
-    trigger:
-      - platform: event
+    triggers:
+      - trigger: event
         event_type: ios.notification_action_fired
         event_data:
           categoryName: area_basement_leak_detected
-    action:
+    actions:
       choose:
         - conditions: >
             "{{ trigger.event.data.actionName == "ACKNOWLEDGE_LEAK" }}"
           sequence:
-            - service: alert.turn_off
+            - action: alert.turn_off
               target:
                 entity_id: alert.area_basement_leak_detected
         - conditions: >
             "{{ trigger.event.data.actionName == "IGNORE_LEAK" }}"
           sequence:
-            - service: alert.turn_off
+            - action: alert.turn_off
               target:
                 entity_id: alert.area_basement_leak_detected
 ################################################################################

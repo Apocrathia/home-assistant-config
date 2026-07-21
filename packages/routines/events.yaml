@@ -12,10 +12,10 @@ automation:
   ################################################################################
   - id: routine_events_game_night
     alias: 'Routine - Events - Game Night'
-    trigger:
-      - platform: time
+    triggers:
+      - trigger: time
         at: '18:00:00'
-    condition:
+    conditions:
       condition: and
       conditions:
         - condition: state
@@ -27,18 +27,18 @@ automation:
             "{{ ( now().isocalendar()[2] == 6
                   and now().day >= 22
                   and now().day <= 28 ) }}"
-    action:
+    actions:
       # I've copied all of the sounds from the iOS app to use across the house
       # https://github.com/home-assistant/iOS/tree/master/HomeAssistant/Sounds
       # US-EN-Morgan-Freeman-Starting-Party-Mode.wav
       # However, it seems like the notify.alexa_media component won't do mp3s
       # Keeping this note here for later.
       # - service: script.notification_party_mode
-      - service: input_boolean.turn_on
+      - action: input_boolean.turn_on
         entity_id: input_boolean.party_lights
       - delay:
           # Turn it off at midnight. 6 hours. 360 minutes.
           minutes: 360
-      - service: input_boolean.turn_off
+      - action: input_boolean.turn_off
         entity_id: input_boolean.party_lights
 ################################################################################

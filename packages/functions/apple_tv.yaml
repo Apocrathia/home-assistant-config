@@ -15,7 +15,7 @@ script:
             domain: remote
     sequence:
       - alias: 'Go to home screen'
-        service: remote.send_command
+        action: remote.send_command
         data:
           entity_id: '{{ entity_id }}'
           command:
@@ -23,7 +23,7 @@ script:
       - delay:
           seconds: 0.5
       - alias: 'Open application switcher'
-        service: remote.send_command
+        action: remote.send_command
         data:
           entity_id: '{{ entity_id }}'
           delay_secs: 0.2
@@ -36,7 +36,7 @@ script:
         repeat:
           count: 10
           sequence:
-            - service: remote.send_command
+            - action: remote.send_command
               data:
                 entity_id: '{{ entity_id }}'
                 command:
@@ -49,7 +49,7 @@ script:
         repeat:
           count: 10
           sequence:
-            - service: remote.send_command
+            - action: remote.send_command
               data:
                 entity_id: '{{ entity_id }}'
                 delay_secs: 0.1
@@ -62,7 +62,7 @@ script:
       - alias: 'Close the application switcher'
         delay:
           seconds: 1
-      - service: remote.send_command
+      - action: remote.send_command
         data:
           entity_id: '{{ entity_id }}'
           command:

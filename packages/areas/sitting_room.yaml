@@ -6,10 +6,10 @@ automation:
   ################################################################################
   - id: area_sitting_room_motion
     alias: Area - Sitting Room - Motion
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: binary_sensor.sitting_room_motion_occupancy
-    condition:
+    conditions:
       - condition: and
         conditions:
           - alias: 'House is occupied'
@@ -20,7 +20,7 @@ automation:
             condition: state
             entity_id: sun.sun
             state: 'below_horizon'
-    action:
+    actions:
       - alias: 'Status handler'
         choose:
           - conditions:
@@ -30,7 +30,7 @@ automation:
                 state: 'on'
             sequence:
               - alias: 'Turn on closet light'
-                service: light.turn_on
+                action: light.turn_on
                 target:
                   entity_id: light.foyer_chandelier
           - conditions:
@@ -40,7 +40,7 @@ automation:
                 state: 'off'
             sequence:
               - alias: 'Turn off closet light'
-                service: light.turn_off
+                action: light.turn_off
                 target:
                   entity_id: light.foyer_chandelier
 ################################################################################

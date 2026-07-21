@@ -31,12 +31,12 @@ automation:
   - id: project_mycology_temperature
     alias: Project - Mycology - Temperature
     description: 'Turns the heater on or off based on the temperature setpoint'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: sensor.mycology_air_quality_sensor_temperature
-      - platform: state
+      - trigger: state
         entity_id: input_number.mycology_temperature_threshold
-    condition:
+    conditions:
       - condition: or
         conditions:
           - condition: numeric_state
@@ -45,7 +45,7 @@ automation:
           - condition: numeric_state
             entity_id: sensor.mycology_air_quality_sensor_temperature
             above: input_number.mycology_temperature_threshold
-    action:
+    actions:
       - choose:
           - conditions:
               - alias: 'Temperature is below threshold'
@@ -53,7 +53,7 @@ automation:
                 entity_id: sensor.mycology_air_quality_sensor_temperature
                 below: input_number.mycology_temperature_threshold
             sequence:
-              - service: switch.turn_on
+              - action: switch.turn_on
                 entity_id: switch.mycology_heater
           - conditions:
               - alias: 'Temperature is above threshold'
@@ -61,18 +61,18 @@ automation:
                 entity_id: sensor.mycology_air_quality_sensor_temperature
                 above: input_number.mycology_temperature_threshold
             sequence:
-              - service: switch.turn_off
+              - action: switch.turn_off
                 entity_id: switch.mycology_heater
   ###############################################################################
   - id: project_mycology_humidity
     alias: Project - Mycology - Humidity
     description: 'Turns the humidifier on or off based on the humidity setpoint'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: sensor.mycology_air_quality_sensor_humidity
-      - platform: state
+      - trigger: state
         entity_id: input_number.mycology_humidity_threshold
-    condition:
+    conditions:
       - condition: or
         conditions:
           - condition: numeric_state
@@ -81,7 +81,7 @@ automation:
           - condition: numeric_state
             entity_id: sensor.mycology_air_quality_sensor_humidity
             below: input_number.mycology_humidity_threshold
-    action:
+    actions:
       - choose:
           - conditions:
               - alias: 'Humidity is below threshold'
@@ -89,7 +89,7 @@ automation:
                 entity_id: sensor.mycology_air_quality_sensor_humidity
                 below: input_number.mycology_humidity_threshold
             sequence:
-              - service: switch.turn_on
+              - action: switch.turn_on
                 entity_id: switch.mycology_humidifier
           - conditions:
               - alias: 'Humidity is above threshold'
@@ -97,18 +97,18 @@ automation:
                 entity_id: sensor.mycology_air_quality_sensor_humidity
                 above: input_number.mycology_humidity_threshold
             sequence:
-              - service: switch.turn_off
+              - action: switch.turn_off
                 entity_id: switch.mycology_humidifier
   ###############################################################################
   - id: project_mycology_lighting_cycle
     alias: Project - Mycology - Lighting Cycle
     description: 'Turns the grow lights on and off based on the time of day.'
-    trigger:
-      - platform: time
+    triggers:
+      - trigger: time
         at: '06:00:00'
-      - platform: time
+      - trigger: time
         at: '18:00:00'
-    action:
+    actions:
       - choose:
           - conditions:
               - alias: 'Daytime'
@@ -116,7 +116,7 @@ automation:
                 after: '06:00:00'
                 before: '18:00:00'
             sequence:
-              - service: switch.turn_on
+              - action: switch.turn_on
                 entity_id: switch.mycology_lights
           - conditions:
               - alias: 'Nighttime'
@@ -127,16 +127,16 @@ automation:
                   - condition: time
                     before: '06:00:00'
             sequence:
-              - service: switch.turn_off
+              - action: switch.turn_off
                 entity_id: switch.mycology_lights
   ###############################################################################
   - id: project_mycology_fruiting_conditions
     alias: Project - Mycology - Fruiting Conditions
     description: 'Turns the humidifier and heater on or off based on the fruiting conditions.'
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: input_boolean.mycology_fruiting_conditions
-    action:
+    actions:
       - choose:
           - conditions:
               - alias: 'Fruiting Conditions Enabled'
@@ -145,19 +145,19 @@ automation:
                 state: 'on'
             sequence:
               - alias: 'Set temperature threshold'
-                service: input_number.set_value
+                action: input_number.set_value
                 target:
                   entity_id: input_number.mycology_temperature_threshold
                 data:
                   value: 22
               - alias: 'Set humidity threshold'
-                service: input_number.set_value
+                action: input_number.set_value
                 target:
                   entity_id: input_number.mycology_humidity_threshold
                 data:
                   value: 75
               - alias: 'Enable lighting cycle'
-                service: automation.turn_on
+                action: automation.turn_on
                 target:
                   entity_id: automation.project_mycology_lighting_cycle
           - conditions:
@@ -167,19 +167,19 @@ automation:
                 state: 'off'
             sequence:
               - alias: 'Set temperature threshold'
-                service: input_number.set_value
+                action: input_number.set_value
                 target:
                   entity_id: input_number.mycology_temperature_threshold
                 data:
                   value: 25
               - alias: 'Set humidity threshold'
-                service: input_number.set_value
+                action: input_number.set_value
                 target:
                   entity_id: input_number.mycology_humidity_threshold
                 data:
                   value: 50
               - alias: 'Disable lighting cycle'
-                service: automation.turn_off
+                action: automation.turn_off
                 target:
                   entity_id: automation.project_mycology_lighting_cycle
 ###############################################################################

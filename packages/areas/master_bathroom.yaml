@@ -67,42 +67,42 @@ automation:
     # setting initial state in case HA was restarted
     # yamllint disable rule:truthy
     initial_state: on
-    trigger:
-      platform: state
+    triggers:
+      trigger: state
       entity_id:
         - binary_sensor.master_bathroom_humidity_high
       from: 'off'
       to: 'on'
       for:
         seconds: 10
-    action:
-      - service: switch.turn_on
+    actions:
+      - action: switch.turn_on
         data:
           entity_id: switch.master_bathroom_fan
-      - service: light.turn_on
+      - action: light.turn_on
         data:
           entity_id: light.master_bathroom_shower_lights
-      - service: fan.set_percentage
+      - action: fan.set_percentage
         data:
           entity_id: fan.master_bedroom_ceiling_fan
           percentage: 100
-      - service: script.area_master_bathroom_start_timer
-      - service: media_player.volume_set
+      - action: script.area_master_bathroom_start_timer
+      - action: media_player.volume_set
         data:
           entity_id: media_player.master_bathroom_homepod
           volume_level: 0.65
   ################################################################################
   - id: area_master_bathroom_humidity_low
     alias: 'Area - Master Bathroom - Humidity Low'
-    trigger:
-      platform: state
+    triggers:
+      trigger: state
       entity_id:
         - binary_sensor.master_bathroom_humidity_high
       from: 'on'
       to: 'off'
       for:
         minutes: 5
-    condition:
+    conditions:
       # Only execute if the toilet door is already open (or the sensor is offline)
       condition: state
       entity_id:
@@ -110,19 +110,19 @@ automation:
       state:
         - 'on'
         - 'unavailable'
-    action:
-      - service: switch.turn_off
+    actions:
+      - action: switch.turn_off
         data:
           entity_id: switch.master_bathroom_fan
-      - service: light.turn_off
+      - action: light.turn_off
         data:
           entity_id: light.master_bathroom_shower_lights
-      - service: fan.set_percentage
+      - action: fan.set_percentage
         data:
           entity_id: fan.master_bedroom_ceiling_fan
           percentage: 33
-      - service: script.area_master_bathroom_stop_timer
-      - service: media_player.volume_set
+      - action: script.area_master_bathroom_stop_timer
+      - action: media_player.volume_set
         data:
           entity_id: media_player.master_bathroom_homepod
           volume_level: 0.50
@@ -130,86 +130,86 @@ automation:
   # Bypass low humidity automation by turning off the shower lights manually
   - id: area_master_bathroom_shower_lights_off
     alias: 'Area - Master Bathroom - Shower Lights Off'
-    trigger:
-      platform: state
+    triggers:
+      trigger: state
       entity_id:
         - light.master_bathroom_shower_lights
       from: 'on'
       to: 'off'
-    condition:
+    conditions:
       condition: state
       entity_id:
         - binary_sensor.master_bathroom_humidity_high
       state: 'on'
-    action:
+    actions:
       - alias: Disable high humidity automation
-        service: automation.turn_off
+        action: automation.turn_off
         data:
           entity_id: automation.area_master_bathroom_humidity_high
       - alias: Trigger low humidity automation
-        service: automation.trigger
+        action: automation.trigger
         data:
           entity_id: automation.area_master_bathroom_humidity_low
       - alias: Wait for humidity to come back down
         wait_for_trigger:
-          - platform: state
+          - trigger: state
             entity_id: binary_sensor.master_bathroom_humidity_high
             to: 'off'
         timeout: 01:00:00
       - alias: Turn high humidity automation back on
-        service: automation.turn_on
+        action: automation.turn_on
         data:
           entity_id: automation.area_master_bathroom_humidity_high
   ################################################################################
   # Turn on the fan when the shitter closet door is closed.
   - id: area_master_bathroom_toilet_door_closed
     alias: 'Area - Master Bathroom - Toilet Door Closed'
-    trigger:
-      platform: state
+    triggers:
+      trigger: state
       entity_id:
         - binary_sensor.master_bathroom_toilet_door_contact
       from: 'on'
       to: 'off'
       for:
         seconds: 10
-    action:
-      - service: switch.turn_on
+    actions:
+      - action: switch.turn_on
         data:
           entity_id: switch.master_bathroom_fan
   ################################################################################
   - id: area_master_bathroom_toilet_door_open
     alias: 'Area - Master Bathroom - Toilet Door Open'
-    trigger:
-      platform: state
+    triggers:
+      trigger: state
       entity_id:
         - binary_sensor.master_bathroom_toilet_door_contact
       from: 'off'
       to: 'on'
       for:
         seconds: 10
-    condition:
+    conditions:
       # Only execute if someone isn't in the shower
       condition: state
       entity_id:
         - binary_sensor.master_bathroom_humidity_high
       state: 'off'
-    action:
+    actions:
       - delay:
           minutes: 5
-      - service: switch.turn_off
+      - action: switch.turn_off
         data:
           entity_id: switch.master_bathroom_fan
   ################################################################################
   - id: area_master_bathroom_lighting_schedule
     alias: 'Area - Master Bathroom - Lighting Schedule'
-    trigger:
-      - platform: time
+    triggers:
+      - trigger: time
         at:
           - '05:00:00'
           - '22:00:00'
-    action:
+    actions:
       - alias: 'Power Toggle'
-        service: remote.send_command
+        action: remote.send_command
         target:
           entity_id: remote.master_bathroom_ir_blaster
         data:
@@ -222,7 +222,7 @@ script:
   area_master_bathroom_start_timer:
     alias: 'Area - Master Bathroom - Start Timer'
     sequence:
-      - service: remote.send_command
+      - action: remote.send_command
         alias: 'Enter stopwatch mode'
         target:
           entity_id: remote.master_bathroom_ir_blaster
@@ -231,7 +231,7 @@ script:
           command: timer
       - delay:
           seconds: 1
-      - service: remote.send_command
+      - action: remote.send_command
         alias: 'Clear timer'
         target:
           entity_id: remote.master_bathroom_ir_blaster
@@ -240,7 +240,7 @@ script:
           command: clear
       - delay:
           seconds: 1
-      - service: remote.send_command
+      - action: remote.send_command
         alias: 'Start timer'
         target:
           entity_id: remote.master_bathroom_ir_blaster
@@ -251,7 +251,7 @@ script:
   area_master_bathroom_stop_timer:
     alias: 'Area - Master Bathroom - Stop Timer'
     sequence:
-      - service: remote.send_command
+      - action: remote.send_command
         alias: 'Enter stopwatch mode'
         target:
           entity_id: remote.master_bathroom_ir_blaster
@@ -260,7 +260,7 @@ script:
           command: timer
       - delay:
           seconds: 1
-      - service: remote.send_command
+      - action: remote.send_command
         alias: 'Stop timer'
         target:
           entity_id: remote.master_bathroom_ir_blaster
@@ -269,7 +269,7 @@ script:
           command: start_stop
       - delay:
           seconds: 1
-      - service: remote.send_command
+      - action: remote.send_command
         alias: 'Clear timer'
         target:
           entity_id: remote.master_bathroom_ir_blaster
@@ -278,7 +278,7 @@ script:
           command: clear
       - delay:
           seconds: 1
-      - service: remote.send_command
+      - action: remote.send_command
         alias: 'Go back to clock mode'
         target:
           entity_id: remote.master_bathroom_ir_blaster

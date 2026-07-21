@@ -76,13 +76,13 @@ alert:
 automation:
   - id: function_energy_solar_production
     alias: Function - Energy - Solar Production
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id:
           - binary_sensor.solar_production
-    action:
+    actions:
       - alias: Turn on outlets when solar is being produced
-        service: >-
+        action: >-
           {% if states('binary_sensor.solar_production') == 'on' %}
             script.energy_enable_heavy_consumption
           {% else %}
@@ -94,21 +94,21 @@ script:
     alias: 'Energy - Enable Heavy Consumption'
     sequence:
       - alias: 'Debug notification'
-        service: notify.notify
+        action: notify.notify
         data:
           message: 'Solar threshold exceeded'
       - alias: 'Enable heavy consumers'
-        service: switch.turn_on
+        action: switch.turn_on
         target:
           entity_id: group.energy_heavy_consumers
   energy_disable_heavy_consumption:
     alias: 'Energy - Disable Heavy Consumption'
     sequence:
       - alias: 'Debug notification'
-        service: notify.notify
+        action: notify.notify
         data:
           message: 'Solar insufficient'
       - alias: 'Disable heavy consumers'
-        service: switch.turn_off
+        action: switch.turn_off
         target:
           entity_id: switch.energy_heavy_consumers

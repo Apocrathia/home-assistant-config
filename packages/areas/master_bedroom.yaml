@@ -38,15 +38,15 @@ automation:
   - id: area_master_bedroom_bed_sensor_night_lights
     alias: Area - Master Bedroom - Bed Sensor Night Lights
     description: Turn on under-bed lights when getting out of bed at night
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: binary_sensor.bed_presence_2bd444_bed_occupied_either
-    condition:
+    conditions:
       - alias: 'Sun is down (night time)'
         condition: sun
         after: sunset
         before: sunrise
-    action:
+    actions:
       - alias: 'Status handler'
         choose:
           - conditions:
@@ -56,7 +56,7 @@ automation:
                 state: 'off'
             sequence:
               - alias: 'Turn on under-bed safety lights'
-                service: switch.turn_on
+                action: switch.turn_on
                 target:
                   entity_id: switch.ians_bed_safety_lights
           - conditions:
@@ -66,21 +66,21 @@ automation:
                 state: 'on'
             sequence:
               - alias: 'Turn off under-bed safety lights'
-                service: switch.turn_off
+                action: switch.turn_off
                 target:
                   entity_id: switch.ians_bed_safety_lights
   ################################################################################
   - id: area_master_bedroom_closet_motion
     alias: Area - Master Bedroom - Closet Motion
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: binary_sensor.master_bedroom_closet_motion_occupancy
-    condition:
+    conditions:
       - alias: 'House is occupied'
         condition: state
         entity_id: group.people
         state: 'home'
-    action:
+    actions:
       - alias: 'Status handler'
         choose:
           - conditions:
@@ -90,7 +90,7 @@ automation:
                 state: 'on'
             sequence:
               - alias: 'Turn on closet light'
-                service: light.turn_on
+                action: light.turn_on
                 target:
                   entity_id: light.master_bedroom_closet_light
           - conditions:
@@ -100,14 +100,14 @@ automation:
                 state: 'off'
             sequence:
               - alias: 'Turn off closet light'
-                service: light.turn_off
+                action: light.turn_off
                 target:
                   entity_id: light.master_bedroom_closet_light
   ################################################################################
   - id: area_master_bedroom_panic_button
     alias: Area - Master Bedroom - Panic Button
-    trigger:
-      - platform: event
+    triggers:
+      - trigger: event
         event_type: zha_event
         event_data:
           unique_id: !secret panic_button_unique_id
@@ -116,7 +116,7 @@ automation:
             # Upon release
             value: 1
     # condition:
-    action:
+    actions:
       # - alias: "Test"
       #   service: notify.alexa_media
       #   data:
@@ -127,24 +127,24 @@ automation:
       #       - media_player.upstairs_thermostat
       #     message: 'The button was pressed.'
       - alias: 'Sound the alarm'
-        service: alarm_control_panel.alarm_trigger
+        action: alarm_control_panel.alarm_trigger
         data:
           entity_id: alarm_control_panel.home
           code: !secret alarm_code
   ################################################################################
   - id: area_master_bedroom_bedjet_preconditioning
     alias: Area - Master Bedroom - BedJet Preconditioning
-    trigger:
-      - platform: time
+    triggers:
+      - trigger: time
         at: input_datetime.bedtime
-    condition:
+    conditions:
       - alias: 'House is occupied'
         condition: state
         entity_id: group.people
         state: 'home'
-    action:
+    actions:
       - alias: 'Get overnight low temperature'
-        service: weather.get_forecasts
+        action: weather.get_forecasts
         data:
           type: daily
         target:
@@ -162,7 +162,7 @@ automation:
                 value_template: '{{ overnight_low < 0 }}'
             sequence:
               - alias: 'Set extended heat preset'
-                service: climate.set_preset_mode
+                action: climate.set_preset_mode
                 target:
                   entity_id: climate.ians_bedjet
                 data:
@@ -173,7 +173,7 @@ automation:
                 value_template: '{{ overnight_low < 10 }}'
             sequence:
               - alias: 'Heat the bed to 25°C'
-                service: climate.set_temperature
+                action: climate.set_temperature
                 target:
                   entity_id: climate.ians_bedjet
                 data:
@@ -185,7 +185,7 @@ automation:
                 value_template: '{{ overnight_low > 25 }}'
             sequence:
               - alias: 'Cool the bed to 15°C'
-                service: climate.set_temperature
+                action: climate.set_temperature
                 target:
                   entity_id: climate.ians_bedjet
                 data:
@@ -198,12 +198,12 @@ automation:
                 above: 25
             sequence:
               - alias: 'Turn on BedJet fan'
-                service: fan.turn_on
+                action: fan.turn_on
                 target:
                   entity_id: fan.ians_bedjet
         default:
           - alias: 'Moderate temperature - turn off BedJet'
-            service: climate.turn_off
+            action: climate.turn_off
             target:
               entity_id: climate.ians_bedjet
 ################################################################################

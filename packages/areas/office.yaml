@@ -21,11 +21,11 @@ light:
 automation:
   ################################################################################
   - alias: Area - Office - Workbench Button Click
-    trigger:
-      - platform: state
+    triggers:
+      - trigger: state
         entity_id: sensor.office_workbench_button_action
         to: 'on'
-    action:
+    actions:
       entity_id: light.office_workbench_lights
-      service: light.toggle
+      action: light.toggle
 ################################################################################
