@@ -183,7 +183,7 @@ automation:
           minutes: >
             {{ states('input_number.good_morning_bed_empty_delay') | int(5) }}
       - trigger: state
-        entity_id: binary_sensor.master_bedroom_motion
+        entity_id: binary_sensor.homekit_master_bedroom_motion
         from: 'off'
         to: 'on'
       - trigger: time
@@ -210,7 +210,7 @@ automation:
       - alias: 'Master bedroom motion was detected recently'
         condition: template
         value_template: >
-          {% set motion = states.binary_sensor.master_bedroom_motion %}
+          {% set motion = states.binary_sensor.homekit_master_bedroom_motion %}
           {{ motion.state in ['on', 'off'] and
              (as_timestamp(now()) - as_timestamp(motion.last_changed)) <= 600 }}
       - condition: state
