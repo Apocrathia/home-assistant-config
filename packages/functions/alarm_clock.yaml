@@ -207,11 +207,12 @@ script:
                 state: 'Plex'
             sequence:
               - alias: 'Open Plex'
-                service: media_player.select_source
+                # Should be sitting on the first menu item (Plex)
+                service: remote.send_command
                 data:
-                  source: Plex
-                target:
-                  entity_id: media_player.master_bedroom_apple_tv
+                  entity_id: remote.master_bedroom_apple_tv
+                  command:
+                    - select
               - delay:
                   seconds: 10
               - alias: 'Scan for Plex clients'
