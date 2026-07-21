@@ -14,6 +14,7 @@ Key directories:
 - `configuration.yaml` — Main config (includes packages/*)
 - `secrets.yaml` — Credentials (never hardcode)
 - `.storage/` — Runtime state (never edit directly)
+- `.scratch/` — Local throwaways (gitignored except README; see `.scratch/README.md`)
 - `docs/` — Documentation
 - `esphome/` — ESPHome device definitions
 - `utilities/` — Helper scripts

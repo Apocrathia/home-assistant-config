@@ -48,6 +48,8 @@
 
 18. **Don't confuse `.agents/` with `packages/`** — `.agents/` contains AI agent context. `packages/` contains Home Assistant configuration. They serve completely different purposes.
 
-19. **Skills are playbooks, not code** — `.agents/skills/*/SKILL.md` files are procedural instructions for agents. They are not Home Assistant automations or scripts.
+19. **`.scratch/` is not config** — Throwaways and WIP live there (see `.scratch/README.md`). Home Assistant does not load it. Do not treat scratch files as source of truth or commit them; promote finished work into tracked paths.
 
-20. **The homelab pattern is lazy-loading** — Context modules should only be loaded when needed. Don't assume all modules are relevant to every task.
+20. **Skills are playbooks, not code** — `.agents/skills/*/SKILL.md` files are procedural instructions for agents. They are not Home Assistant automations or scripts.
+
+21. **The context pattern is lazy-loading** — Context modules should only be loaded when needed. Don't assume all modules are relevant to every task.

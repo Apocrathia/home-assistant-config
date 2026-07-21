@@ -56,19 +56,20 @@ Specialized agent profiles for complex tasks:
 
 ## Key Directories
 
-| Path                     | Purpose                         |
-| ------------------------ | ------------------------------- |
-| `packages/`              | Modular YAML configs (the meat) |
-| `packages/areas/`        | Room/location-specific configs  |
-| `packages/functions/`    | Bundled functionality configs   |
-| `packages/integrations/` | Integration/device configs      |
-| `packages/projects/`     | Multi-device projects           |
-| `packages/routines/`     | Time/event-based automations    |
-| `packages/system/`       | HA system management            |
-| `packages/toys/`         | Fun/non-essential automations   |
-| `docs/`                  | Documentation and diagrams      |
-| `esphome/`               | ESPHome device definitions      |
-| `utilities/`             | Helper scripts                  |
+| Path                     | Purpose                                     |
+| ------------------------ | ------------------------------------------- |
+| `packages/`              | Modular YAML configs (the meat)             |
+| `packages/areas/`        | Room/location-specific configs              |
+| `packages/functions/`    | Bundled functionality configs               |
+| `packages/integrations/` | Integration/device configs                  |
+| `packages/projects/`     | Multi-device projects                       |
+| `packages/routines/`     | Time/event-based automations                |
+| `packages/system/`       | HA system management                        |
+| `packages/toys/`         | Fun/non-essential automations               |
+| `docs/`                  | Documentation and diagrams                  |
+| `esphome/`               | ESPHome device definitions                  |
+| `utilities/`             | Helper scripts                              |
+| `.scratch/`              | Local throwaways (gitignored except README) |
 
 ## Quick Reference
 

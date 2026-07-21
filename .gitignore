@@ -27,6 +27,10 @@ __pycache__
 deps
 appdaemon
 
+# Local scratch workspace (keep README only)
+.scratch/**
+!.scratch/README.md
+
 # Specific file ignores
 core
 image

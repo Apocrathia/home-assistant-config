@@ -7,7 +7,7 @@
 - Read files, explore, search the configuration
 - Run validation, linting, YAML syntax checks
 - Propose changes and present options
-- Use `.scratch/` for throwaways (prefer over `/tmp`)
+- Use `.scratch/` for throwaways (prefer over `/tmp`); see `.scratch/README.md`
 
 ### Requires Explicit Permission
 
