@@ -1,0 +1,83 @@
+---
+# Office - Activity Simulator
+
+# Automation to send random operation keystrokes to WiFi Duck
+# This keeps the computer awake and maintains online status for particularly shitty micromanagers.
+
+input_boolean:
+  function_office_activity_simulation:
+    name: Function - Office - Activity Simulation
+    icon: mdi:duck
+
+automation:
+  - id: function_office_activity_simulator
+    alias: Function - Office - Activity Simulator
+    description: Sends random operation keystrokes to WiFi Duck at random intervals to simulate activity
+    mode: restart
+    triggers:
+      - trigger: time_pattern
+        minutes: '/1' # Check every minute
+    conditions:
+      - condition: state
+        entity_id: input_boolean.function_office_activity_simulation
+        state: 'on'
+      - condition: template
+        # Random chance: triggers approximately every 3-5 minutes
+        value_template: >
+          {% set last = state_attr('automation.function_office_activity_simulator', 'last_triggered') %}
+          {% set age = (now() - (last or now() - timedelta(hours=1))).total_seconds() %}
+          {{ age > 300 or (range(1, 5) | random == 1) }}
+    actions:
+      - alias: 'Random delay to avoid predictable timing'
+        delay: >
+          {{ range(0, 60) | random }}
+      - alias: 'Send random keystroke or app switch'
+        choose:
+          - conditions:
+              - condition: template
+                value_template: >
+                  {% set command_type = range(1, 4) | random %}
+                  {{ command_type == 1 }}
+            sequence:
+              # App switching via Spotlight - 25% chance
+              - alias: 'Open Spotlight'
+                action: text.set_value
+                target:
+                  entity_id: text.office_wifi_duck_command
+                data:
+                  value: 'GUI SPACE'
+              - delay: '00:00:01'
+              - alias: 'Type app name'
+                action: text.set_value
+                target:
+                  entity_id: text.office_wifi_duck_command
+                data:
+                  value: >
+                    {% set apps = ['Cursor', 'iTerm', 'Slack', 'Notion', 'Linear'] %}
+                    STRING "{{ apps | random }}"
+              - delay: '00:00:01'
+              - alias: 'Press Enter'
+                action: text.set_value
+                target:
+                  entity_id: text.office_wifi_duck_command
+                data:
+                  value: 'ENTER'
+          - conditions: []
+            sequence:
+              # Simple keystroke - 75% chance
+              - action: text.set_value
+                target:
+                  entity_id: text.office_wifi_duck_command
+                data:
+                  value: >
+                    {% set simple_keys = [
+                      'UP',
+                      'DOWN',
+                      'LEFT',
+                      'RIGHT',
+                      'HOME',
+                      'END',
+                      'PAGEUP',
+                      'PAGEDOWN',
+                    ] %}
+                    {{ simple_keys | random }}
