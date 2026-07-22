@@ -32,7 +32,7 @@ packages/
 2. **Check existing files** — Read the target package file to see if the entity already exists
 3. **Follow naming conventions** — Use prefixes from nomenclature.md
 4. **Maintain file structure** — Keep consistent section headers and ordering
-5. **Update area registry** — If adding a new area, update `packages/system/areas.yaml`
+5. **New areas** — Create via Home Assistant UI (Settings → Areas). Add `packages/areas/<area>.yaml` for location-specific config; keep `nomenclature.md` area list in sync
 6. **Validate** — Run config-validate skill after changes
 
 ## File Structure Convention
@@ -73,7 +73,7 @@ When moving entities between packages:
 1. Check for references in other packages (grep for entity_id)
 2. Update automation `entity_id` references
 3. Update any `rest_command` or `template` references
-4. Update `areas.yaml` if area ID changed
+4. If the area itself changed, update the HA area registry in the UI and `nomenclature.md`
 
 ## Output Format
 
@@ -87,5 +87,5 @@ Restructuring packages/integrations/core.yaml:
 ## Notes
 
 - Never merge two files without checking for entity conflicts first
-- `packages/system/areas.yaml` is the source of truth for area definitions
-- New areas require: (1) new file in `packages/areas/`, (2) entry in `areas.yaml`, (3) area ID assignment in Home Assistant UI
+- Area definitions live in Home Assistant's area registry (UI / `.storage/core.area_registry`) — assign devices to areas when adding them
+- New areas require: (1) create area in HA UI, (2) optional `packages/areas/<area>.yaml` for location-specific config, (3) update Area Names in `nomenclature.md`
