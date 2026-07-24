@@ -1,0 +1,7 @@
+---
+secrets: /homeassistant/appdaemon/secrets.yaml
+appdaemon:
+  app_dir: /homeassistant/appdaemon/apps
+  plugins:
+    HASS:
+      ws_max_msg_size: 0
