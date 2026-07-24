@@ -13,6 +13,7 @@ packages/
 ├── areas/          # Location-specific config
 ├── functions/      # Cross-area functionality
 ├── integrations/   # Core / integration config
+├── private/        # Local-only packages (gitignored except README)
 ├── projects/       # Multi-device projects
 ├── routines/       # Time- and event-based routines
 ├── system/         # HA system management
@@ -53,6 +54,12 @@ Core management: areas registry helpers, Lovelace, maintenance, shell commands.
 ### Toys (`toys/`)
 
 Optional / seasonal behavior (halloween, party lights).
+
+### Private (`private/`)
+
+Local-only packages loaded by Home Assistant but not committed. Use for personal
+or sensitive routines (health, habits, private reminders). See
+`packages/private/README.md`.
 
 ## Practices
 

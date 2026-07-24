@@ -19,6 +19,7 @@ packages/
 ├── areas/          # One file per location
 ├── functions/      # Cross-area functionality
 ├── integrations/   # Integration / platform config
+├── private/        # Local-only packages (gitignored except README)
 ├── projects/       # Multi-device projects
 ├── routines/       # Time / event routines
 ├── system/         # HA system management

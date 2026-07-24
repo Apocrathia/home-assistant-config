@@ -8,6 +8,7 @@
 - Run validation, linting, YAML syntax checks
 - Propose changes and present options
 - Use `.scratch/` for throwaways (prefer over `/tmp`); see `.scratch/README.md`
+- Use `packages/private/` for local-only HA packages (gitignored except README)
 
 ### Requires Explicit Permission
 
@@ -41,7 +42,7 @@ The following paths require confirmation before any edit:
 
 - Always validate indentation (2 spaces, no tabs)
 - Use `secrets.yaml` for sensitive values, reference with `!secret`
-- Follow package organization: `areas/`, `functions/`, `integrations/`, `projects/`, `routines/`, `system/`, `toys/`
+- Follow package organization: `areas/`, `functions/`, `integrations/`, `private/`, `projects/`, `routines/`, `system/`, `toys/`
 - Use descriptive naming with prefixes: `routine_morning`, `function_presence`, `light_kitchen`, `sensor_bedroom_temperature`
 
 ### Automations

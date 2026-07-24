@@ -19,6 +19,7 @@ packages/
 ├── areas/          # Room/location-specific configs
 ├── functions/      # Bundled functionality configs
 ├── integrations/   # Integration/device configs
+├── private/        # Local-only packages (gitignored except README)
 ├── projects/       # Multi-device projects
 ├── routines/       # Time/event-based automations
 ├── system/         # HA system management

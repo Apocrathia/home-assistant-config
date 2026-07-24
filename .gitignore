@@ -31,6 +31,10 @@ appdaemon
 .scratch/**
 !.scratch/README.md
 
+# Private packages (loaded by HA, not published)
+packages/private/**
+!packages/private/README.md
+
 # Specific file ignores
 core
 image
