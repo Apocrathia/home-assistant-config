@@ -9,20 +9,27 @@
 - Propose changes and present options
 - Use `.scratch/` for throwaways (prefer over `/tmp`); see `.scratch/README.md`
 - Use `packages/private/` for local-only HA packages (gitignored except README)
+- Read `.shopping_list.json` as a work source (see `work-sources.md`)
 
 ### Requires Explicit Permission
 
 - Modify `configuration.yaml` or any file in `packages/`
 - Edit files in `.storage/` (JSON — runtime state, never edit directly)
 - Create or modify automations that affect critical systems (security, safety, HVAC)
-- Change secrets.yaml or any credential-related configuration
+- Change `secrets.yaml` or any credential-related configuration
 - Modify integrations that connect to external services
+- Create branches (unless the operator explicitly asks)
 
 ### Never Do
 
-- Commit changes — the operator handles git operations
-- Push to remote repositories
-- Edit `.storage/` files directly (they are managed by Home Assistant)
+- **Commit, push, merge, rebase, tag, or open PRs/MRs** — git is operator-owned
+  ([`rules/operator-owned-git.md`](../rules/operator-owned-git.md)). This
+  overrides upstream skills (`ship-work`, `clock-out`, `self-improve` shipping
+  steps, etc.).
+- **Write to `.shopping_list.json`** — HA-owned runtime to-dos; read-only work
+  source ([`work-sources.md`](work-sources.md)). Do not mark complete, add,
+  delete, or reformat.
+- Edit `.storage/` files directly (managed by Home Assistant)
 - Hardcode credentials, API keys, or secrets
 - Modify the UniFi or other infrastructure controllers directly
 

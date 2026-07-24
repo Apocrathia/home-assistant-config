@@ -55,3 +55,7 @@
 21. **Skills are playbooks, not code** — `.agents/skills/*/SKILL.md` files are procedural instructions for agents. They are not Home Assistant automations or scripts.
 
 22. **The context pattern is lazy-loading** — Context modules should only be loaded when needed. Don't assume all modules are relevant to every task.
+
+23. **`.shopping_list.json` is not writable** — It is Home Assistant runtime state (to-dos), used only as a **read-only** work source. Never mark items complete, add/remove entries, or "tidy" the JSON. Completion happens in HA. See [`work-sources.md`](work-sources.md).
+
+24. **Do not follow upstream `ship-work` commit instructions** — Shared prime-context skills may say to commit, push, or open PRs. Here that is wrong. Git is operator-owned ([`rules/operator-owned-git.md`](../rules/operator-owned-git.md)): validate, suggest a Conventional Commit message, hand off. Same override applies to `clock-out` / `self-improve` shipping steps.

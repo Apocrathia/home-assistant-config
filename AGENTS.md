@@ -5,6 +5,10 @@
 You are operating in a Home Assistant configuration repository. This directory is the user's
 Home Assistant config — the single source of truth for their smart home.
 
+**60-second model:** `packages/*` is the meat; `.agents/` is AI context; git and
+`.shopping_list.json` are operator/HA-owned (agents never commit or write the
+shopping list). Start at [`.agents/context/README.md`](./.agents/context/README.md).
+
 ## Context Loading Order
 
 Load context modules in this order. Each file is a thin shim that points to deeper context:
@@ -17,33 +21,50 @@ Load context modules in this order. Each file is a thin shim that points to deep
 6. **`.agents/context/voice.md`** — Communication style
 7. **`.agents/context/output.md`** — Output format expectations
 8. **`.agents/context/questions.md`** — Clarification protocol
+9. **`.agents/context/work-sources.md`** — Work discovery sources
+10. **`.agents/context/tools.md`** — HA MCP, config check, shopping-list jq
 
 ## Routing
 
 Start at [`.agents/context/README.md`](./.agents/context/README.md). Skip detail: [`.agents/context/loading.md`](./.agents/context/loading.md).
 
-| If you're…                       | Then read                                          |
-| -------------------------------- | -------------------------------------------------- |
-| New / unsure                     | `README.md` only                                   |
-| Starting non-trivial work        | `traps.md` + `constraints.md`                      |
-| Creating entities or automations | `nomenclature.md` + `output.md` + `constraints.md` |
-| Scope is fuzzy                   | `questions.md`                                     |
-| Writing docs or agent tone       | `voice.md` + `output.md`                           |
-| Validating YAML configs          | `skills/config-validate/SKILL.md`                  |
-| Restructuring packages           | `skills/package-organize/SKILL.md`                 |
-| Fixing broken automations        | `skills/automation-debug/SKILL.md`                 |
-| Deep HA config knowledge needed  | `agents/ha-config-expert/agent.md`                 |
-| Complex automation design needed | `agents/automation-architect/agent.md`             |
+| If you're…                         | Then read                                                                   |
+| ---------------------------------- | --------------------------------------------------------------------------- |
+| New / unsure                       | `README.md` only                                                            |
+| Starting non-trivial work          | `traps.md` + `constraints.md`                                               |
+| Creating entities or automations   | `nomenclature.md` + `output.md` + `constraints.md`                          |
+| Scope is fuzzy                     | `questions.md`                                                              |
+| Writing docs or agent tone         | `voice.md` + `output.md`                                                    |
+| Finding work to do                 | `work-sources.md` + `skills/find-work/SKILL.md`                             |
+| Implementing a scoped change       | `constraints.md` + `skills/implement-change/SKILL.md` (hand off, no commit) |
+| Validating YAML configs            | `tools.md` + `skills/config-validate/SKILL.md`                              |
+| Restructuring packages             | `skills/package-organize/SKILL.md`                                          |
+| Fixing broken automations          | `skills/automation-debug/SKILL.md`                                          |
+| Syncing `.agents/` from upstream   | `skills/integrate-upstream/SKILL.md`                                        |
+| Context claims drifted from repo   | `skills/reconcile-context/SKILL.md`                                         |
+| Tempted to commit / push / open PR | `rules/operator-owned-git.md` — don't                                       |
+| Deep HA config knowledge needed    | `agents/ha-config-expert/agent.md`                                          |
+| Complex automation design needed   | `agents/automation-architect/agent.md`                                      |
 
 ## Skills
 
 When performing specific tasks, consult relevant skill files:
 
-| Skill                | Path                                       | Use When                           |
-| -------------------- | ------------------------------------------ | ---------------------------------- |
-| Config Validation    | `.agents/skills/config-validate/SKILL.md`  | Writing or modifying YAML configs  |
-| Package Organization | `.agents/skills/package-organize/SKILL.md` | Restructuring or creating packages |
-| Automation Debugging | `.agents/skills/automation-debug/SKILL.md` | Fixing broken automations          |
+| Skill                | Path                                         | Use When                                                             |
+| -------------------- | -------------------------------------------- | -------------------------------------------------------------------- |
+| Config Validation    | `.agents/skills/config-validate/SKILL.md`    | Writing or modifying YAML configs                                    |
+| Package Organization | `.agents/skills/package-organize/SKILL.md`   | Restructuring or creating packages                                   |
+| Automation Debugging | `.agents/skills/automation-debug/SKILL.md`   | Fixing broken automations                                            |
+| Find Work            | `.agents/skills/find-work/SKILL.md`          | Discovering open work — sources in `.agents/context/work-sources.md` |
+| Implement Change     | `.agents/skills/implement-change/SKILL.md`   | One change lap → validate → operator handoff                         |
+| Upstream Integration | `.agents/skills/integrate-upstream/SKILL.md` | Syncing `.agents/` from the prime-context core                       |
+| Reconcile Context    | `.agents/skills/reconcile-context/SKILL.md`  | Fix drift between context claims and the repo                        |
+
+Shared skills from the [prime-context](https://github.com/PrimeIntellect-ai/prime-context)
+core (alignment, review-loop, reconcile-docs, ship-work, and others)
+also live under `.agents/skills/`. The pinned upstream revision is in
+`.agents/upstream-ref`. **Shipping/commit steps are overridden by
+`.agents/rules/operator-owned-git.md`.**
 
 ## Agents
 
@@ -71,14 +92,17 @@ Specialized agent profiles for complex tasks:
 | `esphome/`               | ESPHome device definitions                     |
 | `utilities/`             | Helper scripts                                 |
 | `.scratch/`              | Local throwaways (gitignored except README)    |
+| `.agents/`               | AI context, rules, skills, agents              |
 
 ## Quick Reference
 
 - **Main config**: `configuration.yaml` (includes `packages/*`)
 - **Secrets**: `secrets.yaml` (never hardcode credentials)
 - **Storage**: `.storage/` (JSON — do NOT edit directly)
+- **Work source**: `.shopping_list.json` (read-only; see `work-sources.md`)
 - **Custom components**: `custom_components/`
 - **Themes**: `themes/`
+- **CLAUDE.md**: symlink → `AGENTS.md`
 
 ## Rules
 
@@ -89,3 +113,7 @@ Specialized agent profiles for complex tasks:
 5. Match the voice (see voice.md) — communicate appropriately
 6. Format output as specified (see output.md) — consistency matters
 7. Ask questions when needed (see questions.md) — clarify before assuming
+8. Git is operator-owned (see `.agents/rules/operator-owned-git.md`) — never
+   commit, push, or open PRs; this overrides any upstream skill that ships work
+9. `.shopping_list.json` is a read-only work source (see
+   `.agents/context/work-sources.md`) — never write to it

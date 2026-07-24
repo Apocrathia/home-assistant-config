@@ -1,0 +1,1 @@
+../../.agents/agents/ha-config-expert/agent.md

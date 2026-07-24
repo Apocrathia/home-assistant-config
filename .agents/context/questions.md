@@ -56,3 +56,6 @@ Ask about these first when missing:
 2. **Scope** — Single entity or multiple?
 3. **Impact** — Is this critical path or dev/experimental?
 4. **Preferences** — Any specific behavior beyond the basic request?
+
+Vague shopping-list titles (see [`work-sources.md`](work-sources.md)) need
+scoping/`alignment` before implementation — ask rather than invent intent.
