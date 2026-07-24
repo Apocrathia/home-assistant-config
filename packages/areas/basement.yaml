@@ -30,17 +30,13 @@ automation:
         event_data:
           categoryName: area_basement_leak_detected
     actions:
+      # Alert entity alert.area_basement_leak_detected does not exist
+      # This automation will not function until the alert is configured
       choose:
         - conditions: >
             "{{ trigger.event.data.actionName == "ACKNOWLEDGE_LEAK" }}"
-          sequence:
-            - action: alert.turn_off
-              target:
-                entity_id: alert.area_basement_leak_detected
+          sequence: []
         - conditions: >
             "{{ trigger.event.data.actionName == "IGNORE_LEAK" }}"
-          sequence:
-            - action: alert.turn_off
-              target:
-                entity_id: alert.area_basement_leak_detected
+          sequence: []
 ################################################################################
