@@ -1,0 +1,70 @@
+---
+### Party Lights ###
+
+# Inputs
+
+input_boolean:
+  party_lights:
+    name: Party Lights
+    icon: mdi:party-popper
+
+automation:
+  ################################################################################
+  - id: party_lights
+    alias: Toys - Light - Party Lights
+    variables:
+      entities:
+        - light.front_porch_light_left
+        - light.front_porch_light_right
+        - light.outdoor_garage_light_left
+        - light.outdoor_garage_light_right
+        - light.sitting_room_floor_lamp
+        - light.office_floor_lamp
+    triggers:
+      - trigger: state
+        entity_id: input_boolean.party_lights
+        to: 'on'
+    actions:
+      - alias: 'Turn each light on to scroll colors across the house'
+        repeat:
+          sequence:
+            - action: script.turn_on
+              target:
+                entity_id: script.light_colorloop
+              data:
+                variables:
+                  light: >
+                    {{ entities[ (repeat.index - 1) % (entities|length) ] }}
+                  transition: 2
+            - delay:
+                seconds: 2
+          until:
+            - condition: state
+              entity_id: input_boolean.party_lights
+              state: 'off'
+      - alias: 'Stop the colorloop script'
+        action: script.turn_off
+        data:
+          entity_id: script.light_colorloop
+      - alias: 'Reset the lights'
+        choose:
+          - conditions:
+              - alias: 'The sun is down'
+                condition: state
+                entity_id: sun.sun
+                state: 'below_horizon'
+            sequence:
+              - alias: 'Set lights to night mode'
+                action: light.turn_on
+                data:
+                  entity_id: >
+                    {{ entities }}
+                  profile: relax
+        default:
+          - alias: 'Turn the lights off'
+            action: light.turn_off
+            data:
+              entity_id: >
+                {{ entities }}
+
+################################################################################
