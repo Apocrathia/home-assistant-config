@@ -1,0 +1,18 @@
+---
+# Torque — receives OBD2 data pushed from the Torque Pro Android app.
+# The app reads a Bluetooth OBD2 adapter and POSTs to /api/torque.
+#
+# App side (Torque Pro → Settings → Data Logging & Upload):
+#   - Logging Preferences → Select what to log → add PIDs of interest
+#   - Realtime Web Upload → Upload to web-server
+#   - Web-server URL:  https://<ha-host>/api/torque
+#   - Send HTTPS: Bearer Token → paste a Long-Lived Access Token (requires SSL)
+#   - User Email Address: must match `email` below (it's a routing key, not a login)
+#   - Web Logging Interval: raise above the 2s default to avoid flooding recorder
+#
+# Prefer a dedicated, least-privilege HA user for the token so it can be revoked
+# independently if the phone is lost.
+sensor:
+  - platform: torque
+    name: truck
+    email: !secret hass_cloud_email
