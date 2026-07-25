@@ -43,7 +43,7 @@ Keep modules thin; update this hub when adding modules.
 | Output       | `output.md`       | Output format expectations                    |
 | Questions    | `questions.md`    | Clarification protocol                        |
 | Work sources | `work-sources.md` | Where to find open work (incl. shopping list) |
-| Tools        | `tools.md`        | HA MCP, config check, jq for shopping list    |
+| Tools        | `tools.md`        | HA MCP, Grafana HA history, config check, jq  |
 
 ## Rules (always-on)
 
@@ -64,6 +64,7 @@ Located in `.agents/skills/` — task-specific playbooks:
 | Config Validation    | `skills/config-validate/`    | Writing or modifying YAML configs             |
 | Package Organization | `skills/package-organize/`   | Restructuring or creating packages            |
 | Automation Debugging | `skills/automation-debug/`   | Fixing broken automations                     |
+| Grafana HA History   | `skills/grafana-ha-history/` | Past entity state via Grafana InfluxDB        |
 | Find Work            | `skills/find-work/`          | Discovering open work (see `work-sources.md`) |
 | Upstream Integration | `skills/integrate-upstream/` | Syncing `.agents/` from prime-context         |
 | Implement Change     | `skills/implement-change/`   | One change lap → validate → operator handoff  |

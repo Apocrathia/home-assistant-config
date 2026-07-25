@@ -13,6 +13,15 @@ Short map of tools agents actually use here. Not a full MCP catalog.
 Do not use MCP to mutate critical systems without explicit operator ask.
 Discovery (`find-work`) stays read-only even when MCP is available.
 
+## Historical state (Grafana → InfluxDB)
+
+Past entity state / change timelines / numeric sensor series live in Grafana
+datasource uid `homeassistant` (InfluxQL). Do **not** use HA MCP for history.
+
+| Need                         | Go to                                |
+| ---------------------------- | ------------------------------------ |
+| Query HA history via Grafana | `skills/grafana-ha-history/SKILL.md` |
+
 ## Work discovery
 
 ```bash
@@ -23,11 +32,12 @@ Full rules: [`work-sources.md`](work-sources.md). Never write that file.
 
 ## Config / packages
 
-| Need                     | Go to                              |
-| ------------------------ | ---------------------------------- |
-| Validate YAML / packages | `skills/config-validate/SKILL.md`  |
-| Restructure packages     | `skills/package-organize/SKILL.md` |
-| Debug automations        | `skills/automation-debug/SKILL.md` |
+| Need                     | Go to                                |
+| ------------------------ | ------------------------------------ |
+| Validate YAML / packages | `skills/config-validate/SKILL.md`    |
+| Restructure packages     | `skills/package-organize/SKILL.md`   |
+| Debug automations        | `skills/automation-debug/SKILL.md`   |
+| HA history via Grafana   | `skills/grafana-ha-history/SKILL.md` |
 
 ## Agent context maintenance
 

@@ -22,7 +22,7 @@ Load context modules in this order. Each file is a thin shim that points to deep
 7. **`.agents/context/output.md`** — Output format expectations
 8. **`.agents/context/questions.md`** — Clarification protocol
 9. **`.agents/context/work-sources.md`** — Work discovery sources
-10. **`.agents/context/tools.md`** — HA MCP, config check, shopping-list jq
+10. **`.agents/context/tools.md`** — HA MCP, Grafana HA history, config check, shopping-list jq
 
 ## Routing
 
@@ -40,6 +40,7 @@ Start at [`.agents/context/README.md`](./.agents/context/README.md). Skip detail
 | Validating YAML configs                 | `tools.md` + `skills/config-validate/SKILL.md`                              |
 | Restructuring packages                  | `skills/package-organize/SKILL.md`                                          |
 | Fixing broken automations               | `skills/automation-debug/SKILL.md`                                          |
+| Past HA entity state / history          | `tools.md` + `skills/grafana-ha-history/SKILL.md`                           |
 | Syncing `.agents/` from upstream        | `skills/integrate-upstream/SKILL.md`                                        |
 | Context claims drifted from repo        | `skills/reconcile-context/SKILL.md`                                         |
 | Tempted to commit / push / open PR      | `rules/operator-owned-git.md` — don't                                       |
@@ -56,6 +57,7 @@ When performing specific tasks, consult relevant skill files:
 | Config Validation    | `.agents/skills/config-validate/SKILL.md`    | Writing or modifying YAML configs                                    |
 | Package Organization | `.agents/skills/package-organize/SKILL.md`   | Restructuring or creating packages                                   |
 | Automation Debugging | `.agents/skills/automation-debug/SKILL.md`   | Fixing broken automations                                            |
+| Grafana HA History   | `.agents/skills/grafana-ha-history/SKILL.md` | Past entity state via Grafana InfluxDB                               |
 | Find Work            | `.agents/skills/find-work/SKILL.md`          | Discovering open work — sources in `.agents/context/work-sources.md` |
 | Implement Change     | `.agents/skills/implement-change/SKILL.md`   | One change lap → validate → operator handoff                         |
 | Upstream Integration | `.agents/skills/integrate-upstream/SKILL.md` | Syncing `.agents/` from the prime-context core                       |
