@@ -17,7 +17,7 @@ automation:
         to: 'on'
       - trigger: sun
         event: sunset
-        offset: '00:00:00'
+        offset: '00:30:00'
     conditions:
       - condition: and
         conditions:
@@ -51,10 +51,14 @@ script:
                 minutes: >
                   {{ range(3, 7) | random }}
           until:
-            - condition: template
-              value_template: >
-                {{ (is_state('input_boolean.away_mode','off')
-                    or is_state('sun.sun','above_horizon')) }}
+            - condition: or
+              conditions:
+                - condition: state
+                  entity_id: input_boolean.away_mode
+                  state: 'off'
+                - condition: state
+                  entity_id: sun.sun
+                  state: 'above_horizon'
       - alias: 'Reset all lights'
         action: light.turn_off
         target:
