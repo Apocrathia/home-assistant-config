@@ -14,7 +14,7 @@ automation:
       - trigger: state
         entity_id: input_boolean.away_mode
         from: 'off'
-        to: 'on`'
+        to: 'on'
       - trigger: sun
         event: sunset
         offset: '00:00:00'
