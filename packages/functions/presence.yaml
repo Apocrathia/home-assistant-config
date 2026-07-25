@@ -85,20 +85,32 @@ automation:
     alias: 'Function - Vacation - Ian'
     triggers:
       - trigger: numeric_state
+        id: vacation_on
         entity_id: sensor.home_ian_distance
         above: 100
-        below: 100
         # set this just in case we get a fluke proximity reading
         for: 01:00:00
+      - trigger: numeric_state
+        id: vacation_off
+        entity_id: sensor.home_ian_distance
+        below: 100
+        for: 01:00:00
     actions:
-      - action: >
-          {% if states('sensor.home_ian_distance')|float < 100 %}
-            input_boolean.turn_off
-          {% elif states('sensor.home_ian_distance')|float > 100 %}
-            input_boolean.turn_on
-          {% endif %}
-        data:
-          entity_id: input_boolean.vacation_ian
+      - choose:
+          - conditions:
+              - condition: trigger
+                id: vacation_on
+            sequence:
+              - action: input_boolean.turn_on
+                target:
+                  entity_id: input_boolean.vacation_ian
+          - conditions:
+              - condition: trigger
+                id: vacation_off
+            sequence:
+              - action: input_boolean.turn_off
+                target:
+                  entity_id: input_boolean.vacation_ian
   ################################################################################
   - id: function_vacation_detection
     alias: 'Function - Vacation - Detection'
@@ -264,16 +276,36 @@ script:
   vacation_mode_on:
     alias: 'Function - Vacation - On'
     sequence:
-      # Test Notificaton
-      - action: notify.notify
+      - alias: 'Engage away mode if not already active'
+        choose:
+          - conditions:
+              - condition: state
+                entity_id: input_boolean.away_mode
+                state: 'off'
+            sequence:
+              - action: input_boolean.turn_on
+                target:
+                  entity_id: input_boolean.away_mode
+      - alias: 'Notify vacation mode activated'
+        action: notify.notify
         data:
-          message: 'Vacation Script (On) Triggered'
+          title: 'Vacation Mode'
+          message: 'Vacation mode activated. Away hardening engaged.'
   ################################################################################
   vacation_mode_off:
     alias: 'Function - Vacation - Off'
     sequence:
-      # Test Notificaton
-      - action: notify.notify
+      - alias: 'Restore home routines if back home'
+        choose:
+          - conditions:
+              - condition: state
+                entity_id: group.people
+                state: 'home'
+            sequence:
+              - action: script.location_home
+      - alias: 'Notify vacation mode deactivated'
+        action: notify.notify
         data:
-          message: 'Vacation Script (Off) Triggered'
+          title: 'Vacation Mode'
+          message: 'Vacation mode deactivated.'
 ################################################################################
