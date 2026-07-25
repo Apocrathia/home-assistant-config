@@ -137,6 +137,7 @@ automation:
         state:
           - armed
           - armed_home
+          - armed_away
     actions:
       - action: alarm_control_panel.alarm_trigger
         entity_id: alarm_control_panel.home
