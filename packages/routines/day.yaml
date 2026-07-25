@@ -173,19 +173,14 @@ automation:
   ################################################################################
   - id: routine_day_good_morning_wake
     alias: 'Routine - Day - Good Morning Wake Detection'
-    description: Activate Good Morning after weekend bed-exit and bedroom motion
+    description: Activate Good Morning on weekends after the bed stays empty
     triggers:
       - trigger: state
         entity_id: binary_sensor.bed_presence_2bd444_bed_occupied_either
         from: 'on'
         to: 'off'
         for:
-          minutes: >
-            {{ states('input_number.good_morning_bed_empty_delay') | int(5) }}
-      - trigger: state
-        entity_id: binary_sensor.homekit_master_bedroom_motion
-        from: 'off'
-        to: 'on'
+          minutes: "{{ states('input_number.good_morning_bed_empty_delay') | int(5) }}"
       - trigger: time
         at: input_datetime.good_morning_earliest
     conditions:
@@ -207,12 +202,6 @@ automation:
              (as_timestamp(now()) - as_timestamp(bed.last_changed)) >=
              (states('input_number.good_morning_bed_empty_delay') |
               float(5) * 60) }}
-      - alias: 'Master bedroom motion was detected recently'
-        condition: template
-        value_template: >
-          {% set motion = states.binary_sensor.homekit_master_bedroom_motion %}
-          {{ motion.state in ['on', 'off'] and
-             (as_timestamp(now()) - as_timestamp(motion.last_changed)) <= 600 }}
       - condition: state
         entity_id: alarm_control_panel.home
         state: 'armed_home'

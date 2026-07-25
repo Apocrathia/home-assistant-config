@@ -25,6 +25,13 @@ input_datetime:
     icon: mdi:clock-outline
     has_date: false
     has_time: true
+
+  alarm_weekend_disarm:
+    name: 'Alarm Weekend Disarm'
+    icon: mdi:clock-outline
+    has_date: false
+    has_time: true
+    initial: '09:00:00'
 ################################################################################
 
 ################################################################################
@@ -64,6 +71,12 @@ template:
         icon: mdi:clock-outline
         state: >
           {{ (states.input_datetime.alarm_auto_disarm.attributes.timestamp |
+              int | timestamp_custom("%H:%M",False)) }}
+      - default_entity_id: sensor.alarm_weekend_disarm
+        name: Alarm Weekend Disarm
+        icon: mdi:clock-outline
+        state: >
+          {{ (states.input_datetime.alarm_weekend_disarm.attributes.timestamp |
               int | timestamp_custom("%H:%M",False)) }}
 ################################################################################
 automation:
@@ -183,6 +196,35 @@ automation:
       data:
         entity_id: alarm_control_panel.home
         code: !secret alarm_code
+  ################################################################################
+  - id: function_security_alarm_weekend_disarm
+    alias: 'Function - Security - Alarm Weekend Disarm'
+    description: Safety-net disarm on non-workdays when someone is home
+    triggers:
+      - trigger: time
+        at: input_datetime.alarm_weekend_disarm
+    conditions:
+      - condition: state
+        entity_id: binary_sensor.workday
+        state: 'off'
+      - condition: state
+        entity_id: group.people
+        state: 'home'
+      - condition: state
+        entity_id: alarm_control_panel.home
+        state: 'armed_home'
+      - condition: state
+        entity_id: input_boolean.away_mode
+        state: 'off'
+      - condition: state
+        entity_id: input_boolean.vacation_mode
+        state: 'off'
+    actions:
+      - action: alarm_control_panel.alarm_disarm
+        data:
+          entity_id: alarm_control_panel.home
+          code: !secret alarm_code
+    mode: single
   ################################################################################
   - id: function_security_front_porch_motion
     alias: 'Function - Security - Front Porch Motion'
