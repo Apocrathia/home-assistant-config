@@ -19,13 +19,20 @@ Edit in the main checkout. Do not open worktrees
 Custom subagents live in `.agents/agents/` (Cursor copies under
 `.cursor/agents/`). Use them when the task matches:
 
-| Agent                  | When                                                    |
-| ---------------------- | ------------------------------------------------------- |
-| `ha-config-expert`     | Deep HA configuration, packages, entities, traps        |
-| `automation-architect` | Complex automation design (triggers/conditions/actions) |
+| Agent                  | When                                                     |
+| ---------------------- | -------------------------------------------------------- |
+| `ha-config-expert`     | Deep HA configuration, packages, entities, traps         |
+| `automation-architect` | Complex automation design (triggers/conditions/actions)  |
+| `security-analyst`     | Adversarial audit of config posture / dependency vectors |
 
 Invoke by name or delegate explicitly. Run independent agents in parallel in one
 message when fan-out helps.
+
+`security-analyst` is **on-demand and audit-only** — spawn it when the operator
+asks for a security pass. The parent may _suggest_ (never auto-run) a spawn when
+a change touches locks/alarms/cameras, presence/away/vacation, auth/tokens/
+`secrets.yaml` refs, `custom_components/`, or anything expanding external reach.
+It reports findings and stops; it does not edit. Not a `review-loop` gate.
 
 ## When to stay in the parent
 

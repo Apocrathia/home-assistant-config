@@ -19,6 +19,7 @@ canonical detail stays here.
 | [`surgical-edits.md`](./surgical-edits.md)                               | Minimum change; touch only what the request requires                            |
 | [`subagents.md`](./subagents.md)                                         | Parallel fan-out; HA project agents; no worktree gate                           |
 | [`humanizer.md`](./humanizer.md)                                         | Markdown prose: strip AI writing patterns                                       |
+| [`deepwiki.md`](./deepwiki.md)                                           | DeepWiki probe bank (not always-on) for repo introspection + dep vetting        |
 
 Hard limits that these rules reinforce:
 [`.agents/context/constraints.md`](../context/constraints.md).

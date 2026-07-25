@@ -28,23 +28,24 @@ Load context modules in this order. Each file is a thin shim that points to deep
 
 Start at [`.agents/context/README.md`](./.agents/context/README.md). Skip detail: [`.agents/context/loading.md`](./.agents/context/loading.md).
 
-| If you're…                         | Then read                                                                   |
-| ---------------------------------- | --------------------------------------------------------------------------- |
-| New / unsure                       | `README.md` only                                                            |
-| Starting non-trivial work          | `traps.md` + `constraints.md`                                               |
-| Creating entities or automations   | `nomenclature.md` + `output.md` + `constraints.md`                          |
-| Scope is fuzzy                     | `questions.md`                                                              |
-| Writing docs or agent tone         | `voice.md` + `output.md`                                                    |
-| Finding work to do                 | `work-sources.md` + `skills/find-work/SKILL.md`                             |
-| Implementing a scoped change       | `constraints.md` + `skills/implement-change/SKILL.md` (hand off, no commit) |
-| Validating YAML configs            | `tools.md` + `skills/config-validate/SKILL.md`                              |
-| Restructuring packages             | `skills/package-organize/SKILL.md`                                          |
-| Fixing broken automations          | `skills/automation-debug/SKILL.md`                                          |
-| Syncing `.agents/` from upstream   | `skills/integrate-upstream/SKILL.md`                                        |
-| Context claims drifted from repo   | `skills/reconcile-context/SKILL.md`                                         |
-| Tempted to commit / push / open PR | `rules/operator-owned-git.md` — don't                                       |
-| Deep HA config knowledge needed    | `agents/ha-config-expert/agent.md`                                          |
-| Complex automation design needed   | `agents/automation-architect/agent.md`                                      |
+| If you're…                              | Then read                                                                   |
+| --------------------------------------- | --------------------------------------------------------------------------- |
+| New / unsure                            | `README.md` only                                                            |
+| Starting non-trivial work               | `traps.md` + `constraints.md`                                               |
+| Creating entities or automations        | `nomenclature.md` + `output.md` + `constraints.md`                          |
+| Scope is fuzzy                          | `questions.md`                                                              |
+| Writing docs or agent tone              | `voice.md` + `output.md`                                                    |
+| Finding work to do                      | `work-sources.md` + `skills/find-work/SKILL.md`                             |
+| Implementing a scoped change            | `constraints.md` + `skills/implement-change/SKILL.md` (hand off, no commit) |
+| Validating YAML configs                 | `tools.md` + `skills/config-validate/SKILL.md`                              |
+| Restructuring packages                  | `skills/package-organize/SKILL.md`                                          |
+| Fixing broken automations               | `skills/automation-debug/SKILL.md`                                          |
+| Syncing `.agents/` from upstream        | `skills/integrate-upstream/SKILL.md`                                        |
+| Context claims drifted from repo        | `skills/reconcile-context/SKILL.md`                                         |
+| Tempted to commit / push / open PR      | `rules/operator-owned-git.md` — don't                                       |
+| Auditing security posture / dep vectors | `agents/security-analyst/agent.md` + `rules/deepwiki.md`                    |
+| Deep HA config knowledge needed         | `agents/ha-config-expert/agent.md`                                          |
+| Complex automation design needed        | `agents/automation-architect/agent.md`                                      |
 
 ## Skills
 
@@ -70,10 +71,11 @@ also live under `.agents/skills/`. The pinned upstream revision is in
 
 Specialized agent profiles for complex tasks:
 
-| Agent                | Path                                           | Role                            |
-| -------------------- | ---------------------------------------------- | ------------------------------- |
-| HA Config Expert     | `.agents/agents/ha-config-expert/agent.md`     | Deep HA configuration knowledge |
-| Automation Architect | `.agents/agents/automation-architect/agent.md` | Complex automation design       |
+| Agent                | Path                                           | Role                                   |
+| -------------------- | ---------------------------------------------- | -------------------------------------- |
+| HA Config Expert     | `.agents/agents/ha-config-expert/agent.md`     | Deep HA configuration knowledge        |
+| Automation Architect | `.agents/agents/automation-architect/agent.md` | Complex automation design              |
+| Security Analyst     | `.agents/agents/security-analyst/agent.md`     | Adversarial, audit-only posture review |
 
 ## Key Directories
 

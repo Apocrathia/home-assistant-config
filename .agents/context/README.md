@@ -79,10 +79,11 @@ operator.
 
 Located in `.agents/agents/` — specialized profiles for complex tasks:
 
-| Agent                | Path                           | Role                                        |
-| -------------------- | ------------------------------ | ------------------------------------------- |
-| HA Config Expert     | `agents/ha-config-expert/`     | Deep Home Assistant configuration knowledge |
-| Automation Architect | `agents/automation-architect/` | Complex automation design and patterns      |
+| Agent                | Path                           | Role                                          |
+| -------------------- | ------------------------------ | --------------------------------------------- |
+| HA Config Expert     | `agents/ha-config-expert/`     | Deep Home Assistant configuration knowledge   |
+| Automation Architect | `agents/automation-architect/` | Complex automation design and patterns        |
+| Security Analyst     | `agents/security-analyst/`     | Adversarial, audit-only config posture review |
 
 ## Loading Strategy
 
