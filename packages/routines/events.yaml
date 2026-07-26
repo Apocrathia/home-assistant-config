@@ -16,17 +16,15 @@ automation:
       - trigger: time
         at: '18:00:00'
     conditions:
-      condition: and
-      conditions:
-        - condition: state
-          entity_id: group.people
-          state: home
-        - condition: template
-          # on the 4th saturday of the month
-          value_template: >
-            "{{ ( now().isocalendar()[2] == 6
-                  and now().day >= 22
-                  and now().day <= 28 ) }}"
+      - condition: state
+        entity_id: group.people
+        state: home
+      - condition: template
+        # 4th Saturday of the month (day 22–28)
+        value_template: >
+          {{ now().isocalendar()[2] == 6
+              and now().day >= 22
+              and now().day <= 28 }}
     actions:
       # I've copied all of the sounds from the iOS app to use across the house
       # https://github.com/home-assistant/iOS/tree/master/HomeAssistant/Sounds
@@ -35,10 +33,12 @@ automation:
       # Keeping this note here for later.
       # - action: script.notification_party_mode
       - action: input_boolean.turn_on
-        entity_id: input_boolean.party_lights
+        target:
+          entity_id: input_boolean.party_lights
       - delay:
-          # Turn it off at midnight. 6 hours. 360 minutes.
-          minutes: 360
+          # 18:00–20:00 game night window
+          minutes: 120
       - action: input_boolean.turn_off
-        entity_id: input_boolean.party_lights
+        target:
+          entity_id: input_boolean.party_lights
 ################################################################################

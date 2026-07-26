@@ -25,27 +25,24 @@ automation:
         entity_id: input_boolean.party_lights
         to: 'on'
     actions:
-      - alias: 'Turn each light on to scroll colors across the house'
+      - alias: 'Chase rainbow across the lights'
         repeat:
+          for_each: '{{ entities }}'
           sequence:
-            - action: script.turn_on
-              target:
-                entity_id: script.light_colorloop
-              data:
-                variables:
-                  light: >
-                    {{ entities[ (repeat.index - 1) % (entities|length) ] }}
-                  transition: 2
-            - delay:
-                seconds: 2
-          until:
-            - condition: state
-              entity_id: input_boolean.party_lights
-              state: 'off'
-      - alias: 'Stop the colorloop script'
-        action: script.turn_off
-        data:
-          entity_id: script.light_colorloop
+            - if:
+                - condition: state
+                  entity_id: input_boolean.party_lights
+                  state: 'on'
+              then:
+                - action: light.turn_on
+                  target:
+                    entity_id: '{{ repeat.item }}'
+                  data:
+                    effect: rainbow
+                - delay:
+                    milliseconds: 500
+      - alias: 'Wait until party mode ends'
+        wait_template: "{{ is_state('input_boolean.party_lights', 'off') }}"
       - alias: 'Reset the lights'
         choose:
           - conditions:
