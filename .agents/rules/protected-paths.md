@@ -25,6 +25,8 @@ change; don't apply until the operator confirms.**
 - `packages/system/` — core HA system management packages
 - `.shopping_list.json` — read-only work source (see
   [`work-sources.md`](../context/work-sources.md)); never write
+- `.storage/local_todo.*.ics` — Local Todo Issues/Tasks/Ideas (same rules;
+  never write)
 
 ## Confirmation
 

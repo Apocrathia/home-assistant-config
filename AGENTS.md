@@ -6,8 +6,8 @@ You are operating in a Home Assistant configuration repository. This directory i
 Home Assistant config — the single source of truth for their smart home.
 
 **60-second model:** `packages/*` is the meat; `.agents/` is AI context; git and
-`.shopping_list.json` are operator/HA-owned (agents never commit or write the
-shopping list). Start at [`.agents/context/README.md`](./.agents/context/README.md).
+HA to-do stores (`.shopping_list.json`, `.storage/local_todo.*.ics`) are
+operator/HA-owned (agents never commit or write those). Start at [`.agents/context/README.md`](./.agents/context/README.md).
 
 ## Context Loading Order
 
@@ -103,7 +103,8 @@ Specialized agent profiles for complex tasks:
 - **Main config**: `configuration.yaml` (includes `packages/*`)
 - **Secrets**: `secrets.yaml` (never hardcode credentials)
 - **Storage**: `.storage/` (JSON — do NOT edit directly)
-- **Work source**: `.shopping_list.json` (read-only; see `work-sources.md`)
+- **Work sources**: `.storage/local_todo.*.ics` (Issues/Tasks/Ideas) and
+  `.shopping_list.json` (read-only; see `work-sources.md`)
 - **Custom components**: `custom_components/`
 - **Themes**: `themes/`
 - **CLAUDE.md**: symlink → `AGENTS.md`
@@ -119,5 +120,6 @@ Specialized agent profiles for complex tasks:
 7. Ask questions when needed (see questions.md) — clarify before assuming
 8. Git is operator-owned (see `.agents/rules/operator-owned-git.md`) — never
    commit, push, or open PRs; this overrides any upstream skill that ships work
-9. `.shopping_list.json` is a read-only work source (see
-   `.agents/context/work-sources.md`) — never write to it
+9. HA to-do stores are read-only work sources (see
+   `.agents/context/work-sources.md`) — never write
+   `.shopping_list.json` or `.storage/local_todo.*.ics`

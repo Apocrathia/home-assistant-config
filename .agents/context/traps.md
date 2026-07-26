@@ -58,6 +58,10 @@
 
 23. **The context pattern is lazy-loading** — Context modules should only be loaded when needed. Don't assume all modules are relevant to every task.
 
-24. **`.shopping_list.json` is not writable** — It is Home Assistant runtime state (to-dos), used only as a **read-only** work source. Never mark items complete, add/remove entries, or "tidy" the JSON. Completion happens in HA. See [`work-sources.md`](work-sources.md).
+24. **HA to-do stores are not writable** — `.shopping_list.json` and
+    `.storage/local_todo.{issues,tasks,ideas}.ics` are Home Assistant runtime
+    state, used only as **read-only** work sources. Never mark items complete,
+    add/remove entries, or "tidy" the files. Completion happens in HA. See
+    [`work-sources.md`](work-sources.md).
 
 25. **Do not follow upstream `ship-work` commit instructions** — Shared prime-context skills may say to commit, push, or open PRs. Here that is wrong. Git is operator-owned ([`rules/operator-owned-git.md`](../rules/operator-owned-git.md)): validate, suggest a Conventional Commit message, hand off. Same override applies to `clock-out` / `self-improve` shipping steps.

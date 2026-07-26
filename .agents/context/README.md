@@ -5,13 +5,13 @@
 This repo **is** the live Home Assistant config. Agents edit files; the operator
 validates against the running instance, then owns git.
 
-| Layer                 | What it is                                                                                          |
-| --------------------- | --------------------------------------------------------------------------------------------------- |
-| `packages/*`          | The meat — modular YAML (areas, functions, integrations, projects, routines, system, toys, private) |
-| `configuration.yaml`  | Entry point; includes packages                                                                      |
-| `.agents/`            | AI context, rules, skills, agents — not HA config                                                   |
-| `.shopping_list.json` | Read-only work source (HA-owned; see `work-sources.md`)                                             |
-| Git                   | Operator-owned — never commit/push/PR (`rules/operator-owned-git.md`)                               |
+| Layer                                               | What it is                                                                                          |
+| --------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `packages/*`                                        | The meat — modular YAML (areas, functions, integrations, projects, routines, system, toys, private) |
+| `configuration.yaml`                                | Entry point; includes packages                                                                      |
+| `.agents/`                                          | AI context, rules, skills, agents — not HA config                                                   |
+| `.shopping_list.json` / `.storage/local_todo.*.ics` | Read-only work sources (HA-owned; see `work-sources.md`)                                            |
+| Git                                                 | Operator-owned — never commit/push/PR (`rules/operator-owned-git.md`)                               |
 
 Done here means: change → validate (config check / live HA) → hand off with a
 suggested Conventional Commit. Upstream shipping skills that commit are
@@ -33,17 +33,17 @@ Keep modules thin; update this hub when adding modules.
 
 ## Context Modules
 
-| Module       | File              | Purpose                                       |
-| ------------ | ----------------- | --------------------------------------------- |
-| Loading      | `loading.md`      | What to load and when                         |
-| Constraints  | `constraints.md`  | Hard limits and non-negotiables               |
-| Traps        | `traps.md`        | Known pitfalls and gotchas                    |
-| Nomenclature | `nomenclature.md` | Naming conventions and patterns               |
-| Voice        | `voice.md`        | Communication style guide                     |
-| Output       | `output.md`       | Output format expectations                    |
-| Questions    | `questions.md`    | Clarification protocol                        |
-| Work sources | `work-sources.md` | Where to find open work (incl. shopping list) |
-| Tools        | `tools.md`        | HA MCP, Grafana HA history, config check, jq  |
+| Module       | File              | Purpose                                              |
+| ------------ | ----------------- | ---------------------------------------------------- |
+| Loading      | `loading.md`      | What to load and when                                |
+| Constraints  | `constraints.md`  | Hard limits and non-negotiables                      |
+| Traps        | `traps.md`        | Known pitfalls and gotchas                           |
+| Nomenclature | `nomenclature.md` | Naming conventions and patterns                      |
+| Voice        | `voice.md`        | Communication style guide                            |
+| Output       | `output.md`       | Output format expectations                           |
+| Questions    | `questions.md`    | Clarification protocol                               |
+| Work sources | `work-sources.md` | Where to find open work (local_todo + shopping list) |
+| Tools        | `tools.md`        | HA MCP, Grafana HA history, config check, jq         |
 
 ## Rules (always-on)
 

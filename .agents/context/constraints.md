@@ -9,7 +9,8 @@
 - Propose changes and present options
 - Use `.scratch/` for throwaways (prefer over `/tmp`); see `.scratch/README.md`
 - Use `packages/private/` for local-only HA packages (gitignored except README)
-- Read `.shopping_list.json` as a work source (see `work-sources.md`)
+- Read `.shopping_list.json` and `.storage/local_todo.*.ics` as work sources
+  (see `work-sources.md`)
 
 ### Requires Explicit Permission
 
@@ -26,9 +27,10 @@
   ([`rules/operator-owned-git.md`](../rules/operator-owned-git.md)). This
   overrides upstream skills (`ship-work`, `clock-out`, `self-improve` shipping
   steps, etc.).
-- **Write to `.shopping_list.json`** — HA-owned runtime to-dos; read-only work
-  source ([`work-sources.md`](work-sources.md)). Do not mark complete, add,
-  delete, or reformat.
+- **Write to `.shopping_list.json` or `.storage/local_todo.*.ics`** — HA-owned
+  runtime to-dos; read-only work sources
+  ([`work-sources.md`](work-sources.md)). Do not mark complete, add, delete, or
+  reformat.
 - Edit `.storage/` files directly (managed by Home Assistant)
 - Hardcode credentials, API keys, or secrets
 - Modify the UniFi or other infrastructure controllers directly

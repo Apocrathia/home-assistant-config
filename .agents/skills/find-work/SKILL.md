@@ -1,10 +1,11 @@
 ---
 name: find-work
 description: >-
-  Orient on Home Assistant Homelab, scout read-only work sources (shopping list,
-  docs, TODO markers), rank a backlog with evidence, and emit launch briefs for
-  a new chat or continue-with implement/alignment. Use when the user says find
-  work, /find-work, what's left to do, or what should I work on.
+  Orient on Home Assistant Homelab, scout read-only work sources (local_todo
+  Issues/Tasks/Ideas ICS, shopping list, docs, TODO markers), rank a backlog
+  with evidence, and emit launch briefs for a new chat or continue-with
+  implement/alignment. Use when the user says find work, /find-work, what's
+  left to do, or what should I work on.
 disable-model-invocation: true
 ---
 
@@ -33,13 +34,13 @@ that module; this skill is the workflow around it.
 
 Read these (skim is fine):
 
-| File                                                               | Why                                |
-| ------------------------------------------------------------------ | ---------------------------------- |
-| [`AGENTS.md`](../../../AGENTS.md)                                  | Router                             |
-| [`.agents/context/README.md`](../../context/README.md)             | Context hub                        |
-| [`.agents/context/constraints.md`](../../context/constraints.md)   | Hard limits                        |
-| [`.agents/context/traps.md`](../../context/traps.md)               | Known pitfalls                     |
-| [`.agents/context/work-sources.md`](../../context/work-sources.md) | What to scan + shopping-list rules |
+| File                                                               | Why                                        |
+| ------------------------------------------------------------------ | ------------------------------------------ |
+| [`AGENTS.md`](../../../AGENTS.md)                                  | Router                                     |
+| [`.agents/context/README.md`](../../context/README.md)             | Context hub                                |
+| [`.agents/context/constraints.md`](../../context/constraints.md)   | Hard limits                                |
+| [`.agents/context/traps.md`](../../context/traps.md)               | Known pitfalls                             |
+| [`.agents/context/work-sources.md`](../../context/work-sources.md) | What to scan + local_todo / shopping rules |
 
 Build a 60-second model: packages layout, what "done" means here (validate live,
 operator commits), and which HA skills/agents exist.
@@ -51,10 +52,13 @@ are non-fatal — note and continue.
 
 | Source                 | How                                                                              | Notes                                                                                                                      |
 | ---------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| **Shopping list**      | Read `.shopping_list.json`                                                       | Primary. See below.                                                                                                        |
+| **Local Todo Issues**  | `.storage/local_todo.issues.ics` (`STATUS:NEEDS-ACTION`)                         | Highest-priority HA backlog. Cite SUMMARY + UID.                                                                           |
+| **Local Todo Tasks**   | `.storage/local_todo.tasks.ics` (`STATUS:NEEDS-ACTION`)                          | Active work. Cite SUMMARY + UID.                                                                                           |
+| **Local Todo Ideas**   | `.storage/local_todo.ideas.ics` (`STATUS:NEEDS-ACTION`)                          | Speculative. Cite SUMMARY + UID.                                                                                           |
+| **Shopping list**      | Read `.shopping_list.json`                                                       | Legacy; still valid. See below.                                                                                            |
 | **Docs**               | `docs/README.md`, `docs/packages.md`, `docs/projects.md`, `docs/CONTRIBUTING.md` | Documented follow-ups / scoped notes. No `docs/issues/`, `docs/plans/`, backlog, or design trees — they do not exist here. |
 | **TODO markers**       | `# TODO:` under `packages/**` and `docs/**`                                      | Cite path + line.                                                                                                          |
-| **Live HA (optional)** | Home Assistant MCP / live context                                                | Prefer when it clarifies broken entities/automations. Discovery stays read-only.                                           |
+| **Live HA (optional)** | Home Assistant MCP / live context                                                | Prefer when it clarifies broken entities/automations. Discovery stays read-only. Prefer ICS over MCP for list inventory.   |
 | **GitHub (optional)**  | Issues/PRs if MCP/gh available                                                   | Nice-to-have; do not require or block on it.                                                                               |
 
 ### Do not scan
@@ -62,6 +66,41 @@ are non-fatal — note and continue.
 `docs/issues/`, `docs/plans/`, `docs/backlog/roadmap.md`, `docs/design/technology.md`,
 `ponytail:` comments, Linear, Notion, `sync-main.sh`, ordered plan sequences,
 Macroscope, agent-loop state, PR eligibility scripts.
+
+### Local Todo (ICS)
+
+Per [`work-sources.md`](../../context/work-sources.md):
+
+- **Read-only.** Never write, complete, or reformat `.storage/local_todo.*.ics`.
+- Surface only `STATUS:NEEDS-ACTION`. Cite list + `SUMMARY` + `UID`.
+- Vague titles → [`alignment`](../alignment/SKILL.md) first.
+- Missing / unreadable file → note `"local_todo <list> unavailable"` and continue.
+
+```bash
+python3 <<'PY'
+from pathlib import Path
+import re
+
+for list_name, path in [
+    ("issues", ".storage/local_todo.issues.ics"),
+    ("tasks", ".storage/local_todo.tasks.ics"),
+    ("ideas", ".storage/local_todo.ideas.ics"),
+]:
+    p = Path(path)
+    if not p.is_file():
+        print(f"{list_name}: unavailable")
+        continue
+    text = p.read_text().replace("\r\n", "\n").replace("\r", "\n")
+    for block in re.split(r"\nBEGIN:VTODO\n", text)[1:]:
+        status = re.search(r"^STATUS:(.+)$", block, re.M)
+        summary = re.search(r"^SUMMARY:(.+)$", block, re.M)
+        uid = re.search(r"^UID:(.+)$", block, re.M)
+        if not summary or not status or status.group(1).strip() != "NEEDS-ACTION":
+            continue
+        title = summary.group(1).replace("\\,", ",")
+        print(f"{list_name}\t{title}\t{uid.group(1).strip() if uid else ''}")
+PY
+```
 
 ### Shopping list
 
@@ -86,15 +125,15 @@ rg -n '# TODO:' packages docs
 ## 3. Rank and dedupe
 
 Apply tiers in order. Within a tier, prefer clearer scope and stronger evidence.
-Shopping-list items are an **unordered set** within their tier.
+Local-todo and shopping-list items are **unordered sets** within their tier.
 
-| Tier | What                                                   |
-| ---- | ------------------------------------------------------ |
-| 1    | Broken / urgent config or automation issues (if found) |
-| 2    | Documented, already-scoped work in `docs/`             |
-| 3    | Incomplete shopping-list items                         |
-| 4    | `# TODO:` markers                                      |
-| 5    | Speculative / nice-to-have                             |
+| Tier | What                                                               |
+| ---- | ------------------------------------------------------------------ |
+| 1    | Broken / urgent config or automation issues; open **Issues** items |
+| 2    | Documented, already-scoped work in `docs/`                         |
+| 3    | Open **Tasks** items; incomplete shopping-list items               |
+| 4    | `# TODO:` markers                                                  |
+| 5    | Open **Ideas** items; other speculative / nice-to-have             |
 
 Dedupe: same outcome from two sources → one backlog row, cite both sources.
 Do not invent work.
@@ -125,8 +164,8 @@ recommend commits, pushes, PRs, worktrees, `ship-work`, or watch-PR loops.
 ```
 ## Launch brief: <short title>
 
-Source: <shopping-list | docs | TODO | HA live | GitHub>
-Evidence: <name + id | path:line | doc section>
+Source: <local_todo issues|tasks|ideas | shopping-list | docs | TODO | HA live | GitHub>
+Evidence: <list + SUMMARY + UID | name + id | path:line | doc section>
 Tier: <1–5>
 Next skill: <alignment | implement-change | config-validate | …>
 
@@ -137,8 +176,9 @@ Next skill: <alignment | implement-change | config-validate | …>
 - [ ] …
 
 ### Constraints
-- Read work-sources.md shopping-list rules if applicable
+- Read work-sources.md local_todo / shopping-list rules if applicable
 - Operator-owned git — no commit/push/PR/worktree
+- Never write `.storage/local_todo.*.ics` or `.shopping_list.json`
 - Validate before handoff (config-validate where relevant)
 - Stop at: operator validates & commits
 

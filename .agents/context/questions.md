@@ -57,5 +57,5 @@ Ask about these first when missing:
 3. **Impact** — Is this critical path or dev/experimental?
 4. **Preferences** — Any specific behavior beyond the basic request?
 
-Vague shopping-list titles (see [`work-sources.md`](work-sources.md)) need
+Vague shopping-list / local_todo titles (see [`work-sources.md`](work-sources.md)) need
 scoping/`alignment` before implementation — ask rather than invent intent.
