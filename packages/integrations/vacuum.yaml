@@ -97,6 +97,42 @@ automation:
         data_template:
           entity_id: '{{ trigger.entity_id }}'
   ################################################################################
+  # While home, dock any vacuum that starts cleaning — except the morning
+  # workday window (before 09:00). Short for: avoids fighting location_home's
+  # clear-pending start → stop → dock sequence.
+  - id: function_vacuum_quiet_hours
+    alias: 'Function - Vacuum - Quiet Hours'
+    triggers:
+      - trigger: state
+        entity_id:
+          - vacuum.downstairs
+          - vacuum.upstairs
+        to: 'cleaning'
+        for:
+          minutes: 3
+    conditions:
+      - condition: state
+        entity_id: input_boolean.away_mode
+        state: 'off'
+      - condition: not
+        conditions:
+          - condition: and
+            conditions:
+              - condition: state
+                entity_id: binary_sensor.workday
+                state: 'on'
+              - condition: time
+                before: '09:00:00'
+    actions:
+      # Stop first so Valetudo drops the pending job; dock alone would resume later.
+      - action: vacuum.stop
+        data:
+          entity_id: '{{ trigger.entity_id }}'
+      - delay: 00:00:05
+      - action: vacuum.return_to_base
+        data:
+          entity_id: '{{ trigger.entity_id }}'
+  ################################################################################
   # Empty the vacuum every time it goes on the dock. Not just after each cleaning.
   - id: function_vacuum_autoempty
     alias: Function - Vacuum - Auto-Empty

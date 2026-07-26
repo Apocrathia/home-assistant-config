@@ -266,9 +266,25 @@ script:
             - vacuum.downstairs
             - vacuum.upstairs
           fan_speed: low
-      # Return vacuums to dock
-      - action: vacuum.return_to_base
-        data:
+      # Clear any pending Valetudo job (dock alone leaves a resumable run).
+      # Same start → stop → dock pattern as routine_work_start.
+      - alias: 'Start the vacuums'
+        action: vacuum.start
+        target:
+          entity_id:
+            - vacuum.downstairs
+            - vacuum.upstairs
+      - delay: 00:00:15
+      - alias: 'Stop the vacuums'
+        action: vacuum.stop
+        target:
+          entity_id:
+            - vacuum.downstairs
+            - vacuum.upstairs
+      - delay: 00:00:05
+      - alias: 'Return vacuums to docks'
+        action: vacuum.return_to_base
+        target:
           entity_id:
             - vacuum.downstairs
             - vacuum.upstairs
