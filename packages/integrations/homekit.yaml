@@ -81,7 +81,7 @@ homekit:
     port: 51833
     filter:
       include_entities:
-        - camera.front_door_camera_high_insecure
+        - camera.front_door
         - binary_sensor.front_door_camera_doorbell
   ################################################################################
   - name: Dining Room Camera

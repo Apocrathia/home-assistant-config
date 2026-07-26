@@ -228,18 +228,54 @@ automation:
   ################################################################################
   - id: function_security_front_porch_motion
     alias: 'Function - Security - Front Porch Motion'
+    description: >
+      Companion alert on UniFi front-door motion with camera still/stream and
+      actionable deep links. Live view is HA more-info; two-way talk requires
+      UniFi Protect (HA media_player is speaker/TTS only).
     triggers:
       - trigger: state
-        entity_id: binary_sensor.front_porch_motion
+        entity_id: binary_sensor.front_door_camera_motion
         from: 'off'
         to: 'on'
+    mode: single
     actions:
-      # Send an alert to all users
-      - action: notify.notify
+      # Companion camera attachment + URI actions (notify.notify cannot do these).
+      - action: notify.mobile_app_ians_iphone
         data:
-          title: 'Motion detected at front door'
-          message: 'Who could it be?'
-          # TODO:
-          # - Send a snapshot from the front porch camera
-          # - Make this an actionable notification to start a video call
+          title: Motion detected at front door
+          message: Who could it be?
+          data:
+            tag: front-porch-motion
+            group: security
+            push:
+              interruption-level: time-sensitive
+            # Still in preview; expand notification for MJPEG when supported.
+            entity_id: camera.front_door
+            # Tap opens camera more-info. Protect URI is the video-call path.
+            url: entityId:camera.front_door
+            actions:
+              - action: URI
+                title: View Camera
+                uri: entityId:camera.front_door
+              - action: URI
+                title: Open Protect
+                uri: unifi-protect://
+      - action: notify.mobile_app_ians_ipad_pro
+        data:
+          title: Motion detected at front door
+          message: Who could it be?
+          data:
+            tag: front-porch-motion
+            group: security
+            push:
+              interruption-level: time-sensitive
+            entity_id: camera.front_door
+            url: entityId:camera.front_door
+            actions:
+              - action: URI
+                title: View Camera
+                uri: entityId:camera.front_door
+              - action: URI
+                title: Open Protect
+                uri: unifi-protect://
 ################################################################################
