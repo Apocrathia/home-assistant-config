@@ -25,7 +25,7 @@ automation:
         entity_id: input_boolean.party_lights
         to: 'on'
     actions:
-      - alias: 'Chase rainbow across the lights'
+      - alias: 'Chase colorloop across the lights'
         repeat:
           for_each: '{{ entities }}'
           sequence:
@@ -38,7 +38,7 @@ automation:
                   target:
                     entity_id: '{{ repeat.item }}'
                   data:
-                    effect: rainbow
+                    effect: colorloop
                 - delay:
                     milliseconds: 500
       - alias: 'Wait until party mode ends'
