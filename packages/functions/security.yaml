@@ -240,6 +240,8 @@ automation:
     mode: single
     actions:
       # Companion camera attachment + URI actions (notify.notify cannot do these).
+      # Note: entityId:… more-info URIs are Android-only; iOS needs the frontend
+      # ?more-info-entity-id= query (or a lovelace path like /lovelace/cameras).
       - action: notify.mobile_app_ians_iphone
         data:
           title: Motion detected at front door
@@ -251,12 +253,12 @@ automation:
               interruption-level: time-sensitive
             # Still in preview; expand notification for MJPEG when supported.
             entity_id: camera.front_door
-            # Tap opens camera more-info. Protect URI is the video-call path.
-            url: entityId:camera.front_door
+            # Tap / View Camera: open more-info (iOS-compatible).
+            url: /?more-info-entity-id=camera.front_door
             actions:
               - action: URI
                 title: View Camera
-                uri: entityId:camera.front_door
+                uri: /?more-info-entity-id=camera.front_door
               - action: URI
                 title: Open Protect
                 uri: unifi-protect://
@@ -270,11 +272,11 @@ automation:
             push:
               interruption-level: time-sensitive
             entity_id: camera.front_door
-            url: entityId:camera.front_door
+            url: /?more-info-entity-id=camera.front_door
             actions:
               - action: URI
                 title: View Camera
-                uri: entityId:camera.front_door
+                uri: /?more-info-entity-id=camera.front_door
               - action: URI
                 title: Open Protect
                 uri: unifi-protect://
