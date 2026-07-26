@@ -46,6 +46,15 @@ input_number:
     step: 1
     unit_of_measurement: Minutes
 
+  good_morning_motion_window:
+    name: Good Morning Motion Window
+    icon: mdi:motion-sensor
+    initial: 10
+    min: 1
+    max: 30
+    step: 1
+    unit_of_measurement: Minutes
+
 ################################################################################
 
 template:
@@ -173,7 +182,9 @@ automation:
   ################################################################################
   - id: routine_day_good_morning_wake
     alias: 'Routine - Day - Good Morning Wake Detection'
-    description: Activate Good Morning on weekends after the bed stays empty
+    description: >-
+      Activate Good Morning on weekends after bed stays empty and bedroom
+      motion occurs after the pad clears
     triggers:
       - trigger: state
         entity_id: binary_sensor.bed_presence_2bd444_bed_occupied_either
@@ -181,6 +192,10 @@ automation:
         to: 'off'
         for:
           minutes: "{{ states('input_number.good_morning_bed_empty_delay') | int(5) }}"
+      - trigger: state
+        entity_id: binary_sensor.homekit_master_bedroom_motion
+        from: 'off'
+        to: 'on'
       - trigger: time
         at: input_datetime.good_morning_earliest
     conditions:
@@ -202,6 +217,19 @@ automation:
              (as_timestamp(now()) - as_timestamp(bed.last_changed)) >=
              (states('input_number.good_morning_bed_empty_delay') |
               float(5) * 60) }}
+      - alias: 'Bedroom motion after bed emptied, within window'
+        condition: template
+        value_template: >
+          {% set bed =
+             states.binary_sensor.bed_presence_2bd444_bed_occupied_either %}
+          {% set motion =
+             states.binary_sensor.homekit_master_bedroom_motion %}
+          {% set window =
+             states('input_number.good_morning_motion_window') | float(10) * 60 %}
+          {{ motion.last_changed is not none and
+             bed.last_changed is not none and
+             as_timestamp(motion.last_changed) >= as_timestamp(bed.last_changed) and
+             (as_timestamp(now()) - as_timestamp(motion.last_changed)) <= window }}
       - condition: state
         entity_id: alarm_control_panel.home
         state: 'armed_home'
