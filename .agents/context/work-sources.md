@@ -9,14 +9,14 @@ workflow. If they disagree, prefer this file for what/how to read sources.
 
 ## Sources
 
-| Source                 | Path                             | Access        | What it holds                                |
-| ---------------------- | -------------------------------- | ------------- | -------------------------------------------- |
-| Local Todo — Issues    | `.storage/local_todo.issues.ics` | **Read-only** | Confirmed problems / broken behavior         |
-| Local Todo — Tasks     | `.storage/local_todo.tasks.ics`  | **Read-only** | Scoped HA work items                         |
-| Local Todo — Ideas     | `.storage/local_todo.ideas.ics`  | **Read-only** | Speculative / nice-to-have ideas             |
-| Shopping list (legacy) | `.shopping_list.json`            | **Read-only** | Older HA shopping-list to-dos (still in use) |
-| TODO markers           | `packages/**`, `docs/**`         | Read-only     | `# TODO:` comments in tracked paths          |
-| Docs                   | `docs/`                          | Read-only     | Documented follow-ups / project notes        |
+| Source                 | Path                             | Access        | What it holds                                                |
+| ---------------------- | -------------------------------- | ------------- | ------------------------------------------------------------ |
+| Local Todo — Issues    | `.storage/local_todo.issues.ics` | **Read-only** | Confirmed problems / broken behavior (preferred bug channel) |
+| Local Todo — Tasks     | `.storage/local_todo.tasks.ics`  | **Read-only** | Scoped HA work items                                         |
+| Local Todo — Ideas     | `.storage/local_todo.ideas.ics`  | **Read-only** | Speculative / nice-to-have ideas                             |
+| Shopping list (legacy) | `.shopping_list.json`            | **Read-only** | Older HA shopping-list to-dos (still in use)                 |
+| TODO markers           | `packages/**`, `docs/**`         | Read-only     | `# TODO:` comments in tracked paths                          |
+| Docs                   | `docs/`                          | Read-only     | Documented follow-ups / project notes                        |
 
 Optional (nice-to-have, never blocking): live HA via MCP (`tools.md`); GitHub
 issues/PRs if available. Prefer the ICS files over MCP for list discovery —
@@ -28,11 +28,11 @@ Home Assistant **Local To-do** lists, stored as iCalendar `VTODO` calendars
 under `.storage/`. Owned by Home Assistant; Syncthing-synced with the rest of
 runtime state.
 
-| List   | File                             | Role in discovery                           |
-| ------ | -------------------------------- | ------------------------------------------- |
-| Issues | `.storage/local_todo.issues.ics` | Highest-priority HA backlog (bugs / breaks) |
-| Tasks  | `.storage/local_todo.tasks.ics`  | Active project work                         |
-| Ideas  | `.storage/local_todo.ideas.ics`  | Speculative / future ideas                  |
+| List   | File                             | Role in discovery                                               |
+| ------ | -------------------------------- | --------------------------------------------------------------- |
+| Issues | `.storage/local_todo.issues.ics` | Highest-priority HA backlog (bugs / breaks); file new bugs here |
+| Tasks  | `.storage/local_todo.tasks.ics`  | Active project work                                             |
+| Ideas  | `.storage/local_todo.ideas.ics`  | Speculative / future ideas                                      |
 
 Rules:
 

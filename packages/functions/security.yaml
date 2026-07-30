@@ -229,9 +229,10 @@ automation:
   - id: function_security_front_porch_motion
     alias: 'Function - Security - Front Porch Motion'
     description: >
-      Companion alert on UniFi front-door motion with camera still/stream and
-      actionable deep links. Live view is HA more-info; two-way talk requires
-      UniFi Protect (HA media_player is speaker/TTS only).
+      Companion alert on UniFi front-door motion with Protect event thumbnail
+      (not a live camera still) and actionable deep links. Live view is HA
+      more-info; two-way talk requires UniFi Protect (HA media_player is
+      speaker/TTS only).
     triggers:
       - trigger: state
         entity_id: binary_sensor.front_door_camera_motion
@@ -239,7 +240,10 @@ automation:
         to: 'on'
     mode: single
     actions:
-      # Companion camera attachment + URI actions (notify.notify cannot do these).
+      # Wait for Protect to publish the event thumbnail before notifying.
+      - delay:
+          seconds: 2
+      # Companion image + URI actions (notify.notify cannot do these).
       # Note: entityId:… more-info URIs are Android-only; iOS needs the frontend
       # ?more-info-entity-id= query (or a lovelace path like /lovelace/cameras).
       - action: notify.mobile_app_ians_iphone
@@ -251,9 +255,8 @@ automation:
             group: security
             push:
               interruption-level: time-sensitive
-            # Still in preview; expand notification for MJPEG when supported.
-            entity_id: camera.front_door
-            # Tap / View Camera: open more-info (iOS-compatible).
+            image: >-
+              /api/unifiprotect/thumbnail/{{ config_entry_id(trigger.entity_id) }}/{{ trigger.to_state.attributes.event_id }}
             url: /?more-info-entity-id=camera.front_door
             actions:
               - action: URI
@@ -271,7 +274,69 @@ automation:
             group: security
             push:
               interruption-level: time-sensitive
-            entity_id: camera.front_door
+            image: >-
+              /api/unifiprotect/thumbnail/{{ config_entry_id(trigger.entity_id) }}/{{ trigger.to_state.attributes.event_id }}
+            url: /?more-info-entity-id=camera.front_door
+            actions:
+              - action: URI
+                title: View Camera
+                uri: /?more-info-entity-id=camera.front_door
+              - action: URI
+                title: Open Protect
+                uri: unifi-protect://
+  ################################################################################
+  - id: function_security_front_door_doorbell
+    alias: 'Function - Security - Front Door Doorbell'
+    description: >
+      Companion alert on UniFi doorbell ring with Protect event thumbnail and
+      actionable deep links. Skips unavailable transitions (Protect restarts).
+    triggers:
+      - trigger: state
+        entity_id: event.front_door_camera_doorbell
+    conditions:
+      - condition: template
+        value_template: >
+          {{
+            trigger.from_state is not none
+            and trigger.from_state.state != 'unavailable'
+            and trigger.to_state is not none
+            and trigger.to_state.state != 'unavailable'
+            and trigger.to_state.attributes.event_type == 'ring'
+          }}
+    mode: single
+    actions:
+      - delay:
+          seconds: 2
+      - action: notify.mobile_app_ians_iphone
+        data:
+          title: Doorbell
+          message: Someone is at the front door
+          data:
+            tag: front-door-doorbell
+            group: security
+            push:
+              interruption-level: time-sensitive
+            image: >-
+              /api/unifiprotect/thumbnail/{{ config_entry_id(trigger.entity_id) }}/{{ trigger.to_state.attributes.event_id }}
+            url: /?more-info-entity-id=camera.front_door
+            actions:
+              - action: URI
+                title: View Camera
+                uri: /?more-info-entity-id=camera.front_door
+              - action: URI
+                title: Open Protect
+                uri: unifi-protect://
+      - action: notify.mobile_app_ians_ipad_pro
+        data:
+          title: Doorbell
+          message: Someone is at the front door
+          data:
+            tag: front-door-doorbell
+            group: security
+            push:
+              interruption-level: time-sensitive
+            image: >-
+              /api/unifiprotect/thumbnail/{{ config_entry_id(trigger.entity_id) }}/{{ trigger.to_state.attributes.event_id }}
             url: /?more-info-entity-id=camera.front_door
             actions:
               - action: URI

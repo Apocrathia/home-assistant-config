@@ -87,13 +87,14 @@ automation:
       - trigger: numeric_state
         id: vacation_on
         entity_id: sensor.home_ian_distance
-        above: 100
-        # set this just in case we get a fluke proximity reading
+        # Proximity distance is meters (not km). 100000 m ≈ 100 km.
+        above: 100000
+        # Hold to ride out fluke proximity readings
         for: 01:00:00
       - trigger: numeric_state
         id: vacation_off
         entity_id: sensor.home_ian_distance
-        below: 100
+        below: 100000
         for: 01:00:00
     actions:
       - choose:
