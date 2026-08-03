@@ -3,7 +3,7 @@ substitutions:
   name: master-bedroom-rf-ir-remote
   friendly_name: Master Bedroom RF IR Remote
   room: Master Bedroom
-  dns_domain: .iot.apocrathia.com
+  dns_domain: !secret esphome_domain
   # renovate: datasource=github-releases depName=athom-tech/esp32-configs versioning=loose
   version: esphome-2026.7.3
 
@@ -23,4 +23,4 @@ api:
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-  domain: .iot.apocrathia.com
+  domain: !secret esphome_domain
