@@ -65,12 +65,12 @@ links too. Fix broken links/anchors or drop dead references.
 Check claims against the repo:
 
 - Package dirs, docs list (`docs/README.md`, `packages.md`, `projects.md`,
-  `CONTRIBUTING.md`, `LICENSE.md` — no `docs/issues/`, `docs/plans/`,
-  `docs/backlog/`).
+  `CONTRIBUTING.md`, `LICENSE.md`, `docs/issues/`, `docs/plans/`).
 - Skills/agents listed in the hub exist; work sources match
-  [`work-sources.md`](../../context/work-sources.md).
+  [`work-sources.md`](../../context/work-sources.md) (dual channel: agent
+  docs ledger + human Local Todo).
 - Do not overwrite project-specific prose with upstream text. Reconcile facts;
-  preserve HA voice and decisions.
+  preserve HA voice and decisions. Keep worktree / operator-owned-git overrides.
 
 ### 4. Drift notes
 

@@ -3,75 +3,77 @@ name: implement-change
 description: >-
   One change lap for Home Assistant Homelab: scope, edit, validate, hand off
   with a suggested Conventional Commit. Use when implementing a config fix,
-  package change, or agent-context update.
+  package change, plan checkbox, or agent-context update.
 disable-model-invocation: true
 ---
 
 # Implement change
 
 One logical change from request to **operator handoff**. Edit only in the main
-checkout. Do **not** commit, push, or open PRs unless the operator explicitly
-asks. Override:
-[`.agents/rules/operator-owned-git.md`](../../rules/operator-owned-git.md).
+checkout ([`worktrees.md`](../../rules/worktrees.md)). Do **not** commit, push,
+or open PRs unless the operator explicitly asks
+([`operator-owned-git.md`](../../rules/operator-owned-git.md)).
 
 ## Scope
 
-Config and agent work in this repo:
+| Surface                              | Route                                                                      |
+| ------------------------------------ | -------------------------------------------------------------------------- |
+| YAML packages / `configuration.yaml` | edit here; validate via [`config-validate`](../config-validate/SKILL.md)   |
+| Package layout                       | [`package-organize`](../package-organize/SKILL.md)                         |
+| Broken automations                   | [`automation-debug`](../automation-debug/SKILL.md)                         |
+| Docs issue / plan checkbox           | implement slice; update plan checkboxes; delete-on-ship via reconcile-docs |
+| Fuzzy scope                          | [`alignment`](../alignment/SKILL.md) first, then stop for operator         |
 
-| Surface                              | Route                                                                    |
-| ------------------------------------ | ------------------------------------------------------------------------ |
-| YAML packages / `configuration.yaml` | edit here; validate via [`config-validate`](../config-validate/SKILL.md) |
-| Package layout                       | [`package-organize`](../package-organize/SKILL.md)                       |
-| Broken automations                   | [`automation-debug`](../automation-debug/SKILL.md)                       |
-| Fuzzy scope                          | [`alignment`](../alignment/SKILL.md) first, then stop for operator       |
-
-Load context as needed: `.agents/context/{constraints,traps,nomenclature,output,questions}.md`.
+Load context as needed: `.agents/context/{constraints,traps,nomenclature,output,questions,vertical-slices,development-loop}.md`.
 
 **Secrets:** never hardcode; use `!secret`. **Automations:** modern keys
 (`triggers` / `conditions` / `actions`; item keys `trigger:` / `action:`).
 **YAML:** 2-space indent.
 
-Skip upstream swarm paths: no `docs/issues`, `docs/plans`, `sync-main.sh`,
-cargo/TDD pipelines, or `ship-work` as a commit gate.
+Plan/issue templates: `docs/plans/_template.md`, `docs/issues/_template.md`.
+
+Ignore upstream steps that require worktrees or agent commits.
 
 ## Workflow
 
 ```
-- [ ] 1. Frame scope (one change, done conditions)
-- [ ] 2. Edit in place (packages/, docs/, .agents/ as needed)
+- [ ] 1. Frame scope (one change, done conditions; link issue/plan if any)
+- [ ] 2. Edit in place (packages/, esphome/, docs/, .agents/ as needed)
 - [ ] 3. Validate (config-validate + HA-oriented checks)
-- [ ] 4. Hand off — stop for operator
+- [ ] 4. Update plan checkboxes / reconcile-docs if acceptance met
+- [ ] 5. Hand off — stop for operator
 ```
 
 ### 1. Frame scope
 
-One sentence goal + done conditions. If two unrelated outcomes, split and run
-this skill once each. Protected paths need confirmation
-([`.agents/rules/protected-paths.md`](../../rules/protected-paths.md)).
+One sentence goal + done conditions. Prefer one vertical slice
+([`vertical-slices.md`](../../context/vertical-slices.md)). If two unrelated
+outcomes, split. Protected paths need confirmation
+([`protected-paths.md`](../../rules/protected-paths.md)).
 
 ### 2. Edit
 
-Make the minimal change. Prefer existing package patterns under `packages/`
-(`areas/`, `functions/`, `integrations/`, `projects/`, `routines/`, `system/`,
-`toys/`).
+Make the minimal change. Prefer existing package patterns under `packages/`.
 
 ### 3. Validate
 
 Follow [`config-validate`](../config-validate/SKILL.md). For automations, also
-check entity refs and modern key usage. For `.agents/` prose, skim links and
-naming against context modules.
+check entity refs and modern key usage.
 
-### 4. Hand off
+### 4. Docs ledger
 
-Stop. Do not run `ship-work` as a commit step — optionally summarize via
-[`ship-work`](../ship-work/SKILL.md) (handoff only) when the operator wants a
-structured wrap.
+If working from a plan: tick completed checkboxes. If acceptance on the linked
+issue is fully met, run [`reconcile-docs`](../reconcile-docs/SKILL.md)
+delete-on-ship in this change.
+
+### 5. Hand off
 
 ```markdown
 ## Implement change
 
 **Goal:** <one sentence>
 **Paths:** <files>
+**Issue/plan:** <paths or none>
 **Result:** ready for operator | blocked
 
 ### Validation

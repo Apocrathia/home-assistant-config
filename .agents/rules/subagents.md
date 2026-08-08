@@ -30,6 +30,10 @@ Custom subagents live in `.agents/agents/` (Cursor copies under
 | `ha-config-expert`     | Deep HA configuration, packages, entities, traps         |
 | `automation-architect` | Complex automation design (triggers/conditions/actions)  |
 | `security-analyst`     | Adversarial audit of config posture / dependency vectors |
+| `/implementer`         | Atomic config/code unit against a Bar                    |
+| `/reviewer`            | Judge Artifact against Bar (pair with implementer)       |
+| `/verifier`            | Post-pair arbiter (`config-validate` / tools.md)         |
+| `/context-steward`     | Context drift detection after renames / doc moves        |
 
 Invoke by name or delegate explicitly. Run independent agents in parallel in one
 message when fan-out helps.
@@ -39,12 +43,8 @@ asks for a security pass. The parent may _suggest_ (never auto-run) a spawn when
 a change touches locks/alarms/cameras, presence/away/vacation, auth/tokens/
 `secrets.yaml` refs, `custom_components/`, or anything expanding external reach.
 It reports findings and stops; it does not edit. Not a `review-loop` gate.
-
-Homelab does not ship generic `/implementer`, `/reviewer`, or `/verifier`
-personas. Map those roles onto what exists: parent (or a domain agent) as
-implementer; `config-validate` / `review-loop` as verifier; optional
-`security-analyst` or a cold-start reviewer Task as reviewer when a Bar needs
-an independent judge.
+Domain reviewers (including `security-analyst`) fill the **reviewer** Role when
+the Bar is security-shaped.
 
 ## When to stay in the parent
 
@@ -105,10 +105,9 @@ For trivial single-file edits, skip the pair — parent edits and validates.
 ### Verifier (arbiter)
 
 The verifier is **not** in the pair. It runs **after** the implementer↔reviewer
-pair returns `pass` (or after the parent finishes a trivial edit). In Homelab
-the arbiter is usually [`config-validate`](../skills/config-validate/SKILL.md)
-and/or [`review-loop`](../skills/review-loop/SKILL.md), run by the parent or a
-`shell` Task — not a dedicated `/verifier` persona.
+pair returns `pass` (or after the parent finishes a trivial edit). Prefer the
+`/verifier` persona, or run [`config-validate`](../skills/config-validate/SKILL.md)
+/ [`review-loop`](../skills/review-loop/SKILL.md) as the arbiter.
 
 - On **pass**: continue to operator handoff.
 - On **issue**: fix or escalate; do not declare ready.

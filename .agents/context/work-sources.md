@@ -7,32 +7,57 @@ workflow in [`skills/find-work/SKILL.md`](../skills/find-work/SKILL.md).
 **This module owns the source rules.** The find-work skill owns the discovery
 workflow. If they disagree, prefer this file for what/how to read sources.
 
+## Dual channel (issues)
+
+| Channel            | Who reports | Path                        | Agents                                                          |
+| ------------------ | ----------- | --------------------------- | --------------------------------------------------------------- |
+| Local Todo (HA UI) | Humans      | `.storage/local_todo.*.ics` | **Read-only** discovery                                         |
+| Docs ledger        | Agents      | `docs/issues/*.md`          | File / update via [`file-issue`](../skills/file-issue/SKILL.md) |
+
+Plans (`docs/plans/*.md`) are how-work linked from agent issues. Never write
+Local Todo ICS or `.shopping_list.json`.
+
 ## Sources
 
-| Source                 | Path                             | Access        | What it holds                                                |
-| ---------------------- | -------------------------------- | ------------- | ------------------------------------------------------------ |
-| Local Todo — Issues    | `.storage/local_todo.issues.ics` | **Read-only** | Confirmed problems / broken behavior (preferred bug channel) |
-| Local Todo — Tasks     | `.storage/local_todo.tasks.ics`  | **Read-only** | Scoped HA work items                                         |
-| Local Todo — Ideas     | `.storage/local_todo.ideas.ics`  | **Read-only** | Speculative / nice-to-have ideas                             |
-| Shopping list (legacy) | `.shopping_list.json`            | **Read-only** | Older HA shopping-list to-dos (still in use)                 |
-| TODO markers           | `packages/**`, `docs/**`         | Read-only     | `# TODO:` comments in tracked paths                          |
-| Docs                   | `docs/`                          | Read-only     | Documented follow-ups / project notes                        |
+| Source                 | Path                             | Access                              | What it holds                                |
+| ---------------------- | -------------------------------- | ----------------------------------- | -------------------------------------------- |
+| Docs issues (agent)    | `docs/issues/*.md`               | Read (scout) / write via file-issue | Agent-reported gaps; status in frontmatter   |
+| Docs plans             | `docs/plans/*.md`                | Read (scout) / write when authoring | Living how-work; skip README + `_template`   |
+| Local Todo — Issues    | `.storage/local_todo.issues.ics` | **Read-only**                       | Human-reported problems / broken behavior    |
+| Local Todo — Tasks     | `.storage/local_todo.tasks.ics`  | **Read-only**                       | Human-scoped HA work items                   |
+| Local Todo — Ideas     | `.storage/local_todo.ideas.ics`  | **Read-only**                       | Speculative / nice-to-have ideas             |
+| Shopping list (legacy) | `.shopping_list.json`            | **Read-only**                       | Older HA shopping-list to-dos (still in use) |
+| TODO markers           | `packages/**`, `docs/**`         | Read-only                           | `# TODO:` comments in tracked paths          |
+| Other docs             | `docs/*.md`                      | Read-only                           | Package/project notes (not the issue ledger) |
 
 Optional (nice-to-have, never blocking): live HA via MCP (`tools.md`); GitHub
 issues/PRs if available. Prefer the ICS files over MCP for list discovery —
 MCP may only expose a subset of lists.
 
+## Docs issues / plans
+
+Conventions: [`docs/issues/README.md`](../../docs/issues/README.md),
+[`docs/plans/README.md`](../../docs/plans/README.md).
+
+Scout rules:
+
+1. Skip `README.md` and `_template.md`.
+2. Ignore issues whose `status` is `closed`, `wontfix`, `superseded`, or
+   `promoted`.
+3. Ignore plans whose `status` is `done` (or treat as low priority).
+4. Cite path + `title` + `found_at` (and `plan:` / `related_issue:` when set).
+5. Issue with acceptance but no `plan:` → candidate for plan authoring.
+6. Plan with open checkboxes → candidate for implement-change.
+
 ## Local Todo (`.storage/local_todo.*.ics`)
 
-Home Assistant **Local To-do** lists, stored as iCalendar `VTODO` calendars
-under `.storage/`. Owned by Home Assistant; Syncthing-synced with the rest of
-runtime state.
+Home Assistant **Local To-do** lists — the **human** reporting channel.
 
-| List   | File                             | Role in discovery                                               |
-| ------ | -------------------------------- | --------------------------------------------------------------- |
-| Issues | `.storage/local_todo.issues.ics` | Highest-priority HA backlog (bugs / breaks); file new bugs here |
-| Tasks  | `.storage/local_todo.tasks.ics`  | Active project work                                             |
-| Ideas  | `.storage/local_todo.ideas.ics`  | Speculative / future ideas                                      |
+| List   | File                             | Role in discovery            |
+| ------ | -------------------------------- | ---------------------------- |
+| Issues | `.storage/local_todo.issues.ics` | Human-reported bugs / breaks |
+| Tasks  | `.storage/local_todo.tasks.ics`  | Human-scoped project work    |
+| Ideas  | `.storage/local_todo.ideas.ics`  | Speculative / future ideas   |
 
 Rules:
 
@@ -87,11 +112,9 @@ Rules:
    Do not mark items complete, add items, or reformat it.
 2. **Surface only `"complete": false` items** as work candidates.
 3. Cite each candidate with its `name` (title) and `id` (evidence).
-4. Vague items (e.g. "Reminders to water plants") route to scoping/`alignment`
-   first — do not implement autonomously from a five-word title.
+4. Vague items route to scoping/`alignment` first.
 5. Failure is non-fatal: if the file is missing, empty, not valid JSON, or not
-   an array, skip the source, note "shopping list unavailable" in the report,
-   and continue with other sources. Skip entries missing a `name`.
+   an array, skip the source, note "shopping list unavailable", and continue.
 
 ```bash
 jq -r '.[] | select(.complete == false) | "\(.name) (\(.id))"' .shopping_list.json
@@ -104,11 +127,11 @@ Apply tiers in order. Within a tier (and within a single list), order does
 
 | Tier | What                                                               |
 | ---- | ------------------------------------------------------------------ |
-| 1    | Broken / urgent config or automation issues; open **Issues** items |
-| 2    | Documented, already-scoped work in `docs/`                         |
-| 3    | Open **Tasks** items; incomplete shopping-list items               |
-| 4    | `# TODO:` markers                                                  |
-| 5    | Open **Ideas** items; other speculative / nice-to-have             |
+| 1    | Broken / urgent: open `docs/issues` bugs + human Local Todo Issues |
+| 2    | Open `docs/plans` with work left; issues ready for plan authoring  |
+| 3    | Open Local Todo Tasks; incomplete shopping-list items              |
+| 4    | `# TODO:` markers; other documented follow-ups                     |
+| 5    | Open Local Todo Ideas; speculative / nice-to-have                  |
 
 Dedupe: same outcome from two sources → one backlog row, cite both sources.
 
@@ -118,5 +141,5 @@ Dedupe: same outcome from two sources → one backlog row, cite both sources.
    ([`rules/operator-owned-git.md`](../rules/operator-owned-git.md)).
 2. Every surfaced candidate needs a source and evidence — no vibes.
 3. The operator picks what to work on; agents recommend.
-4. After the operator picks, hand off to `implement-change` / `alignment` —
-   do not start shipping from discovery alone.
+4. After the operator picks, hand off to `implement-change` / `alignment` /
+   plan authoring / `file-issue` — do not start shipping from discovery alone.

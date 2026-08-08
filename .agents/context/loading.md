@@ -14,6 +14,8 @@ non-trivial edits.
 7. **`.agents/context/questions.md`** — Clarification (fuzzy scope)
 8. **`.agents/context/work-sources.md`** — Work discovery (finding work)
 9. **`.agents/context/tools.md`** — HA MCP, Grafana HA history, config check, shopping-list jq
+10. **`.agents/context/vertical-slices.md`** — Slice discipline (plans / briefs)
+11. **`.agents/context/development-loop.md`** — Lap shape (find → handoff)
 
 ## When to Load What
 
@@ -24,7 +26,8 @@ non-trivial edits.
 | Creating entities or automations      | `nomenclature.md` + `output.md` + `constraints.md`                          |
 | Scope is fuzzy                        | `questions.md` (+ `skills/alignment/` if still fuzzy)                       |
 | Writing docs or agent tone            | `voice.md` + `output.md`                                                    |
-| Finding work to do                    | `work-sources.md` + `skills/find-work/SKILL.md`                             |
+| Finding work to do                    | `work-sources.md` + `development-loop.md` + `skills/find-work/SKILL.md`     |
+| Filing or planning a gap              | `docs/issues/README.md` / `docs/plans/README.md` + `vertical-slices.md`     |
 | Implementing a scoped change          | `constraints.md` + `skills/implement-change/SKILL.md` → hand off, no commit |
 | Validating YAML configs               | `tools.md` + `skills/config-validate/SKILL.md`                              |
 | Restructuring packages                | `skills/package-organize/SKILL.md`                                          |

@@ -26,6 +26,8 @@
 
 - [Package Structure](packages.md) - Organization and structure of Home Assistant packages
 - [Special Projects](projects.md) - Documentation for mycology, aquaponics, and other special integrations
+- [Issue ledger](issues/README.md) - Agent-reported gaps (what); humans use Local Todo UI
+- [Plan ledger](plans/README.md) - Living how-work linked from issues
 - [Contributing Guidelines](CONTRIBUTING.md) - How to contribute to this project
 - [License Information](LICENSE.md) - Project license details
 
