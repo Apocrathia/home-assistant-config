@@ -69,6 +69,8 @@ Located in `.agents/skills/` — task-specific playbooks:
 | Upstream Integration | `skills/integrate-upstream/` | Syncing `.agents/` from prime-context         |
 | Implement Change     | `skills/implement-change/`   | One change lap → validate → operator handoff  |
 | Reconcile Context    | `skills/reconcile-context/`  | Fix drift between context claims and the repo |
+| Create Agent         | `skills/create-agent/`       | New persona under `.agents/agents/`           |
+| Create Skill         | `skills/create-skill/`       | New procedural skill under `.agents/skills/`  |
 
 Additional shared skills from the prime-context core (alignment, review-loop,
 reconcile-docs, file-issue, retrospective, ship-work, and others) live

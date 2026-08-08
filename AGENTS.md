@@ -62,6 +62,8 @@ When performing specific tasks, consult relevant skill files:
 | Implement Change     | `.agents/skills/implement-change/SKILL.md`   | One change lap → validate → operator handoff                         |
 | Upstream Integration | `.agents/skills/integrate-upstream/SKILL.md` | Syncing `.agents/` from the prime-context core                       |
 | Reconcile Context    | `.agents/skills/reconcile-context/SKILL.md`  | Fix drift between context claims and the repo                        |
+| Create Agent         | `.agents/skills/create-agent/SKILL.md`       | New persona under `.agents/agents/`                                  |
+| Create Skill         | `.agents/skills/create-skill/SKILL.md`       | New procedural skill under `.agents/skills/`                         |
 
 Shared skills from the [prime-context](https://github.com/PrimeIntellect-ai/prime-context)
 core (alignment, review-loop, reconcile-docs, ship-work, and others)
