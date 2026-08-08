@@ -1,0 +1,28 @@
+---
+substitutions:
+  name: master-bath-remote
+  friendly_name: Primary Bathroom Remote
+  room: Primary Bathroom
+  dns_domain: !secret esphome_domain
+  # renovate: datasource=github-releases depName=athom-tech/esp32-configs versioning=loose
+  version: esphome-2026.7.3
+
+packages:
+  Athom_Technology.RF_IR_Remote: github://athom-tech/esp32-configs/athom-rf-ir-remote.yaml@${version}
+  # Vanity LED clock IR — named buttons over Athom ir_transmitter
+  primary_bathroom_clock_ir: !include common/primary-bathroom-clock-ir.yaml
+
+esphome:
+  name: ${name}
+  name_add_mac_suffix: false
+  friendly_name: ${friendly_name}
+  area: ${room}
+
+api:
+  encryption:
+    key: !secret home_assistant_api_encryption_key
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  domain: !secret esphome_domain
