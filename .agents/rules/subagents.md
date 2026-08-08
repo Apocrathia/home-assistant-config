@@ -25,15 +25,17 @@ Edit in the main checkout. Do not open worktrees
 Custom subagents live in `.agents/agents/` (Cursor copies under
 `.cursor/agents/`). Use them when the task matches:
 
-| Agent                  | When                                                     |
-| ---------------------- | -------------------------------------------------------- |
-| `ha-config-expert`     | Deep HA configuration, packages, entities, traps         |
-| `automation-architect` | Complex automation design (triggers/conditions/actions)  |
-| `security-analyst`     | Adversarial audit of config posture / dependency vectors |
-| `/implementer`         | Atomic config/code unit against a Bar                    |
-| `/reviewer`            | Judge Artifact against Bar (pair with implementer)       |
-| `/verifier`            | Post-pair arbiter (`config-validate` / tools.md)         |
-| `/context-steward`     | Context drift detection after renames / doc moves        |
+| Agent                  | When                                                      |
+| ---------------------- | --------------------------------------------------------- |
+| `ha-config-expert`     | Deep HA configuration, packages, entities, traps          |
+| `automation-architect` | Complex automation design (triggers/conditions/actions)   |
+| `security-analyst`     | Adversarial audit of config posture / dependency vectors  |
+| `pattern-analyst`      | Mine HA history for trigger candidates (implementer half) |
+| `pattern-reviewer`     | Judge pattern-mine Artifact vs Bar (reviewer half)        |
+| `/implementer`         | Atomic config/code unit against a Bar                     |
+| `/reviewer`            | Judge Artifact against Bar (pair with implementer)        |
+| `/verifier`            | Post-pair arbiter (`config-validate` / tools.md)          |
+| `/context-steward`     | Context drift detection after renames / doc moves         |
 
 Invoke by name or delegate explicitly. Run independent agents in parallel in one
 message when fan-out helps.
@@ -44,7 +46,10 @@ a change touches locks/alarms/cameras, presence/away/vacation, auth/tokens/
 `secrets.yaml` refs, `custom_components/`, or anything expanding external reach.
 It reports findings and stops; it does not edit. Not a `review-loop` gate.
 Domain reviewers (including `security-analyst`) fill the **reviewer** Role when
-the Bar is security-shaped.
+the Bar is security-shaped. `pattern-analyst` ↔ `pattern-reviewer` are an
+inseparable pair for history-pattern Bars (procedure:
+[`pattern-mine`](../skills/pattern-mine/SKILL.md)); they do not write YAML —
+hand `pass` candidates to `automation-architect`.
 
 ## When to stay in the parent
 
