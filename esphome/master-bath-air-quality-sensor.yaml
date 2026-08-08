@@ -1,0 +1,43 @@
+---
+# Master Bathroom Air Quality Sensor
+<<: !include common/diagnostics.yaml
+
+esphome:
+  name: master-bath-air-quality-sensor
+  friendly_name: 'Master Bathroom Air Quality Sensor'
+
+esp32:
+  board: wemos_d1_mini32
+  framework:
+    type: esp-idf
+
+wifi: !include common/wifi.yaml
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: !secret home_assistant_api_encryption_key
+
+ota:
+  platform: esphome
+  password: !secret esphome_ota
+
+captive_portal:
+
+# Enable active Bluetooth proxy
+bluetooth_proxy:
+  active: true
+
+uart:
+  # D2 = IO22
+  rx_pin: GPIO22
+  baud_rate: 9600
+
+sensor:
+  - platform: pm1006
+    pm_2_5:
+      id: 'master_bathroom_air_quality'
+      name: 'Master Bathroom Air Quality'
