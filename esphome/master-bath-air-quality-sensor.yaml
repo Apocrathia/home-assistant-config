@@ -1,10 +1,14 @@
 ---
 # Master Bathroom Air Quality Sensor
+substitutions:
+  name: master-bath-air-quality-sensor
+  friendly_name: Master Bathroom Air Quality Sensor
+
 <<: !include common/diagnostics.yaml
 
 esphome:
-  name: master-bath-air-quality-sensor
-  friendly_name: 'Master Bathroom Air Quality Sensor'
+  name: ${name}
+  friendly_name: ${friendly_name}
 
 esp32:
   board: wemos_d1_mini32
