@@ -20,7 +20,4 @@ api:
   encryption:
     key: !secret home_assistant_api_encryption_key
 
-wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
-  domain: !secret esphome_domain
+wifi: !include common/wifi.yaml
