@@ -1,5 +1,8 @@
 ---
 substitutions:
+  name: living-room-remote
+  friendly_name: Living Room Remote
+  room: Living Room
   # renovate: datasource=github-releases depName=athom-tech/esp32-configs versioning=semver extractVersion=^esphome-(?<version>.*)$
   version: 2026.7.3
 
@@ -7,13 +10,13 @@ packages:
   Athom_Technology.RF_IR_Remote: github://athom-tech/esp32-configs/athom-rf-ir-remote.yaml@esphome-${version}
 
 esphome:
-  name: living-room-remote
+  name: ${name}
   name_add_mac_suffix: false
-  friendly_name: Living Room Remote
-  area: Living Room
+  friendly_name: ${friendly_name}
+  area: ${room}
 
 esp32_ble:
-  name: living-room-remote
+  name: ${name}
 
 # Don't let Athom's managed OTA overwrite this build with stock firmware
 update:
