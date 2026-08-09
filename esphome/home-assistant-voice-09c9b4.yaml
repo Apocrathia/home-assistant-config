@@ -1,4 +1,6 @@
 ---
+<<: !include common/diagnostics.yaml
+
 substitutions:
   name: home-assistant-voice-09c9b4
   friendly_name: Office Voice
