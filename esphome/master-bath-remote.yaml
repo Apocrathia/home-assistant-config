@@ -16,6 +16,14 @@ esphome:
   friendly_name: ${friendly_name}
   area: ${room}
 
+esp32_ble:
+  name: ${name}
+
+# Don't let Athom's managed OTA overwrite this build with stock firmware
+update:
+  - id: update_http_request
+    <<: !remove
+
 api:
   encryption:
     key: !secret home_assistant_api_encryption_key
