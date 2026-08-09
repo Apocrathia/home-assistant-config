@@ -1,9 +1,9 @@
 ---
-<<: !include common/diagnostics.yaml
-
 substitutions:
   name: home-assistant-voice-09c9b4
   friendly_name: Office Voice
+
+<<: !include common/diagnostics.yaml
 
 packages:
   Nabu Casa.Home Assistant Voice PE: github://esphome/home-assistant-voice-pe/home-assistant-voice.yaml
