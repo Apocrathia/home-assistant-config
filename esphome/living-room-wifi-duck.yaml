@@ -6,11 +6,11 @@
 # Inspired by the following project:
 # https://github.com/jensweimann/esphome_ducky
 
-<<: !include common/diagnostics.yaml
-
 substitutions:
   friendly_name: 'Living Room WiFi Duck'
   unit_name: living-room-wifi-duck
+
+<<: !include common/diagnostics.yaml
 
 esphome:
   name: ${unit_name}
