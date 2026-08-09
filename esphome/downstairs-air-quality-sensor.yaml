@@ -1,10 +1,20 @@
 ---
 # Downstairs Air Quality Sensor
+# AirGradient ONE - Board v9
+# https://www.airgradient.com/open-airgradient/instructions/overview/
+substitutions:
+  name: downstairs-air-quality-sensor
+  friendly_name: Downstairs Air Quality Sensor
+  # renovate: datasource=github-releases depName=MallocArray/airgradient_esphome versioning=semver
+  config_version: 5.3.0
+  # Must have quotes around value
+  name_add_mac_suffix: 'false'
+
 <<: !include common/diagnostics.yaml
 
 esphome:
-  name: downstairs-air-quality-sensor
-  friendly_name: Downstairs Air Quality Sensor
+  name: ${name}
+  friendly_name: ${friendly_name}
 
 esp32:
   board: esp32-c3-devkitm-1
@@ -26,17 +36,6 @@ ota:
   password: !secret esphome_ota
 
 captive_portal:
-
-# AirGradient ONE - Board v9
-# https://www.airgradient.com/open-airgradient/instructions/overview/
-
-substitutions:
-  name: downstairs-air-quality-sensor
-  friendly_name: Downstairs Air Quality Sensor
-  # renovate: datasource=github-releases depName=MallocArray/airgradient_esphome versioning=semver
-  config_version: 5.3.0
-  # Must have quotes around value
-  name_add_mac_suffix: 'false'
 
 dashboard_import:
   package_import_url: github://MallocArray/airgradient_esphome/airgradient-one.yaml@${config_version}
