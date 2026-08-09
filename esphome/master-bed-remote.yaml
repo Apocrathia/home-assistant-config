@@ -1,20 +1,20 @@
 ---
-substitutions:
-  name: master-bed-remote
-  friendly_name: Master Bedroom Remote
-  room: Master Bedroom
-  dns_domain: !secret esphome_domain
-  # renovate: datasource=github-releases depName=athom-tech/esp32-configs versioning=loose
-  version: esphome-2026.7.3
-
+# renovate: datasource=github-releases depName=athom-tech/esp32-configs versioning=semver extractVersion=^esphome-(?<version>.*)$
 packages:
-  Athom_Technology.RF_IR_Remote: github://athom-tech/esp32-configs/athom-rf-ir-remote.yaml@${version}
+  Athom_Technology.RF_IR_Remote: github://athom-tech/esp32-configs/athom-rf-ir-remote.yaml@esphome-2026.7.3
 
 esphome:
-  name: ${name}
+  name: master-bed-remote
   name_add_mac_suffix: false
-  friendly_name: ${friendly_name}
-  area: ${room}
+  friendly_name: Master Bedroom Remote
+  area: Master Bedroom
+
+esp32_ble:
+  name: master-bed-remote
+
+# Don't let Athom's managed OTA overwrite this build with stock firmware
+update:
+  - id: !remove update_http_request
 
 api:
   encryption:
