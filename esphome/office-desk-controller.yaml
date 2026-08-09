@@ -1,4 +1,6 @@
 ---
+<<: !include common/diagnostics.yaml
+
 substitutions:
   name: office-desk-controller
   friendly_name: Office Desk Controller
