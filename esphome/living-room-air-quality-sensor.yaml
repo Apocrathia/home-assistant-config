@@ -1,10 +1,14 @@
 ---
 # Living Room Air Quality Sensor
+substitutions:
+  name: living-room-air-quality-sensor
+  friendly_name: Living Room Air Quality Sensor
+
 <<: !include common/diagnostics.yaml
 
 esphome:
-  name: living-room-air-quality-sensor
-  friendly_name: 'Living Room Air Quality Sensor'
+  name: ${name}
+  friendly_name: ${friendly_name}
 
 esp32:
   board: wemos_d1_mini32
