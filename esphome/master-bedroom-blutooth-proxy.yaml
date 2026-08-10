@@ -1,14 +1,14 @@
 ---
 # Master Bedroom Bluetooth Proxy
-<<: !include common/diagnostics.yaml
-
 substitutions:
   name: master-bedroom-bluetooth-proxy
   friendly_name: Master Bedroom Bluetooth Proxy
 
+<<: !include common/diagnostics.yaml
+
 esphome:
-  name: master-bedroom-bluetooth-proxy
-  friendly_name: Master Bedroom Bluetooth Proxy
+  name: ${name}
+  friendly_name: ${friendly_name}
   min_version: 2025.5.0
   name_add_mac_suffix: false
 

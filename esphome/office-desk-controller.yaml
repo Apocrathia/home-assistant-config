@@ -4,12 +4,17 @@ substitutions:
   friendly_name: Office Desk Controller
   # renovate: datasource=github-releases depName=tjhorner/upsy-desky
   version: v5.0.2
+
+<<: !include common/diagnostics.yaml
+
 packages:
   tj_horner.upsy_desky: github://tjhorner/upsy-desky/firmware/stock.yaml@${version}
+
 esphome:
   name: ${name}
   name_add_mac_suffix: false
   friendly_name: ${friendly_name}
+
 wifi: !include common/wifi.yaml
 
 # Enable logging
