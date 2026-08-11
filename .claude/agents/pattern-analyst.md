@@ -1,0 +1,1 @@
+../../.agents/agents/pattern-analyst/agent.md

@@ -1,83 +1,59 @@
 ---
 name: file-issue
 description: >-
-  Capture out-of-scope Homelab work without inventing docs/issues/. Recommend a
-  Home Assistant Local Todo Issues item (preferred for bugs), Tasks/Ideas when
-  appropriate, an operator note, and/or a short entry in an existing docs file.
-  Never write .storage/local_todo.*.ics or .shopping_list.json.
+  Create or update an agent-reported issue under docs/issues/. Use when an
+  agent finds a bug, feature gap, or spec-level ask that is out of scope for
+  the current lap, or when asked to file an issue. Does not create GitHub
+  issues. Never writes Local Todo ICS or .shopping_list.json.
 disable-model-invocation: true
 ---
 
 # File issue
 
-Name kept for upstream identity. **Behavior is HA-specific.**
+Record a problem or desired state under `docs/issues/`. Issues define _what_;
+plans under `docs/plans/` define _how_.
 
-This repo has no `docs/issues/`, `docs/plans/`, or issue frontmatter system. Do
-not create them. Do not open GitHub issues unless the operator explicitly asks.
+**Dual channel:** agents file here. Humans report via the Home Assistant Local
+Todo UI (Issues / Tasks / Ideas). Agents discover Local Todo read-only — never
+write `.storage/local_todo.*.ics` or `.shopping_list.json`. See
+[`.agents/context/work-sources.md`](../../context/work-sources.md) and
+[`docs/issues/README.md`](../../../docs/issues/README.md).
 
-**Checkout:** main working tree only. No git worktrees.
+**Checkout:** main working tree only. No git worktrees
+([`worktrees.md`](../../rules/worktrees.md)). Do not commit
+([`operator-owned-git.md`](../../rules/operator-owned-git.md)).
 
-Work sources: [`.agents/context/work-sources.md`](../../context/work-sources.md).
+Do not open GitHub issues unless the operator explicitly asks.
 
 ## When to file
 
-| Situation                                     | Action                                                              |
-| --------------------------------------------- | ------------------------------------------------------------------- |
-| Fixable in current work                       | Fix it — don't file                                                 |
-| Out of scope / follow-up                      | File via one of the channels below                                  |
-| Duplicate of open local_todo or shopping item | Point at the existing item; don't duplicate                         |
-| Acceptance fuzzy                              | Run [`alignment`](../alignment/SKILL.md) first if needed, then file |
+| Situation                           | File?                                                                                    |
+| ----------------------------------- | ---------------------------------------------------------------------------------------- |
+| Fixable in the current lap          | No — fix it                                                                              |
+| Out of scope for current lap        | Yes — `docs/issues/<slug>.md`                                                            |
+| Architecture friction               | Yes (`kind: architecture`); see [`architecture-review`](../architecture-review/SKILL.md) |
+| Feature or spec-level desired state | **Alignment first** if acceptance unclear; then yes                                      |
+| Duplicate of existing open issue    | Update existing                                                                          |
+| Already on Local Todo (human)       | Prefer pointing at that item; file here only when agent-owned acceptance/plan is needed  |
+| Needs human / external visibility   | File locally; ask operator about GitHub or Local Todo UI                                 |
 
-## Channels (pick one or more)
-
-### (a) Local Todo — Issues (preferred for bugs / broken behavior)
-
-Recommend the operator add an item in the **Home Assistant Issues** Local Todo
-list UI.
-
-- **Never write** `.storage/local_todo.issues.ics` (HA-owned runtime state).
-- Give a short suggested `SUMMARY` (and optional DESCRIPTION) the operator can
-  paste.
-- Discovery later reads `STATUS:NEEDS-ACTION` items read-only (see
-  work-sources).
-
-Use **Tasks** for scoped project work and **Ideas** for speculative / nice-to-
-have — same read-only rule for their ICS files.
-
-### (b) Shopping list (legacy)
-
-Only when the operator prefers the legacy shopping-list UI, or the item is a
-non-HA chore already tracked there.
-
-- **Never write** `.shopping_list.json`.
-- Give a short suggested `name` (and optional note).
-
-### (c) Operator note
-
-Propose a concise note in chat for the operator to keep however they like
-(no repo write required). Include: problem, why it matters, suggested next
-step, evidence (file/entity/path).
-
-### (d) Existing docs only
-
-If they want something tracked in-repo, suggest a **short** addition under an
-existing page (`docs/README.md`, `docs/packages.md`, `docs/projects.md`, or
-`docs/CONTRIBUTING.md`) — never a new issues tree or YAML/HTML frontmatter
-swarm template.
-
-Get confirmation before editing docs. Protected agent paths stay under
-[`protected-paths`](../../rules/protected-paths.md).
+If the gap is a feature, spec, `slice: hitl`, or **multi-path bug** and
+acceptance is not yet writable, run [`alignment`](../alignment/SKILL.md)
+before this skill. Paste the alignment summary into the issue body when filing.
 
 ## Workflow
 
 ```
-- [ ] 1. Confirm it's out of scope (else fix)
-- [ ] 2. Dedupe against local_todo ICS + shopping list (read-only) and docs/
-- [ ] 3. Choose channel(s); draft the item/note/doc blurb
-- [ ] 4. Hand off — no commit; no local_todo / shopping-list write
+- [ ] 0. If feature/spec/hitl/multi-path bug and acceptance is fuzzy: /alignment first; stop until operator says proceed
+- [ ] 1. Search docs/issues/*.md for duplicates (skip README, _template)
+- [ ] 2. Dedupe against Local Todo ICS + shopping list (read-only) — cite if human already tracked it
+- [ ] 3. If duplicate in docs: update that file; skip to step 6
+- [ ] 4. If no docs duplicate: copy docs/issues/_template.md → docs/issues/<short-slug>.md
+- [ ] 5. Fill frontmatter and body; include **Feedback loop**; do not write the plan here
+- [ ] 6. Link plan if one exists; report path to the operator (no commit)
 ```
 
-Dedupe against Local Todo (never write):
+Dedupe Local Todo (never write):
 
 ```bash
 python3 <<'PY'
@@ -105,22 +81,28 @@ for list_name, path in [
 PY
 ```
 
-Legacy shopping list (never write):
+## Frontmatter
 
-```bash
-jq -r '.[] | select(.complete == false) | "\(.name) (\(.id))"' .shopping_list.json
-```
+Required: `title`, `kind` (`bug` | `feature` | `spec` | `architecture`),
+`status`, `severity` (`low` | `medium` | `high` | `blocker`), `source`,
+`found_at`.
 
-If a source is missing or invalid, skip dedupe against it and say so.
+Optional: `found_by`, `area`, `slice`, `plan`, `github`, `branch`, `closed_by`.
+
+## Closure (in the shipping change)
+
+When acceptance is met, [`reconcile-docs`](../reconcile-docs/SKILL.md) should
+fix backlinks and **delete** `docs/issues/<slug>.md` in the same change the
+operator will commit. Do not leave deletion for afterward.
 
 ## Report
 
 ```markdown
-## Filed (HA)
+## Filed
 
-**Channel:** local_todo Issues | Tasks | Ideas | shopping-list | operator note | docs blurb
-**Suggested title:** <SUMMARY / shopping name / n/a>
-**Note / description:** <draft>
-**Docs path (if any):** <existing file only>
-**Do not:** write `.storage/local_todo.*.ics` or `.shopping_list.json`; create `docs/issues/`
+**Path:** docs/issues/<slug>.md
+**Kind / severity:** …
+**Local Todo overlap:** none | <list SUMMARY UID>
+**Plan linked:** none | docs/plans/…
+**Do not:** write Local Todo ICS / shopping-list; commit
 ```

@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⤵️ Check out configuration from GitHub
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: 🚀 Run yamllint
         uses: frenck/action-yamllint@v1.5.0
 
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⤵️ Check out configuration from GitHub
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Running Remark lint
         uses: 'docker://pipelinecomponents/remark-lint:latest'
         continue-on-error: true
@@ -38,7 +38,7 @@ jobs:
         version: ['stable', 'beta', 'dev']
     steps:
       - name: ⤵️ Check out configuration from GitHub
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Copy stub files into configuration folder
         run: cp -R ./.stubs/* .
       - name: Install custom components
@@ -55,11 +55,11 @@ jobs:
     needs: [yamllint]
     steps:
       - name: ⤵️ Check out configuration from GitHub
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Set up Python 3.13
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
-          python-version: 3.13
+          python-version: 3.14
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip setuptools wheel

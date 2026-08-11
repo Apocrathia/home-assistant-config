@@ -7,7 +7,8 @@ Home Assistant config — the single source of truth for their smart home.
 
 **60-second model:** `packages/*` is the meat; `.agents/` is AI context; git and
 HA to-do stores (`.shopping_list.json`, `.storage/local_todo.*.ics`) are
-operator/HA-owned (agents never commit or write those). Start at [`.agents/context/README.md`](./.agents/context/README.md).
+operator/HA-owned (agents never commit or write those). Agent gaps live under
+`docs/issues/`; how-work under `docs/plans/`. Start at [`.agents/context/README.md`](./.agents/context/README.md).
 
 ## Context Loading Order
 
@@ -23,30 +24,35 @@ Load context modules in this order. Each file is a thin shim that points to deep
 8. **`.agents/context/questions.md`** — Clarification protocol
 9. **`.agents/context/work-sources.md`** — Work discovery sources
 10. **`.agents/context/tools.md`** — HA MCP, Grafana HA history, config check, shopping-list jq
+11. **`.agents/context/vertical-slices.md`** — Slice discipline
+12. **`.agents/context/development-loop.md`** — Lap shape
 
 ## Routing
 
 Start at [`.agents/context/README.md`](./.agents/context/README.md). Skip detail: [`.agents/context/loading.md`](./.agents/context/loading.md).
 
-| If you're…                              | Then read                                                                   |
-| --------------------------------------- | --------------------------------------------------------------------------- |
-| New / unsure                            | `README.md` only                                                            |
-| Starting non-trivial work               | `traps.md` + `constraints.md`                                               |
-| Creating entities or automations        | `nomenclature.md` + `output.md` + `constraints.md`                          |
-| Scope is fuzzy                          | `questions.md`                                                              |
-| Writing docs or agent tone              | `voice.md` + `output.md`                                                    |
-| Finding work to do                      | `work-sources.md` + `skills/find-work/SKILL.md`                             |
-| Implementing a scoped change            | `constraints.md` + `skills/implement-change/SKILL.md` (hand off, no commit) |
-| Validating YAML configs                 | `tools.md` + `skills/config-validate/SKILL.md`                              |
-| Restructuring packages                  | `skills/package-organize/SKILL.md`                                          |
-| Fixing broken automations               | `skills/automation-debug/SKILL.md`                                          |
-| Past HA entity state / history          | `tools.md` + `skills/grafana-ha-history/SKILL.md`                           |
-| Syncing `.agents/` from upstream        | `skills/integrate-upstream/SKILL.md`                                        |
-| Context claims drifted from repo        | `skills/reconcile-context/SKILL.md`                                         |
-| Tempted to commit / push / open PR      | `rules/operator-owned-git.md` — don't                                       |
-| Auditing security posture / dep vectors | `agents/security-analyst/agent.md` + `rules/deepwiki.md`                    |
-| Deep HA config knowledge needed         | `agents/ha-config-expert/agent.md`                                          |
-| Complex automation design needed        | `agents/automation-architect/agent.md`                                      |
+| If you're…                              | Then read                                                                       |
+| --------------------------------------- | ------------------------------------------------------------------------------- |
+| New / unsure                            | `README.md` only                                                                |
+| Starting non-trivial work               | `traps.md` + `constraints.md`                                                   |
+| Creating entities or automations        | `nomenclature.md` + `output.md` + `constraints.md`                              |
+| Scope is fuzzy                          | `questions.md`                                                                  |
+| Writing docs or agent tone              | `voice.md` + `output.md`                                                        |
+| Finding work to do                      | `work-sources.md` + `development-loop.md` + `skills/find-work/SKILL.md`         |
+| Filing / planning a gap                 | `docs/issues/README.md` / `docs/plans/README.md` + `vertical-slices.md`         |
+| Implementing a scoped change            | `constraints.md` + `skills/implement-change/SKILL.md` (hand off, no commit)     |
+| Validating YAML configs                 | `tools.md` + `skills/config-validate/SKILL.md`                                  |
+| Restructuring packages                  | `skills/package-organize/SKILL.md`                                              |
+| Fixing broken automations               | `skills/automation-debug/SKILL.md`                                              |
+| Past HA entity state / history          | `tools.md` + `skills/grafana-ha-history/SKILL.md`                               |
+| Syncing `.agents/` from upstream        | `skills/integrate-upstream/SKILL.md`                                            |
+| Context claims drifted from repo        | `skills/reconcile-context/SKILL.md`                                             |
+| Tempted to commit / push / open PR      | `rules/operator-owned-git.md` — don't                                           |
+| Tempted to open a worktree              | `rules/worktrees.md` — don't; main checkout only                                |
+| Auditing security posture / dep vectors | `agents/security-analyst/agent.md` + `rules/deepwiki.md`                        |
+| Deep HA config knowledge needed         | `agents/ha-config-expert/agent.md`                                              |
+| Complex automation design needed        | `agents/automation-architect/agent.md`                                          |
+| Reliable trigger / history pattern hunt | `skills/pattern-mine/SKILL.md` + `agents/pattern-analyst` ↔ `pattern-reviewer` |
 
 ## Skills
 
@@ -58,10 +64,13 @@ When performing specific tasks, consult relevant skill files:
 | Package Organization | `.agents/skills/package-organize/SKILL.md`   | Restructuring or creating packages                                   |
 | Automation Debugging | `.agents/skills/automation-debug/SKILL.md`   | Fixing broken automations                                            |
 | Grafana HA History   | `.agents/skills/grafana-ha-history/SKILL.md` | Past entity state via Grafana InfluxDB                               |
+| Pattern Mine         | `.agents/skills/pattern-mine/SKILL.md`       | History mining for automation trigger candidates                     |
 | Find Work            | `.agents/skills/find-work/SKILL.md`          | Discovering open work — sources in `.agents/context/work-sources.md` |
 | Implement Change     | `.agents/skills/implement-change/SKILL.md`   | One change lap → validate → operator handoff                         |
 | Upstream Integration | `.agents/skills/integrate-upstream/SKILL.md` | Syncing `.agents/` from the prime-context core                       |
 | Reconcile Context    | `.agents/skills/reconcile-context/SKILL.md`  | Fix drift between context claims and the repo                        |
+| Create Agent         | `.agents/skills/create-agent/SKILL.md`       | New persona under `.agents/agents/`                                  |
+| Create Skill         | `.agents/skills/create-skill/SKILL.md`       | New procedural skill under `.agents/skills/`                         |
 
 Shared skills from the [prime-context](https://github.com/PrimeIntellect-ai/prime-context)
 core (alignment, review-loop, reconcile-docs, ship-work, and others)
@@ -78,6 +87,12 @@ Specialized agent profiles for complex tasks:
 | HA Config Expert     | `.agents/agents/ha-config-expert/agent.md`     | Deep HA configuration knowledge        |
 | Automation Architect | `.agents/agents/automation-architect/agent.md` | Complex automation design              |
 | Security Analyst     | `.agents/agents/security-analyst/agent.md`     | Adversarial, audit-only posture review |
+| Pattern Analyst      | `.agents/agents/pattern-analyst/agent.md`      | Mine history for trigger candidates    |
+| Pattern Reviewer     | `.agents/agents/pattern-reviewer/agent.md`     | Judge pattern-mine Artifact vs Bar     |
+| Implementer          | `.agents/agents/implementer/agent.md`          | Atomic unit against a Bar              |
+| Reviewer             | `.agents/agents/reviewer/agent.md`             | Judge Artifact against Bar             |
+| Verifier             | `.agents/agents/verifier/agent.md`             | Post-pair validate arbiter             |
+| Context Steward      | `.agents/agents/context-steward/agent.md`      | Context drift detection                |
 
 ## Key Directories
 
@@ -103,8 +118,8 @@ Specialized agent profiles for complex tasks:
 - **Main config**: `configuration.yaml` (includes `packages/*`)
 - **Secrets**: `secrets.yaml` (never hardcode credentials)
 - **Storage**: `.storage/` (JSON — do NOT edit directly)
-- **Work sources**: `.storage/local_todo.*.ics` (Issues/Tasks/Ideas) and
-  `.shopping_list.json` (read-only; see `work-sources.md`)
+- **Work sources:** `docs/issues/` + `docs/plans/` (agent ledger); Local Todo
+  ICS + `.shopping_list.json` (human / legacy, read-only — see `work-sources.md`)
 - **Custom components**: `custom_components/`
 - **Themes**: `themes/`
 - **CLAUDE.md**: symlink → `AGENTS.md`

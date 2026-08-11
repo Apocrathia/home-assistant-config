@@ -10,7 +10,8 @@ validates against the running instance, then owns git.
 | `packages/*`                                        | The meat — modular YAML (areas, functions, integrations, projects, routines, system, toys, private) |
 | `configuration.yaml`                                | Entry point; includes packages                                                                      |
 | `.agents/`                                          | AI context, rules, skills, agents — not HA config                                                   |
-| `.shopping_list.json` / `.storage/local_todo.*.ics` | Read-only work sources (HA-owned; see `work-sources.md`)                                            |
+| `.shopping_list.json` / `.storage/local_todo.*.ics` | Human / legacy work sources (read-only; see `work-sources.md`)                                      |
+| `docs/issues/`, `docs/plans/`                       | Agent what/how ledgers                                                                              |
 | Git                                                 | Operator-owned — never commit/push/PR (`rules/operator-owned-git.md`)                               |
 
 Done here means: change → validate (config check / live HA) → hand off with a
@@ -33,17 +34,19 @@ Keep modules thin; update this hub when adding modules.
 
 ## Context Modules
 
-| Module       | File              | Purpose                                              |
-| ------------ | ----------------- | ---------------------------------------------------- |
-| Loading      | `loading.md`      | What to load and when                                |
-| Constraints  | `constraints.md`  | Hard limits and non-negotiables                      |
-| Traps        | `traps.md`        | Known pitfalls and gotchas                           |
-| Nomenclature | `nomenclature.md` | Naming conventions and patterns                      |
-| Voice        | `voice.md`        | Communication style guide                            |
-| Output       | `output.md`       | Output format expectations                           |
-| Questions    | `questions.md`    | Clarification protocol                               |
-| Work sources | `work-sources.md` | Where to find open work (local_todo + shopping list) |
-| Tools        | `tools.md`        | HA MCP, Grafana HA history, config check, jq         |
+| Module           | File                  | Purpose                                                |
+| ---------------- | --------------------- | ------------------------------------------------------ |
+| Loading          | `loading.md`          | What to load and when                                  |
+| Constraints      | `constraints.md`      | Hard limits and non-negotiables                        |
+| Traps            | `traps.md`            | Known pitfalls and gotchas                             |
+| Nomenclature     | `nomenclature.md`     | Naming conventions and patterns                        |
+| Voice            | `voice.md`            | Communication style guide                              |
+| Output           | `output.md`           | Output format expectations                             |
+| Questions        | `questions.md`        | Clarification protocol                                 |
+| Work sources     | `work-sources.md`     | Dual channel: docs/issues (agent) + Local Todo (human) |
+| Tools            | `tools.md`            | HA MCP, Grafana HA history, config check, jq           |
+| Vertical slices  | `vertical-slices.md`  | End-to-end slice discipline for plans/briefs           |
+| Development loop | `development-loop.md` | Find → implement → handoff lap shape                   |
 
 ## Rules (always-on)
 
@@ -69,6 +72,8 @@ Located in `.agents/skills/` — task-specific playbooks:
 | Upstream Integration | `skills/integrate-upstream/` | Syncing `.agents/` from prime-context         |
 | Implement Change     | `skills/implement-change/`   | One change lap → validate → operator handoff  |
 | Reconcile Context    | `skills/reconcile-context/`  | Fix drift between context claims and the repo |
+| Create Agent         | `skills/create-agent/`       | New persona under `.agents/agents/`           |
+| Create Skill         | `skills/create-skill/`       | New procedural skill under `.agents/skills/`  |
 
 Additional shared skills from the prime-context core (alignment, review-loop,
 reconcile-docs, file-issue, retrospective, ship-work, and others) live
@@ -85,6 +90,10 @@ Located in `.agents/agents/` — specialized profiles for complex tasks:
 | HA Config Expert     | `agents/ha-config-expert/`     | Deep Home Assistant configuration knowledge   |
 | Automation Architect | `agents/automation-architect/` | Complex automation design and patterns        |
 | Security Analyst     | `agents/security-analyst/`     | Adversarial, audit-only config posture review |
+| Implementer          | `agents/implementer/`          | Atomic unit against a Bar                     |
+| Reviewer             | `agents/reviewer/`             | Judge Artifact against Bar                    |
+| Verifier             | `agents/verifier/`             | Post-pair config/validate arbiter             |
+| Context Steward      | `agents/context-steward/`      | Detect context drift; propose fixes           |
 
 ## Loading Strategy
 

@@ -5,6 +5,8 @@ Exit 0 if parity holds, 1 if any discovery path is missing, broken, wrong,
 not a symlink, or orphaned. Stdlib only; safe for hooks.
 """
 
+from __future__ import annotations
+
 import os
 import sys
 
@@ -40,6 +42,39 @@ def _sot_ids(parent: str) -> list[str]:
     return sorted(
         name for name in os.listdir(parent) if os.path.isdir(os.path.join(parent, name))
     )
+
+
+def _agent_sot_ids(parent: str) -> list[str]:
+    """Agent ids from directories (<name>/agent.md) or flat .md files (<name>.md).
+
+    Raises ValueError if the same id appears in both layouts (e.g. foo/agent.md
+    and foo.md), which would silently shadow one source.
+    """
+    if not os.path.isdir(parent):
+        return []
+    dir_ids: set[str] = set()
+    flat_ids: set[str] = set()
+    for name in os.listdir(parent):
+        full = os.path.join(parent, name)
+        if os.path.isdir(full) and os.path.isfile(os.path.join(full, "agent.md")):
+            dir_ids.add(name)
+        elif name.endswith(".md") and name != "README.md" and os.path.isfile(full):
+            flat_ids.add(name[:-3])
+    duplicates = dir_ids & flat_ids
+    if duplicates:
+        raise ValueError(
+            f"duplicate agent ids in {parent}: both directory and flat-file "
+            f"layouts exist for {sorted(duplicates)}"
+        )
+    return sorted(dir_ids | flat_ids)
+
+
+def _agent_expected(parent: str, agent_id: str) -> str:
+    """Resolve the source-of-truth path for an agent (directory or flat file)."""
+    dir_path = os.path.join(parent, agent_id, "agent.md")
+    if os.path.exists(dir_path):
+        return dir_path
+    return os.path.join(parent, f"{agent_id}.md")
 
 
 def _check_symlink(
@@ -96,13 +131,18 @@ def main() -> int:
 
     agents_sot = os.path.join(ROOT, ".agents", "agents")
     skills_sot = os.path.join(ROOT, ".agents", "skills")
-    agent_ids = _sot_ids(agents_sot)
+    try:
+        agent_ids = _agent_sot_ids(agents_sot)
+    except ValueError as exc:
+        print(f"DUPLICATE_ID [agent-sot] {exc}")
+        print("\n1 discovery parity failure(s).")
+        return 1
     skill_ids = _sot_ids(skills_sot)
     agent_id_set = set(agent_ids)
     skill_id_set = set(skill_ids)
 
     for agent_id in agent_ids:
-        expected = os.path.join(agents_sot, agent_id, "agent.md")
+        expected = _agent_expected(agents_sot, agent_id)
         _check_symlink(
             os.path.join(ROOT, ".cursor", "agents", f"{agent_id}.md"),
             expected,

@@ -1,7 +1,13 @@
 ---
-esphome:
-  name: 'bed-presence-sensor'
+substitutions:
+  name: bed-presence-sensor
   friendly_name: Bed Presence Sensor
+  room: Master Bedroom
+
+esphome:
+  name: ${name}
+  friendly_name: ${friendly_name}
+  area: ${room}
   min_version: 2024.6.0
   name_add_mac_suffix: false
   project:
@@ -18,26 +24,23 @@ esp32:
       CONFIG_BT_BLE_42_FEATURES_SUPPORTED: y
       CONFIG_BT_BLE_50_FEATURES_SUPPORTED: n
 
-# Enable logging
 logger:
 
-# Enable Home Assistant API
 api:
+  encryption:
+    key: !secret home_assistant_api_encryption_key
 
-# Enable wifi
-wifi:
-  # Set up a wifi access point
-  ap: {}
+ota:
+  platform: esphome
+  password: !secret esphome_ota
 
-# In combination with the `ap` this allows the user
-# to provision wifi credentials to the device via WiFi AP.
+wifi: !include common/wifi.yaml
+
 captive_portal:
 
-# Enable esphome OTA updates
-ota:
-  - platform: esphome
-
 ################################################################################
+# Vendor package already includes diagnostics — do not also include
+# common/diagnostics.yaml (would duplicate wifi/uptime/reset entities).
 packages:
   remote_package:
     url: https://github.com/ElevatedSensors/sensor-configs

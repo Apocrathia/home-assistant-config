@@ -100,7 +100,13 @@ find "$agents_dir/rules" -name '*.md' 2>/dev/null | sort
 find "$agents_dir/skills" -name 'SKILL.md' 2>/dev/null | sort
 find "$agents_dir/skills" -path '*/scripts/*.py' 2>/dev/null | sort
 find "$agents_dir/context" -name '*.md' 2>/dev/null | sort
+find "$agents_dir/agents" -name '*.md' 2>/dev/null | sort
 ```
+
+Record the full file list, including agent personas (`.agents/agents/`).
+Check that Homelab has personas (or documented role mappings in
+[`subagents.md`](../../rules/subagents.md)) for roles shared skills invoke
+(`/implementer`, `/reviewer`, `/verifier`, plus any HA domain agents).
 
 **Leave alone (layer 3 / HA-native):** context modules tailored to Homelab,
 HA agents, and domain skills `automation-debug`, `config-validate`,
@@ -111,13 +117,14 @@ work-sources).
 
 Discover upstream files dynamically — do not hardcode skill names.
 
-| Layer                                    | Upstream source                             | Local                                 | Action                                                   |
-| ---------------------------------------- | ------------------------------------------- | ------------------------------------- | -------------------------------------------------------- |
-| 1 — Rules                                | `rules/*.md`                                | `.agents/rules/*.md`                  | Direct diff                                              |
-| 1 — Byte-identical skills                | `skills/<name>/SKILL.md` (no project token) | `.agents/skills/<name>/SKILL.md`      | Direct diff                                              |
-| 1 — Scripts                              | `skills/reconcile-context/scripts/*.py`     | same under `.agents/`                 | Direct diff                                              |
-| 2 — Templatized skills                   | skills with `{{project_name}}`              | local skill                           | Diff after replacing token with `Home Assistant Homelab` |
-| 3 — Context / root / reference templates | `templates/**`                              | `.agents/context/`, `AGENTS.md`, etc. | Structural suggestions only — never overwrite            |
+| Layer                       | Upstream source                             | Local                                 | Action                                                   |
+| --------------------------- | ------------------------------------------- | ------------------------------------- | -------------------------------------------------------- |
+| 1 — Rules                   | `rules/*.md`                                | `.agents/rules/*.md`                  | Direct diff                                              |
+| 1 — Byte-identical skills   | `skills/<name>/SKILL.md` (no project token) | `.agents/skills/<name>/SKILL.md`      | Direct diff                                              |
+| 1 — Scripts                 | `skills/reconcile-context/scripts/*.py`     | same under `.agents/`                 | Direct diff                                              |
+| 2 — Templatized skills      | skills with `{{project_name}}`              | local skill                           | Diff after replacing token with `Home Assistant Homelab` |
+| 3 — Context / root / refs   | `templates/**`                              | `.agents/context/`, `AGENTS.md`, etc. | Structural suggestions only — never overwrite            |
+| 3 — Agent persona templates | `templates/agents/*.tmpl`                   | `.agents/agents/*.md`                 | Structural only — verify role coverage in `subagents.md` |
 
 For modified files, 3-way when baseline is known:
 

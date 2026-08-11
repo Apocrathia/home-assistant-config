@@ -13,7 +13,8 @@ disable-model-invocation: true
 Read-only. Do not edit files, commit, or implement until alignment is reached
 and the operator explicitly asks to proceed. Git is operator-owned
 ([`operator-owned-git.md`](../../rules/operator-owned-git.md)). This repo does
-not use git worktrees — stay in the main checkout.
+not use git worktrees — stay in the main checkout
+([`worktrees.md`](../../rules/worktrees.md)).
 
 Derived from the [grill-me](https://www.aihero.dev/my-grill-me-skill-has-gone-viral)
 pattern: interview relentlessly until shared understanding, one decision branch
@@ -31,33 +32,33 @@ Run **before** changing config when any of these apply:
 | Trigger                                | Examples                                                                        |
 | -------------------------------------- | ------------------------------------------------------------------------------- |
 | New feature or automation              | Desired behavior unclear, multiple package homes, stop condition fuzzy          |
-| Shopping-list item needs scoping       | Vague title; acceptance not yet writable                                        |
+| Docs issue / Local Todo needs scoping  | Vague title; acceptance not yet writable                                        |
 | Package / area placement unclear       | New device could live under `areas/`, `integrations/`, or `projects/`           |
 | Security / presence / energy tradeoffs | Away mode, notifications, secrets, network exposure                             |
+| Before filing or planning              | Feature/spec/`slice: hitl`/multi-path bug without writable acceptance           |
 | Implement gate                         | [`implement-change`](../implement-change/SKILL.md) when expectations still open |
 
-**Skip** when acceptance is already explicit (clear shopping-list item with
-enough detail, or a prior alignment summary in this thread). Do not re-run
-alignment in the same thread if a summary already exists.
+**Skip** when acceptance is already explicit (clear issue/plan or Local Todo
+item with enough detail, or a prior alignment summary in this thread).
 
 ## Typical flow
 
 ```text
-idea / shopping-list row / find-work brief
+idea / docs issue / Local Todo row / find-work brief
         │
         ▼
    /alignment  (read-only; grill until shared understanding)
         │
-        ├──► implement-change (config under packages/, esphome/, docs/)
+        ├──► file-issue → docs/issues/   (agent channel)
+        ├──► plan authoring → docs/plans/
+        ├──► implement-change (packages/, esphome/, docs/)
         ├──► config-validate / package-organize / automation-debug
         ├──► ha-config-expert / automation-architect
-        └──► prototype in .scratch/ (design question still open)
+        └──► prototype in .scratch/
 ```
 
-This repo has **no** `docs/issues/` or `docs/plans/` as first-class surfaces.
-Do not route alignment output into those paths. Capture acceptance in the
-thread (and optionally recommend a shopping-list wording for the operator to
-add in HA if they want a durable to-do).
+After alignment, **do not** write Local Todo ICS. Agents file durable gaps
+under `docs/issues/`; humans keep using the HA UI for their own reports.
 
 ## End summary
 
@@ -66,27 +67,22 @@ and a suggested next step:
 
 | Situation                                  | Next                                                                                                                                                     |
 | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Gap ready to record                        | [`file-issue`](../file-issue/SKILL.md) → `docs/issues/<slug>.md`                                                                                         |
+| How-work needed                            | Author `docs/plans/<slug>.md`; link issue `plan:`                                                                                                        |
 | Scoped YAML / package / automation change  | [`implement-change`](../implement-change/SKILL.md) after operator says proceed                                                                           |
 | YAML validity / layout / broken automation | [`config-validate`](../config-validate/SKILL.md), [`package-organize`](../package-organize/SKILL.md), [`automation-debug`](../automation-debug/SKILL.md) |
 | Deep HA config unknowns                    | [`ha-config-expert`](../../agents/ha-config-expert/agent.md)                                                                                             |
 | Complex automation design                  | [`automation-architect`](../../agents/automation-architect/agent.md)                                                                                     |
 | Still exploring shape of logic/UI          | [`prototype`](../prototype/SKILL.md) in `.scratch/`                                                                                                      |
-| Cursor / `.agents/` / skills / hooks       | Propose edits; wait for confirmation per [`protected-paths.md`](../../rules/protected-paths.md)                                                          |
 | Still ambiguous                            | Stop; list remaining decisions — do not invent scope                                                                                                     |
 
-Alignment output should be concrete enough to drive implementation
+Alignment output should be concrete enough to drive filing or implementation
 (**Problem**, **Acceptance**, target path under `packages/` / `esphome/` /
 `docs/`) without another discovery pass.
 
-## Routed from
-
-- [`find-work`](../find-work/SKILL.md): vague shopping-list or multi-path items
-- [`implement-change`](../implement-change/SKILL.md): alignment gate before edits
-- [`clarify-dont-guess.md`](../../rules/clarify-dont-guess.md) / [`subagents.md`](../../rules/subagents.md): extended ambiguity
-
 ## Do not
 
-- Commit, push, open PRs, or create branches
-- Write issue/plan files under `docs/issues/` or `docs/plans/`
-- Write to `.shopping_list.json` (operator / HA owns it)
+- Commit, push, open PRs, create branches, or open worktrees
+- Write to `.shopping_list.json` or `.storage/local_todo.*.ics`
 - Start implementation until the operator says proceed
+- File issues during alignment unless the operator asked to file as the next step
