@@ -70,5 +70,19 @@ jobs:
         run: cp ./.stubs/secrets.yaml ./esphome/secrets.yaml
       - name: Run esphome on all files
         # yamllint disable rule:line-length
+        # Retry absorbs GitHub raw/ download flakes (Voice PE audio_file fetches).
         run: |
-          for file in $(find ./esphome -maxdepth 1 -type f -name "*.yaml" -not -name "secrets.yaml"); do esphome config "${file}"; done
+          set -euo pipefail
+          for file in $(find ./esphome -maxdepth 1 -type f -name "*.yaml" -not -name "secrets.yaml" | sort); do
+            attempt=1
+            max_attempts=3
+            until esphome config "${file}"; do
+              if [ "${attempt}" -ge "${max_attempts}" ]; then
+                echo "esphome config failed for ${file} after ${max_attempts} attempts" >&2
+                exit 1
+              fi
+              echo "esphome config failed for ${file} (attempt ${attempt}/${max_attempts}); retrying..." >&2
+              attempt=$((attempt + 1))
+              sleep $((attempt * 5))
+            done
+          done
