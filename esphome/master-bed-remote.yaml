@@ -4,7 +4,7 @@ substitutions:
   friendly_name: Master Bedroom Remote
   room: Master Bedroom
   # renovate: datasource=github-releases depName=athom-tech/esp32-configs versioning=semver extractVersion=^esphome-(?<version>.*)$
-  version: 2026.7.3
+  version: 2026.7.4
 
 packages:
   Athom_Technology.RF_IR_Remote: github://athom-tech/esp32-configs/athom-rf-ir-remote.yaml@esphome-${version}
