@@ -1,3 +1,12 @@
+---
+name: config-validate
+description: >-
+  Validate Home Assistant YAML configuration for syntax, structure, entity
+  references, duplicates, and secrets usage before applying changes. Use when
+  writing or modifying any YAML config file, before suggesting changes to
+  packages/, when the user asks "does this look right?" or "validate my
+  config", or after any automation or integration change.
+---
 # Skill: Config Validation
 
 ## Purpose
