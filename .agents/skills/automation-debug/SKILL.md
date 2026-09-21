@@ -1,3 +1,12 @@
+---
+name: automation-debug
+description: >-
+  Systematically diagnose and fix broken Home Assistant automations with a
+  structured reproduce → triggers → conditions → actions workflow. Use when an
+  automation is not firing, fires at the wrong time, an action fails silently,
+  entity state does not update as expected, or template/condition logic
+  produces unexpected results.
+---
 # Skill: Automation Debugging
 
 ## Purpose
