@@ -283,6 +283,9 @@ scene:
       light.living_room_tv_lights:
         state: 'on'
         brightness_pct: 50
+      light.fork_lamp:
+        state: 'on'
+        brightness_pct: 50
 
       # Master Bedroom Lights (100% brightness)
       light.master_bedroom_floor_lamp:
