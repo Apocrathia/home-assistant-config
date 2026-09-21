@@ -1,3 +1,13 @@
+---
+name: package-organize
+description: >-
+  Restructure, create, or reorganize Home Assistant packages following the
+  homelab's packages/ directory layout (areas, functions, integrations,
+  private, projects, routines, system, toys) and naming conventions. Use when
+  restructuring existing packages, creating new package files, moving entities
+  between packages, consolidating or splitting large package files, or adding
+  new areas.
+---
 # Skill: Package Organization
 
 ## Purpose
