@@ -177,13 +177,13 @@ script:
             - climate.downstairs
             - climate.upstairs
           preset_mode: 'away'
-      # Set the vacuums to turbo
-      - action: vacuum.set_fan_speed
+      # Set the vacuums to heavy coverage
+      - action: select.select_option
         data:
           entity_id:
-            - vacuum.downstairs
-            - vacuum.upstairs
-          fan_speed: max
+            - select.downstairs_coverage
+            - select.upstairs_coverage
+          option: heavy_duty
       # Start the vacuum
       - action: vacuum.start
         data:
@@ -260,22 +260,15 @@ script:
             - fan.master_bedroom_ceiling_fan
             - fan.master_bedroom_air_purifier
           percentage: 33
-      # Set the vacuums to silent
-      - action: vacuum.set_fan_speed
+      # Set the vacuums to standard coverage
+      - action: select.select_option
         data:
           entity_id:
-            - vacuum.downstairs
-            - vacuum.upstairs
-          fan_speed: low
-      # Clear any pending Valetudo job (dock alone leaves a resumable run).
-      # Same start → stop → dock pattern as routine_work_start.
-      - alias: 'Start the vacuums'
-        action: vacuum.start
-        target:
-          entity_id:
-            - vacuum.downstairs
-            - vacuum.upstairs
-      - delay: 00:00:15
+            - select.downstairs_coverage
+            - select.upstairs_coverage
+          option: standard
+      # Stop any run started while we were out. Matic's stop also sends
+      # the robot home; the dock call matches the quiet-hours pattern.
       - alias: 'Stop the vacuums'
         action: vacuum.stop
         target:

@@ -67,35 +67,6 @@ automation:
                 data_template:
                   entity_id: '{{ trigger.entity_id }}'
   ################################################################################
-  # While we're out of the house, keep sending the vacuum out as soon as it's
-  # reached a full charge. This may or may not end well.
-  - id: function_vacuum_continue
-    alias: 'Function - Vacuum - Continue'
-    triggers:
-      - trigger: numeric_state
-        entity_id:
-          - vacuum.downstairs
-          - vacuum.upstairs
-        value_template: >
-          {{ state_attr(trigger.entity_id, 'battery_level') | int }}
-        above: 99
-        for:
-          # if it's been charged for this long, it's finished it's last cleaning.
-          minutes: 30
-    conditions:
-      condition: and
-      conditions:
-        - condition: state
-          entity_id: input_boolean.away_mode
-          state: 'on'
-        - condition: template
-          value_template: >
-            {{ state_attr(trigger.entity_id, 'state') == "docked" }}
-    actions:
-      - delay: 00:00:30
-      - action: 'vacuum.start'
-        data_template:
-          entity_id: '{{ trigger.entity_id }}'
   ################################################################################
   # While home, dock any vacuum that starts cleaning — except the morning
   # workday window (before 09:00). Short for: avoids fighting location_home's
@@ -132,34 +103,4 @@ automation:
       - action: vacuum.return_to_base
         data:
           entity_id: '{{ trigger.entity_id }}'
-  ################################################################################
-  # Empty the vacuum every time it goes on the dock. Not just after each cleaning.
-  - id: function_vacuum_autoempty
-    alias: Function - Vacuum - Auto-Empty
-    triggers:
-      - trigger: state
-        entity_id:
-          - vacuum.downstairs
-          - vacuum.upstairs
-        to: 'docked'
-        for:
-          seconds: 10
-    actions:
-      - alias: Trigger dock auto-empty
-        action: button.press
-        data:
-          entity_id: >
-            {% if trigger.entity_id == 'vacuum.downstairs' %}
-              button.valetudo_downstairs_trigger_auto_empty_dock
-            {% elif trigger.entity_id == 'vacuum.upstairs' %}
-              button.valetudo_upstairs_trigger_auto_empty_dock
-            {% endif %}
-      # - alias: vacuum_trigger_autoempty
-      #   action: mqtt.publish
-      #   data:
-      #     topic: >
-      #       {% set entity = trigger.entity_id.split('.') %}
-      #       vacuum/{{ entity[1] }}/AutoEmptyDockManualTriggerCapability/trigger/set
-      #     payload: PERFORM
-
 ################################################################################
