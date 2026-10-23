@@ -112,10 +112,43 @@ automation:
   - id: function_hvac_sync
     alias: 'Function - HVAC Sync'
     triggers:
+      # Sync only on meaningful changes: the target temperature attribute and
+      # hvac_mode (the entity state). A bare state trigger fires on every
+      # attribute tick (current_temperature / hvac_action churn, ~1.3k/day).
+      # for: holds coalesce rapid setpoint nudges / mode flips into one
+      # sync of the settled value (the hold restarts on every new change).
       - trigger: state
         entity_id:
           - climate.homekit_downstairs
           - climate.homekit_upstairs
+        attribute: temperature
+        for:
+          minutes: 3
+      - trigger: state
+        entity_id:
+          - climate.homekit_downstairs
+          - climate.homekit_upstairs
+        to:
+          - 'off'
+          - heat
+          - cool
+          - auto
+          - heat_cool
+          - dry
+          - fan_only
+        for:
+          seconds: 30
+    conditions:
+      # Echo guard: skip when a zone is unavailable or both zones already
+      # agree, so syncing one zone cannot re-trigger a sync of the other.
+      - alias: 'Zones differ and both are available'
+        condition: template
+        value_template: >
+          {{ states('climate.homekit_downstairs') not in ['unavailable', 'unknown']
+             and states('climate.homekit_upstairs') not in ['unavailable', 'unknown']
+             and (states('climate.homekit_downstairs') != states('climate.homekit_upstairs')
+                  or state_attr('climate.homekit_downstairs', 'temperature')
+                      != state_attr('climate.homekit_upstairs', 'temperature')) }}
     actions:
       - alias: 'State Handler'
         choose:
@@ -132,7 +165,7 @@ automation:
                 temperature: >
                   {{ state_attr('climate.homekit_upstairs', 'temperature') }}
                 hvac_mode: >
-                  {{ states.climate.homekit_upstairs.state }}
+                  {{ states('climate.homekit_upstairs') }}
           - conditions:
               alias: Downstairs was changed
               condition: template
@@ -146,7 +179,7 @@ automation:
                 temperature: >
                   {{ state_attr('climate.homekit_downstairs', 'temperature') }}
                 hvac_mode: >
-                  {{ states.climate.homekit_downstairs.state }}
+                  {{ states('climate.homekit_downstairs') }}
   #############################################################################
   # Turn off HVAC if an outside door has been left open for 60 seconds
   - id: function_hvac_efficiency_doors
