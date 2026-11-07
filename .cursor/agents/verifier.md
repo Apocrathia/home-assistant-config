@@ -1,1 +1,0 @@
-../../.agents/agents/verifier/agent.md
