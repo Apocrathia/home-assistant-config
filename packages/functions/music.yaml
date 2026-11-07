@@ -1,0 +1,137 @@
+---
+### Music Functions ###
+template:
+  - button:
+      # HomeKit-exposed trigger for script.function_music_ians_station:
+      # the operator's background-radio mode (Ian's Station at 25%
+      # house-wide), fired by the manual button press via the main HomeKit
+      # bridge (packages/integrations/homekit.yaml).
+      - default_entity_id: button.ians_station
+        name: "Ian's Station"
+        icon: mdi:radio
+        # Passes no data: the station URI and 25% target are pinned in the
+        # script (no fields), so every caller gets the same background-radio
+        # mode.
+        press:
+          - action: script.function_music_ians_station
+
+script:
+  ################################################################################
+  function_music_ians_station:
+    alias: "Function - Music - Ian's Station"
+    description: |
+      Plays Ian's Station (the operator's Apple Music personal radio) on every
+      HomePod via Music Assistant (media_player.homepods) at 25% volume,
+      standardizing every member to the target. Smooth transition: if the
+      HomePods are already playing, duck the current music down over ~30 s,
+      switch the source while ducked, then ramp back up to 25%; otherwise
+      play straight at 25%. No fields: the station and target are pinned.
+    variables:
+      # Pinned station (resolved read-only 2026-09-23 from the Music
+      # Assistant Apple Music "Radio Stations" browse). Apple Music exposes
+      # the operator's personal station as a playlist-typed provider item,
+      # not a library radio; the provider URI is the exact media_id for
+      # music_assistant.play_media (verify_item_uri returns True).
+      station_uri: 'apple_music--HP9JH3hn://playlist/ra.u-9f44b88cfedc8da61abb70ff757aa95f'
+      # Background-radio target: 25% house-wide (operator-confirmed).
+      target_volume: 0.25
+      # Duck floor: the established ~5% clamp from the wakeup fade.
+      duck_floor: 0.05
+      # Two 15 s steps span ~30 s, inside the issue's 30-60 s duck window.
+      duck_steps: 2
+      # Snapshot the group's start state and volume: the ramp-up branch must
+      # only fire when we actually ducked (play_media itself flips the group
+      # to playing), and the duck ramps from the real start volume.
+      was_playing: >
+        {{ is_state('media_player.homepods', 'playing') }}
+      duck_start: >
+        {{ state_attr('media_player.homepods', 'volume_level') | float(0.25) }}
+    sequence:
+      - alias: 'Duck the current music before switching sources'
+        if:
+          - condition: template
+            value_template: '{{ was_playing }}'
+        then:
+          - alias: 'Ramp every member down to the duck floor'
+            repeat:
+              count: '{{ duck_steps }}'
+              sequence:
+                - delay:
+                    seconds: 15
+                # Hoist the step level before the member loop: an inner
+                # repeat shadows repeat.index (the wakeup fade lesson).
+                - variables:
+                    step_volume: >
+                      {{ [duck_start + (duck_floor - duck_start) * (repeat.index / duck_steps), duck_floor] | max }}
+                - repeat:
+                    for_each: '{{ state_attr("media_player.homepods", "group_members") }}'
+                    sequence:
+                      - action: media_player.volume_set
+                        target:
+                          entity_id: '{{ repeat.item }}'
+                        data:
+                          volume_level: '{{ step_volume }}'
+        else:
+          - alias: 'Standardize every HomePod member volume to 25%'
+            repeat:
+              for_each: '{{ state_attr("media_player.homepods", "group_members") }}'
+              sequence:
+                - action: media_player.volume_set
+                  target:
+                    entity_id: '{{ repeat.item }}'
+                  data:
+                    volume_level: '{{ target_volume }}'
+      - alias: "Play Ian's Station on all HomePods"
+        action: music_assistant.play_media
+        target:
+          entity_id: media_player.homepods
+        data:
+          media_type: playlist
+          media_id: '{{ station_uri }}'
+          enqueue: replace
+      # AirPlay has a known no-start mode; music-side entities report
+      # properly, so waiting on state is valid (same as the wakeup script).
+      - alias: 'Wait for the HomePods to start playing'
+        wait_for_trigger:
+          - trigger: state
+            entity_id: media_player.homepods
+            to: playing
+        timeout:
+          seconds: 45
+      - alias: 'Retry once if playback never started'
+        if:
+          - condition: not
+            conditions:
+              - condition: state
+                entity_id: media_player.homepods
+                state: playing
+        then:
+          - action: music_assistant.play_media
+            target:
+              entity_id: media_player.homepods
+            data:
+              media_type: playlist
+              media_id: '{{ station_uri }}'
+              enqueue: replace
+      - alias: 'Ramp back up to 25% after the ducked switch'
+        if:
+          - condition: template
+            value_template: '{{ was_playing }}'
+        then:
+          - alias: 'One coarse volume step every 15 s'
+            repeat:
+              count: '{{ duck_steps }}'
+              sequence:
+                - delay:
+                    seconds: 15
+                - variables:
+                    step_volume: >
+                      {{ duck_floor + (target_volume - duck_floor) * (repeat.index / duck_steps) }}
+                - repeat:
+                    for_each: '{{ state_attr("media_player.homepods", "group_members") }}'
+                    sequence:
+                      - action: media_player.volume_set
+                        target:
+                          entity_id: '{{ repeat.item }}'
+                        data:
+                          volume_level: '{{ step_volume }}'
