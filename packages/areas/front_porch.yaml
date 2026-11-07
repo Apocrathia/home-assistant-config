@@ -1,6 +1,94 @@
 ---
 ### Front Porch ###
 
+script:
+  area_front_porch_front_door_reminder:
+    alias: 'Area - Front Porch - Front Door Reminder'
+    description: >
+      Sends the actionable front-door reminder and handles the button
+      response. Never locks the door on its own - locking happens only when
+      the operator presses Lock now.
+    mode: restart
+    sequence:
+      - variables:
+          notification_tag: front-door-reminder
+          action_lock: "{{ 'LOCK_FRONT_DOOR_' ~ context.id }}"
+      - repeat:
+          while:
+            - condition: state
+              entity_id: lock.front_door_lock
+              state: 'unlocked'
+            # Cap prompts per invocation (notification tag replaces, no pile-up)
+            - condition: template
+              value_template: '{{ repeat.index <= 3 }}'
+          sequence:
+            - action: notify.mobile_app_ians_iphone
+              data:
+                title: Front Door Unlocked
+                message: >
+                  Front door has been unlocked since
+                  {{ (states.lock.front_door_lock.last_changed | as_local).strftime('%H:%M') }}.
+                data:
+                  tag: '{{ notification_tag }}'
+                  group: front-door
+                  push:
+                    interruption-level: time-sensitive
+                  actions:
+                    - action: '{{ action_lock }}'
+                      title: Lock now
+                      authenticationRequired: true
+                      destructive: true
+            - action: notify.mobile_app_ians_ipad_pro
+              data:
+                title: Front Door Unlocked
+                message: >
+                  Front door has been unlocked since
+                  {{ (states.lock.front_door_lock.last_changed | as_local).strftime('%H:%M') }}.
+                data:
+                  tag: '{{ notification_tag }}'
+                  group: front-door
+                  push:
+                    interruption-level: time-sensitive
+                  actions:
+                    - action: '{{ action_lock }}'
+                      title: Lock now
+                      authenticationRequired: true
+                      destructive: true
+            - wait_for_trigger:
+                - trigger: event
+                  event_type: mobile_app_notification_action
+                  event_data:
+                    action: '{{ action_lock }}'
+              timeout:
+                minutes: 30
+            - choose:
+                # Operator pressed Lock now - the ONLY path that locks
+                - conditions:
+                    - condition: template
+                      value_template: '{{ wait.trigger is not none and wait.trigger.event.data.action == action_lock }}'
+                  sequence:
+                    - condition: state
+                      entity_id: lock.front_door_lock
+                      state: 'unlocked'
+                    - action: lock.lock
+                      target:
+                        entity_id: lock.front_door_lock
+                    - action: notify.mobile_app_ians_iphone
+                      data:
+                        title: Front Door Locked
+                        message: Front door locked.
+                        data:
+                          tag: front-door-locked
+                    - action: notify.mobile_app_ians_ipad_pro
+                      data:
+                        title: Front Door Locked
+                        message: Front door locked.
+                        data:
+                          tag: front-door-locked
+                    - stop: Locked at operator request.
+                    # No response after 30 min: loop re-checks and re-prompts.
+                    # The door is NEVER locked on timeout.
+
 automation:
   ################################################################################
   - id: area_front_porch_motion_initial
@@ -75,4 +163,32 @@ automation:
                 action: lock.unlock
                 target:
                   entity_id: lock.front_door_lock
+  ################################################################################
+  - id: area_front_porch_front_door_unlock_reminder
+    alias: 'Area - Front Porch - Front Door Unlock Reminder'
+    description: >
+      The front door had no reminder of any kind (backlog C2/A10: record
+      12.6 h overnight unlocked 10/19-10/20, was <1 min all August). Mirrors
+      the back-door unlock reminder: after the front door has been unlocked
+      (closed, Ian home) for 30 minutes, prompt to lock. Restart mode: a
+      fresh unlock resets the timer; state is re-verified at prompt time.
+    mode: restart
+    triggers:
+      - trigger: state
+        entity_id: lock.front_door_lock
+        to: 'unlocked'
+    actions:
+      - delay:
+          minutes: 30
+      # Re-verify everything before prompting (fail-safe: quiet exit)
+      - condition: state
+        entity_id: lock.front_door_lock
+        state: 'unlocked'
+      - condition: state
+        entity_id: binary_sensor.front_door
+        state: 'off'
+      - condition: state
+        entity_id: person.ian
+        state: 'home'
+      - action: script.area_front_porch_front_door_reminder
 ################################################################################
