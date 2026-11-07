@@ -1,40 +1,135 @@
 ---
 ### Kitchen ###
-alert:
+
+# Runaway-cycle guard for the WashData dishwasher (sensor-noise design
+# 2026-09-21). Incremented on every cycle start, reset at midnight.
+input_number:
   ################################################################################
-  kitchen_dishwasher_complete:
-    name: Kitchen Dishwasher Complete
-    message: >
-      {% set state = states.sensor.dishwasher_state.state %}
-      {% if state == 'finished' %}
-        Dishwasher cycle complete.
-      {% elif state == 'clean' %}
-        Dishwasher finished. Open door to remove dishes.
-      {% elif state == 'ending' %}
-        Dishwasher cycle nearly done.
-      {% else %}
-        Dishwasher: {{ state }}
-      {% endif %}
-    done_message: 'Dishwasher running.'
-    entity_id: sensor.dishwasher_state
-    state: 'alert'
-    repeat:
-      - 15
-      - 30
-      - 60
-    can_acknowledge: true
-    skip_first: false
-    notifiers:
-      - mobile_app_ians_iphone
-      - mobile_app_ians_ipad_pro
-    data:
-      tag: kitchen-dishwasher-complete
-      group: kitchen-appliances
-      push:
-        interruption-level: active
+  kitchen_dishwasher_cycles_today:
+    name: 'Dishwasher Cycles Today'
+    icon: mdi:dishwasher-alert
+    min: 0
+    max: 20
+    step: 1
+    mode: box
 ################################################################################
 
 automation:
+  ################################################################################
+  - id: area_kitchen_dishwasher_complete_notify
+    alias: 'Area - Kitchen - Dishwasher Complete Notify'
+    description: Single-shot notify when a dishwasher cycle finishes; clears when the next cycle starts.
+    triggers:
+      - trigger: state
+        entity_id: sensor.dishwasher_state
+        to: finished
+    conditions:
+      - condition: state
+        entity_id: input_boolean.away_mode
+        state: 'off'
+    actions:
+      - action: notify.mobile_app_ians_iphone
+        data:
+          title: Kitchen
+          message: Dishwasher cycle complete.
+          data:
+            tag: kitchen-dishwasher-complete
+            group: kitchen-appliances
+            push:
+              interruption-level: active
+      - action: notify.mobile_app_ians_ipad_pro
+        data:
+          title: Kitchen
+          message: Dishwasher cycle complete.
+          data:
+            tag: kitchen-dishwasher-complete
+            group: kitchen-appliances
+            push:
+              interruption-level: active
+    mode: single
+  ################################################################################
+  - id: area_kitchen_dishwasher_clear_notification
+    alias: 'Area - Kitchen - Dishwasher Clear Notification'
+    description: Clear the completion notification when the next cycle starts.
+    triggers:
+      - trigger: state
+        entity_id: sensor.dishwasher_state
+        to: running
+    actions:
+      - action: notify.mobile_app_ians_iphone
+        data:
+          message: clear_notification
+          data:
+            tag: kitchen-dishwasher-complete
+      - action: notify.mobile_app_ians_ipad_pro
+        data:
+          message: clear_notification
+          data:
+            tag: kitchen-dishwasher-complete
+    mode: single
+  ################################################################################
+  - id: area_kitchen_dishwasher_interrupted_notify
+    alias: 'Area - Kitchen - Dishwasher Interrupted Notify'
+    description: Actionable failure - cycle cut mid-run (e.g. outlet toggled by energy automation).
+    triggers:
+      - trigger: state
+        entity_id: sensor.dishwasher_state
+        to: interrupted
+    actions:
+      - action: notify.mobile_app_ians_iphone
+        data:
+          title: Kitchen
+          message: Dishwasher cycle was interrupted - check the outlet.
+          data:
+            tag: kitchen-dishwasher-interrupted
+            group: kitchen-appliances
+            push:
+              interruption-level: time-sensitive
+    mode: single
+  ################################################################################
+  - id: area_kitchen_dishwasher_runaway_counter
+    alias: 'Area - Kitchen - Dishwasher Runaway Counter'
+    description: Count cycle starts; alert on a 3rd cycle in one day (auto-restart loop signature).
+    triggers:
+      - trigger: state
+        entity_id: sensor.dishwasher_state
+        to: running
+    actions:
+      - action: input_number.increment
+        target:
+          entity_id: input_number.kitchen_dishwasher_cycles_today
+      - if:
+          - condition: numeric_state
+            entity_id: input_number.kitchen_dishwasher_cycles_today
+            above: 2
+        then:
+          - action: notify.mobile_app_ians_iphone
+            data:
+              title: Kitchen
+              message: >-
+                Dishwasher started cycle
+                {{ states('input_number.kitchen_dishwasher_cycles_today') | int }}
+                today - possible auto-restart loop. Check the heavy-consumers outlet.
+              data:
+                tag: kitchen-dishwasher-runaway
+                group: kitchen-appliances
+                push:
+                  interruption-level: time-sensitive
+    mode: single
+  ################################################################################
+  - id: area_kitchen_dishwasher_runaway_counter_reset
+    alias: 'Area - Kitchen - Dishwasher Runaway Counter Reset'
+    description: Reset the daily dishwasher cycle counter at midnight.
+    triggers:
+      - trigger: time
+        at: '00:00:00'
+    actions:
+      - action: input_number.set_value
+        target:
+          entity_id: input_number.kitchen_dishwasher_cycles_today
+        data:
+          value: 0
+    mode: single
   ################################################################################
   - id: area_kitchen_pantry_light
     alias: 'Area - Kitchen - Pantry Light'
