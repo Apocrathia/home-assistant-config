@@ -29,8 +29,14 @@ homekit:
         - fan.living_room_ceiling_fan
         - switch.fireplace
         - switch.garage_lights
+        - switch.living_room_tv_action_use_pc
         - scene.routine_day_good_morning
         - scene.routine_night_goodnight
+        - button.get_up_music
+        - button.ians_station
+    entity_config:
+      switch.living_room_tv_action_use_pc:
+        name: Living Room TV
   ################################################################################
   # Moving door locks to separate accessory bridges
   # https://github.com/home-assistant/core/issues/48843#issuecomment-817447652
