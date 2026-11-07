@@ -8,6 +8,27 @@ input_number:
     min: 0
     max: 100
     step: 10
+  # Bed-presence debounce windows (sensor-noise design 2026-09-21).
+  # settle: raw ON must hold this long before "really in bed".
+  # exit: raw OFF must hold this long before "really out of bed" - the
+  # longest observed mid-night departure is 18 min, so 30 min never
+  # breaks sleep. Tuning these live retunes the stable wrapper below.
+  master_bedroom_bed_settle_minutes:
+    name: 'Bed Presence Settle Minutes'
+    icon: mdi:bed
+    min: 5
+    max: 30
+    step: 1
+    initial: 10
+    unit_of_measurement: min
+  master_bedroom_bed_exit_minutes:
+    name: 'Bed Presence Exit Minutes'
+    icon: mdi:bed-empty
+    min: 10
+    max: 60
+    step: 5
+    initial: 30
+    unit_of_measurement: min
 
 # Template Sensors
 template:
@@ -17,6 +38,28 @@ template:
         state: >
           {{ ( float(states('sensor.master_bedroom_humidifier_water_level')) <
             float(states('input_number.master_bedroom_humidifer_threshold')) ) }}
+      # Sleep-grade bed occupancy: debounced view of the raw ESPHome
+      # either-bed sensor. The raw sensor stays untouched for instant
+      # consumers (night lights, good morning, alarm clock) - future
+      # sleep-mode logic keys this stable entity instead.
+      - name: Master Bedroom Bed Occupied Stable
+        unique_id: master_bedroom_bed_occupied_stable
+        device_class: occupancy
+        state: >
+          {{ is_state('binary_sensor.bed_presence_2bd444_bed_occupied_either', 'on') }}
+        # delay_on/off take a top-level template that must render a time
+        # period; render "HH:MM:SS" (a bare number would mean seconds).
+        # Bedtime settle: raw must hold ON this long before "really in bed".
+        delay_on: >
+          {{ "00:%02d:00" | format(
+            states('input_number.master_bedroom_bed_settle_minutes') | int(10)
+          ) }}
+        # Bathroom trips (observed 1-18 min) must not break sleep; morning
+        # exit is declared this long after sustained vacancy.
+        delay_off: >
+          {{ "00:%02d:00" | format(
+            states('input_number.master_bedroom_bed_exit_minutes') | int(30)
+          ) }}
 
 # Alerts
 alert:
