@@ -13,6 +13,11 @@ input_datetime:
     has_date: false
     has_time: true
     # initial: 05:00
+  wakeup_time_weekend:
+    name: Wakeup Time Weekend
+    has_date: false
+    has_time: true
+    # initial: '06:00'
 
 input_number:
   wakeup_duration:
@@ -25,14 +30,35 @@ input_number:
     unit_of_measurement: Minutes
 
 input_select:
-  alarm_type:
-    name: Alarm Type
+  alarm_channel:
+    name: Alarm Channel
     options:
-      - Plex
-      - News
+      - Cartoons
+      - Adult Swim
       - Music
-    # initial: Plex
-    icon: mdi:alarm
+      - PBS
+      - Trash
+    initial: PBS
+    icon: mdi:television-guide
+  alarm_channel_weekend:
+    name: Alarm Channel Weekend
+    options:
+      - Cartoons
+      - Adult Swim
+      - Music
+      - PBS
+      - Trash
+    initial: Cartoons
+    icon: mdi:television-guide
+  music_playlist:
+    name: Music Playlist
+    # HA 2026.9.2 forbids empty input_select options (CONFIG_SCHEMA
+    # vol.Length(min=1)), so the picker starts on this single real
+    # playlist; automation function_music_playlist_refresh replaces the
+    # list with the Music Assistant library at startup.
+    options:
+      - Get Up!
+    icon: mdi:playlist-music
 
 ### Sensors ###
 template:
@@ -54,6 +80,47 @@ template:
           {{ (((states.input_datetime.wakeup_time.attributes.timestamp |
               int) - ((states.input_number.wakeup_duration.state |
               int * 60)/2 )) | timestamp_custom("%H:%M",False)) }}
+      # Weekend siblings (2026-09-22): the same start/midpoint math keyed
+      # on the weekend helper instead of the weekday one.
+      - default_entity_id: sensor.wakeup_alarm_start_time_weekend
+        name: Alarm Clock Start Weekend
+        state: >
+          {{ (((states.input_datetime.wakeup_time_weekend.attributes.timestamp |
+              int) - (states.input_number.wakeup_duration.state |
+              int * 60)) | timestamp_custom("%H:%M",False)) }}
+      - default_entity_id: sensor.wakeup_alarm_midpoint_weekend
+        name: Alarm Clock Midpoint Weekend
+        state: >
+          {{ (((states.input_datetime.wakeup_time_weekend.attributes.timestamp |
+              int) - ((states.input_number.wakeup_duration.state |
+              int * 60)/2 )) | timestamp_custom("%H:%M",False)) }}
+  ################################################################################
+  - button:
+      # HomeKit-exposed trigger for script.function_wakeup_music: the
+      # operator's alarm-off iOS Shortcuts automation presses it via the
+      # main HomeKit bridge (packages/integrations/homekit.yaml).
+      - default_entity_id: button.get_up_music
+        name: Get Up Music
+        icon: mdi:playlist-music
+        # Passes no data: the playlist fallback is the script-level
+        # playlist_uri variable (the field default: is UI-only on HA
+        # 2026.9.2); the volume templates default via
+        # | default(50) | int, the fade template via
+        # | default(false) | bool, and the shuffle_mode template via
+        # | default(true) | bool (default on since 2026-10-23).
+        press:
+          - action: script.function_wakeup_music
+      # HomeKit-exposed trigger for script.function_ians_station: the
+      # operator's background-radio mode (Ian's Station at 25%
+      # house-wide), fired by the manual button or the arrival path.
+      - default_entity_id: button.ians_station
+        name: "Ian's Station"
+        icon: mdi:radio
+        # Passes no data: the station URI and 25% target are pinned in the
+        # script (no fields), so every caller gets the same background-radio
+        # mode.
+        press:
+          - action: script.function_ians_station
 
 automation:
   ################################################################################
@@ -112,6 +179,66 @@ automation:
           color_temp_kelvin: 3000
           brightness_pct: 100
   ################################################################################
+  # Weekend sibling (added 2026-09-22): the non-workday wake chain. Same
+  # lights sequence and midpoint/duration math (shared
+  # input_number.wakeup_duration), weekend time helper, inverse workday
+  # gate. The time trigger names the input_datetime helper directly: on
+  # 2026.9.2 a time trigger never arms on an HH:MM template sensor.
+  - id: function_wakeup_lights_weekend
+    alias: 'Function - Wakeup - Lights Weekend'
+    triggers:
+      - trigger: template
+        value_template: >
+          {{ (states.sensor.time.state ==
+              states.sensor.wakeup_alarm_start_time_weekend.state) }}
+      - trigger: time
+        at: input_datetime.wakeup_time_weekend
+    conditions:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.workday
+          state: 'off'
+        - condition: state
+          entity_id: sun.sun
+          state: below_horizon
+        - condition: state
+          entity_id: group.people
+          state: home
+    actions:
+      - alias: 'Turn on master bedroom floor lamp'
+        action: light.turn_on
+        data:
+          entity_id: light.master_bedroom_floor_lamp
+          profile: energize
+          brightness_pct: 100
+      - alias: 'Transition master bedroom table lamps'
+        action: script.light_transition
+        data:
+          entity_id: light.master_bedroom_table_lamps
+          starting_brightness_pct: 10
+          ending_brightness_pct: 100
+          interval_pct: 10
+          transition_time: >
+            {{ states.input_number.wakeup_duration.state | multiply(60) | int - 1 }}
+      - alias: 'Turn on the master bathroom vanity lights'
+        action: light.turn_on
+        data:
+          entity_id: light.master_bathroom_vanity_lights
+          profile: relax
+          brightness_pct: 100
+      - alias: 'Turn on morning lights'
+        action: light.turn_on
+        data:
+          entity_id: light.morning_lights
+          brightness_pct: 50
+      - alias: 'Set office floor lamp to 100% brightness'
+        action: light.turn_on
+        data:
+          entity_id: light.office_floor_lamp
+          color_temp_kelvin: 3000
+          brightness_pct: 100
+  ################################################################################
   - id: function_wakeup_apple_tv
     alias: 'Function - Wakeup - Apple TV'
     triggers:
@@ -125,8 +252,38 @@ automation:
         - condition: state
           entity_id: binary_sensor.workday
           state: 'on'
+        - condition: state
+          entity_id: group.people
+          state: home
     actions:
-      action: script.function_wakeup_apple_tv
+      - action: script.function_wakeup_apple_tv
+  ################################################################################
+  # Weekend sibling (added 2026-09-22): same TV fire at the weekend
+  # midpoint, inverse workday gate, plus the someone-home guard added
+  # 2026-10-22 (group.people, mirroring the lights automations — the
+  # wake chain fired 5/5 vacant weekdays). The weekend picker's state
+  # rides the script's optional channel field; the weekday automation
+  # passes no data and keeps the weekday-picker default.
+  - id: function_wakeup_apple_tv_weekend
+    alias: 'Function - Wakeup - Apple TV Weekend'
+    triggers:
+      - trigger: template
+        value_template: >
+          {{ (states.sensor.time.state ==
+              states.sensor.wakeup_alarm_midpoint_weekend.state) }}
+    conditions:
+      condition: and
+      conditions:
+        - condition: state
+          entity_id: binary_sensor.workday
+          state: 'off'
+        - condition: state
+          entity_id: group.people
+          state: home
+    actions:
+      - action: script.function_wakeup_apple_tv
+        data:
+          channel: "{{ states('input_select.alarm_channel_weekend') }}"
   ################################################################################
   - id: function_wakeup_vacuum
     alias: 'Function - Wakeup - Vacuum'
@@ -139,6 +296,9 @@ automation:
         - condition: state
           entity_id: binary_sensor.workday
           state: 'on'
+        - condition: state
+          entity_id: group.people
+          state: home
     actions:
       - action: vacuum.start
         data:
@@ -157,142 +317,492 @@ automation:
         - condition: state
           entity_id: binary_sensor.workday
           state: 'on'
+        - condition: state
+          entity_id: group.people
+          state: home
     actions:
       - action: button.press
         target:
           entity_id: button.ians_bed_preset_flat
+  ################################################################################
+  - id: function_music_playlist_refresh
+    alias: 'Function - Music Playlist Refresh'
+    triggers:
+      - trigger: homeassistant
+        event: start
+      # Daily at 03:00. A missed run while HA is down is covered by the
+      # next homeassistant.start fire; the selector keeps its last options
+      # until then.
+      - trigger: time_pattern
+        hours: '3'
+        minutes: '0'
+    actions:
+      - alias: 'Fetch the Music Assistant playlist library'
+        # Flat limit key: the registered action schema takes top-level
+        # limit/offset, despite the nested pagination object its UI
+        # description shows; 500 is the documented selector maximum. The
+        # config entry id is the Music Assistant integration's entry
+        # (live read 2026-09-21); stable until the entry is re-created.
+        action: music_assistant.get_library
+        data:
+          config_entry_id: 01JFJZ4G5T9H5DV0SPCEDP7704
+          media_type: playlist
+          limit: 500
+        response_variable: ma_playlists
+      - alias: 'Replace the selector options with the library names'
+        # set_options keeps the current selection when it stays among the
+        # new options and falls back to the first option otherwise
+        # (verified against the 2026.9.2 source). Duplicates are rejected,
+        # hence unique.
+        action: input_select.set_options
+        target:
+          entity_id: input_select.music_playlist
+        data:
+          # Jinja resolves response-dict attributes to bound Python methods first, so bracket access is required.
+          options: >
+            {{ ma_playlists['items'] | map(attribute='name') | unique | list }}
+  ################################################################################
+  - id: function_wakeup_music_out_of_bed
+    alias: 'Function - Wakeup - Music (Out of Bed)'
+    triggers:
+      # Out-of-bed sustain, templated from the shared Good Morning helper
+      # (minutes, range stays 1-30). Operator-tuned 7 minutes 2026-09-23:
+      # covers the 4-night audit's max in-window stir of 6:48 with
+      # margin, without the false fires a 5-minute initial showed on the
+      # observed 5-7 minute stirs (supersedes the earlier set-to-10
+      # deploy note). The max pre-dawn stir of 9:00 stays excluded by the
+      # after-good_morning_earliest window, and every true rise left the
+      # bed clear for 6+ hours. The helper's initial lives in
+      # packages/routines/day.yaml.
+      - trigger: state
+        entity_id: binary_sensor.bed_presence_2bd444_bed_occupied_either
+        from: 'on'
+        to: 'off'
+        for: "00:{{ states('input_number.good_morning_bed_empty_delay') | int(5) }}:00"
+    conditions:
+      condition: and
+      conditions:
+        # Evidence window: all observed final rises were 06:22-08:43; the
+        # 21-minute insomnia gap ended 04:54, so the 05:00 start excludes
+        # it. The 12:00 ceiling is late-rise drift insurance, not a
+        # required interaction of the 06:00 weekend wake (2026-09-23):
+        # natural weekend rises ran to 08:43 in the 4-night audit, and a
+        # rough-morning rise past 09:00 should still get music. The
+        # wider window is safe because the sustain + motion-recency +
+        # not-playing gates must all pass; midday naps and no-occupancy
+        # hours stay excluded. Weekday behavior is unchanged (rises
+        # 05:00-09:00 pass identically).
+        - condition: time
+          after: input_datetime.good_morning_earliest
+          before: '12:00:00'
+        # Motion RECENCY WINDOW: bedroom motion in the last 15 minutes
+        # (now() - last_changed <= 15 min). NEVER an ordering comparison
+        # vs bed.last_changed; that ordering race is what broke the
+        # weekend disarm automation (routine_day_good_morning_wake).
+        # Motion fires 1-7 s BEFORE bed-off on real rises, so ordering
+        # fails them while recency passes; this condition passed on all
+        # 3 observed final rises.
+        - condition: template
+          value_template: >
+            {% set motion = states.binary_sensor.homekit_master_bedroom_motion %}
+            {{ motion is not none and motion.last_changed is not none and
+               (now() - motion.last_changed) <= timedelta(minutes=15) }}
+        # Already-playing guard: do not restart music that a manual button
+        # press (button.get_up_music) or an earlier fire already started.
+        - condition: not
+          conditions:
+            - condition: state
+              entity_id: media_player.homepods
+              state: playing
+    actions:
+      # Fires weekday AND weekend: this is music, not security, and the
+      # weekday TV alarm intentionally coexists with this trigger.
+      # TV pause DECIDED (2026-09-23): the bedroom TV is paused after a
+      # ~5-minute dwell so the riser is actually up and out of the room
+      # — in this automation only, never the button path (manual midday
+      # presses must not pause the TV) or the script itself.
+      - alias: 'Play the selected playlist on the HomePods'
+        action: script.function_wakeup_music
+        data:
+          playlist: "{{ states('input_select.music_playlist') }}"
+      - alias: 'Dwell so the riser is actually up and out of the room'
+        # The called script runs to completion first (its 45 s wait +
+        # retry tail), so the pause lands ~5-6 min after music start,
+        # ~12-13 min after the rise.
+        delay: '00:05:00'
+      - alias: 'Only pause a TV that is still playing'
+        # No-op when the TV is already off/stopped: manual stop,
+        # screensaver death, or the pod having slept. An action-level
+        # condition halts the remaining steps without erroring.
+        condition: state
+        entity_id: media_player.master_bedroom_apple_tv
+        state: playing
+      - alias: 'Pause the bedroom TV'
+        action: media_player.media_pause
+        target:
+          entity_id: media_player.master_bedroom_apple_tv
 ################################################################################
 
 script:
   ################################################################################
   function_wakeup_apple_tv:
     alias: 'Function - Wakeup - Apple TV'
+    description: |
+      Wakes the Apple TV and deep-links VLC to the Tunarr channel picked
+      in input_select.alarm_channel, or the optional channel field when a
+      caller passes one (the weekend automation passes
+      input_select.alarm_channel_weekend).
+    fields:
+      channel:
+        # Channel name from a picker (added 2026-09-22). The default: key
+        # is UI-only on HA 2026.9.2 (never injected into run variables),
+        # so the runtime fallback lives in the alarm_channel variable.
+        description: 'Channel name from a picker; defaults to the input_select.alarm_channel state.'
+        example: 'Cartoons'
+        advanced: false
+        required: false
+        default: "{{ states('input_select.alarm_channel') }}"
+        selector:
+          select:
+            options:
+              - Cartoons
+              - Adult Swim
+              - Music
+              - PBS
+              - Trash
+    variables:
+      # Complete VLC deep links (vlc-x-callback://stream?url= plus the
+      # RFC3986-encoded Tunarr stream URL), pre-encoded so the deep link needs
+      # no template filter at run time. Raw stream URLs and the channel table
+      # live in docs/plans/wakeup-routine-migration.md.
+      # yamllint disable rule:line-length
+      channel_urls:
+        Cartoons: 'vlc-x-callback://stream?url=https%3A%2F%2Ftunarr.gateway.services.apocrathia.com%2Fstream%2Fchannels%2F1a3a904e-ab23-4af5-8e41-34b93dc87760%3FstreamMode%3Dhls'
+        'Adult Swim': 'vlc-x-callback://stream?url=https%3A%2F%2Ftunarr.gateway.services.apocrathia.com%2Fstream%2Fchannels%2F2f75ff8f-db9c-488c-ade8-0f47fe5eb17e%3FstreamMode%3Dhls'
+        Music: 'vlc-x-callback://stream?url=https%3A%2F%2Ftunarr.gateway.services.apocrathia.com%2Fstream%2Fchannels%2F6beb4ebb-91d8-40a0-afcd-91e10eaa466f%3FstreamMode%3Dhls'
+        PBS: 'vlc-x-callback://stream?url=https%3A%2F%2Ftunarr.gateway.services.apocrathia.com%2Fstream%2Fchannels%2Ff2dc893f-c71c-42b0-a818-4b2b7a872ce9%3FstreamMode%3Dhls'
+        Trash: 'vlc-x-callback://stream?url=https%3A%2F%2Ftunarr.gateway.services.apocrathia.com%2Fstream%2Fchannels%2Fd525d4f0-5687-443b-8a97-8ed10c071a57%3FstreamMode%3Dhls'
+      # Effective channel (added 2026-09-22): the optional channel field
+      # when a caller passes one, else the weekday picker state. Field
+      # default: is UI-only on HA 2026.9.2, so |default() carries the
+      # fallback at run time. Collision-probed live: channel is no jinja
+      # global (unlike the renamed shuffle_mode).
+      alarm_channel: >
+        {{ channel | default(states('input_select.alarm_channel')) }}
+    # yamllint enable rule:line-length
     sequence:
-      # Device wakeup
-      - action: remote.send_command
-        data:
+      - alias: 'Wake the Apple TV'
+        # turn_on does not wake this device (verified live); the wakeup
+        # command wakes the box and HDMI-CEC wakes the TV.
+        action: remote.send_command
+        target:
           entity_id: remote.master_bedroom_apple_tv
-          command:
-            - menu
-      - delay:
-          seconds: 15
-      - action: remote.send_command
         data:
-          entity_id: remote.master_bedroom_apple_tv
-          command:
-            - top_menu
-      - delay:
-          seconds: 1
-      - action: remote.send_command
+          command: wakeup
+      - alias: 'Let tvOS settle'
+        # Tune this delay during the manual fire if the deep link lands
+        # on a black screen.
+        delay:
+          seconds: 5
+      - alias: 'Deep-link VLC to the selected Tunarr channel'
+        # Fire-and-trust: no wait or retry on the TV entity. VLC's
+        # now-playing push info can decay to idle mid-playback
+        # (verified live), so entity state is not a success signal.
+        action: media_player.play_media
+        target:
+          entity_id: media_player.master_bedroom_apple_tv
         data:
-          entity_id: remote.master_bedroom_apple_tv
-          command:
-            - top_menu
-      - delay:
-          seconds: 1
-      # Close all applications before opening new content
-      - action: script.function_apple_tv_close_all_applications
+          media_content_type: url
+          media_content_id: >
+            {{ channel_urls[alarm_channel] }}
+  ################################################################################
+  function_wakeup_music:
+    alias: 'Function - Wakeup - Music'
+    description: |
+      Plays the chosen playlist (default: the pinned 'Get Up!' URI) on every
+      HomePod via Music Assistant (media_player.homepods), standardizes every
+      member's volume to the target first, waits up to 45 s for playback to
+      confirm, and retries once if AirPlay never starts. Optional fade and
+      shuffle_mode parameters: fade defaults off, shuffle_mode defaults on
+      (operator 2026-10-23) and can be turned off per-call.
+    fields:
+      playlist:
+        # Name collisions resolve to MA's best match (see the play step).
+        description: 'Playlist to play: a library:// URI, or a playlist name Music Assistant resolves by search.'
+        example: 'Get Up!'
+        advanced: false
+        required: false
+        # Pinned default: the 'Get Up!' (Apple Music) playlist, from a
+        # one-time read-only Music Assistant library lookup; re-resolve via
+        # music_assistant.get_library (media_type: playlist) only if the
+        # playlist is ever recreated.
+        default: 'library://playlist/32'
+        selector:
+          text:
+      volume:
+        description: 'Target volume (0-100) for every HomePod member before playback.'
+        example: '50'
+        advanced: false
+        required: false
+        default: 50
+        selector:
+          number:
+            min: 0
+            max: 100
+            step: 1
+            unit_of_measurement: '%'
+      fade:
+        description: 'Fade the member volumes in from ~5%. One step every 30 s, spanning half the wakeup duration.'
+        example: 'false'
+        advanced: false
+        required: false
+        default: false
+        selector:
+          boolean:
+      shuffle_mode:
+        description: >
+          Shuffle the playlist and skip once to re-roll the first track.
+          On by default (operator 2026-10-23); pass false to turn it off
+          for a call.
+        example: 'false'
+        advanced: false
+        required: false
+        default: true
+        selector:
+          boolean:
+    variables:
+      # Field default: is UI-only on HA 2026.9.2, so the runtime playlist fallback lives here.
+      playlist_uri: >
+        {{ playlist | default('library://playlist/32') }}
+      # The ramp target: the volume field as a media_player volume_level.
+      fade_target: >
+        {{ (volume | default(50) | int) / 100 }}
+      # One 30 s step per minute of wakeup duration: the ramp spans half the
+      # duration, so a midpoint fire lands at full volume when the light ramp
+      # ends. Floored at one step so a zero duration still climbs off the
+      # 0.05 volume clamp.
+      fade_steps: >
+        {{ [states('input_number.wakeup_duration') | int, 1] | max }}
+    sequence:
+      - alias: 'Standardize every HomePod member volume'
+        # The group entity's volume_set only scales members proportionally
+        # (live-verified 2026-09-21: members sat at 14-50% while the group
+        # read 50%), so set every member explicitly. group_members is the
+        # sync group's own member list (live-verified attribute; the known
+        # members are the bedside left/right, kitchen, master bathroom,
+        # office, and upstairs HomePods if a hardcoded fallback is ever
+        # needed).
+        repeat:
+          for_each: '{{ state_attr("media_player.homepods", "group_members") }}'
+          sequence:
+            - action: media_player.volume_set
+              target:
+                entity_id: '{{ repeat.item }}'
+              data:
+                # Fade starts quiet at ~5%; otherwise go straight to target.
+                volume_level: >
+                  {{ 0.05 if fade | default(false) | bool else (volume | default(50) | int) / 100 }}
+      - alias: 'Play the playlist on all HomePods'
+        # A library:// URI plays as-is; a playlist name resolves via MA's
+        # name-search fallback, where name collisions pick MA's best match.
+        action: music_assistant.play_media
+        target:
+          entity_id: media_player.homepods
         data:
-          entity_id: remote.master_bedroom_apple_tv
-      - delay:
-          seconds: 2
-      # Now figure out what we're doing
-      - choose:
-          ############
-          ### Plex ###
-          ############
-          - conditions:
+          media_type: playlist
+          media_id: '{{ playlist_uri }}'
+          enqueue: replace
+      # AirPlay has a known no-start mode; music-side entities report
+      # properly, so waiting on state is valid here, unlike the TV path.
+      # wait_for_trigger, never wait_for: HA 2026.9.2's script schema has
+      # no wait_for action, and a wait_for step disables the script at
+      # reload (verified against the 2026.9.2 source and the live
+      # websocket validate_config command).
+      - alias: 'Wait for the HomePods to start playing'
+        wait_for_trigger:
+          - trigger: state
+            entity_id: media_player.homepods
+            to: playing
+        timeout:
+          seconds: 45
+      - alias: 'Retry once if playback never started'
+        if:
+          - condition: not
+            conditions:
               - condition: state
-                entity_id: input_select.alarm_type
-                state: 'Plex'
-            sequence:
-              - alias: 'Open Plex'
-                # Should be sitting on the first menu item (Plex)
-                action: remote.send_command
-                data:
-                  entity_id: remote.master_bedroom_apple_tv
-                  command:
-                    - select
-              - delay:
-                  seconds: 10
-              - alias: 'Scan for Plex clients'
-                action: button.press
-                target:
-                  entity_id: button.apocrathia_scan_clients
-              - delay:
-                  seconds: 5
-              - alias: 'Wait for Plex client to be available'
-                wait_template: "{{ not is_state('media_player.plex_master_bedroom_apple_tv', 'unavailable') }}"
-                timeout:
-                  seconds: 30
-              - delay:
-                  seconds: 10
-              - alias: 'Navigate to Plex Live TV'
-                # This is a bit of a hack, but it works.
-                action: remote.send_command
-                data:
-                  entity_id: remote.master_bedroom_apple_tv
-                  command:
-                    # Navigate to Live TV section in Plex app
-                    - left
-                    - down
-                    - down
-                    - down
-                    - down
-                    - down
-                    - down
-                    - select
-              - delay:
-                  seconds: 15
-              - alias: 'Select Live TV Channel'
-                action: remote.send_command
-                data:
-                  entity_id: remote.master_bedroom_apple_tv
-                  command:
-                    # Navigate to specific channel (adjust based on channel position)
-                    - select
-          ############
-          ### News ###
-          ############
-          - conditions:
+                entity_id: media_player.homepods
+                state: playing
+        then:
+          - action: music_assistant.play_media
+            target:
+              entity_id: media_player.homepods
+            data:
+              media_type: playlist
+              media_id: '{{ playlist_uri }}'
+              enqueue: replace
+      # Shuffle is default-on per operator 2026-10-23 (the same first song
+      # every morning was monotonous); | default(true) is the runtime
+      # switch because field defaults are UI-only on HA 2026.9.2.
+      - alias: 'Shuffle the playlist if requested'
+        if:
+          - condition: template
+            value_template: '{{ shuffle_mode | default(true) | bool }}'
+        then:
+          - action: media_player.shuffle_set
+            target:
+              entity_id: media_player.homepods
+            data:
+              shuffle: true
+          - alias: 'Skip once to re-roll the first track'
+            action: media_player.media_next_track
+            target:
+              entity_id: media_player.homepods
+      - alias: 'Ramp the volume back up if fading in'
+        if:
+          - condition: template
+            value_template: '{{ fade | default(false) | bool }}'
+        then:
+          - alias: 'One coarse volume step every 30 s'
+            repeat:
+              count: '{{ fade_steps }}'
+              sequence:
+                - delay:
+                    seconds: 30
+                # Hoist the step level before the member loop: an inner
+                # repeat shadows repeat.index, so it cannot be read from
+                # inside the for_each.
+                - variables:
+                    step_volume: >
+                      {{ 0.05 + (fade_target - 0.05) * (repeat.index / fade_steps) }}
+                # The group would only scale members proportionally, so
+                # every step sets every member directly. Each step is a real
+                # AirPlay command to every HomePod, so the steps stay
+                # coarse on purpose.
+                - repeat:
+                    for_each: '{{ state_attr("media_player.homepods", "group_members") }}'
+                    sequence:
+                      - action: media_player.volume_set
+                        target:
+                          entity_id: '{{ repeat.item }}'
+                        data:
+                          volume_level: '{{ step_volume }}'
+  ################################################################################
+  function_ians_station:
+    alias: "Function - Ian's Station"
+    description: |
+      Plays Ian's Station (the operator's Apple Music personal radio) on every
+      HomePod via Music Assistant (media_player.homepods) at 25% volume,
+      standardizing every member to the target. Smooth transition: if the
+      HomePods are already playing, duck the current music down over ~30 s,
+      switch the source while ducked, then ramp back up to 25%; otherwise
+      play straight at 25%. No fields: the station and target are pinned.
+    variables:
+      # Pinned station (resolved read-only 2026-09-23 from the Music
+      # Assistant Apple Music "Radio Stations" browse). Apple Music exposes
+      # the operator's personal station as a playlist-typed provider item,
+      # not a library radio; the provider URI is the exact media_id for
+      # music_assistant.play_media (verify_item_uri returns True).
+      station_uri: 'apple_music--HP9JH3hn://playlist/ra.u-9f44b88cfedc8da61abb70ff757aa95f'
+      # Background-radio target: 25% house-wide (operator-confirmed).
+      target_volume: 0.25
+      # Duck floor: the established ~5% clamp from the wakeup fade.
+      duck_floor: 0.05
+      # Two 15 s steps span ~30 s, inside the issue's 30-60 s duck window.
+      duck_steps: 2
+      # Snapshot the group's start state and volume: the ramp-up branch must
+      # only fire when we actually ducked (play_media itself flips the group
+      # to playing), and the duck ramps from the real start volume.
+      was_playing: >
+        {{ is_state('media_player.homepods', 'playing') }}
+      duck_start: >
+        {{ state_attr('media_player.homepods', 'volume_level') | float(0.25) }}
+    sequence:
+      - alias: 'Duck the current music before switching sources'
+        if:
+          - condition: template
+            value_template: '{{ was_playing }}'
+        then:
+          - alias: 'Ramp every member down to the duck floor'
+            repeat:
+              count: '{{ duck_steps }}'
+              sequence:
+                - delay:
+                    seconds: 15
+                # Hoist the step level before the member loop: an inner
+                # repeat shadows repeat.index (the wakeup fade lesson).
+                - variables:
+                    step_volume: >
+                      {{ [duck_start + (duck_floor - duck_start) * (repeat.index / duck_steps), duck_floor] | max }}
+                - repeat:
+                    for_each: '{{ state_attr("media_player.homepods", "group_members") }}'
+                    sequence:
+                      - action: media_player.volume_set
+                        target:
+                          entity_id: '{{ repeat.item }}'
+                        data:
+                          volume_level: '{{ step_volume }}'
+        else:
+          - alias: 'Standardize every HomePod member volume to 25%'
+            repeat:
+              for_each: '{{ state_attr("media_player.homepods", "group_members") }}'
+              sequence:
+                - action: media_player.volume_set
+                  target:
+                    entity_id: '{{ repeat.item }}'
+                  data:
+                    volume_level: '{{ target_volume }}'
+      - alias: "Play Ian's Station on all HomePods"
+        action: music_assistant.play_media
+        target:
+          entity_id: media_player.homepods
+        data:
+          media_type: playlist
+          media_id: '{{ station_uri }}'
+          enqueue: replace
+      # AirPlay has a known no-start mode; music-side entities report
+      # properly, so waiting on state is valid (same as the wakeup script).
+      - alias: 'Wait for the HomePods to start playing'
+        wait_for_trigger:
+          - trigger: state
+            entity_id: media_player.homepods
+            to: playing
+        timeout:
+          seconds: 45
+      - alias: 'Retry once if playback never started'
+        if:
+          - condition: not
+            conditions:
               - condition: state
-                entity_id: input_select.alarm_type
-                state: 'News'
-            sequence:
-              # TODO
-              - delay: 00:00:00
-          #############
-          ### Music ###
-          #############
-          - conditions:
-              - condition: state
-                entity_id: input_select.alarm_type
-                state: 'Music'
-            sequence:
-              - action: remote.send_command
-                data:
-                  entity_id: remote.master_bedroom_apple_tv
-                  command:
-                    # Move down one (Music)
-                    - down
-                    # Open Music
-                    - select
-              - delay:
-                  seconds: 15
-              - action: remote.send_command
-                data:
-                  entity_id: remote.master_bedroom_apple_tv
-                  command:
-                    # Move to first item
-                    - down
-                    # Select
-                    - select
-              - delay:
-                  seconds: 5
-              - action: remote.send_command
-                data:
-                  entity_id: remote.master_bedroom_apple_tv
-                  command:
-                    # Play
-                    - select
+                entity_id: media_player.homepods
+                state: playing
+        then:
+          - action: music_assistant.play_media
+            target:
+              entity_id: media_player.homepods
+            data:
+              media_type: playlist
+              media_id: '{{ station_uri }}'
+              enqueue: replace
+      - alias: 'Ramp back up to 25% after the ducked switch'
+        if:
+          - condition: template
+            value_template: '{{ was_playing }}'
+        then:
+          - alias: 'One coarse volume step every 15 s'
+            repeat:
+              count: '{{ duck_steps }}'
+              sequence:
+                - delay:
+                    seconds: 15
+                - variables:
+                    step_volume: >
+                      {{ duck_floor + (target_volume - duck_floor) * (repeat.index / duck_steps) }}
+                - repeat:
+                    for_each: '{{ state_attr("media_player.homepods", "group_members") }}'
+                    sequence:
+                      - action: media_player.volume_set
+                        target:
+                          entity_id: '{{ repeat.item }}'
+                        data:
+                          volume_level: '{{ step_volume }}'
 ################################################################################
