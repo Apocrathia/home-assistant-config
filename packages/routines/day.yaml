@@ -40,7 +40,15 @@ input_number:
   good_morning_bed_empty_delay:
     name: Good Morning Bed Empty Delay
     icon: mdi:bed-empty
-    initial: 5
+    # Operator-tuned 7 minutes (2026-09-23): covers the 4-night audit's max
+    # in-window stir of 6:48 with margin. After the 2026-09-23 wake rebuild,
+    # this helper's ONLY consumer is the out-of-bed music trigger
+    # (function_wakeup_music_out_of_bed in packages/functions/alarm_clock.yaml,
+    # which renders the live value); the rebuilt weekend disarm uses a
+    # hardcoded 60 s sustain, not this helper. initial seeds only on helper
+    # reload/recreate - restore state pins the live value across restarts
+    # (it read 5.0 live on 2026-09-23 until set to 7).
+    initial: 7
     min: 1
     max: 30
     step: 1
@@ -183,21 +191,22 @@ automation:
   - id: routine_day_good_morning_wake
     alias: 'Routine - Day - Good Morning Wake Detection'
     description: >-
-      Activate Good Morning on weekends after bed stays empty and bedroom
-      motion occurs after the pad clears
+      Activate Good Morning on weekends after the bed stays empty for 60
+      seconds and bedroom motion is recent; the scene-activated alarm
+      automation (routine_day_good_morning_alarm) then disarms the panel.
     triggers:
+      # Sustain is HARDCODED 60 s on purpose - deliberately NOT the shared
+      # input_number.good_morning_bed_empty_delay helper (that helper now
+      # carries the music path's multi-minute sustain). This disarm must
+      # beat the operator's observed 87 s manual disarm pace, so it needs
+      # its own 60 s value. ACCEPTED RISK (operator 2026-09-23): a 60 s+
+      # stir could disarm early; mirrors the existing weekday 05:00
+      # auto-disarm precedent (input_datetime.alarm_auto_disarm).
       - trigger: state
         entity_id: binary_sensor.bed_presence_2bd444_bed_occupied_either
         from: 'on'
         to: 'off'
-        for:
-          minutes: "{{ states('input_number.good_morning_bed_empty_delay') | int(5) }}"
-      - trigger: state
-        entity_id: binary_sensor.homekit_master_bedroom_motion
-        from: 'off'
-        to: 'on'
-      - trigger: time
-        at: input_datetime.good_morning_earliest
+        for: '00:01:00'
     conditions:
       - alias: 'Today is not a workday'
         condition: state
@@ -208,28 +217,20 @@ automation:
         value_template: >
           {{ now().strftime('%H:%M:%S') >=
              states('input_datetime.good_morning_earliest') }}
-      - alias: 'Bed has remained empty'
+      - alias: 'Bedroom motion within the last 2 minutes'
+        # RECENCY SEMANTICS ONLY - never an ordering comparison against the
+        # bed sensor: bedroom motion fires 1-7 s BEFORE bed-off on real
+        # rises, so ordering (motion.last_changed >= bed.last_changed)
+        # fails every genuine rise while recency passes them. A missing
+        # or unavailable motion sensor fails closed (no disarm without
+        # corroboration).
         condition: template
         value_template: >
-          {% set bed =
-             states.binary_sensor.bed_presence_2bd444_bed_occupied_either %}
-          {{ bed.state == 'off' and
-             (as_timestamp(now()) - as_timestamp(bed.last_changed)) >=
-             (states('input_number.good_morning_bed_empty_delay') |
-              float(5) * 60) }}
-      - alias: 'Bedroom motion after bed emptied, within window'
-        condition: template
-        value_template: >
-          {% set bed =
-             states.binary_sensor.bed_presence_2bd444_bed_occupied_either %}
-          {% set motion =
-             states.binary_sensor.homekit_master_bedroom_motion %}
-          {% set window =
-             states('input_number.good_morning_motion_window') | float(10) * 60 %}
-          {{ motion.last_changed is not none and
-             bed.last_changed is not none and
-             as_timestamp(motion.last_changed) >= as_timestamp(bed.last_changed) and
-             (as_timestamp(now()) - as_timestamp(motion.last_changed)) <= window }}
+          {% set motion = states.binary_sensor.homekit_master_bedroom_motion %}
+          {{ motion is not none and
+             motion.state not in ['unavailable', 'unknown'] and
+             motion.last_changed is not none and
+             (now() - motion.last_changed) <= timedelta(minutes=2) }}
       - condition: state
         entity_id: alarm_control_panel.home
         state: 'armed_home'
