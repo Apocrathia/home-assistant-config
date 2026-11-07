@@ -1,0 +1,382 @@
+---
+################################################################################
+# System - Watchdog
+#
+# Quiet-by-default availability monitoring:
+#   - critical safety devices unavailable > 24 h -> one notification per entity
+#   - one daily digest message for everything else (counts by family + delta)
+#   - automation-unavailability breach above the ghost baseline -> one notify
+# Sibling of system_notification_* in this package. No standing sensors that
+# iterate all states; counting happens inside the automations.
+#
+# First deploy fires a few one-time alerts for entities already dark now
+# (accepted by the operator 2026-09-21); it then goes quiet.
+################################################################################
+
+input_number:
+  system_watchdog_digest_dead_last:
+    name: Watchdog Digest Dead Entities Yesterday
+    icon: mdi:counter
+    min: 0
+    max: 9999
+    step: 1
+    initial: 0
+
+  system_watchdog_automation_dead_baseline:
+    name: Watchdog Automations Dead Baseline
+    icon: mdi:counter
+    min: 0
+    max: 999
+    step: 1
+    # Verified registry-ghost count 2026-09-21. The operator cleans the ghost
+    # registry later; reset this value to the new dead-automation count then.
+    initial: 55
+
+input_boolean:
+  system_watchdog_automation_breach:
+    name: Watchdog Automation Breach Latched
+    icon: mdi:alarm-light
+
+template:
+  - binary_sensor:
+      # The only standing template: 2 dependencies, cheap. The UPS dies as a
+      # stuck-zero, not unavailable (NUT source entity absent) - see design.
+      - name: System Watchdog UPS Metrics Missing
+        unique_id: system_watchdog_ups_metrics_missing
+        device_class: problem
+        state: >
+          {{ states('sensor.living_room_ups_nominal_real_power') is none
+              or states('sensor.living_room_ups_nominal_real_power')
+                in ['unknown', 'unavailable']
+              or float(states('sensor.living_room_ups_power'), -1) == 0 }}
+
+automation:
+  ################################################################################
+  # Critical safety devices dark > 24 h -> one notify per entity.
+  - id: system_watchdog_safety_device_offline
+    alias: 'System - Watchdog - Safety Device Offline'
+    description: >
+      Critical safety/security devices unavailable or unknown for 24 hours.
+      One notification per entity per outage; the hourly sweep catches
+      entities dark at boot (state triggers never arm without a transition),
+      using a 24-25 h outage-age window as the dedupe.
+    triggers:
+      - trigger: state
+        # Single source of the critical-entity list; aliases below reuse it.
+        entity_id: &watchdog_critical_entities
+          - lock.front_door_lock
+          - lock.back_door_lock
+          - binary_sensor.basement_leak_sensor_water_leak
+          - sensor.basement_leak_sensor_battery
+          - binary_sensor.front_door_smoke_alarm_detected
+          - binary_sensor.front_door_co_alarm_detected
+          - binary_sensor.front_yard_smoke_alarm_detected
+          - binary_sensor.front_yard_co_alarm_detected
+          - binary_sensor.back_yard_smoke_alarm_detected
+          - binary_sensor.back_yard_co_alarm_detected
+          - binary_sensor.front_door_lock_home_security_tampering_product_cover_removed
+          - binary_sensor.back_door_lock_home_security_tampering_product_cover_removed
+          - binary_sensor.main_garage_door_home_security_tampering_product_cover_removed
+          - binary_sensor.second_garage_door_home_security_tampering_product_cover_removed
+          - binary_sensor.freezer_door_contact
+          - sensor.freezer_door_battery
+          - binary_sensor.fridge_door_contact
+          - sensor.fridge_door_battery
+          - alarm_control_panel.home
+        to: ['unavailable', 'unknown']
+        for:
+          hours: 24
+      - trigger: state
+        entity_id: binary_sensor.system_watchdog_ups_metrics_missing
+        to: 'on'
+        for:
+          hours: 24
+      - alias: 'Hourly sweep for dark-at-boot entities'
+        trigger: time_pattern
+        minutes: 0
+    variables:
+      # Trigger-anchor list plus the UPS sensor; the digest aliases this anchor.
+      critical_entities: &watchdog_critical_entities_all
+        - lock.front_door_lock
+        - lock.back_door_lock
+        - binary_sensor.basement_leak_sensor_water_leak
+        - sensor.basement_leak_sensor_battery
+        - binary_sensor.front_door_smoke_alarm_detected
+        - binary_sensor.front_door_co_alarm_detected
+        - binary_sensor.front_yard_smoke_alarm_detected
+        - binary_sensor.front_yard_co_alarm_detected
+        - binary_sensor.back_yard_smoke_alarm_detected
+        - binary_sensor.back_yard_co_alarm_detected
+        - binary_sensor.front_door_lock_home_security_tampering_product_cover_removed
+        - binary_sensor.back_door_lock_home_security_tampering_product_cover_removed
+        - binary_sensor.main_garage_door_home_security_tampering_product_cover_removed
+        - binary_sensor.second_garage_door_home_security_tampering_product_cover_removed
+        - binary_sensor.freezer_door_contact
+        - sensor.freezer_door_battery
+        - binary_sensor.fridge_door_contact
+        - sensor.fridge_door_battery
+        - alarm_control_panel.home
+        - binary_sensor.system_watchdog_ups_metrics_missing
+    conditions:
+      # Sweep path only notifies inside the 24-25 h window (dedupe); the
+      # state-trigger path fires exactly at 24 h and passes by itself.
+      - condition: template
+        value_template: >
+          {% if trigger.platform == 'time_pattern' %}
+            {% set ns = namespace(hit=false) %}
+            {% for e in critical_entities %}
+              {% set s = states[e] %}
+              {%- if s is not none and s.state in ['unavailable', 'unknown'] -%}
+                {% set age = (as_timestamp(now()) - as_timestamp(s.last_changed)) / 3600 %}
+                {% if age >= 24 and age < 25 %}{% set ns.hit = true %}{% endif %}
+              {%- endif -%}
+            {% endfor %}
+            {{ ns.hit }}
+          {% else %}
+            true
+          {% endif %}
+    actions:
+      - alias: 'Collect critical entities dark >= 24 h'
+        variables:
+          dark: >
+            {% set ns = namespace(list=[]) %}
+            {% for e in critical_entities %}
+              {% set s = states[e] %}
+              {%- if s is not none and s.state in ['unavailable', 'unknown'] -%}
+                {% set age = (as_timestamp(now()) - as_timestamp(s.last_changed)) / 3600 %}
+                {% if age >= 24 %}{% set ns.list = ns.list + [e] %}{% endif %}
+              {%- elif e == 'binary_sensor.system_watchdog_ups_metrics_missing'
+                  and s is not none and s.state == 'on' -%}
+                {% set ns.list = ns.list + [e] %}
+              {%- endif -%}
+            {% endfor %}
+            {{ ns.list }}
+      - alias: 'Targeted entity when a state trigger fired (else summarize)'
+        variables:
+          target_entity: "{{ trigger.entity_id if trigger.platform == 'state' else '' }}"
+      - if:
+          - condition: template
+            value_template: '{{ dark | length > 0 }}'
+        then:
+          - action: notify.mobile_app_ians_iphone
+            data:
+              title: Watchdog - safety device offline
+              message: >
+                {% if target_entity != '' and target_entity in dark %}
+                  {{ state_attr(target_entity, 'friendly_name') | default(target_entity) }}
+                  has been offline for 24 hours.
+                  {% if dark | reject('eq', target_entity) | list | length > 0 %}
+                    Also dark: {{ dark | reject('eq', target_entity) | join(', ') }}
+                  {% endif %}
+                {% else %}
+                  {{ dark | length }} safety devices dark > 24 h:
+                  {{ dark | join(', ') }}
+                {% endif %}
+              data:
+                group: watchdog
+                tag: "watchdog-critical-{{ target_entity if target_entity != '' and target_entity in dark else dark | join(',') }}"
+                push:
+                  interruption-level: time-sensitive
+          - action: notify.mobile_app_ians_ipad_pro
+            data:
+              title: Watchdog - safety device offline
+              message: >
+                {% if target_entity != '' and target_entity in dark %}
+                  {{ state_attr(target_entity, 'friendly_name') | default(target_entity) }}
+                  offline 24 h.
+                {% else %}
+                  {{ dark | join(', ') }}
+                {% endif %}
+              data:
+                group: watchdog
+                tag: "watchdog-critical-{{ target_entity if target_entity != '' and target_entity in dark else dark | join(',') }}"
+                push:
+                  interruption-level: time-sensitive
+    mode: single
+
+  ################################################################################
+  # Critical device recovered -> replace its alert (same tag).
+  - id: system_watchdog_safety_device_recovered
+    alias: 'System - Watchdog - Safety Device Recovered'
+    description: >
+      Clear the offline alert when a watched device reports again. Only
+      announces recoveries for outages >= 24 h dark (the offline alert's own
+      gate); short smoke/CO and Z-Wave blips do not re-notify.
+    triggers:
+      - trigger: state
+        entity_id: *watchdog_critical_entities
+        from: ['unavailable', 'unknown']
+    conditions:
+      # Quiet-by-default: the offline path alerts at 24 h of darkness, so only
+      # announce recovery for outages >= 24 h - one push per real outage, never
+      # for smoke/CO camera blips or Z-Wave lockstep flaps.
+      - condition: template
+        value_template: >
+          {{ (now() - trigger.from_state.last_changed).total_seconds() >= 24 * 3600 }}
+    actions:
+      - action: notify.mobile_app_ians_iphone
+        data:
+          title: Watchdog - safety device back
+          message: >
+            {{ state_attr(trigger.entity_id, 'friendly_name') | default(trigger.entity_id) }}
+            is reporting again.
+          data:
+            group: watchdog
+            tag: 'watchdog-critical-{{ trigger.entity_id }}'
+            push:
+              interruption-level: active
+      - action: notify.mobile_app_ians_ipad_pro
+        data:
+          title: Watchdog - safety device back
+          message: >
+            {{ state_attr(trigger.entity_id, 'friendly_name') | default(trigger.entity_id) }}
+            is reporting again.
+          data:
+            group: watchdog
+            tag: 'watchdog-critical-{{ trigger.entity_id }}'
+            push:
+              interruption-level: active
+    mode: single
+
+  ################################################################################
+  # One daily digest. Counts are computed here, not in a standing sensor.
+  - id: system_watchdog_daily_digest
+    alias: 'System - Watchdog - Daily Digest'
+    description: >
+      One message per day: total dead entities + delta, family counts,
+      automations vs baseline, critical devices currently dark.
+    triggers:
+      - trigger: time
+        at: '09:00:00'
+    variables:
+      # One canonical grouping method (entity-id prefix families, verified
+      # against the live registry; platform is not template-visible).
+      families:
+        # rtl433_rf removed 2026-10-22: the dead rtl_433 MQTT fleet was
+        # purged from HA and the broker (operator-directed).
+        meshtastic: ['mesh']
+        unifi_stale_trackers: ['unifi_default_']
+      critical_entities: *watchdog_critical_entities_all
+    actions:
+      - alias: 'Compute the census'
+        variables:
+          dead_total: >
+            {{ states | selectattr('state', 'in', ['unavailable', 'unknown']) | list | count }}
+          dead_pct: >
+            {{ '%0.1f' | format(100 * (states | selectattr('state', 'in',
+              ['unavailable', 'unknown']) | list | count) / (states | list | count)) }}
+          yesterday: "{{ states('input_number.system_watchdog_digest_dead_last') | int(0) }}"
+          family_lines: >
+            {% set dead = states | selectattr('state', 'in', ['unavailable', 'unknown']) | list %}
+            {% set ns = namespace(lines=[]) %}
+            {% for fam, prefixes in families.items() %}
+              {% set rx = '^([a-z_]+\.)(' + (prefixes | join('|')) + ')' %}
+              {% set c = dead | selectattr('entity_id', 'search', rx) | list | count %}
+              {% set ns.lines = ns.lines + [fam ~ ': ' ~ c] %}
+            {% endfor %}
+            {{ ns.lines | join(' | ') }}
+          autos_dead: >
+            {{ states.automation | selectattr('state', 'in', ['unavailable', 'unknown']) | list | count }}
+          autos_baseline: "{{ states('input_number.system_watchdog_automation_dead_baseline') | int(0) }}"
+          critical_dark: >
+            {% set ns = namespace(list=[]) %}
+            {% for e in critical_entities %}
+              {% set s = states[e] %}
+              {%- if s is not none and s.state in ['unavailable', 'unknown'] -%}
+                {% set ns.list = ns.list + [e.split('.')[-1]] %}
+              {%- elif e == 'binary_sensor.system_watchdog_ups_metrics_missing'
+                  and s is not none and s.state == 'on' -%}
+                {% set ns.list = ns.list + ['ups_metrics_missing'] %}
+              {%- endif -%}
+            {% endfor %}
+            {{ ns.list | join(', ') if ns.list else 'none' }}
+      - alias: 'Send the digest (one message; replaces yesterday by tag)'
+        action: notify.mobile_app_ians_iphone
+        data:
+          title: Entity health digest
+          message: >
+            {{ dead_total }}/{{ states | list | count }} dead ({{ dead_pct }}%)
+            {% if yesterday | int > 0 %}
+              , delta {{ '+' if dead_total | int - yesterday > 0 else '' }}{{ dead_total | int - yesterday }}
+            {% else %}
+              (first digest; baseline set)
+            {% endif %}
+            {{ family_lines }}
+            | automations dead: {{ autos_dead }} (baseline {{ autos_baseline }},
+            +{{ [0, autos_dead | int - autos_baseline | int] | max }} new)
+            | critical dark: {{ critical_dark }}
+          data:
+            group: watchdog
+            tag: daily-digest
+      - alias: 'Store today as the delta base for tomorrow'
+        action: input_number.set_value
+        target:
+          entity_id: input_number.system_watchdog_digest_dead_last
+        data:
+          value: '{{ dead_total | int }}'
+    mode: single
+
+  ################################################################################
+  # Automation-unavailability breach above the ghost baseline -> ONE notify.
+  - id: system_watchdog_automation_breach
+    alias: 'System - Watchdog - Automation Breach'
+    description: >
+      More than 5 automations unavailable above the registry-ghost baseline
+      (the 2026-09-15 signature: a package failed to load at startup and 32
+      went dark at once). Latched: one notification per breach episode.
+    triggers:
+      - trigger: time_pattern
+        minutes: 0
+    conditions:
+      - condition: template
+        value_template: >
+          {{ (states.automation | selectattr('state', 'in',
+              ['unavailable', 'unknown']) | list | count)
+              - (states('input_number.system_watchdog_automation_dead_baseline') | int(0))
+              > 5 }}
+      - condition: state
+        entity_id: input_boolean.system_watchdog_automation_breach
+        state: 'off'
+    actions:
+      - action: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.system_watchdog_automation_breach
+      - action: notify.mobile_app_ians_iphone
+        data:
+          title: Watchdog - automations down
+          message: >
+            {{ (states.automation | selectattr('state', 'in',
+            ['unavailable', 'unknown']) | list | count)
+            - (states('input_number.system_watchdog_automation_dead_baseline') | int(0)) }}
+            automations newly unavailable (baseline excluded) - check startup logs.
+          data:
+            group: watchdog
+            tag: automation-breach
+            push:
+              interruption-level: time-sensitive
+    mode: single
+
+  ################################################################################
+  # Clear the breach latch once the count returns to baseline.
+  - id: system_watchdog_automation_breach_clear
+    alias: 'System - Watchdog - Automation Breach Clear'
+    description: Clear the breach latch once the dead count returns to baseline.
+    triggers:
+      - trigger: time_pattern
+        minutes: 0
+    conditions:
+      - condition: state
+        entity_id: input_boolean.system_watchdog_automation_breach
+        state: 'on'
+      - condition: template
+        value_template: >
+          {{ (states.automation | selectattr('state', 'in',
+              ['unavailable', 'unknown']) | list | count)
+              - (states('input_number.system_watchdog_automation_dead_baseline') | int(0))
+              <= 5 }}
+    actions:
+      - action: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.system_watchdog_automation_breach
+    mode: single
+################################################################################
