@@ -16,30 +16,38 @@ non-trivial edits.
 9. **`.agents/context/tools.md`** — HA MCP, Grafana HA history, config check, shopping-list jq
 10. **`.agents/context/vertical-slices.md`** — Slice discipline (plans / briefs)
 11. **`.agents/context/development-loop.md`** — Lap shape (find → handoff)
+12. **`.agents/context/context-management.md`** — Meter-first compaction; post-compact reload
+13. **`.agents/context/support-matrix.md`** — Harness capabilities + verification ledger
+14. **`.agents/context/ontologies.md`** — Harness entry classes + R1–R6
+15. **`.agents/context/enforcement.md`** — Structural enforcement points
 
 ## When to Load What
 
-| If you're…                            | Then read                                                                   |
-| ------------------------------------- | --------------------------------------------------------------------------- |
-| New / unsure                          | `README.md` only                                                            |
-| Starting non-trivial work             | `traps.md` + `constraints.md`                                               |
-| Creating entities or automations      | `nomenclature.md` + `output.md` + `constraints.md`                          |
-| Scope is fuzzy                        | `questions.md` (+ `skills/alignment/` if still fuzzy)                       |
-| Writing docs or agent tone            | `voice.md` + `output.md`                                                    |
-| Finding work to do                    | `work-sources.md` + `development-loop.md` + `skills/find-work/SKILL.md`     |
-| Filing or planning a gap              | `docs/issues/README.md` / `docs/plans/README.md` + `vertical-slices.md`     |
-| Implementing a scoped change          | `constraints.md` + `skills/implement-change/SKILL.md` → hand off, no commit |
-| Validating YAML configs               | `tools.md` + `skills/config-validate/SKILL.md`                              |
-| Restructuring packages                | `skills/package-organize/SKILL.md`                                          |
-| Fixing broken automations             | `skills/automation-debug/SKILL.md`                                          |
-| Past HA entity state / history        | `tools.md` + `skills/grafana-ha-history/SKILL.md`                           |
-| Syncing `.agents/` from upstream      | `skills/integrate-upstream/SKILL.md` + `rules/operator-owned-git.md`        |
-| Context claims drifted from repo      | `skills/reconcile-context/SKILL.md`                                         |
-| Tempted to commit / push / open PR    | `rules/operator-owned-git.md` — don't; operator-owned                       |
-| Tempted to follow `ship-work` commits | Same — override; stop at validation + handoff                               |
-| Need HA MCP / Grafana history / jq    | `tools.md`                                                                  |
-| Deep HA config knowledge needed       | `agents/ha-config-expert/agent.md`                                          |
-| Complex automation design needed      | `agents/automation-architect/agent.md`                                      |
+| If you're…                                         | Then read                                                                   |
+| -------------------------------------------------- | --------------------------------------------------------------------------- |
+| New / unsure                                       | `README.md` only                                                            |
+| Starting non-trivial work                          | `traps.md` + `constraints.md`                                               |
+| Creating entities or automations                   | `nomenclature.md` + `output.md` + `constraints.md`                          |
+| Scope is fuzzy                                     | `questions.md` (+ `skills/alignment/` if still fuzzy)                       |
+| Writing docs or agent tone                         | `voice.md` + `output.md`                                                    |
+| Finding work to do                                 | `work-sources.md` + `development-loop.md` + `skills/find-work/SKILL.md`     |
+| Filing or planning a gap                           | `docs/issues/README.md` / `docs/plans/README.md` + `vertical-slices.md`     |
+| Implementing a scoped change                       | `constraints.md` + `skills/implement-change/SKILL.md` → hand off, no commit |
+| Validating YAML configs                            | `tools.md` + `skills/config-validate/SKILL.md`                              |
+| Restructuring packages                             | `skills/package-organize/SKILL.md`                                          |
+| Fixing broken automations                          | `skills/automation-debug/SKILL.md`                                          |
+| Past HA entity state / history                     | `tools.md` + `skills/grafana-ha-history/SKILL.md`                           |
+| Syncing `.agents/` from upstream                   | `skills/integrate-upstream/SKILL.md` + `rules/operator-owned-git.md`        |
+| Context claims drifted from repo                   | `skills/reconcile-context/SKILL.md`                                         |
+| Tempted to commit / push / open PR                 | `rules/operator-owned-git.md` — don't; operator-owned                       |
+| Tempted to follow `ship-work` commits              | Same — override; stop at validation + handoff                               |
+| Window fat, after compact, before heavy fan-out    | `context-management.md` (+ `rules/context-management.md`)                   |
+| Choosing a harness or trusting a capability in one | `support-matrix.md`                                                         |
+| Writing a harness memory, skill, or subagent spec  | `ontologies.md` + `rules/ontology-framework.md`                             |
+| Adding or improving a structural check             | `enforcement.md`                                                            |
+| Need HA MCP / Grafana history / jq                 | `tools.md`                                                                  |
+| Deep HA config knowledge needed                    | `agents/ha-config-expert/agent.md`                                          |
+| Complex automation design needed                   | `agents/automation-architect/agent.md`                                      |
 
 ## Handoff (implement-change)
 

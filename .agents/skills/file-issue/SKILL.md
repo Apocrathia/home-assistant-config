@@ -27,15 +27,17 @@ Do not open GitHub issues unless the operator explicitly asks.
 
 ## When to file
 
-| Situation                           | File?                                                                                    |
-| ----------------------------------- | ---------------------------------------------------------------------------------------- |
-| Fixable in the current lap          | No — fix it                                                                              |
-| Out of scope for current lap        | Yes — `docs/issues/<slug>.md`                                                            |
-| Architecture friction               | Yes (`kind: architecture`); see [`architecture-review`](../architecture-review/SKILL.md) |
-| Feature or spec-level desired state | **Alignment first** if acceptance unclear; then yes                                      |
-| Duplicate of existing open issue    | Update existing                                                                          |
-| Already on Local Todo (human)       | Prefer pointing at that item; file here only when agent-owned acceptance/plan is needed  |
-| Needs human / external visibility   | File locally; ask operator about GitHub or Local Todo UI                                 |
+| Situation                           | File?                                                                                                    |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| Fixable in the current lap          | No — fix it                                                                                              |
+| Out of scope for current lap        | Yes — `docs/issues/<slug>.md`                                                                            |
+| Architecture friction               | Yes (`kind: architecture`); see [`architecture-review`](../architecture-review/SKILL.md)                 |
+| Feature or spec-level desired state | **Alignment first** if acceptance unclear; then yes                                                      |
+| Duplicate of existing open issue    | Update existing                                                                                          |
+| Already on Local Todo (human)       | Prefer pointing at that item; file here only when agent-owned acceptance/plan is needed                  |
+| Needs human / external visibility   | File locally; ask operator about GitHub or Local Todo UI                                                 |
+| Intentional shortcut                | `ponytail:` comment in code, not here                                                                    |
+| Clustered `ponytail:` cleanup       | Yes — one debt-first issue per theme when [`find-work`](../find-work/SKILL.md) ranks it, not per comment |
 
 If the gap is a feature, spec, `slice: hitl`, or **multi-path bug** and
 acceptance is not yet writable, run [`alignment`](../alignment/SKILL.md)

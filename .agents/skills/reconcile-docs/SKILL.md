@@ -64,6 +64,11 @@ When this change meets acceptance on a linked issue or finishes a plan:
    change (operator commits later)
 3. Do not keep a `closed/` tree — git history is the archive
 
+If a backlink fix would touch a protected path
+([`protected-paths.md`](../../rules/protected-paths.md)), propose the patch and
+apply it after confirmation, then delete; if the operator declines, keep the
+file and its backlink — never leave a broken link.
+
 See [`docs/issues/README.md`](../../../docs/issues/README.md) and
 [`docs/plans/README.md`](../../../docs/plans/README.md).
 

@@ -26,54 +26,71 @@ Load context modules in this order. Each file is a thin shim that points to deep
 10. **`.agents/context/tools.md`** — HA MCP, Grafana HA history, config check, shopping-list jq
 11. **`.agents/context/vertical-slices.md`** — Slice discipline
 12. **`.agents/context/development-loop.md`** — Lap shape
+13. **`.agents/context/context-management.md`** — Meter-first compaction + post-compact reload
+14. **`.agents/context/support-matrix.md`** — Harness capabilities + verification ledger
+15. **`.agents/context/ontologies.md`** — Harness entry classes + R1–R6
+16. **`.agents/context/enforcement.md`** — Structural enforcement points
 
 ## Routing
 
 Start at [`.agents/context/README.md`](./.agents/context/README.md). Skip detail: [`.agents/context/loading.md`](./.agents/context/loading.md).
 
-| If you're…                              | Then read                                                                       |
-| --------------------------------------- | ------------------------------------------------------------------------------- |
-| New / unsure                            | `README.md` only                                                                |
-| Starting non-trivial work               | `traps.md` + `constraints.md`                                                   |
-| Creating entities or automations        | `nomenclature.md` + `output.md` + `constraints.md`                              |
-| Scope is fuzzy                          | `questions.md`                                                                  |
-| Writing docs or agent tone              | `voice.md` + `output.md`                                                        |
-| Finding work to do                      | `work-sources.md` + `development-loop.md` + `skills/find-work/SKILL.md`         |
-| Filing / planning a gap                 | `docs/issues/README.md` / `docs/plans/README.md` + `vertical-slices.md`         |
-| Implementing a scoped change            | `constraints.md` + `skills/implement-change/SKILL.md` (hand off, no commit)     |
-| Validating YAML configs                 | `tools.md` + `skills/config-validate/SKILL.md`                                  |
-| Restructuring packages                  | `skills/package-organize/SKILL.md`                                              |
-| Fixing broken automations               | `skills/automation-debug/SKILL.md`                                              |
-| Past HA entity state / history          | `tools.md` + `skills/grafana-ha-history/SKILL.md`                               |
-| Syncing `.agents/` from upstream        | `skills/integrate-upstream/SKILL.md`                                            |
-| Context claims drifted from repo        | `skills/reconcile-context/SKILL.md`                                             |
-| Tempted to commit / push / open PR      | `rules/operator-owned-git.md` — don't                                           |
-| Tempted to open a worktree              | `rules/worktrees.md` — don't; main checkout only                                |
-| Auditing security posture / dep vectors | `agents/security-analyst/agent.md` + `rules/deepwiki.md`                        |
-| Deep HA config knowledge needed         | `agents/ha-config-expert/agent.md`                                              |
-| Complex automation design needed        | `agents/automation-architect/agent.md`                                          |
-| Reliable trigger / history pattern hunt | `skills/pattern-mine/SKILL.md` + `agents/pattern-analyst` ↔ `pattern-reviewer` |
+| If you're…                                        | Then read                                                                       |
+| ------------------------------------------------- | ------------------------------------------------------------------------------- |
+| New / unsure                                      | `README.md` only                                                                |
+| Starting non-trivial work                         | `traps.md` + `constraints.md`                                                   |
+| Creating entities or automations                  | `nomenclature.md` + `output.md` + `constraints.md`                              |
+| Scope is fuzzy                                    | `questions.md`                                                                  |
+| Writing docs or agent tone                        | `voice.md` + `output.md`                                                        |
+| Finding work to do                                | `work-sources.md` + `development-loop.md` + `skills/find-work/SKILL.md`         |
+| Filing / planning a gap                           | `docs/issues/README.md` / `docs/plans/README.md` + `vertical-slices.md`         |
+| Implementing a scoped change                      | `constraints.md` + `skills/implement-change/SKILL.md` (hand off, no commit)     |
+| Validating YAML configs                           | `tools.md` + `skills/config-validate/SKILL.md`                                  |
+| Restructuring packages                            | `skills/package-organize/SKILL.md`                                              |
+| Fixing broken automations                         | `skills/automation-debug/SKILL.md`                                              |
+| Past HA entity state / history                    | `tools.md` + `skills/grafana-ha-history/SKILL.md`                               |
+| Syncing `.agents/` from upstream                  | `skills/integrate-upstream/SKILL.md`                                            |
+| Context claims drifted from repo                  | `skills/reconcile-context/SKILL.md`                                             |
+| Tempted to commit / push / open PR                | `rules/operator-owned-git.md` — don't                                           |
+| Tempted to open a worktree                        | `rules/worktrees.md` — don't; main checkout only                                |
+| Auditing security posture / dep vectors           | `agents/security-analyst/agent.md` + `rules/deepwiki.md`                        |
+| Deep HA config knowledge needed                   | `agents/ha-config-expert/agent.md`                                              |
+| Complex automation design needed                  | `agents/automation-architect/agent.md`                                          |
+| Reliable trigger / history pattern hunt           | `skills/pattern-mine/SKILL.md` + `agents/pattern-analyst` ↔ `pattern-reviewer` |
+| Window fat or after compact                       | `context/context-management.md` + `rules/context-management.md`                 |
+| Choosing a harness or trusting a capability       | `context/support-matrix.md`                                                     |
+| Writing a harness memory, skill, or subagent spec | `context/ontologies.md` + `rules/ontology-framework.md`                         |
+| Adding or improving a structural check            | `context/enforcement.md`                                                        |
+| Improving the shared `.agents` core               | `skills/contribute-upstream/SKILL.md` — port back to the context-engine core    |
 
 ## Skills
 
 When performing specific tasks, consult relevant skill files:
 
-| Skill                | Path                                         | Use When                                                             |
-| -------------------- | -------------------------------------------- | -------------------------------------------------------------------- |
-| Config Validation    | `.agents/skills/config-validate/SKILL.md`    | Writing or modifying YAML configs                                    |
-| Package Organization | `.agents/skills/package-organize/SKILL.md`   | Restructuring or creating packages                                   |
-| Automation Debugging | `.agents/skills/automation-debug/SKILL.md`   | Fixing broken automations                                            |
-| Grafana HA History   | `.agents/skills/grafana-ha-history/SKILL.md` | Past entity state via Grafana InfluxDB                               |
-| Pattern Mine         | `.agents/skills/pattern-mine/SKILL.md`       | History mining for automation trigger candidates                     |
-| Find Work            | `.agents/skills/find-work/SKILL.md`          | Discovering open work — sources in `.agents/context/work-sources.md` |
-| Implement Change     | `.agents/skills/implement-change/SKILL.md`   | One change lap → validate → operator handoff                         |
-| Upstream Integration | `.agents/skills/integrate-upstream/SKILL.md` | Syncing `.agents/` from the prime-context core                       |
-| Reconcile Context    | `.agents/skills/reconcile-context/SKILL.md`  | Fix drift between context claims and the repo                        |
-| Create Agent         | `.agents/skills/create-agent/SKILL.md`       | New persona under `.agents/agents/`                                  |
-| Create Skill         | `.agents/skills/create-skill/SKILL.md`       | New procedural skill under `.agents/skills/`                         |
+| Skill                | Path                                          | Use When                                                               |
+| -------------------- | --------------------------------------------- | ---------------------------------------------------------------------- |
+| Config Validation    | `.agents/skills/config-validate/SKILL.md`     | Writing or modifying YAML configs                                      |
+| Package Organization | `.agents/skills/package-organize/SKILL.md`    | Restructuring or creating packages                                     |
+| Automation Debugging | `.agents/skills/automation-debug/SKILL.md`    | Fixing broken automations                                              |
+| Grafana HA History   | `.agents/skills/grafana-ha-history/SKILL.md`  | Past entity state via Grafana InfluxDB                                 |
+| Pattern Mine         | `.agents/skills/pattern-mine/SKILL.md`        | History mining for automation trigger candidates                       |
+| Find Work            | `.agents/skills/find-work/SKILL.md`           | Discovering open work — sources in `.agents/context/work-sources.md`   |
+| Implement Change     | `.agents/skills/implement-change/SKILL.md`    | One change lap → validate → operator handoff                           |
+| Upstream Integration | `.agents/skills/integrate-upstream/SKILL.md`  | Syncing `.agents/` from the context-engine core                        |
+| Contribute Upstream  | `.agents/skills/contribute-upstream/SKILL.md` | Porting a local `.agents/` improvement back to the context-engine core |
+| Reconcile Context    | `.agents/skills/reconcile-context/SKILL.md`   | Fix drift between context claims and the repo                          |
+| Create Agent         | `.agents/skills/create-agent/SKILL.md`        | New persona under `.agents/agents/`                                    |
+| Create Skill         | `.agents/skills/create-skill/SKILL.md`        | New procedural skill under `.agents/skills/`                           |
+| Context Eval         | `.agents/skills/context-eval/SKILL.md`        | Measuring whether the `.agents/` context earns its tokens              |
+| Skill Stocktake      | `.agents/skills/skill-stocktake/SKILL.md`     | Auditing the skill library — overlap, staleness, retire/merge          |
+| Change Impact        | `.agents/skills/change-impact/SKILL.md`       | Blast-radius analysis before cross-package or irreversible changes     |
+| Module Regression    | `.agents/skills/module-regression/SKILL.md`   | Downstream-consumer regression ledger after module changes             |
+| Eli5                 | `.agents/skills/eli5/SKILL.md`                | Plain-language pass on a diff or doc — by ask, not by default          |
+| Review Correctness   | `.agents/skills/review-correctness/SKILL.md`  | Correctness lens on a diff or Artifact (review-loop fan-out)           |
+| Review Fit           | `.agents/skills/review-fit/SKILL.md`          | Design-fit and scope lens on a diff or Artifact (review-loop fan-out)  |
+| Review Security      | `.agents/skills/review-security/SKILL.md`     | Security lens on a diff or Artifact (review-loop fan-out)              |
 
-Shared skills from the [prime-context](https://github.com/PrimeIntellect-ai/prime-context)
-core (alignment, review-loop, reconcile-docs, ship-work, and others)
+Shared skills from the context-engine core (alignment, review-loop, reconcile-docs, ship-work, and others)
 also live under `.agents/skills/`. The pinned upstream revision is in
 `.agents/upstream-ref`. **Shipping/commit steps are overridden by
 `.agents/rules/operator-owned-git.md`.**

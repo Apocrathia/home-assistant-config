@@ -14,7 +14,7 @@ invoke a repeatable workflow by name (`/name`) instead of re-deriving the steps
 each session.
 
 Before writing, skim existing Homelab skills and (when available) upstream
-`/Users/ianyoung/Projects/prime-context/templates/context/skill-authoring.md.tmpl`
+the core's `templates/context/skill-authoring.md.tmpl` (core checkout — ask the operator)
 — conciseness, progressive disclosure, invocation choice, information
 hierarchy, imperative voice.
 
@@ -37,10 +37,15 @@ hierarchy, imperative voice.
 ## Procedure
 
 1. **Name the skill.** Use a verb phrase or noun describing the workflow:
-   `find-work`, `review-loop`, `ship-work`. Check `.agents/skills/` for
-   collisions.
+   `find-work`, `review-loop`, `ship-work`. Check `.agents/skills/` **and**
+   `.agents/agents/` — both surface as `/<name>`.
 
-2. **Create the directory:**
+2. **Preflight the protected paths.** A skill writes steering surfaces:
+   `.agents/skills/<name>/` and the `AGENTS.md` routing row. Name the exact
+   paths and wait for operator confirmation unless an approved plan already
+   lists them ([`protected-paths.md`](../../rules/protected-paths.md)).
+
+3. **Create the directory:**
 
    ```
    .agents/skills/<name>/SKILL.md
@@ -50,7 +55,7 @@ hierarchy, imperative voice.
    executable checks. Do not add `README.md`, `CHANGELOG.md`, or other
    non-agent files.
 
-3. **Write the frontmatter:**
+4. **Write the frontmatter:**
 
    ```yaml
    ---
@@ -62,16 +67,19 @@ hierarchy, imperative voice.
    ---
    ```
 
+   Keep the folded (`>-`) shape: a `: ` inside an unquoted plain scalar breaks
+   the frontmatter YAML and the skill.
+
    Set `disable-model-invocation: true` when only the operator should invoke
    the skill by name. Omit it when the agent should discover the skill
    autonomously from the description, or when another skill needs to call it.
    Each model-invoked description sits in the context window every turn, so
    prefer user-invocation when only the operator needs to reach the skill.
 
-4. **Write the body.** Structure:
+5. **Write the body.** Structure:
 
    - **Opening** — one or two sentences: what the skill does and its boundary
-     (read-only, creates worktree, etc.).
+     (read-only, no commits, writes files, etc.).
    - **Steps** — ordered, numbered. Each step ends on a completion criterion the
      agent can check (done vs not-done).
    - **Reference** — non-ordered material (tables, pattern catalogs) the agent
@@ -79,20 +87,25 @@ hierarchy, imperative voice.
      it is long.
    - **Return** — what the skill hands back to the parent or operator.
 
-5. **Keep SKILL.md lean.** Move long catalogs and examples to `references/`
+6. **Keep SKILL.md lean.** Move long catalogs and examples to `references/`
    and load them only when the step needs them. The skill body is the
    procedure; the references are the library.
 
-6. **Update routing.** If the skill should be discoverable via `AGENTS.md`,
+7. **Update routing.** If the skill should be discoverable via `AGENTS.md`,
    add a routing table row in `AGENTS.md` pointing at the skill.
 
-7. **Validate.** Run `check_links.py` if the skill contains links:
+8. **Validate.**
 
    ```bash
+   python3 .agents/skills/reconcile-context/scripts/check_frontmatter.py
    python3 .agents/skills/reconcile-context/scripts/check_links.py
    ```
 
-8. **Hand off.** Do not commit or push
+   `check_links.py` walks tracked files only — a brand-new skill is
+   invisible until tracked, so eyeball its links and note the file for the
+   operator (`git add -N` makes it visible; agents never stage).
+
+9. **Hand off.** Do not commit or push
    ([`operator-owned-git.md`](../../rules/operator-owned-git.md)).
 
 ## Return to parent

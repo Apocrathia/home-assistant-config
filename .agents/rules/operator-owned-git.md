@@ -16,6 +16,9 @@ checkout only.
 ## Never
 
 - `git commit`, `git push`, `git merge`, `git rebase`, tag, or open PRs/MRs
+- Merge or approve a PR/MR, dismiss its reviews, or enable auto-merge —
+  merge authorization is the operator's alone
+  ([`merge-authorization.md`](./merge-authorization.md))
 - Create branches or worktrees (see [`worktrees.md`](./worktrees.md))
 - Write to `.storage/`, `.shopping_list.json`, or any HA-managed runtime state
 

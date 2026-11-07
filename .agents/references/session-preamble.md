@@ -7,7 +7,7 @@ Cold-start context for a fresh agent session on Home Assistant Homelab.
 This directory is the live Home Assistant config — modular YAML under
 `packages/`, ESPHome under `esphome/`, agent steering under `.agents/`.
 
-See [`README.md`](../../README.md) and [`.agents/context/README.md`](../context/README.md).
+See [`.agents/context/README.md`](../context/README.md).
 
 ## How to route
 

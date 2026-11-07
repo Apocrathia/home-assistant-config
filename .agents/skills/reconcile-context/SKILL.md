@@ -2,8 +2,9 @@
 name: reconcile-context
 description: >-
   Fix drift in Home Assistant Homelab agent context (AGENTS.md, CLAUDE.md,
-  .agents/context/, rules, skills, agents) against the repo. Run check_links and
-  check_discovery. Use when asked to sync, reconcile, or update agent context.
+  .agents/context/, rules, skills, agents) against the repo. Run check_links,
+  check_discovery, and check_frontmatter. Use when asked to sync, reconcile, or
+  update agent context.
 disable-model-invocation: true
 ---
 
@@ -16,7 +17,7 @@ Keep the agent context true and thin. Stale context is worse than none.
 
 **HA modules (do not rename):** `constraints`, `traps`, `nomenclature`, `voice`,
 `output`, `questions`, `work-sources`, `loading`, plus `README.md`. If
-prime-context uses different names (invariants, pitfalls, vocabulary,
+the core uses different names (invariants, pitfalls, vocabulary,
 writing-style), map conceptually — never force a rename.
 
 **Checkout:** edit in the main working tree only. No git worktrees, no branch
@@ -29,7 +30,7 @@ Conventional Commit. Do not commit, push, or open PRs.
 ## Workflow
 
 ```
-- [ ] 1. check_links + check_discovery
+- [ ] 1. check_links + check_discovery + check_frontmatter
 - [ ] 2. Structural drift (hub, routing, loading)
 - [ ] 3. Reality drift (claims vs packages/docs/skills)
 - [ ] 4. Harvest <!-- drift: --> notes
@@ -42,10 +43,16 @@ Conventional Commit. Do not commit, push, or open PRs.
 ```bash
 python3 .agents/skills/reconcile-context/scripts/check_links.py
 python3 .agents/skills/reconcile-context/scripts/check_discovery.py
+python3 .agents/skills/reconcile-context/scripts/check_frontmatter.py
 ```
 
 Use `check_links.py --all` when docs or non-context markdown may have broken
 links too. Fix broken links/anchors or drop dead references.
+
+`check_frontmatter.py` validates `SKILL.md` frontmatter shape: `name` matches
+the directory, `description` present and not a literal block scalar, body
+non-empty. `--all` adds rules and `.agents/agents/` personas; `--strict`
+fails on findings.
 
 ### 2. Structural drift
 
@@ -55,7 +62,7 @@ links too. Fix broken links/anchors or drop dead references.
   points at a real path; every context module except `README.md` appears in
   routing or loading guidance.
 - **Loading** ([`loading.md`](../../context/loading.md)): named surfaces still exist.
-- **Missing upstream concepts:** if prime-context has a useful module this repo
+- **Missing upstream concepts:** if the core has a useful module this repo
   lacks, **suggest** a structural add (new thin file + hub/routing rows). Do not
   invent content by copying upstream verbatim, and do not rename existing HA
   modules to match upstream.
@@ -84,8 +91,8 @@ Act when clear; delete the comment. Leave ambiguous notes for the operator.
 
 Protected paths need confirmation
 ([`protected-paths`](../../rules/protected-paths.md)). Stay thin; link out; don't
-invent decisions. Re-run both scripts. Report and suggest a commit message —
-operator ships.
+invent decisions. Re-run all three scripts. Report and suggest a commit
+message — operator ships.
 
 ## Report
 
@@ -99,6 +106,7 @@ operator ships.
 **Needs judgment:** <…>
 **Links:** <pass | N fixed>
 **Discovery:** <pass | failures>
+**Frontmatter:** <pass | N findings>
 **Suggested commit:** <type(scope): description>
 ```
 

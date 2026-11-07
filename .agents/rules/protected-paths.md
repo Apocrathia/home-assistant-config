@@ -12,10 +12,7 @@ change; don't apply until the operator confirms.**
 ## Agent steering
 
 - `AGENTS.md`, `CLAUDE.md`
-- `.agents/**` — context, skills, agents, rules, references (canonical source;
-  Cursor shim `.cursor/rules/homeassistant.mdc` points here — don't break routing)
-- `.cursor/hooks.json`, `.cursor/hooks/**`
-- `.cursor/README.md`
+- `.agents/**` — context, skills, agents, rules, references (canonical source)
 
 ## Home Assistant critical
 

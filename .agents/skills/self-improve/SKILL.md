@@ -10,7 +10,7 @@ disable-model-invocation: true
 # Self-improve
 
 One **light** lap: discover → pick (with operator) → implement → review →
-handoff → **STOP**. All edits happen in the main checkout.
+handoff → retro → **STOP**. All edits happen in the main checkout.
 
 No autonomous PR merging, no overnight ship loops, no merge cleanup via
 clock-out, no `watch-pr`. Git stays operator-owned:
@@ -27,9 +27,10 @@ flowchart TD
   start --> findWork["find-work (read-only)"]
   findWork --> pick[Operator picks Launch N]
   pick --> impl[implement-change]
-  impl --> review[review-loop]
+  impl --> review["review-loop (lens skills)"]
   review --> ship["ship-work (handoff only)"]
-  ship --> stop[STOP]
+  ship --> retro["retrospective (lap close)"]
+  retro --> stop[STOP]
 ```
 
 ```
@@ -38,7 +39,8 @@ flowchart TD
 - [ ] 3. [`implement-change`](../implement-change/SKILL.md)
 - [ ] 4. [`review-loop`](../review-loop/SKILL.md)
 - [ ] 5. [`ship-work`](../ship-work/SKILL.md) handoff
-- [ ] 6. STOP — do not loop, merge, or clock-out-merge-cleanup
+- [ ] 6. [`retrospective`](../retrospective/SKILL.md) — lap-close lessons, before session wrap
+- [ ] 7. STOP — do not loop, merge, or clock-out-merge-cleanup
 ```
 
 Fuzzy briefs → [`alignment`](../alignment/SKILL.md), then stop for proceed.
@@ -59,7 +61,7 @@ find-work lap until the operator asks.
 ## Do not
 
 - Commit, push, open PRs, or create branches
-- Assume overnight Cursor Automations or merge cleanup
+- Assume overnight automations or merge cleanup
 - Write `.shopping_list.json` or `.storage/`
 - Treat `ship-work` as commit/push — it is handoff only
 - Run `clock-out` as merge teardown (session wrap only, if asked)

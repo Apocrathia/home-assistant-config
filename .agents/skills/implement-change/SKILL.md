@@ -49,7 +49,9 @@ Ignore upstream steps that require worktrees or agent commits.
 One sentence goal + done conditions. Prefer one vertical slice
 ([`vertical-slices.md`](../../context/vertical-slices.md)). If two unrelated
 outcomes, split. Protected paths need confirmation
-([`protected-paths.md`](../../rules/protected-paths.md)).
+([`protected-paths.md`](../../rules/protected-paths.md)). For non-trivial
+changes, run [`change-impact`](../change-impact/SKILL.md) first (read-only,
+optional) and feed its blast radius into the plan.
 
 ### 2. Edit
 

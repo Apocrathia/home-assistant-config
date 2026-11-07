@@ -15,7 +15,7 @@ time.
 
 Before writing, skim existing personas under `.agents/agents/` and (when
 available) the upstream seed
-`/Users/ianyoung/Projects/prime-context/templates/context/agent-personas.md.tmpl`
+the core's `templates/context/agent-personas.md.tmpl` (core checkout — ask the operator)
 plus `templates/agents/*.tmpl` — format, when to create vs reuse, return
 structure.
 
@@ -39,21 +39,31 @@ structure.
 ## Procedure
 
 1. **Name the persona.** Use a role noun, not a verb phrase: `debugger`, not
-   `debug-issues`. One word when possible. Check `.agents/agents/` for name
-   collisions.
+   `debug-issues`. One word when possible. Check `.agents/agents/` **and**
+   `.agents/skills/` — both surface as `/<name>`.
 
-2. **Write the frontmatter:**
+2. **Preflight the protected paths.** A persona writes steering surfaces:
+   `.agents/agents/<name>/agent.md`, the `subagents.md` routing row, the
+   `AGENTS.md` agents table, and the `.claude/agents/<name>.md` symlink. Name
+   the exact paths and wait for operator confirmation unless an approved plan
+   already lists them ([`protected-paths.md`](../../rules/protected-paths.md)).
+
+3. **Write the frontmatter:**
 
    ```yaml
    ---
    name: <persona-name>
-   description: <what it does; include trigger phrases the parent matches on>
+   description: >-
+     <what it does; include trigger phrases the parent matches on>
    model: inherit # or "fast" for cheap read-only scouts
    readonly: true # if the persona should not edit files
    ---
    ```
 
-3. **Write the body.** Structure every persona the same way:
+   Folded (`>-`) or quoted scalars only: a `: ` inside an unquoted plain
+   scalar breaks the frontmatter YAML and the persona.
+
+4. **Write the body.** Structure every persona the same way:
 
    - **Opening line** — one sentence: what the persona is and does.
    - **Context to load** — which `.agents/context/` modules, skills, or docs to
@@ -66,33 +76,44 @@ structure.
    - **Return to parent** — the structured return format. Lead with 1-3 sentences
      answering the question. Then evidence, not narration.
 
-4. **Keep it under 60 lines.** A persona is a charter, not a manual. If it grows
-   past 60 lines, the role is too broad — split into two personas or move
-   reference content to a linked doc.
+5. **Keep it under 60 lines.** A persona is a charter, not a manual. If it
+   grows past 60 lines, the role is too broad — split into two personas or
+   move reference content to a linked doc.
 
-5. **Update the routing table.** Add the persona to the `subagents` rule
-   (`.agents/rules/subagents.md`) project agents table:
+6. **Update the routing table.** Add the persona to the `subagents` rule
+   (`.agents/rules/subagents.md`) project agents table — and to the
+   `AGENTS.md` agents table, which is the router surface:
 
    ```markdown
    | `/<persona-name>` | <when to delegate to it> |
    ```
 
-6. **Validate.** Run `check_links.py` on the new file if it contains links:
+7. **Mirror for Claude Code.** Symlink `.claude/agents/<name>.md` →
+   `../../.agents/agents/<name>/agent.md` (per-file symlinks, matching the
+   existing pattern).
+
+8. **Validate.**
+
    ```bash
+   python3 .agents/skills/reconcile-context/scripts/check_frontmatter.py --all
    python3 .agents/skills/reconcile-context/scripts/check_links.py
    ```
 
+   `check_links.py` walks tracked files only — a brand-new persona is
+   invisible until tracked, so eyeball its links and note the file for the
+   operator (`git add -N` makes it visible; agents never stage).
+
 ## Template
 
-Homelab layout is **directory SoT**: `.agents/agents/<name>/agent.md` (Cursor
-mirrors under `.cursor/agents/<name>.md`). Use existing Homelab personas as
-format references. Upstream seeds (when the prime-context checkout is present):
+Homelab layout is **directory SoT**: `.agents/agents/<name>/agent.md`. Use
+existing Homelab personas as
+format references. Upstream seeds (when the core checkout is present, under `templates/agents/`):
 
 ```
-/Users/ianyoung/Projects/prime-context/templates/agents/implementer.md.tmpl
-/Users/ianyoung/Projects/prime-context/templates/agents/verifier.md.tmpl
-/Users/ianyoung/Projects/prime-context/templates/agents/reviewer.md.tmpl
-/Users/ianyoung/Projects/prime-context/templates/agents/context-steward.md.tmpl
+templates/agents/implementer.md.tmpl
+templates/agents/verifier.md.tmpl
+templates/agents/reviewer.md.tmpl
+templates/agents/context-steward.md.tmpl
 ```
 
 Update [`.agents/rules/subagents.md`](../../rules/subagents.md) when adding a

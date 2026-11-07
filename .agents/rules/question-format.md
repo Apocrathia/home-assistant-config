@@ -1,6 +1,6 @@
 ---
 alwaysApply: true
-description: Context → Ask → Suggestion → Gaps format for non-trivial questions
+description: Context → Ask → Suggestion or Strawman → Gaps format for non-trivial questions
 ---
 
 # Question format
@@ -15,10 +15,24 @@ for when to ask vs. when to infer.
 paragraph.
 
 **Suggestion:** Your recommendation with brief reasoning. If you have no preference,
-say so.
+say so. For an open-ended ask with no genuine recommendation, replace this block
+with **Strawman** (below) — never nest one here, never add a fifth block.
 
 **Gaps/concerns:** What you couldn't verify or what could go wrong. Omit the block
 if there are none; don't write "none".
+
+## Strawman drafts
+
+For an open-ended ask (a definition, design, plan, or name), don't just ask.
+Commit to a deliberately rough draft, labeled a **strawman**, and invite the
+operator to tear it apart: critiquing a concrete artifact is cheaper than
+generating from scratch, and a rough draft surfaces the operator's real
+criteria faster than an open question.
+
+The strawman **replaces** the Suggestion slot (Context → Ask → Strawman → Gaps).
+With a genuine recommendation, keep Suggestion and skip the strawman — a
+strawman is for open problems, not a hedge. Passing weak work off as your best
+answer destroys trust.
 
 ## Tool choice
 

@@ -3,7 +3,7 @@ name: retrospective
 description: >-
   Structured post-work retrospective for Home Assistant Homelab: review
   outcomes, mine git history for context drift, classify lessons, and route
-  improvements — HA-local vs contribute back to prime-context. Use when the
+  improvements — HA-local vs contribute back to the core. Use when the
   user says retro, /retrospective, what did we learn, or at session-end.
 disable-model-invocation: true
 ---
@@ -13,7 +13,7 @@ disable-model-invocation: true
 A structured review at work-close or session-end. The retrospective
 **classifies** observations and **routes** them: local context edits,
 HA-domain skill/rule improvements, or upstream contributions to
-[prime-context](https://github.com/PrimeIntellect-ai/prime-context).
+the context-engine core.
 
 This skill does not edit files directly (except optional non-protected scratch
 notes). It produces a report with classified recommendations. Protected-path
@@ -25,19 +25,20 @@ worktrees; inspect the main checkout.
 ## When to run
 
 - After a meaningful config / `.agents/` change set (before the operator commits)
+- At lap close — the standard loop-exit step, after
+  [`ship-work`](../ship-work/SKILL.md) handoff, before session wrap
 - At session-end when the operator asks "what did we learn?"
 - After merges or Syncthing syncs that changed context surfaces outside the session
 - Standalone: `/retrospective` or "do a retro"
 
-There is no required ship-work / clock-out gate here. Retrospectives inform;
-they do not block.
+Retrospectives inform; they do not block.
 
 ## What it produces
 
 1. **Outcome summary** — what happened, one or two lines
 2. **Git history findings** — significant changes that touched context surfaces
 3. **Observations** — classified lessons, each with a route
-4. **Upstream candidates** — generic enough for prime-context
+4. **Upstream candidates** — generic enough for the context-engine core
 5. **HA-local keepers** — packages conventions, shopping-list rules, domain skills
 6. **No-op declaration** — if nothing to capture, say so explicitly
 
@@ -103,29 +104,33 @@ validation script changes.
 | Test                                                                                           | Result                 |
 | ---------------------------------------------------------------------------------------------- | ---------------------- |
 | Touches HA packages, entities, shopping list, ESPHome, live validate-before-commit             | **HA-local**           |
-| Improves generic rules/skills/scripts usable by other prime-context consumers                  | **Upstream candidate** |
+| Improves generic rules/skills/scripts usable by other core consumers                           | **Upstream candidate** |
 | Layer 3 context / HA-native skills (`automation-debug`, `config-validate`, `package-organize`) | **HA-local**           |
 | Layer 1–2 shared skills/rules/scripts                                                          | Consider **upstream**  |
 
-Upstream candidates: propose an issue description or patch notes for the
-operator to take to the prime-context repo. **Do not** open PRs or push to
-prime-context from this skill unless the operator explicitly asks.
+Upstream candidates: draft a ready-to-apply contribution with
+[`contribute-upstream`](../contribute-upstream/SKILL.md) for the operator to
+take to the core repo; file an issue only when the change is not yet
+writable (scope unclear or needs design). **Do not** open PRs or push to
+the core from this skill unless the operator explicitly asks.
 
 ### 6. Route and propose
 
-| Route                       | Action                                  | Approval                                 |
-| --------------------------- | --------------------------------------- | ---------------------------------------- |
-| reconcile-context           | Note drift for next pass / run skill    | Skill handles                            |
-| Context / rule / skill edit | Propose diff in report                  | Yes (protected)                          |
-| Enforcement                 | Propose hook/CI                         | Yes                                      |
-| Memory                      | Propose `.agents/memories/<topic>.md`   | Yes                                      |
-| Upstream                    | Draft contribution notes for operator   | Yes — operator owns git on prime-context |
-| Shopping-list wording       | Suggest title for operator to add in HA | Never write the file                     |
+| Route                       | Action                                                                      | Approval                            |
+| --------------------------- | --------------------------------------------------------------------------- | ----------------------------------- |
+| reconcile-context           | Note drift for next pass / run skill                                        | Skill handles                       |
+| Context / rule / skill edit | Propose diff in report                                                      | Yes (protected)                     |
+| Enforcement                 | Propose hook/CI                                                             | Yes                                 |
+| Memory                      | Propose `.agents/memories/<topic>.md`                                       | Yes                                 |
+| Upstream                    | [`contribute-upstream`](../contribute-upstream/SKILL.md) draft for operator | Yes — operator owns git on the core |
+| Shopping-list wording       | Suggest title for operator to add in HA                                     | Never write the file                |
 
 ### 7. Durable lessons
 
 Propose lessons for `.agents/memories/<topic>.md` (Context / Lesson /
-References). Always-on policy belongs in a rule, not memories. Promotion path:
+References) with the full body in the report — `.scratch/`-only drafts are
+gitignored and get cleaned, and only the operator commits. Always-on policy
+belongs in a rule, not memories. Promotion path:
 
 ```text
 Memory → recurs 3+ times → Rule → fails repeatedly → Hook
@@ -150,9 +155,9 @@ Memory → recurs 3+ times → Rule → fails repeatedly → Hook
 | --- | ---- | ----------- | ----- | ------ |
 | 1   | …    | …           | …     | …      |
 
-**Upstream candidates (prime-context):** <N or none>
+**Upstream candidates (the core):** <N or none>
 
-- … → draft for operator (no PR automation)
+- … → [`contribute-upstream`](../contribute-upstream/SKILL.md) draft / issue / deferred (operator opens the PR)
 
 **HA-local keepers:** <N or none>
 

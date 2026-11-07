@@ -68,10 +68,10 @@ jq -r '.[] | select(.complete == false) | "\(.name) (\(.id))"' .shopping_list.js
 
 ## Agent context maintenance
 
-| Need                               | Go to                                |
-| ---------------------------------- | ------------------------------------ |
-| Sync `.agents/` from prime-context | `skills/integrate-upstream/SKILL.md` |
-| Fix context ↔ repo drift          | `skills/reconcile-context/SKILL.md`  |
+| Need                                         | Go to                                |
+| -------------------------------------------- | ------------------------------------ |
+| Sync `.agents/` from the context-engine core | `skills/integrate-upstream/SKILL.md` |
+| Fix context ↔ repo drift                    | `skills/reconcile-context/SKILL.md`  |
 
 ## Git
 

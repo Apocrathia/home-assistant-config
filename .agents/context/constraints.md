@@ -31,6 +31,10 @@
   runtime to-dos; read-only work sources
   ([`work-sources.md`](work-sources.md)). Do not mark complete, add, delete, or
   reformat.
+- **Name the context-engine core project in repo files** — the upstream core is
+  a private project. Refer to it only as "the core" / "the context-engine
+  core"; never write its name, its repo URL, or the local checkout path into
+  any committed file (agent memory may hold the path).
 - Edit `.storage/` files directly (managed by Home Assistant)
 - Hardcode credentials, API keys, or secrets
 - Modify the UniFi or other infrastructure controllers directly

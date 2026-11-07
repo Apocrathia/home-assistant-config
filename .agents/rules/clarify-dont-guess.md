@@ -45,8 +45,10 @@ Protected-path edits always need confirmation
 When ambiguity spans several **dependent** decisions (not one clarify question
 or several independent facts), use
 [`alignment`](../skills/alignment/SKILL.md) instead of ad-hoc back-and-forth.
-For several independent gaps, list the questions in one reply. Alignment is
-read-only until the operator asks to proceed.
+Alignment resolves dependent decisions **one at a time**: one question per turn,
+then wait for the operator's answer before asking the next. Batching several
+questions into one reply is allowed **only for independent gaps** that no other
+decision depends on. Alignment is read-only until the operator asks to proceed.
 
 ## Not ambiguity
 

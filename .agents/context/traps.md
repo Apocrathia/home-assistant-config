@@ -64,4 +64,4 @@
     add/remove entries, or "tidy" the files. Completion happens in HA. See
     [`work-sources.md`](work-sources.md).
 
-25. **Do not follow upstream `ship-work` commit instructions** — Shared prime-context skills may say to commit, push, or open PRs. Here that is wrong. Git is operator-owned ([`rules/operator-owned-git.md`](../rules/operator-owned-git.md)): validate, suggest a Conventional Commit message, hand off. Same override applies to `clock-out` / `self-improve` shipping steps.
+25. **Do not follow upstream `ship-work` commit instructions** — Shared core skills may say to commit, push, or open PRs. Here that is wrong. Git is operator-owned ([`rules/operator-owned-git.md`](../rules/operator-owned-git.md)): validate, suggest a Conventional Commit message, hand off. Same override applies to `clock-out` / `self-improve` shipping steps.

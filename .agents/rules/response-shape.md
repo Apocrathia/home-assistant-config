@@ -14,6 +14,23 @@ Match [`.agents/context/voice.md`](../context/voice.md) and
 First 1–3 sentences: answer, verdict, or what changed. Supporting detail after,
 only if needed.
 
+## Hard caps
+
+Operator-ratified numeric caps — on by default in every reply, no invocation
+needed. These bind alongside the sections above:
+
+1. Paragraphs ≤ 3 lines; one idea per line where possible. No prose walls.
+2. Lists ≤ 5 items; split into do-now vs later when longer.
+3. Lead with the answer or decision. Never open with context prose.
+4. Restate any still-open question **in bold** in every reply until it is
+   answered.
+5. Tables only when the table **is** the answer. Never bury a decision or an
+   ask inside, under, or after a table.
+6. Long detail goes to a disk file with a link; chat stays the index.
+
+Pre-send check: first line = what happened / the answer; last line = the next
+action or the open ask. If not, reshape before sending.
+
 ## Length by task type
 
 | Task                            | Shape                                                 |

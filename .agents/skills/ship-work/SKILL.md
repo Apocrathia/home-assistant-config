@@ -18,6 +18,7 @@ identity only. Override:
 [`.agents/rules/operator-owned-git.md`](../../rules/operator-owned-git.md).
 
 Prefer a clean [`review-loop`](../review-loop/SKILL.md) first. Downstream:
+[`retrospective`](../retrospective/SKILL.md) at lap close, then
 [`clock-out`](../clock-out/SKILL.md) for session wrap (optional).
 
 ## Workflow
@@ -38,7 +39,9 @@ paths, and packages touched under `packages/`.
 ### Validation already done
 
 Cite checks from this lap (e.g. [`config-validate`](../config-validate/SKILL.md),
-YAML/modern-key review, link check). If review-loop was skipped, say so.
+YAML/modern-key review, link check). If review-loop was skipped, say so. If
+anything changed after the last clean [`review-loop`](../review-loop/SKILL.md)
+pass, re-run it before handoff.
 
 ### Suggested commit
 

@@ -23,7 +23,7 @@ overridden.
 This directory holds context modules that shape how AI agents work in this
 repo. Each file is a thin, focused module loaded on demand. Module names stay
 HA-native (`constraints`, `traps`, `nomenclature`, …) — not renamed to
-prime-context labels like invariants/pitfalls/vocabulary.
+core labels like invariants/pitfalls/vocabulary.
 
 ## The context is living
 
@@ -34,24 +34,28 @@ Keep modules thin; update this hub when adding modules.
 
 ## Context Modules
 
-| Module           | File                  | Purpose                                                |
-| ---------------- | --------------------- | ------------------------------------------------------ |
-| Loading          | `loading.md`          | What to load and when                                  |
-| Constraints      | `constraints.md`      | Hard limits and non-negotiables                        |
-| Traps            | `traps.md`            | Known pitfalls and gotchas                             |
-| Nomenclature     | `nomenclature.md`     | Naming conventions and patterns                        |
-| Voice            | `voice.md`            | Communication style guide                              |
-| Output           | `output.md`           | Output format expectations                             |
-| Questions        | `questions.md`        | Clarification protocol                                 |
-| Work sources     | `work-sources.md`     | Dual channel: docs/issues (agent) + Local Todo (human) |
-| Tools            | `tools.md`            | HA MCP, Grafana HA history, config check, jq           |
-| Vertical slices  | `vertical-slices.md`  | End-to-end slice discipline for plans/briefs           |
-| Development loop | `development-loop.md` | Find → implement → handoff lap shape                   |
+| Module             | File                    | Purpose                                                      |
+| ------------------ | ----------------------- | ------------------------------------------------------------ |
+| Loading            | `loading.md`            | What to load and when                                        |
+| Constraints        | `constraints.md`        | Hard limits and non-negotiables                              |
+| Traps              | `traps.md`              | Known pitfalls and gotchas                                   |
+| Nomenclature       | `nomenclature.md`       | Naming conventions and patterns                              |
+| Voice              | `voice.md`              | Communication style guide                                    |
+| Output             | `output.md`             | Output format expectations                                   |
+| Questions          | `questions.md`          | Clarification protocol                                       |
+| Work sources       | `work-sources.md`       | Dual channel: docs/issues (agent) + Local Todo (human)       |
+| Tools              | `tools.md`              | HA MCP, Grafana HA history, config check, jq                 |
+| Vertical slices    | `vertical-slices.md`    | End-to-end slice discipline for plans/briefs                 |
+| Development loop   | `development-loop.md`   | Find → implement → handoff lap shape                         |
+| Context management | `context-management.md` | Meter-first compaction; compact vs fork vs delegate vs write |
+| Support matrix     | `support-matrix.md`     | Which harness loads what, with verification ledger           |
+| Ontologies         | `ontologies.md`         | Harness entry classes, R1–R6, HA domain entries              |
+| Enforcement        | `enforcement.md`        | Structural checks: pre-commit, HA config check, checkers     |
 
 ## Rules (always-on)
 
 Located in `.agents/rules/`. Generic rules come from the
-[prime-context](https://github.com/PrimeIntellect-ai/prime-context) core
+context-engine core
 (pinned in `.agents/upstream-ref`). Project-specific override:
 
 | Rule               | File                          | Purpose                                                         |
@@ -62,20 +66,20 @@ Located in `.agents/rules/`. Generic rules come from the
 
 Located in `.agents/skills/` — task-specific playbooks:
 
-| Skill                | Path                         | Use When                                      |
-| -------------------- | ---------------------------- | --------------------------------------------- |
-| Config Validation    | `skills/config-validate/`    | Writing or modifying YAML configs             |
-| Package Organization | `skills/package-organize/`   | Restructuring or creating packages            |
-| Automation Debugging | `skills/automation-debug/`   | Fixing broken automations                     |
-| Grafana HA History   | `skills/grafana-ha-history/` | Past entity state via Grafana InfluxDB        |
-| Find Work            | `skills/find-work/`          | Discovering open work (see `work-sources.md`) |
-| Upstream Integration | `skills/integrate-upstream/` | Syncing `.agents/` from prime-context         |
-| Implement Change     | `skills/implement-change/`   | One change lap → validate → operator handoff  |
-| Reconcile Context    | `skills/reconcile-context/`  | Fix drift between context claims and the repo |
-| Create Agent         | `skills/create-agent/`       | New persona under `.agents/agents/`           |
-| Create Skill         | `skills/create-skill/`       | New procedural skill under `.agents/skills/`  |
+| Skill                | Path                         | Use When                                        |
+| -------------------- | ---------------------------- | ----------------------------------------------- |
+| Config Validation    | `skills/config-validate/`    | Writing or modifying YAML configs               |
+| Package Organization | `skills/package-organize/`   | Restructuring or creating packages              |
+| Automation Debugging | `skills/automation-debug/`   | Fixing broken automations                       |
+| Grafana HA History   | `skills/grafana-ha-history/` | Past entity state via Grafana InfluxDB          |
+| Find Work            | `skills/find-work/`          | Discovering open work (see `work-sources.md`)   |
+| Upstream Integration | `skills/integrate-upstream/` | Syncing `.agents/` from the context-engine core |
+| Implement Change     | `skills/implement-change/`   | One change lap → validate → operator handoff    |
+| Reconcile Context    | `skills/reconcile-context/`  | Fix drift between context claims and the repo   |
+| Create Agent         | `skills/create-agent/`       | New persona under `.agents/agents/`             |
+| Create Skill         | `skills/create-skill/`       | New procedural skill under `.agents/skills/`    |
 
-Additional shared skills from the prime-context core (alignment, review-loop,
+Additional shared skills from the context-engine core (alignment, review-loop,
 reconcile-docs, file-issue, retrospective, ship-work, and others) live
 alongside them. **All shipping/commit steps in shared skills are overridden by
 `rules/operator-owned-git.md`** — agents stop at validation and hand off to the

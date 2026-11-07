@@ -21,9 +21,17 @@ pattern: interview relentlessly until shared understanding, one decision branch
 at a time. Explore the repo when that answers the question; do not ask the
 operator to repeat what the tree already shows.
 
+**One decision per turn.** Ask a single question, then wait for the operator's
+answer before asking the next. Batching multiple design questions in one turn
+is bewildering; grilling means one question, one answer, then the next.
+
+Trivial factual disambiguation ("did you mean `kitchen.yaml` or
+`office.yaml`?") may use a quick one-line question without a full alignment
+session.
+
 For each question, use the format in
 [`question-format.md`](../../rules/question-format.md): Context, **Ask**,
-Suggestion, Gaps/concerns (omit Gaps when none).
+Suggestion or Strawman, Gaps/concerns (omit Gaps when none).
 
 ## When to run
 

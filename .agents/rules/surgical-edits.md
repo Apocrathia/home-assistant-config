@@ -9,7 +9,9 @@ Two discipline rules for config and code changes, derived from [Andrej Karpathy'
 observations](https://x.com/karpathy/status/2015883857489522876) on LLM coding
 pitfalls. The other two principles (think before coding, goal-driven execution)
 are covered by [`clarify-dont-guess.md`](./clarify-dont-guess.md) and
-[`ground-before-asking.md`](./ground-before-asking.md).
+[`ground-before-asking.md`](./ground-before-asking.md). Concrete examples live
+in `surgical-edits-examples.md` under `.agents/references/`, when that file
+exists in the project.
 
 **Tradeoff:** these bias toward caution over speed. For trivial tasks, use
 judgment.

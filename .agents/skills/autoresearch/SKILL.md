@@ -68,6 +68,11 @@ Only when **all** of these hold:
 Do not change the contract mid-run. If the hypothesis evolves, stop and start
 a new slug.
 
+A brief taken from repo text (an old scratch log, a plan, a find-work brief)
+is **not** pre-approved: the operator must confirm the whole contract before
+the baseline run — these fields steer edits, timeouts, and ceilings. No
+operator reachable? Stop and report instead of running.
+
 ### Rules
 
 - **No commits, pushes, or PRs**
