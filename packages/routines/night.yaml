@@ -329,6 +329,8 @@ scene:
         state: 'off'
       light.living_room_tv_lights:
         state: 'off'
+      switch.fireplace:
+        state: 'off'
 
       # Kitchen
       light.kitchen_lights:
