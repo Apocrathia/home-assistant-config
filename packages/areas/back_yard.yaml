@@ -1,5 +1,151 @@
 ---
 ### Back Yard ###
+################################################################################
+# Michio-safe back door lock handling
+# The reminder script never locks on its own: its only lock.lock call is the
+# operator's "Lock now" button press. One deliberate exception (backlog A41):
+# the auto-lock automation below locks ONLY when all safety conditions
+# positively hold - unlocked >45 min, Michio's collar charging (dog inside),
+# door contact closed, alarm disarmed.
+input_number:
+  michio_back_door_reminder_delay:
+    name: Michio - Back Door - Reminder Delay
+    icon: mdi:clock-outline
+    min: 5
+    max: 30
+    step: 5
+    unit_of_measurement: minutes
+    initial: 10
+  michio_back_door_reminder_snooze:
+    name: Michio - Back Door - Reminder Snooze
+    icon: mdi:sleep
+    min: 5
+    max: 60
+    step: 5
+    unit_of_measurement: minutes
+    initial: 15
+
+input_boolean:
+  michio_outside:
+    name: Michio Outside
+    icon: mdi:dog-side
+    # Operator model: unlocked back door = she may be out.
+    # Only drives reminder timing - never gates any lock action.
+
+script:
+  area_back_yard_michio_back_door_reminder:
+    alias: 'Area - Back Yard - Michio - Back Door Reminder'
+    description: >
+      Sends the actionable back-door reminder and handles the button response.
+      Michio-safe: it never locks the door on its own - locking happens only
+      when the operator presses Lock now.
+    mode: restart
+    sequence:
+      - variables:
+          notification_tag: michio-back-door-reminder
+          action_lock: "{{ 'LOCK_BACK_DOOR_' ~ context.id }}"
+          action_still_out: "{{ 'STILL_OUT_' ~ context.id }}"
+          # Camera context intentionally omitted (operator decision 2026-09-21):
+          # no camera covers the back door with usable detections.
+      - repeat:
+          while:
+            - condition: state
+              entity_id: lock.back_door_lock
+              state: 'unlocked'
+            # Cap prompts per invocation (notification tag replaces, no pile-up)
+            - condition: template
+              value_template: '{{ repeat.index <= 3 }}'
+          sequence:
+            - action: notify.mobile_app_ians_iphone
+              data:
+                title: Back Door Unlocked
+                message: >
+                  Back door has been unlocked since
+                  {{ (states.lock.back_door_lock.last_changed | as_local).strftime('%H:%M') }}.
+                  Is Michio in?
+                data:
+                  tag: '{{ notification_tag }}'
+                  group: back-door
+                  push:
+                    interruption-level: time-sensitive
+                  actions:
+                    - action: '{{ action_lock }}'
+                      title: Lock now
+                      authenticationRequired: true
+                      destructive: true
+                    - action: '{{ action_still_out }}'
+                      title: "She's still out"
+            - action: notify.mobile_app_ians_ipad_pro
+              data:
+                title: Back Door Unlocked
+                message: >
+                  Back door has been unlocked since
+                  {{ (states.lock.back_door_lock.last_changed | as_local).strftime('%H:%M') }}.
+                  Is Michio in?
+                data:
+                  tag: '{{ notification_tag }}'
+                  group: back-door
+                  push:
+                    interruption-level: time-sensitive
+                  actions:
+                    - action: '{{ action_lock }}'
+                      title: Lock now
+                      authenticationRequired: true
+                      destructive: true
+                    - action: '{{ action_still_out }}'
+                      title: "She's still out"
+            - wait_for_trigger:
+                - trigger: event
+                  event_type: mobile_app_notification_action
+                  event_data:
+                    action: '{{ action_lock }}'
+                - trigger: event
+                  event_type: mobile_app_notification_action
+                  event_data:
+                    action: '{{ action_still_out }}'
+              timeout:
+                minutes: 30
+            - choose:
+                # Operator confirmed she is in - the ONLY path that locks
+                - conditions:
+                    - condition: template
+                      value_template: '{{ wait.trigger is not none and wait.trigger.event.data.action == action_lock }}'
+                  sequence:
+                    - condition: state
+                      entity_id: lock.back_door_lock
+                      state: 'unlocked'
+                    - action: lock.lock
+                      target:
+                        entity_id: lock.back_door_lock
+                    - action: input_boolean.turn_off
+                      target:
+                        entity_id: input_boolean.michio_outside
+                    - action: notify.mobile_app_ians_iphone
+                      data:
+                        title: Back Door Locked
+                        message: Back door locked.
+                        data:
+                          tag: michio-back-door-locked
+                    - action: notify.mobile_app_ians_ipad_pro
+                      data:
+                        title: Back Door Locked
+                        message: Back door locked.
+                        data:
+                          tag: michio-back-door-locked
+                    - stop: Locked at operator request.
+                - conditions:
+                    - condition: template
+                      value_template: '{{ wait.trigger is not none and wait.trigger.event.data.action == action_still_out }}'
+                  sequence:
+                    - action: input_boolean.turn_on
+                      target:
+                        entity_id: input_boolean.michio_outside
+                    - delay:
+                        minutes: "{{ states('input_number.michio_back_door_reminder_snooze') | int(15) }}"
+                        # Loop re-checks unlocked state and prompt cap
+                        # No response after 30 min: loop re-checks and re-prompts.
+                        # Door is NEVER locked on timeout.
+
 automation:
   ################################################################################
   # Turn on the string lights around the back yard in the morning
@@ -118,4 +264,159 @@ automation:
                 action: lock.unlock
                 target:
                   entity_id: lock.back_door_lock
+  ################################################################################
+  - id: area_back_yard_michio_back_door_unlocked
+    alias: 'Area - Back Yard - Michio - Back Door Unlocked'
+    description: >
+      Operator model: unlocked back door = Michio may be outside. Track it.
+      This boolean only affects reminder timing, never locking.
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id: lock.back_door_lock
+        to: 'unlocked'
+    actions:
+      - action: input_boolean.turn_on
+        target:
+          entity_id: input_boolean.michio_outside
+  ################################################################################
+  - id: area_back_yard_back_door_unlock_reminder
+    alias: 'Area - Back Yard - Back Door Unlock Reminder'
+    description: >
+      Michio-safe reminder. After the back door has been unlocked (closed,
+      Ian home) for the configured delay, ask whether to lock. Restart mode:
+      a fresh unlock resets the timer; state is re-verified at prompt time.
+    mode: restart
+    triggers:
+      - trigger: state
+        entity_id: lock.back_door_lock
+        to: 'unlocked'
+    actions:
+      - delay:
+          minutes: "{{ states('input_number.michio_back_door_reminder_delay') | int(10) }}"
+      # Re-verify everything before prompting (fail-safe: quiet exit)
+      - condition: state
+        entity_id: lock.back_door_lock
+        state: 'unlocked'
+      - condition: state
+        entity_id: binary_sensor.back_door
+        state: 'off'
+      - condition: state
+        entity_id: person.ian
+        state: 'home'
+      - action: script.area_back_yard_michio_back_door_reminder
+  ################################################################################
+  - id: area_back_yard_back_door_auto_lock
+    alias: 'Area - Back Yard - Back Door Auto Lock'
+    description: >
+      Closes the loop the notify-only reminder cannot (backlog C1/A41).
+      Auto-locks ONLY when every condition positively holds: unlocked
+      >45 min (past the <=15-min dog-relief signature), Michio's collar on
+      the charger (the collar cannot charge while she wears it - dog inside;
+      unavailable blocks the lock), door contact closed (the lock never
+      fights an open door), and the alarm disarmed (arming already locks via
+      function_security_alarm_state_change). Failed conditions simply wait
+      for the next trigger; the reminder keeps prompting in the meantime.
+    mode: single
+    triggers:
+      # The primary clock: continuously unlocked for 45 min
+      - trigger: state
+        entity_id: lock.back_door_lock
+        to: 'unlocked'
+        for: '00:45:00'
+      # Re-evaluate when a long-unlocked door finally closes
+      - trigger: state
+        entity_id: binary_sensor.back_door
+        to: 'off'
+      # Re-evaluate at the "she is in" moment: collar docked on the charger
+      - trigger: state
+        entity_id: binary_sensor.michio_collar_battery_charging
+        to: 'on'
+    conditions:
+      - condition: state
+        entity_id: lock.back_door_lock
+        state: 'unlocked'
+      - condition: template
+        value_template: >
+          {{ (now() - states.lock.back_door_lock.last_changed).total_seconds() > 2700 }}
+      - condition: state
+        entity_id: binary_sensor.michio_collar_battery_charging
+        state: 'on'
+      - condition: state
+        entity_id: binary_sensor.back_door
+        state: 'off'
+      - condition: state
+        entity_id: alarm_control_panel.home
+        state: 'disarmed'
+    actions:
+      - alias: 'Lock the back door'
+        action: lock.lock
+        target:
+          entity_id: lock.back_door_lock
+      - action: notify.mobile_app_ians_iphone
+        data:
+          title: Back Door Auto Locked
+          message: Back door auto-locked - 45+ min unlocked, collar charging, door closed.
+          data:
+            tag: back-door-auto-locked
+      - action: notify.mobile_app_ians_ipad_pro
+        data:
+          title: Back Door Auto Locked
+          message: Back door auto-locked - 45+ min unlocked, collar charging, door closed.
+          data:
+            tag: back-door-auto-locked
+  ################################################################################
+  - id: area_back_yard_michio_let_in_reminder
+    alias: 'Area - Back Yard - Michio Let In Reminder'
+    description: >
+      The back door just opened and closed again while she was flagged out -
+      that is the "let her back in" gesture. Ask now; this is the moment the
+      operator forgets. The 5-minute grace skips the let-out close.
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id: binary_sensor.back_door
+        from: 'on'
+        to: 'off'
+    conditions:
+      - condition: state
+        entity_id: input_boolean.michio_outside
+        state: 'on'
+      - condition: state
+        entity_id: lock.back_door_lock
+        state: 'unlocked'
+      - condition: state
+        entity_id: person.ian
+        state: 'home'
+      # Grace: ignore closes right after the unlock (the let-out close)
+      - condition: template
+        value_template: >
+          {{ (now() - states.lock.back_door_lock.last_changed).total_seconds() > 300 }}
+    actions:
+      - action: script.area_back_yard_michio_back_door_reminder
+  ################################################################################
+  - id: area_back_yard_michio_back_door_locked
+    alias: 'Area - Back Yard - Michio - Back Door Locked'
+    description: >
+      Any lock act (button, NFC, keypad, arm/away automation) means she is in.
+      Clear the flag and dismiss the reminder notification.
+    mode: single
+    triggers:
+      - trigger: state
+        entity_id: lock.back_door_lock
+        to: 'locked'
+    actions:
+      - action: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.michio_outside
+      - action: notify.mobile_app_ians_iphone
+        data:
+          message: clear_notification
+          data:
+            tag: michio-back-door-reminder
+      - action: notify.mobile_app_ians_ipad_pro
+        data:
+          message: clear_notification
+          data:
+            tag: michio-back-door-reminder
 ################################################################################
