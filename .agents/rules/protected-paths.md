@@ -11,7 +11,7 @@ change; don't apply until the operator confirms.**
 
 ## Agent steering
 
-- `AGENTS.md`, `CLAUDE.md`
+- `AGENTS.md`
 - `.agents/**` — context, skills, agents, rules, references (canonical source)
 
 ## Home Assistant critical

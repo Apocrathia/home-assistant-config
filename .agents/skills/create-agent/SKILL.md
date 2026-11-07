@@ -43,10 +43,10 @@ structure.
    `.agents/skills/` — both surface as `/<name>`.
 
 2. **Preflight the protected paths.** A persona writes steering surfaces:
-   `.agents/agents/<name>/agent.md`, the `subagents.md` routing row, the
-   `AGENTS.md` agents table, and the `.claude/agents/<name>.md` symlink. Name
-   the exact paths and wait for operator confirmation unless an approved plan
-   already lists them ([`protected-paths.md`](../../rules/protected-paths.md)).
+   `.agents/agents/<name>/agent.md`, the `subagents.md` routing row, and the
+   `AGENTS.md` agents table. Name the exact paths and wait for operator
+   confirmation unless an approved plan already lists them
+   ([`protected-paths.md`](../../rules/protected-paths.md)).
 
 3. **Write the frontmatter:**
 
@@ -88,11 +88,7 @@ structure.
    | `/<persona-name>` | <when to delegate to it> |
    ```
 
-7. **Mirror for Claude Code.** Symlink `.claude/agents/<name>.md` →
-   `../../.agents/agents/<name>/agent.md` (per-file symlinks, matching the
-   existing pattern).
-
-8. **Validate.**
+7. **Validate.**
 
    ```bash
    python3 .agents/skills/reconcile-context/scripts/check_frontmatter.py --all

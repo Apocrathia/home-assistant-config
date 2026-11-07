@@ -1,1 +1,0 @@
-../../.agents/agents/reviewer/agent.md

@@ -15,7 +15,9 @@ workflow. If they disagree, prefer this file for what/how to read sources.
 | Docs ledger        | Agents      | `docs/issues/*.md`          | File / update via [`file-issue`](../skills/file-issue/SKILL.md) |
 
 Plans (`docs/plans/*.md`) are how-work linked from agent issues. Never write
-Local Todo ICS or `.shopping_list.json`.
+Local Todo ICS or `.shopping_list.json`. Both docs ledgers are **local-only**:
+content is gitignored; each ledger's `README.md` and `_template.md` stay
+tracked as the signpost.
 
 ## Sources
 

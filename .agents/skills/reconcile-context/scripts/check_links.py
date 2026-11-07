@@ -2,8 +2,8 @@
 """Check that intra-repo markdown links and #anchors in the context surface
 resolve. Exit 0 if all good, 1 if any are broken. Safe to run from a hook.
 
-Default surface: AGENTS.md, CLAUDE.md, .agents/README.md,
-.agents/**/*.md, and tracked .claude/**/*.md. Pass --all to check every
+Default surface: AGENTS.md, .agents/README.md,
+.agents/**/*.md. Pass --all to check every
 tracked markdown file in the repo instead.
 """
 
@@ -1229,13 +1229,11 @@ def surface(check_all, md_files):
         return md_files
     files = [
         os.path.join(ROOT, "AGENTS.md"),
-        os.path.join(ROOT, "CLAUDE.md"),
     ]
     files += [
         f
         for f in md_files
-        if os.path.relpath(f, ROOT).split(os.sep, 1)[0]
-        in {".agents", ".claude"}
+        if os.path.relpath(f, ROOT).split(os.sep, 1)[0] in {".agents"}
     ]
     return [f for f in files if os.path.lexists(f) and not is_template_source(f)]
 
@@ -1243,11 +1241,11 @@ def surface(check_all, md_files):
 def drop_internal_symlinks(surface_files, md_files):
     """Drop surface files that are symlinks to another tracked Markdown file.
 
-    Harness discovery paths are symlinks into `.agents/` (CLAUDE.md -> AGENTS.md,
-    .claude/agents/ -> .agents/agents/). safe_markdown_path refuses to read
-    through any symlink, so scanning these reports the file as broken against
-    itself. The target is tracked and scanned on its own, so skipping the link
-    is lossless — provided the target is also on the surface.  When a symlink
+    A surface entry can be a symlink into `.agents/`. safe_markdown_path
+    refuses to read through any symlink, so scanning such an entry reports
+    the file as broken against itself. The target is tracked and scanned on
+    its own, so skipping the link is lossless — provided the target is also
+    on the surface.  When a symlink
     target is tracked but NOT on the surface (e.g. a `.agents/` alias pointing
     at a `docs/` file in default mode), the alias is kept so the link is still
     validated.  A broken symlink (realpath resolves to a nonexistent target) is
@@ -2122,8 +2120,8 @@ def main():
     md_files = tracked_md()
     tracked_markdown, folded_tracked_markdown = tracked_lookup(md_files)
     surface_files_early = drop_internal_symlinks(surface(check_all, md_files), md_files)
-    # Default mode puts AGENTS.md / CLAUDE.md on the surface even when they
-    # are still untracked. Index those too so same-doc #fragments are checked.
+    # Default mode puts AGENTS.md on the surface even when it is still
+    # untracked. Index it too so same-doc #fragments are checked.
     seen = {os.path.realpath(f) for f in md_files}
     anchor_files = list(md_files)
     for f in surface_files_early:
@@ -2143,7 +2141,7 @@ def main():
     # anchor_map records read failures for every tracked file because the anchor
     # index has to cover any link target. A read failure only fails the run if
     # that file is on the surface, which is every tracked file under --all but
-    # just AGENTS.md/CLAUDE.md/.agents in default mode. Otherwise a symlink or
+    # just AGENTS.md/.agents in default mode. Otherwise a symlink or
     # unreadable Markdown under docs/ that nothing links to would break the
     # default hook.
     surface_set = set(surface_files)

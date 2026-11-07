@@ -20,7 +20,7 @@ Grafana history dumps, subagent fan-out.
   report raw tokens. True size = input + cache-read + cache-creation tokens.
 - Tool-call count is a weak proxy — a few big reads fill the window fast.
 
-Claude Code exposes no live in-session meter here — use the smells.
+Any harness without a live in-session meter: use the smells.
 
 ## Smell triggers (no meter)
 

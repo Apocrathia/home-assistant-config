@@ -1,7 +1,8 @@
 # Issue ledger — Home Assistant Homelab
 
-In-repo backlog for **agent-reported** gaps, bugs, and desired state. Chat is
-not the backlog. Git history is the archive.
+Local-only backlog (gitignored) for **agent-reported** gaps, bugs, and desired
+state. Chat is not the backlog. The ledger files are their own archive — only
+this `README.md` and `_template.md` are tracked.
 
 ## Dual channel
 

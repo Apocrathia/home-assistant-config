@@ -135,11 +135,10 @@ Specialized agent profiles for complex tasks:
 - **Main config**: `configuration.yaml` (includes `packages/*`)
 - **Secrets**: `secrets.yaml` (never hardcode credentials)
 - **Storage**: `.storage/` (JSON — do NOT edit directly)
-- **Work sources:** `docs/issues/` + `docs/plans/` (agent ledger); Local Todo
-  ICS + `.shopping_list.json` (human / legacy, read-only — see `work-sources.md`)
+- **Work sources:** `docs/issues/` + `docs/plans/` (agent ledger, local-only /
+  gitignored); Local Todo ICS + `.shopping_list.json` (human / legacy, read-only — see `work-sources.md`)
 - **Custom components**: `custom_components/`
 - **Themes**: `themes/`
-- **CLAUDE.md**: symlink → `AGENTS.md`
 
 ## Rules
 

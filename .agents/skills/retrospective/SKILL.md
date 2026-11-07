@@ -77,7 +77,7 @@ If nothing happened, say so and continue to git history.
 
 ```bash
 git log --oneline --since="<last session date or tag>" -- \
-  AGENTS.md CLAUDE.md .agents/ packages/ docs/ esphome/
+  AGENTS.md .agents/ packages/ docs/ esphome/
 ```
 
 Optional if `gh` is available — do not require it. For each significant change:

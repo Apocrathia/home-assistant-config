@@ -35,6 +35,14 @@ appdaemon
 packages/private/**
 !packages/private/README.md
 
+# Work ledgers (local-only; keep README + template as signposts)
+docs/issues/**
+!docs/issues/README.md
+!docs/issues/_template.md
+docs/plans/**
+!docs/plans/README.md
+!docs/plans/_template.md
+
 # Specific file ignores
 core
 image

@@ -1,7 +1,8 @@
 # Plan ledger — Home Assistant Homelab
 
-In-repo living plans for multi-session **how**-work. Chat is not the plan.
-Git history is the archive.
+Local-only living plans (gitignored) for multi-session **how**-work. Chat is
+not the plan. The ledger files are their own archive — only this `README.md`
+and `_template.md` are tracked.
 
 ## Plans vs issues
 

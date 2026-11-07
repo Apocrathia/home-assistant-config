@@ -1,7 +1,7 @@
 ---
 name: reconcile-context
 description: >-
-  Fix drift in Home Assistant Homelab agent context (AGENTS.md, CLAUDE.md,
+  Fix drift in Home Assistant Homelab agent context (AGENTS.md,
   .agents/context/, rules, skills, agents) against the repo. Run check_links,
   check_discovery, and check_frontmatter. Use when asked to sync, reconcile, or
   update agent context.
@@ -12,7 +12,7 @@ disable-model-invocation: true
 
 Keep the agent context true and thin. Stale context is worse than none.
 
-**Surface:** `AGENTS.md`, `CLAUDE.md`, `.agents/context/*.md`, `.agents/rules/`,
+**Surface:** `AGENTS.md`, `.agents/context/*.md`, `.agents/rules/`,
 `.agents/skills/`, `.agents/agents/`. Upstream pin: `.agents/upstream-ref`.
 
 **HA modules (do not rename):** `constraints`, `traps`, `nomenclature`, `voice`,
@@ -58,7 +58,7 @@ fails on findings.
 
 - **Context hub** ([`.agents/context/README.md`](../../context/README.md)): module
   table matches files on disk; skills/agents/rules lists match reality.
-- **Router** ([`AGENTS.md`](../../../AGENTS.md) / `CLAUDE.md`): every routing row
+- **Router** ([`AGENTS.md`](../../../AGENTS.md)): every routing row
   points at a real path; every context module except `README.md` appears in
   routing or loading guidance.
 - **Loading** ([`loading.md`](../../context/loading.md)): named surfaces still exist.
@@ -82,7 +82,7 @@ Check claims against the repo:
 ### 4. Drift notes
 
 ```bash
-grep -rn "<!-- drift:" AGENTS.md CLAUDE.md .agents/context/ .agents/rules/
+grep -rn "<!-- drift:" AGENTS.md .agents/context/ .agents/rules/
 ```
 
 Act when clear; delete the comment. Leave ambiguous notes for the operator.

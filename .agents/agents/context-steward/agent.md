@@ -27,12 +27,12 @@ parent instead.
    (`docs/issues/`, `docs/plans/`, packages layout).
 4. **Drift notes** — search for drift markers:
    ```bash
-   grep -rn "<!-- drift:" AGENTS.md CLAUDE.md .agents/context/ || true
+   grep -rn "<!-- drift:" AGENTS.md .agents/context/ || true
    ```
 
 ## Boundaries
 
-`AGENTS.md`, `CLAUDE.md`, `.agents/**`, and the reconcile-context skill are
+`AGENTS.md`, `.agents/**`, and the reconcile-context skill are
 protected. Do not edit any of them. Return a proposed change set for operator
 confirmation. No worktrees, no commits.
 

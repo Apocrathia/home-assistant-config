@@ -19,17 +19,17 @@ drift rule decides when the proof expired. Support-state records adapted from
 A state is written only with evidence behind it (see ledger). `TODO` means
 unproven from this repo — do not guess it.
 
-| Capability    | Claude Code                                                       | prime-agent                                                                       |
-| ------------- | ----------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| Rules loading | Adapted — `CLAUDE.md` → `AGENTS.md` symlink                       | Native — `AGENTS.md` injected as project context                                  |
-| Skills        | Adapted — `.claude/skills` → `../.agents/skills`                  | Native — repo `.agents/skills` surface discovered as skills                       |
-| Subagents     | Adapted — `.claude/agents/*.md` symlinks                          | Native — `rlm.spawn` fan-out with per-child sessions                              |
-| Hooks         | None wired (harness supports them; nothing in this repo)          | None (heartbeats / goals / refinement are their own surfaces, not hooks)          |
-| MCP           | TODO — no repo-level config; global config unverifiable from here | Native — kernel MCP catalog + `mcp_servers` registry (HA, Grafana, …)             |
-| Memories      | TODO — no repo wiring proven                                      | Native — continual harness state (memories, prompt notes, skills, subagent specs) |
+| Capability    | prime-agent                                                                       |
+| ------------- | --------------------------------------------------------------------------------- |
+| Rules loading | Native — `AGENTS.md` injected as project context                                  |
+| Skills        | Native — repo `.agents/skills` surface discovered as skills                       |
+| Subagents     | Native — `rlm.spawn` fan-out with per-child sessions                              |
+| Hooks         | None (heartbeats / goals / refinement are their own surfaces, not hooks)          |
+| MCP           | Native — kernel MCP catalog + `mcp_servers` registry (HA, Grafana, …)             |
+| Memories      | Native — continual harness state (memories, prompt notes, skills, subagent specs) |
 
-Notes on what is actually wired: `.claude/` holds only `agents/` and `skills/`
-(no `settings.json` — no hooks). The official HA MCP server exposes
+This repo runs a single harness (prime-agent) — the matrix keeps the drift
+discipline for its one column. The official HA MCP server exposes
 entity/service control and live context but no config-check call — config
 validation is the HA REST check ([`tools.md`](tools.md)), not an MCP tool.
 
@@ -37,7 +37,6 @@ validation is the HA REST check ([`tools.md`](tools.md)), not an MCP tool.
 
 | Harness     | Last verified | Verify                                                                                                                                |
 | ----------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| Claude Code | 2026-11-07    | `python3 .agents/skills/reconcile-context/scripts/check_discovery.py` proves the `CLAUDE.md`, skills, and agents symlinks             |
 | prime-agent | 2026-11-07    | Live session: repo skills in the skill list, `AGENTS.md` in the system prompt, harness digest present, `mcp_servers.names()` resolves |
 
 ## Drift rule

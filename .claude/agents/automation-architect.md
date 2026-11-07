@@ -1,1 +1,0 @@
-../../.agents/agents/automation-architect/agent.md

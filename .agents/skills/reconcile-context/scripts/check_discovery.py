@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
-"""Check Claude Code discovery symlinks against the .agents/ source of truth.
+"""Check the integrity of the .agents/ source of truth.
 
-Exit 0 if parity holds, 1 if any discovery path is missing, broken, wrong,
-not a symlink, or orphaned. Stdlib only; safe for hooks.
+Exit 0 if integrity holds, 1 if a collection is missing, a SKILL.md
+entrypoint is missing, not a file, or escapes .agents/, an agent id is
+duplicated or malformed, or a tree entry is orphaned. Stdlib only; safe
+for hooks.
 """
 
 from __future__ import annotations
@@ -81,14 +83,6 @@ def _agent_sot_ids(parent: str) -> list[str]:
     return sorted(dir_ids | flat_ids)
 
 
-def _agent_expected(parent: str, agent_id: str) -> str:
-    """Resolve the source-of-truth path for an agent (directory or flat file)."""
-    dir_path = os.path.join(parent, agent_id, "agent.md")
-    if os.path.exists(dir_path):
-        return dir_path
-    return os.path.join(parent, f"{agent_id}.md")
-
-
 def _check_contained(
     path: str,
     ancestor: str,
@@ -123,45 +117,21 @@ def _check_regular_file(
         failures.append(("NOT_A_FILE", kind, _rel(path), None))
 
 
-def _check_symlink(
-    path: str,
-    expected: str,
-    kind: str,
-    failures: list[tuple[str, str, str, str | None]],
-) -> None:
-    """Require path to be a symlink whose realpath matches expected."""
-    rel = _rel(path)
-    expected_rel = _rel(expected)
-    if not os.path.lexists(path):
-        failures.append(("MISSING", kind, rel, expected_rel))
-        return
-    if not os.path.islink(path):
-        failures.append(("NOT_SYMLINK", kind, rel, expected_rel))
-        return
-    # lexists is true for dangling symlinks; exists follows and is false.
-    if not os.path.exists(path):
-        failures.append(("BROKEN", kind, rel, expected_rel))
-        return
-    if os.path.realpath(path) != os.path.realpath(expected):
-        failures.append(("WRONG_TARGET", kind, rel, expected_rel))
-        return
-
-
 def _orphan_entries(
-    discovery_dir: str,
+    tree_dir: str,
     sot_ids: set[str],
     kind: str,
     *,
     md_only: bool,
     failures: list[tuple[str, str, str, str | None]],
 ) -> None:
-    """Fail on discovery entries with no SoT peer. Skip README.md."""
-    if not os.path.isdir(discovery_dir):
+    """Fail on tree entries with no SoT peer. Skip README.md."""
+    if not os.path.isdir(tree_dir):
         return
-    for name in sorted(os.listdir(discovery_dir)):
+    for name in sorted(os.listdir(tree_dir)):
         if name == "README.md":
             continue
-        path = os.path.join(discovery_dir, name)
+        path = os.path.join(tree_dir, name)
         if md_only:
             if not name.endswith(".md"):
                 continue
@@ -179,18 +149,16 @@ def main() -> int:
     skills_sot = os.path.join(ROOT, ".agents", "skills")
     # Missing source-of-truth collections must fail loudly rather than
     # enumerate as empty: a deleted .agents/skills/ would otherwise yield
-    # no skills, no orphans, and a false parity OK.
+    # no skills, no orphans, and a false OK.
     if not os.path.isdir(agents_sot):
         failures.append(("MISSING", "agents-sot", _rel(agents_sot), None))
     if not os.path.isdir(skills_sot):
         failures.append(("MISSING", "skills-sot", _rel(skills_sot), None))
     skill_ids = _sot_ids(skills_sot)
     for skill_id in skill_ids:
-        # The SKILL.md entrypoint is what Claude Code actually loads; the
+        # The SKILL.md entrypoint is what consumers actually load; the
         # containing directory alone can resolve while the entrypoint is
         # deleted, replaced by a directory, or symlinked outside .agents/.
-        # A deleted entrypoint must fail explicitly: the discovery symlinks
-        # point at the directory, so nothing else catches the absence.
         expected_skill_md = os.path.join(skills_sot, skill_id, "SKILL.md")
         _check_contained(
             expected_skill_md,
@@ -213,72 +181,32 @@ def main() -> int:
             else:
                 print(f"{code} [{kind}] {rel} -> {expected}")
         print(f"[agent-sot] {exc}")
-        print(f"\n{len(failures) + 1} discovery parity failure(s).")
+        print(f"\n{len(failures) + 1} source-of-truth integrity failure(s).")
         return 1
-    agent_id_set = set(agent_ids)
-
-    # --- Agent discovery ---
-    # Two valid layouts:
-    #   1. Directory-level symlink: .claude/agents -> ../.agents/agents
-    #   2. Per-file symlinks: .claude/agents/<id>.md -> ../../.agents/agents/<id>.md
-    for harness in ("claude",):
-        disc_dir = os.path.join(ROOT, f".{harness}", "agents")
-        if os.path.islink(disc_dir):
-            if not os.path.exists(disc_dir):
-                failures.append(
-                    ("BROKEN", f"agents-{harness}", _rel(disc_dir), _rel(agents_sot))
-                )
-                continue
-            if os.path.realpath(disc_dir) == os.path.realpath(agents_sot):
-                continue  # directory-level symlink is sufficient
-            failures.append(
-                ("WRONG_TARGET", f"agents-{harness}", _rel(disc_dir), _rel(agents_sot))
-            )
-            continue
-        if not os.path.isdir(disc_dir):
-            failures.append(
-                ("MISSING", f"agents-{harness}", _rel(disc_dir), _rel(agents_sot))
-            )
-            continue
-        # Per-file layout: check each agent file.
-        for agent_id in agent_ids:
-            expected = _agent_expected(agents_sot, agent_id)
-            _check_symlink(
-                os.path.join(disc_dir, f"{agent_id}.md"),
-                expected,
-                f"agent-{harness}",
-                failures,
-            )
-
-    # --- Skill discovery ---
-    # Claude: .claude/skills -> ../.agents/skills (directory-level symlink).
-    _check_symlink(
-        os.path.join(ROOT, ".claude", "skills"),
+    # --- Orphan detection within the .agents trees ---
+    # The id and entrypoint checks cover every loadable entry; a top-level
+    # entry they cannot classify (a stray file) is dead weight no consumer
+    # loads.
+    expected_agent_names = set()
+    for agent_id in agent_ids:
+        if os.path.isdir(os.path.join(agents_sot, agent_id)):
+            expected_agent_names.add(agent_id)
+        else:
+            expected_agent_names.add(f"{agent_id}.md")
+    _orphan_entries(
+        agents_sot,
+        expected_agent_names,
+        "agent-sot",
+        md_only=False,
+        failures=failures,
+    )
+    _orphan_entries(
         skills_sot,
-        "skills-claude",
-        failures,
+        set(skill_ids),
+        "skill-sot",
+        md_only=False,
+        failures=failures,
     )
-    _check_symlink(
-        os.path.join(ROOT, "CLAUDE.md"),
-        os.path.join(ROOT, "AGENTS.md"),
-        "claude-md",
-        failures,
-    )
-
-    # --- Orphan detection ---
-    # A directory-level symlink mirrors the SoT exactly, so only real
-    # directories can hold orphans.
-    for harness in ("claude",):
-        disc_dir = os.path.join(ROOT, f".{harness}", "agents")
-        if os.path.islink(disc_dir):
-            continue
-        _orphan_entries(
-            disc_dir,
-            agent_id_set,
-            f"agent-{harness}",
-            md_only=True,
-            failures=failures,
-        )
 
     for code, kind, rel, expected in failures:
         if expected is None:
@@ -287,9 +215,9 @@ def main() -> int:
             print(f"{code} [{kind}] {rel} -> {expected}")
 
     if failures:
-        print(f"\n{len(failures)} discovery parity failure(s).")
+        print(f"\n{len(failures)} source-of-truth integrity failure(s).")
         return 1
-    print("Discovery parity OK.")
+    print("Source-of-truth integrity OK.")
     return 0
 
 

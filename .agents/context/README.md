@@ -111,4 +111,4 @@ self-contained and references others by path.
 2. Reference other modules by path, not by content duplication
 3. Update this hub when adding new modules
 4. Keep `AGENTS.md` thin — it's a router, not a content file
-5. `CLAUDE.md` is a symlink to `AGENTS.md` — edit the router once
+5. `AGENTS.md` is the single router surface — edit the router once
