@@ -3,6 +3,10 @@ ssid: !secret esphome_wifi_ssid
 password: !secret esphome_wifi_password
 domain: !secret esphome_domain
 fast_connect: !secret esphome_fast_connect
-# Enable fallback hotspot (captive portal) in case wifi connection fails
+# Fallback hotspot disabled: ap_timeout 0s stops the automatic fallback AP
+# (the SSID named after the device) from ever starting on its own. The ap
+# config is kept so the AP can still be started manually (USB serial improv,
+# factory-reset button) if wifi credentials ever need re-entering.
 ap:
   password: !secret esphome_wifi_password
+  ap_timeout: 0s
