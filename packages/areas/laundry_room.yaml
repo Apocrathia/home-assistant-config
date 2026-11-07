@@ -12,16 +12,6 @@ input_number:
     unit_of_measurement: Watts
 ################################################################################
 
-input_boolean:
-  ################################################################################
-  laundry_washing_machine_complete_alert:
-    name: Laundry Washing Machine Complete Alert
-    icon: mdi:washing-machine-alert
-  laundry_dryer_complete_alert:
-    name: Laundry Dryer Complete Alert
-    icon: mdi:tumble-dryer-alert
-################################################################################
-
 template:
   ################################################################################
   - binary_sensor:
@@ -30,83 +20,75 @@ template:
         state: >
           {{ ( float(states.input_number.washing_machine_energy_threshold.state)
             < float(states.sensor.washing_machine_outlet_power.state) ) }}
+        # Confirm a real start: 1 min sustained above threshold
+        # (panel spikes / plug blips no longer count as a cycle).
+        delay_on:
+          minutes: 1
+        # Cover mid-cycle soak/pause phases below threshold;
+        # +5 min notify latency is acceptable for laundry.
         delay_off:
-          minutes: 5
-################################################################################
-
-alert:
-  ################################################################################
-  laundry_washing_machine_complete:
-    name: Laundry Washing Machine Complete
-    message: The washing machine has finished its cycle! 🧺
-    done_message: clear_notification
-    entity_id: input_boolean.laundry_washing_machine_complete_alert
-    state: 'on'
-    repeat:
-      - 15
-      - 30
-      - 60
-    can_acknowledge: true
-    skip_first: false
-    notifiers:
-      - mobile_app_ians_iphone
-      - mobile_app_ians_ipad_pro
-    data:
-      tag: laundry-washer-complete
-      group: laundry-appliances
-      push:
-        interruption-level: active
-
-  laundry_dryer_complete:
-    name: Laundry Dryer Complete
-    message: The dryer has finished its cycle! 👕
-    done_message: clear_notification
-    entity_id: input_boolean.laundry_dryer_complete_alert
-    state: 'on'
-    repeat:
-      - 15
-      - 30
-      - 60
-    can_acknowledge: true
-    skip_first: false
-    notifiers:
-      - mobile_app_ians_iphone
-      - mobile_app_ians_ipad_pro
-    data:
-      tag: laundry-dryer-complete
-      group: laundry-appliances
-      push:
-        interruption-level: active
+          minutes: 10
 ################################################################################
 
 automation:
   ################################################################################
-  - id: area_laundry_washing_machine_complete_alert_set
-    alias: 'Area - Laundry Room - Washing Machine Complete Alert Set'
+  - id: area_laundry_washing_machine_complete_notify
+    alias: 'Area - Laundry Room - Washing Machine Complete Notify'
+    description: Single-shot notify on cycle complete; no repeats.
     triggers:
       - trigger: state
         entity_id: binary_sensor.washing_machine_status
         from: 'on'
         to: 'off'
+    conditions:
+      - condition: state
+        entity_id: input_boolean.away_mode
+        state: 'off'
     actions:
-      - action: input_boolean.turn_on
-        target:
-          entity_id: input_boolean.laundry_washing_machine_complete_alert
-
-  - id: area_laundry_washing_machine_complete_alert_reset
-    alias: 'Area - Laundry Room - Washing Machine Complete Alert Reset'
+      - action: notify.mobile_app_ians_iphone
+        data:
+          title: Laundry
+          message: The washing machine has finished its cycle! 🧺
+          data:
+            tag: laundry-washer-complete
+            group: laundry-appliances
+            push:
+              interruption-level: active
+      - action: notify.mobile_app_ians_ipad_pro
+        data:
+          title: Laundry
+          message: The washing machine has finished its cycle! 🧺
+          data:
+            tag: laundry-washer-complete
+            group: laundry-appliances
+            push:
+              interruption-level: active
+    mode: single
+  ################################################################################
+  - id: area_laundry_washing_machine_clear_notification
+    alias: 'Area - Laundry Room - Washing Machine Clear Notification'
+    description: Clear the completion notification when the next cycle starts.
     triggers:
       - trigger: state
         entity_id: binary_sensor.washing_machine_status
         from: 'off'
         to: 'on'
     actions:
-      - action: input_boolean.turn_off
-        target:
-          entity_id: input_boolean.laundry_washing_machine_complete_alert
-
-  - id: area_laundry_dryer_complete_alert_set
-    alias: 'Area - Laundry Room - Dryer Complete Alert Set'
+      - action: notify.mobile_app_ians_iphone
+        data:
+          message: clear_notification
+          data:
+            tag: laundry-washer-complete
+      - action: notify.mobile_app_ians_ipad_pro
+        data:
+          message: clear_notification
+          data:
+            tag: laundry-washer-complete
+    mode: single
+  ################################################################################
+  - id: area_laundry_dryer_complete_notify
+    alias: 'Area - Laundry Room - Dryer Complete Notify'
+    description: Single-shot notify when the dryer stops vibrating for 2 minutes; no repeats.
     triggers:
       - trigger: state
         entity_id: binary_sensor.dryer_vibration_sensor_vibration
@@ -114,20 +96,49 @@ automation:
         to: 'off'
         for:
           minutes: 2
+    conditions:
+      - condition: state
+        entity_id: input_boolean.away_mode
+        state: 'off'
     actions:
-      - action: input_boolean.turn_on
-        target:
-          entity_id: input_boolean.laundry_dryer_complete_alert
-
-  - id: area_laundry_dryer_complete_alert_reset
-    alias: 'Area - Laundry Room - Dryer Complete Alert Reset'
+      - action: notify.mobile_app_ians_iphone
+        data:
+          title: Laundry
+          message: The dryer has finished its cycle! 👕
+          data:
+            tag: laundry-dryer-complete
+            group: laundry-appliances
+            push:
+              interruption-level: active
+      - action: notify.mobile_app_ians_ipad_pro
+        data:
+          title: Laundry
+          message: The dryer has finished its cycle! 👕
+          data:
+            tag: laundry-dryer-complete
+            group: laundry-appliances
+            push:
+              interruption-level: active
+    mode: single
+  ################################################################################
+  - id: area_laundry_dryer_clear_notification
+    alias: 'Area - Laundry Room - Dryer Clear Notification'
+    description: Clear the completion notification when the next cycle starts.
     triggers:
       - trigger: state
         entity_id: binary_sensor.dryer_vibration_sensor_vibration
         from: 'off'
         to: 'on'
     actions:
-      - action: input_boolean.turn_off
-        target:
-          entity_id: input_boolean.laundry_dryer_complete_alert
+      - action: notify.mobile_app_ians_iphone
+        data:
+          message: clear_notification
+          data:
+            tag: laundry-dryer-complete
+      - action: notify.mobile_app_ians_ipad_pro
+        data:
+          message: clear_notification
+          data:
+            tag: laundry-dryer-complete
+    mode: single
 ################################################################################
