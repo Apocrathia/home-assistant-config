@@ -1,76 +1,24 @@
 ---
-# Roborock Vacuums
+# Matic Robot Vacuums
 
-# The vacuums are rooted and running Valetudo for granular local control and
-# separation from the Xiaomi cloud. Plus, I can get the maps in lovelace.
-# I've used the mirobo tool built by rytilahti to upload firmware
-# ```mirobo --debug discover --handshake true```
-# ```mirobo --ip 192.168.8.1 --token $$$ update-firmware firmware.pkg```
-# Default login 'root:cleaner'
-# Sources
-# Vacuumz.info - https://vacuumz.info/download/gen2/
-# mirobo - https://github.com/rytilahti/python-miio
-# Valetudo - https://github.com/Hypfer/Valetudo
-# Firmware Builder - https://github.com/zvldz/vacuum
-# Firmware Builder - https://builder.dontvacuum.me
+# Two Matic robot vacuums: vacuum.downstairs and vacuum.upstairs, provided by
+# the matic_robot integration, a custom component bundled in
+# custom_components/matic_robot (https://github.com/ProspectOre/matic-home-assistant).
+#
+# Vacuum entity surface:
+#   - States: cleaning / returning / error / idle / docked / paused.
+#   - Supported: start, pause, stop, return-to-base, room and area cleaning.
+#     No fan speeds — cleaning intensity is the coverage select
+#     (select.downstairs_coverage / select.upstairs_coverage).
+#   - Battery is a separate sensor (sensor.downstairs_battery /
+#     sensor.upstairs_battery), not a vacuum attribute.
+#   - Live maps: camera.downstairs_map / camera.upstairs_map.
 
 automation:
   ################################################################################
-  # keep the vacuum going if it complains that it's stuck.
-  # We have fairly high pile carpets, and the added resistance against the
-  # brush is typically percieved as something being caught in the brush.
-  # To work around this, we just tell the vacuum to keep going.
-  - id: function_vacuum_restart
-    alias: 'Function - Vacuum - Restart'
-    triggers:
-      - trigger: state
-        entity_id:
-          - vacuum.downstairs
-          - vacuum.upstairs
-        from:
-          - cleaning
-          - returning
-          - error
-        to:
-          - error
-          - idle
-        for:
-          minutes: 5
-    actions:
-      #  This hasn't seemed to work, so let me make sure the template works
-      - action: notify.notify
-        data_template:
-          title: '{{ trigger.to_state.attributes.friendly_name }} has gotten stuck'
-          message: >
-            I'm going to tell it to get back to work.
-            You might want to check on it.
-      - choose:
-          - conditions:
-              - condition: template
-                value_template: "{{ trigger.from_state.state == 'cleaning' }}"
-            sequence:
-              - action: vacuum.start
-                data_template:
-                  entity_id: '{{ trigger.entity_id }}'
-          - conditions:
-              - condition: template
-                value_template: "{{ trigger.from_state.state == 'returning' }}"
-            sequence:
-              - action: vacuum.return_to_base
-                data_template:
-                  entity_id: '{{ trigger.entity_id }}'
-          - conditions:
-              - condition: template
-                value_template: "{{ trigger.from_state.state == 'error' }}"
-            sequence:
-              - action: vacuum.return_to_base
-                data_template:
-                  entity_id: '{{ trigger.entity_id }}'
-  ################################################################################
-  ################################################################################
-  # While home, dock any vacuum that starts cleaning — except the morning
-  # workday window (before 09:00). Short for: avoids fighting location_home's
-  # clear-pending start → stop → dock sequence.
+  # While home, dock any vacuum that starts cleaning — except on non-workdays
+  # and the workday morning window (before 09:00). Short for: avoids fighting
+  # location_home's clear-pending start → stop → dock sequence.
   - id: function_vacuum_quiet_hours
     alias: 'Function - Vacuum - Quiet Hours'
     triggers:
@@ -87,15 +35,21 @@ automation:
         state: 'off'
       - condition: not
         conditions:
-          - condition: and
+          - condition: or
             conditions:
               - condition: state
                 entity_id: binary_sensor.workday
-                state: 'on'
-              - condition: time
-                before: '09:00:00'
+                state: 'off'
+              - condition: and
+                conditions:
+                  - condition: state
+                    entity_id: binary_sensor.workday
+                    state: 'on'
+                  - condition: time
+                    before: '09:00:00'
     actions:
-      # Stop first so Valetudo drops the pending job; dock alone would resume later.
+      # Stop first. Matic's stop also sends the robot home; the dock call
+      # after the delay makes sure the robot is back on its dock.
       - action: vacuum.stop
         data:
           entity_id: '{{ trigger.entity_id }}'
