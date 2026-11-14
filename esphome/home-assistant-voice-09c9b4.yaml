@@ -6,7 +6,7 @@ substitutions:
 <<: !include common/diagnostics.yaml
 
 packages:
-  Nabu Casa.Home Assistant Voice PE: github://esphome/home-assistant-voice-pe/home-assistant-voice.yaml
+  Nabu Casa.Home Assistant Voice PE: github://esphome/home-assistant-voice-pe/home-assistant-voice.yaml@26.9.0
 
 esphome:
   name: ${name}
