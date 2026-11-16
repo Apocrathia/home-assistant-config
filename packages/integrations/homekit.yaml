@@ -32,8 +32,7 @@ homekit:
         - switch.living_room_tv_action_use_pc
         - scene.routine_day_good_morning
         - scene.routine_night_goodnight
-        - button.get_up_music
-        - button.ians_station
+        - button.play_music
     entity_config:
       switch.living_room_tv_action_use_pc:
         name: Living Room TV
