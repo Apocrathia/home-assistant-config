@@ -38,7 +38,9 @@
   ],
   "ignorePaths": [],
   "semanticCommits": "enabled",
-  "dependencyDashboard": true,
+  "dependencyDashboard": {
+    "enabled": true
+  },
   "dependencyDashboardApproval": true,
   "vulnerabilityAlerts": {
     "enabled": true
