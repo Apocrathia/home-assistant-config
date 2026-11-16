@@ -1,12 +1,14 @@
 ---
 substitutions:
-  name: home-assistant-voice-09c9b4
+  name: office_voice
   friendly_name: Office Voice
+  # renovate: datasource=github-releases depName=esphome/home-assistant-voice-pe versioning=semver
+  config_version: 26.9.0
 
 <<: !include common/diagnostics.yaml
 
 packages:
-  Nabu Casa.Home Assistant Voice PE: github://esphome/home-assistant-voice-pe/home-assistant-voice.yaml@26.9.0
+  Nabu Casa.Home Assistant Voice PE: github://esphome/home-assistant-voice-pe/home-assistant-voice.yaml@${config_version}
 
 esphome:
   name: ${name}
@@ -25,6 +27,6 @@ api:
 
 ota:
   platform: esphome
-  password: !secret esphome_ota
+  encryption:
 
 captive_portal:
