@@ -199,6 +199,12 @@ automation:
           entity_id: light.office_floor_lamp
         data:
           brightness: 100%
+      - alias: 'Drop the house music to 25%'
+        action: media_player.volume_set
+        target:
+          entity_id: media_player.whole_home
+        data:
+          volume_level: 0.25
   ###############################################################################
   - id: routine_work_break
     alias: Routine - Work - Break
