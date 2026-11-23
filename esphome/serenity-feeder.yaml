@@ -9,10 +9,14 @@
 #   - house skeleton: substitutions/esphome/wifi/logger/api/ota/captive_portal blocks
 #     replace upstream wifi/api/ota/captive_portal/dashboard_import/web_server blocks
 #   - name_add_mac_suffix: false; upstream project tag dropped; comment tag kept
-#   - jam guard added (handle_food_jam + the 1 s watchdog interval; event
-#     esphome.feeder_food_jam); no auto-reverse (upstream never reverses either)
 #   - lint normalization only elsewhere (lowercase booleans, bracket spacing,
 #     wrapped lines, stripped trailing spaces) - no behavior change
+#   - feed re-entry guard: actuate_feeder ignores new requests while the motor
+#     runs, and manual_feed_button is debounced (50ms) - a dispense request no
+#     longer resets the pulse count mid-feed (2026-11-23 runaway incident: a
+#     physical-button press kept dispensing until the device was unplugged)
+#   - 'Stop feed' button: HA-callable motor off (remote kill switch, added
+#     after the same 2026-11-23 incident)
 ---
 substitutions:
   name: serenity-feeder
@@ -23,8 +27,6 @@ substitutions:
   max_scoops: '6'
   # Motor pulses per "scoop": 1 pulse is not enough rotation to drop kibble.
   pulses_per_scoop: '2'
-  # Motor pulses (GPIO27) must arrive at least this often while feeding, else jam.
-  jam_timeout_ms: '3000'
 
 esphome:
   name: ${name}
@@ -81,11 +83,11 @@ globals:
     type: int
     initial_value: '0'
     restore_value: true
-  # Jam guard: millis() timestamp of the last motor pulse seen on GPIO27.
-  - id: last_motor_pulse_ms
+  # Cumulative total for diagnostics; reset via the 'Reset dispense counter' button.
+  - id: total_dispensed_scoops
     type: int
     initial_value: '0'
-    restore_value: false
+    restore_value: true
 
 script:
   - id: play_rtttl
@@ -104,7 +106,14 @@ script:
     then:
       - if:
           condition:
-            lambda: return scoops > 0;
+            lambda: return id(feed_forward).state;
+          then:
+            - logger.log:
+                level: INFO
+                format: 'Ignoring dispense request - feed already in progress'
+      - if:
+          condition:
+            lambda: return scoops > 0 && !id(feed_forward).state;
           then:
             - logger.log:
                 level: INFO
@@ -115,7 +124,6 @@ script:
                 id(scoops_count) = 0;
                 id(food_sensor_count) = 0;
                 id(max_scoops) = scoops * ${pulses_per_scoop};
-                id(last_motor_pulse_ms) = millis();
             - switch.turn_on: feed_forward
   - id: dispatch_feeder_food_dispensed_event
     parameters:
@@ -164,20 +172,6 @@ script:
             );
           }
         }
-  # House addition - jam handler. Stops the motor first, then logs, fires the
-  # esphome.feeder_food_jam HA event, and updates the state text sensor.
-  # No auto-reverse: upstream's normal flow never runs feed_reverse either.
-  - id: handle_food_jam
-    then:
-      - switch.turn_off: feed_forward
-      - logger.log:
-          level: WARN
-          format: 'Food jam: no motor pulses for over ${jam_timeout_ms} ms, feed stopped'
-      - homeassistant.event:
-          event: esphome.feeder_food_jam
-          data:
-            message: '${friendly_name} food jam detected. Motor stopped. Check the feeder.'
-      - lambda: id(feeder_state).publish_state("Food jam detected");
 
 light:
   - platform: binary
@@ -218,19 +212,6 @@ interval:
             - light.turn_on:
                 id: led
                 effect: fast_blink
-  # House addition - jam watchdog: while feed_forward is on, motor pulses
-  # (GPIO27) must keep arriving; a stall longer than jam_timeout_ms trips the
-  # jam handler. Watchdog is idle whenever the motor is off, so no boot-time
-  # false positives (last_motor_pulse_ms starts at 0, feed_forward starts off).
-  - interval: 1s
-    then:
-      - if:
-          condition:
-            lambda: |-
-              return id(feed_forward).state &&
-                  (millis() - id(last_motor_pulse_ms)) > ${jam_timeout_ms};
-          then:
-            - script.execute: handle_food_jam
 
 uart:
   tx_pin: GPIO1
@@ -644,6 +625,8 @@ binary_sensor:
     pin:
       number: GPIO34
       inverted: true
+    filters:
+      - delayed_on: 50ms
     on_press:
       then:
         - lambda: id(actuate_feeder)->execute((int) id(default_scoops).state);
@@ -657,11 +640,11 @@ binary_sensor:
       then:
         - lambda: |-
             id(scoops_count) += 1;
-            id(last_motor_pulse_ms) = millis();
             if (id(scoops_count) >= id(max_scoops)) {
               id(feed_forward).turn_off();
               id(last_food_sensor_count) = id(food_sensor_count);
               id(last_food_scoops_count) = id(scoops_count);
+              id(total_dispensed_scoops) += id(scoops_count);
               id(check_food_level)->execute(
                 /* food_dispensed = */ true, /* play_sound = */ true, /* send_event = */ true
               );
@@ -681,11 +664,17 @@ binary_sensor:
         - lambda: |-
             id(food_sensor_count) += 1;
 
+debug:
+
 text_sensor:
   - platform: template
     name: 'State'
     id: feeder_state
     entity_category: diagnostic
+  - platform: debug
+    reset_reason:
+      name: 'Reset reason'
+      entity_category: diagnostic
 
 switch:
   - platform: template
@@ -803,14 +792,37 @@ sensor:
     accuracy_decimals: 0
     lambda: |-
       return id(last_food_scoops_count) / ${pulses_per_scoop};
+  - platform: template
+    id: total_dispensed
+    name: 'Total dispensed scoops'
+    icon: mdi:counter
+    entity_category: diagnostic
+    state_class: measurement
+    accuracy_decimals: 0
+    lambda: |-
+      return id(total_dispensed_scoops) / ${pulses_per_scoop};
 
 button:
+  - platform: template
+    name: 'Reset dispense counter'
+    id: reset_dispense_counter
+    icon: mdi:counter-reset
+    entity_category: config
+    on_press:
+      then:
+        - lambda: id(total_dispensed_scoops) = 0;
   - name: 'Dispense food'
     id: dispense_food
     icon: mdi:food-turkey
     platform: template
     on_press:
       - lambda: id(actuate_feeder)->execute((int) id(default_scoops).state);
+  - name: 'Stop feed'
+    id: stop_feed
+    icon: mdi:stop-circle
+    platform: template
+    on_press:
+      - switch.turn_off: feed_forward
   - platform: restart
     name: 'Restart'
     disabled_by_default: true

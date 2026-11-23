@@ -300,52 +300,44 @@ automation:
   - id: function_wakeup_music_out_of_bed
     alias: 'Function - Wakeup - Music (Out of Bed)'
     triggers:
-      # Primary: the bed goes empty, confirmed by recent bedroom motion.
-      # Failsafe: the stairs-thermostat motion and the living-room PIR (the
-      # "letting Michio out" path) fire when the bed sensor misses the rise.
-      # One-shot per morning: the not-playing guard below blocks re-fires
-      # once music has started.
+      # Raw device signal (already noise-debounced by the device itself):
+      # bed goes empty and holds empty for a short confirm (1 min). A fresh
+      # on->off cycle is the one-shot; walking around the room doesn't
+      # re-arm it.
       - trigger: state
         entity_id: binary_sensor.bed_presence_2bd444_bed_occupied_either
+        from: 'on'
         to: 'off'
-      - trigger: state
-        entity_id: binary_sensor.homekit_upstairs_motion
-        to: 'on'
-      - trigger: state
-        entity_id: binary_sensor.living_room
-        to: 'on'
+        for: '00:01:00'
     conditions:
       condition: and
       conditions:
         - condition: time
           after: input_datetime.good_morning_earliest
           before: '12:00:00'
-        # Primary: bed empty + bedroom motion within the last 5 minutes.
-        # Failsafe: stairs-thermostat AND living-room PIR both fired within
-        # the last 10 minutes (no bed sensor required).
-        - condition: template
-          value_template: >
-            {% set br = states.binary_sensor.homekit_master_bedroom_motion %}
-            {% set st = states.binary_sensor.homekit_upstairs_motion %}
-            {% set lr = states.binary_sensor.living_room %}
-            {{ (is_state('binary_sensor.bed_presence_2bd444_bed_occupied_either', 'off')
-                and br is not none and br.last_changed is not none
-                and (now() - br.last_changed) <= timedelta(minutes=5))
-               or (st is not none and st.last_changed is not none
-                   and lr is not none and lr.last_changed is not none
-                   and (now() - st.last_changed) <= timedelta(minutes=10)
-                   and (now() - lr.last_changed) <= timedelta(minutes=10)) }}
         # Already-playing guard: do not restart music that's already playing
-        # on the group (the manual infinite_mix button or an earlier fire).
+        # on the group (the manual play_music button or an earlier fire).
         - condition: not
           conditions:
             - condition: state
               entity_id: media_player.whole_home
               state: playing
     actions:
+      - alias: 'Ensure every member is at 50%'
+        # Set first so a stale 25% (from yesterday's 09:00 drop) doesn't
+        # survive: function_infinite_mix no-ops when already playing.
+        repeat:
+          for_each: '{{ state_attr("media_player.whole_home", "group_members") }}'
+          sequence:
+            - action: media_player.volume_set
+              target:
+                entity_id: '{{ repeat.item }}'
+              data:
+                volume_level: 0.5
       - alias: 'Start Infinite Mix at 50%'
         action: script.function_infinite_mix
-      - alias: 'Fade the bedroom TV down to 5% over 30 s'
+      - alias: >
+          Fade the bedroom TV down to 5% over 30 s
         repeat:
           count: 2
           sequence:
@@ -355,7 +347,12 @@ automation:
               target:
                 entity_id: media_player.master_bedroom_apple_tv
               data:
-                volume_level: "{{ ((states('input_number.wakeup_tv_volume') | float(30)) / 100) + (0.05 - ((states('input_number.wakeup_tv_volume') | float(30)) / 100)) * (repeat.index / 2) }}"
+                volume_level: >
+                  {{
+                    ((states('input_number.wakeup_tv_volume') | float(30)) / 100)
+                    + (0.05 - ((states('input_number.wakeup_tv_volume') | float(30)) / 100))
+                    * (repeat.index / 2)
+                  }}
   ################################################################################
   - id: function_wakeup_tv_off_downstairs
     alias: 'Function - Wakeup - TV Off (Downstairs)'
