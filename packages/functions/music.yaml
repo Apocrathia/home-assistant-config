@@ -133,3 +133,79 @@ automation:
         data:
           # If it's before 0900, volume @ 50%, else 25%
           volume: '{{ 50 if now().hour < 9 else 25 }}'
+  ################################################################################
+  - id: function_music_group_watchdog
+    alias: 'Function - Music - Group Watchdog'
+    description: >
+      Re-adds any speaker that dropped out of the Whole Home sync group while
+      it is playing. For Music Assistant the working direction is target=group
+      and group_members=[the missing player].
+    triggers:
+      - trigger: state
+        entity_id: media_player.whole_home
+        to: playing
+      - trigger: time_pattern
+        minutes: '/2'
+    conditions:
+      - condition: state
+        entity_id: media_player.whole_home
+        state: playing
+    actions:
+      - alias: 'Re-add any missing speakers'
+        repeat:
+          for_each: >
+            {{ ['media_player.housewaves_three_93b020',
+                'media_player.housewaves_three_93a06c',
+                'media_player.kitchen_homepod',
+                'media_player.master_bathroom_homepod',
+                'media_player.bedside_left_homepod',
+                'media_player.bedside_right_homepod',
+                'media_player.office_homepod',
+                'media_player.upstairs_homepod']
+               | reject('in', state_attr('media_player.whole_home', 'group_members') | default([]))
+               | list }}
+          sequence:
+            - action: media_player.join
+              target:
+                entity_id: media_player.whole_home
+              data:
+                group_members:
+                  - '{{ repeat.item }}'
+  ################################################################################
+  - id: function_music_stall_watchdog
+    alias: 'Function - Music - Stall Watchdog'
+    description: >
+      Restarts the Whole Home stream when it stalls mid-track. MA position
+      updates are event-driven (track start / pause / play) with HA
+      extrapolating in between, so a stale timestamp alone is normal - the
+      stall signature is the extrapolated position running past the track
+      duration while the state still says playing.
+    triggers:
+      - trigger: time_pattern
+        minutes: '/5'
+    conditions:
+      - condition: state
+        entity_id: media_player.whole_home
+        state: playing
+      - condition: template
+        value_template: >
+          {% set pos = state_attr('media_player.whole_home', 'media_position') %}
+          {% set dur = state_attr('media_player.whole_home', 'media_duration') %}
+          {% set upd = state_attr('media_player.whole_home', 'media_position_updated_at') %}
+          {{ dur is not none and pos is not none and upd is not none
+             and dur > 0
+             and (pos + (now() - upd).total_seconds()) > (dur + 120) }}
+    actions:
+      - alias: 'Stop the stalled stream'
+        action: media_player.media_stop
+        target:
+          entity_id: media_player.whole_home
+      - delay: '00:00:03'
+      - alias: 'Restart the Infinite Mix'
+        action: music_assistant.play_media
+        target:
+          entity_id: media_player.whole_home
+        data:
+          media_type: playlist
+          media_id: 'builtin://playlist/infinite_mix'
+          enqueue: replace
