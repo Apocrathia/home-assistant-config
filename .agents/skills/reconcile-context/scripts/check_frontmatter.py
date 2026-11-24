@@ -10,7 +10,10 @@ rule), templates/agents/*.tmpl, and .agents/agents/ personas.
 Every skill must carry a flat YAML frontmatter block with `name` (matching
 the directory) and `description`. Harnesses render `description` into flat
 tables, so a literal block scalar (`|`) — which preserves internal newlines
-— silently breaks them; folded (`>`) and inline scalars are fine.
+— silently breaks them; folded (`>`) and inline scalars are fine. The
+optional `templatized` key is a classifier marker: present means exactly
+`true` (the skill's `{{project_name}}` positions are renderable); semantic
+enforcement of the marker lives in check_tokens.py.
 
 Frontmatter findings warn by default so an adopting repo does not fail on
 day one; pass --strict to promote them to failures. Structural failures
@@ -240,6 +243,15 @@ def _check_file(
             rel,
             f"description uses literal block scalar '{indicator}', which preserves "
             "internal newlines; use an inline string or folded '>' scalar instead",
+        )
+
+    if "templatized" in values and values["templatized"] != "true":
+        report(
+            False,
+            "invalid-templatized",
+            rel,
+            "frontmatter 'templatized' must be exactly 'true' when present — it "
+            "is a classifier marker for renderable skills, not a value holder",
         )
 
     if not body.strip():

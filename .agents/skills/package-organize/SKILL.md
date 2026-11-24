@@ -8,6 +8,7 @@ description: >-
   between packages, consolidating or splitting large package files, or adding
   new areas.
 ---
+
 # Skill: Package Organization
 
 ## Purpose
@@ -52,7 +53,6 @@ Each package file should follow this section order:
 
 ```yaml
 # <Area/Function> Configuration
-# Last updated: YYYY-MM-DD
 
 # ============================
 # Lights

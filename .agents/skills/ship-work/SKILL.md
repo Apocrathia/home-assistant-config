@@ -1,5 +1,6 @@
 ---
 name: ship-work
+templatized: true
 description: >-
   Hand off completed Home Assistant Homelab work to the operator: summarize
   diffs, suggest a Conventional Commit, list validation done, and remind them

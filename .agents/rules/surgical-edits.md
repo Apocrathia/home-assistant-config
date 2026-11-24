@@ -13,6 +13,9 @@ are covered by [`clarify-dont-guess.md`](./clarify-dont-guess.md) and
 in `surgical-edits-examples.md` under `.agents/references/`, when that file
 exists in the project.
 
+Complements [`ponytail.md`](./ponytail.md): that rule is the YAGNI ladder and
+lazy-senior voice; this rule is the edit-scope contract.
+
 **Tradeoff:** these bias toward caution over speed. For trivial tasks, use
 judgment.
 
@@ -20,7 +23,9 @@ judgment.
 
 Minimum YAML/code that solves the problem. Nothing speculative.
 
-Before writing anything, climb the ladder (stop at the first rung that holds):
+Before writing anything, climb the [ponytail ladder](./ponytail.md) (stop at
+the first rung that holds), then apply these constraints to whatever you
+write. The HA-shaped rungs:
 
 1. Does this need to exist at all? Speculative need = skip it.
 2. Already in this codebase? Reuse it — look in `packages/` before you write.
@@ -29,12 +34,10 @@ Before writing anything, climb the ladder (stop at the first rung that holds):
 5. Can it be a small addition to an existing package file? Prefer that.
 6. Only then: the minimum new config that works.
 
-Then apply these constraints to whatever you write:
-
 - No features beyond what was asked.
 - No abstractions for single-use automations.
 - No flexibility or configurability that wasn't requested.
-- No speculative branches for states that can't occur.
+- No speculative branches for states that can't occur (dead `if`/`else`, unused config keys, defensive match arms for impossible inputs).
 - If you write a large block and it could be a small one, rewrite your own new code.
 - Push back when a simpler approach exists; say so before implementing.
 

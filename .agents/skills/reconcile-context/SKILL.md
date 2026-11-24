@@ -1,5 +1,6 @@
 ---
 name: reconcile-context
+templatized: true
 description: >-
   Fix drift in Home Assistant Homelab agent context (AGENTS.md,
   .agents/context/, rules, skills, agents) against the repo. Run check_links,
@@ -30,7 +31,7 @@ Conventional Commit. Do not commit, push, or open PRs.
 ## Workflow
 
 ```
-- [ ] 1. check_links + check_discovery + check_frontmatter
+- [ ] 1. check_links + check_discovery + check_frontmatter + check_tokens
 - [ ] 2. Structural drift (hub, routing, loading)
 - [ ] 3. Reality drift (claims vs packages/docs/skills)
 - [ ] 4. Harvest <!-- drift: --> notes
@@ -44,6 +45,7 @@ Conventional Commit. Do not commit, push, or open PRs.
 python3 .agents/skills/reconcile-context/scripts/check_links.py
 python3 .agents/skills/reconcile-context/scripts/check_discovery.py
 python3 .agents/skills/reconcile-context/scripts/check_frontmatter.py
+python3 .agents/skills/reconcile-context/scripts/check_tokens.py
 ```
 
 Use `check_links.py --all` when docs or non-context markdown may have broken
@@ -53,6 +55,16 @@ links too. Fix broken links/anchors or drop dead references.
 the directory, `description` present and not a literal block scalar, body
 non-empty. `--all` adds rules and `.agents/agents/` personas; `--strict`
 fails on findings.
+
+`check_tokens.py` verifies rendered-token discipline: skills marked
+`templatized: true` in frontmatter must be fully rendered in this tree (no
+raw project-name token left anywhere in the file), the two byte-identical
+skills that document the token convention (`contribute-upstream`,
+`integrate-upstream`) must keep all of their mentions, and a consumer tree is
+validated against the `token_counts` recorded in `.agents/upstream-ref`. In
+the core repo the check enforces the marker itself: exactly the five
+templatized skills carry `templatized: true`, and no unmarked skill may hold
+a project-name token.
 
 ### 2. Structural drift
 
@@ -91,7 +103,7 @@ Act when clear; delete the comment. Leave ambiguous notes for the operator.
 
 Protected paths need confirmation
 ([`protected-paths`](../../rules/protected-paths.md)). Stay thin; link out; don't
-invent decisions. Re-run all three scripts. Report and suggest a commit
+invent decisions. Re-run all four scripts. Report and suggest a commit
 message — operator ships.
 
 ## Report
@@ -107,6 +119,7 @@ message — operator ships.
 **Links:** <pass | N fixed>
 **Discovery:** <pass | failures>
 **Frontmatter:** <pass | N findings>
+**Tokens:** <pass | failures>
 **Suggested commit:** <type(scope): description>
 ```
 

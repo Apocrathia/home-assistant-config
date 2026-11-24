@@ -37,7 +37,6 @@ New file: packages/areas/guest_room.yaml
 
 ```yaml
 # Guest Room Configuration
-# Last updated: 2026-07-20
 
 input_boolean:
   guest_room_occupied:

@@ -6,11 +6,13 @@ description: Ask when ambiguous; distinguish advice from action; permission-ques
 # Clarify, don't guess
 
 When the request has two or more reasonable interpretations, **do not guess**.
-Surface the ambiguity and ask using the format in [`question-format.md`](./question-format.md).
+Ask per [`question-format.md`](./question-format.md) (prefer the structured-question
+tool when it is in the tool list). Prove what you can first; flag irreducible
+ambiguity with `[NEEDS CLARIFICATION]` ([`ambiguity-goes-back-to-source.md`](./ambiguity-goes-back-to-source.md)).
 
 ## Triggers
 
-- Two valid scopes for the same instruction (e.g. "fix the lights" — which area).
+- Two valid scopes for the same instruction (e.g. "fix the lights"; which area).
 - Two valid approaches with different tradeoffs.
 - A constraint that conflicts with another constraint.
 - A reference to a file, package, or entity whose identity isn't obvious.
@@ -18,8 +20,8 @@ Surface the ambiguity and ask using the format in [`question-format.md`](./quest
 
 ## Distinguish advice from action
 
-When the operator uses consultative language — "advice", "please advise", "what
-should I do", "considering", "thinking about" — provide options and
+When the operator uses consultative language; "advice", "please advise", "what
+should I do", "considering", "thinking about"; provide options and
 recommendations only. **Do not implement or mutate repo state** (no edits,
 staging, branches, or worktrees). Read-only investigation is allowed
 and expected: read files, run diagnostic commands, reproduce behavior. Wait for
@@ -33,8 +35,8 @@ Never treat "implement" as permission to commit or push
 
 ## Permission-question discipline
 
-If you ask a permission question — "Want me to…?", "Should I…?", "Do you want me
-to…?" — **stop and wait for the answer**. Never batch the permission ask with the
+If you ask a permission question; "Want me to…?", "Should I…?", "Do you want me
+to…?"; **stop and wait for the answer**. Never batch the permission ask with the
 action itself. A previous "proceed" on a different topic does not carry forward.
 
 Protected-path edits always need confirmation
@@ -45,10 +47,11 @@ Protected-path edits always need confirmation
 When ambiguity spans several **dependent** decisions (not one clarify question
 or several independent facts), use
 [`alignment`](../skills/alignment/SKILL.md) instead of ad-hoc back-and-forth.
-Alignment resolves dependent decisions **one at a time**: one question per turn,
-then wait for the operator's answer before asking the next. Batching several
-questions into one reply is allowed **only for independent gaps** that no other
-decision depends on. Alignment is read-only until the operator asks to proceed.
+Alignment works the decision tree in **frontier rounds**: every question whose
+prerequisites are settled goes in one numbered round; dependent questions wait
+for later rounds. For several **independent** gaps outside alignment, use one
+structured-question turn (or one prose Ask) covering them. Alignment is
+read-only until the operator asks to proceed.
 
 ## Not ambiguity
 

@@ -17,13 +17,35 @@ not use git worktrees — stay in the main checkout
 ([`worktrees.md`](../../rules/worktrees.md)).
 
 Derived from the [grill-me](https://www.aihero.dev/my-grill-me-skill-has-gone-viral)
-pattern: interview relentlessly until shared understanding, one decision branch
-at a time. Explore the repo when that answers the question; do not ask the
-operator to repeat what the tree already shows.
+pattern in [mattpocock/skills](https://github.com/mattpocock/skills)
+(`skills/productivity/grill-me`, adapted July 2026). Upstream has since split
+it into a `grill-me` stub plus an evolved
+[`grilling`](https://github.com/mattpocock/skills/blob/main/skills/productivity/grilling/SKILL.md)
+skill; the frontier-rounds and fact-finding mechanics below are synced from
+that evolution (checked 2026-11-23). Re-sync from upstream when it drifts.
 
-**One decision per turn.** Ask a single question, then wait for the operator's
-answer before asking the next. Batching multiple design questions in one turn
-is bewildering; grilling means one question, one answer, then the next.
+Interview the operator about every aspect of the topic until you reach shared
+understanding. Walk each branch of the decision tree, resolving dependencies
+between decisions one at a time.
+
+**Frontier rounds.** Map the topic as a decision tree: every decision branches
+into the decisions that hang off it. The **frontier** is every decision whose
+prerequisites are already settled: the questions you can ask now without
+guessing at answers you have not heard. Ask the whole frontier in one numbered
+round, each question with its recommendation, then wait. A question whose
+answer depends on a decision still open in this round belongs to a later round,
+not this one. Dependency order is never batched away: the frontier round
+replaces strict one-question-per-turn, not the waiting between dependent
+decisions.
+
+**Word each question so a bare "yes" accepts the recommendation.**
+
+**Facts are the agent's job, never the operator's.** When a frontier question
+needs a fact from the environment (filesystem, tooling, repo state), look it
+up or dispatch a read-only scout with a fresh context window; do not ask the
+operator for anything you could find yourself. Do not block the round on a
+running lookup: only the questions downstream of it wait; ask the rest of the
+frontier now. The decisions are the operator's: put each to them and wait.
 
 Trivial factual disambiguation ("did you mean `kitchen.yaml` or
 `office.yaml`?") may use a quick one-line question without a full alignment

@@ -25,11 +25,18 @@ on confirm, update the pin, validate, hand off. No commits, pushes, or PRs.
 
 Three layers:
 
-| Layer                | What                                       | How this skill handles it                   |
-| -------------------- | ------------------------------------------ | ------------------------------------------- |
-| 1 — Generic          | Rules, byte-identical skills, scripts      | Direct diff; copy or reconcile              |
-| 2 — Templatized      | Skills with `{{project_name}}` tokens      | Diff after token normalization; reconcile   |
-| 3 — Project-specific | Context modules, HA agents/skills, routing | **Do not overwrite.** Structural check only |
+| Layer                | What                                             | How this skill handles it                   |
+| -------------------- | ------------------------------------------------ | ------------------------------------------- |
+| 1 — Generic          | Rules, byte-identical skills, scripts            | Direct diff; copy or reconcile              |
+| 2 — Templatized      | Skills marked `templatized: true` in frontmatter | Diff after token normalization; reconcile   |
+| 3 — Project-specific | Context modules, HA agents/skills, routing       | **Do not overwrite.** Structural check only |
+
+`contribute-upstream` and `integrate-upstream` are layer 1 even though they
+contain `{{project_name}}`: those mentions document the token convention, and
+substituting the project name into them corrupts the consumer copy (issue
+#32). Never replace the token in either skill. `check_tokens.py` compares
+those copies to the `token_counts` recorded in `.agents/upstream-ref`; step 9
+refreshes that manifest.
 
 ## When to run
 
@@ -63,7 +70,7 @@ writing ([`protected-paths.md`](../../rules/protected-paths.md)).
 - [ ] 7. Surface the change set — STOP for operator confirmation
 - [ ] 8. Apply in the main checkout after confirmation
 - [ ] 9. Update .agents/upstream-ref to $upstream_rev (only on a complete apply)
-- [ ] 10. Run link + discovery + frontmatter checks
+- [ ] 10. Run link + discovery + frontmatter + token checks
 - [ ] 11. Report and hand off (operator commits)
 ```
 
@@ -79,7 +86,10 @@ Verify the upstream looks like the core: top-level `rules/`, `skills/`,
 structure does not match, stop and ask.
 
 Pin the **canonical tip**, not whatever branch the checkout happens to be on —
-fetch, never re-checkout or fast-forward the supplied clone:
+fetch, never re-checkout or fast-forward the supplied clone. If the checkout's
+`origin` is a fork, fetch the canonical remote
+(`PrimeIntellect-ai/prime-context`) instead; a fork's `origin/main` can be
+stale:
 
 ```bash
 git -C "$upstream" fetch origin
@@ -94,8 +104,13 @@ the sync.
 ### 2. Baseline from upstream-ref
 
 ```bash
-baseline_rev=$(cat .agents/upstream-ref 2>/dev/null || echo "")
+baseline_rev=$(python3 -c 'import json; print(json.load(open(".agents/upstream-ref")).get("sha") or "")' 2>/dev/null || echo "")
 ```
+
+The pin is JSON: `sha` (the baseline), `synced_at`, optional `version`, and
+`token_counts` — the expected `{{project_name}}` mention count per
+token-bearing doc skill; the step-9 pin write refreshes it. A bare SHA (older
+pins) is read as-is.
 
 Verify the pin is an object in `$upstream` **and** an ancestor of
 `$upstream_rev`:
@@ -138,15 +153,17 @@ work-sources).
 Discover upstream files dynamically from `$upstream_rev`
 (`git -C "$upstream" ls-tree -r --name-only "$upstream_rev"`), do not hardcode
 skill names, and diff against `$upstream_rev` (`git show "$upstream_rev:<file>"`)
-— never the working tree. Classify a skill as layer 2 from
-`{{project_name}}` tokens in its `SKILL.md`.
+— never the working tree. Classify a skill as layer 2 from the
+`templatized: true` frontmatter marker, never by grepping for
+`{{project_name}}`: `contribute-upstream` and `integrate-upstream` mention the
+token as documentation and stay byte-identical.
 
 | Layer                       | Upstream source                             | Local                                 | Action                                                   |
 | --------------------------- | ------------------------------------------- | ------------------------------------- | -------------------------------------------------------- |
 | 1 — Rules                   | `rules/*.md`                                | `.agents/rules/*.md`                  | Direct diff                                              |
 | 1 — Byte-identical skills   | `skills/<name>/SKILL.md` (no project token) | `.agents/skills/<name>/SKILL.md`      | Direct diff                                              |
 | 1 — Skill auxiliaries       | `skills/<name>/**` except `SKILL.md`        | same under `.agents/skills/<name>/`   | Direct diff                                              |
-| 2 — Templatized skills      | skills with `{{project_name}}`              | local skill                           | Diff after replacing token with `Home Assistant Homelab` |
+| 2 — Templatized skills      | skills marked `templatized: true`           | local skill                           | Diff after replacing token with `Home Assistant Homelab` |
 | 3 — Context / root / refs   | `templates/**`                              | `.agents/context/`, `AGENTS.md`, etc. | Structural suggestions only — never overwrite            |
 | 3 — Agent persona templates | `templates/agents/*.tmpl`                   | `.agents/agents/*.md`                 | Structural only — verify role coverage in `subagents.md` |
 
@@ -218,8 +235,30 @@ Only after explicit operator confirmation:
 ### 9. Update the pin — only on a complete apply
 
 ```bash
-echo "$upstream_rev" > .agents/upstream-ref
+synced_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+counts=$(python3 - <<'PY'
+import json
+counts = {}
+for skill in ("contribute-upstream", "integrate-upstream"):
+    with open(f".agents/skills/{skill}/SKILL.md", encoding="utf-8") as fh:
+        counts[skill] = fh.read().count("{{project_name}}")
+print(json.dumps(counts))
+PY
+)
+python3 - "$upstream_rev" "$synced_at" "$counts" <<'PY'
+import json, sys
+sha, synced_at, counts = sys.argv[1], sys.argv[2], json.loads(sys.argv[3])
+with open(".agents/upstream-ref", "w") as f:
+    json.dump({"sha": sha, "synced_at": synced_at, "token_counts": counts}, f, indent=2)
+    f.write("\n")
+PY
 ```
+
+The pin is a JSON object: `sha`, `synced_at`, and `token_counts` — the
+`{{project_name}}` mention count for the two doc skills. Count from the
+reconciled local copies (equal to the upstream counts when the copies are
+byte-identical) so `check_tokens.py` verifies the copies that actually
+shipped. Do not stage; the operator commits the pin with the sync.
 
 Bump the pin **only** when every confirmed layer-1/2 file was applied and
 the checks pass. If the operator declined any layer-1/2 update or a check
@@ -238,10 +277,21 @@ python3 .agents/skills/reconcile-context/scripts/check_discovery.py
 python3 .agents/skills/reconcile-context/scripts/check_frontmatter.py
 ```
 
+Run `check_tokens.py` **after** the step-9 pin write — it reads
+`token_counts` from `.agents/upstream-ref`, so running it sooner compares the
+new copies against the previous pin:
+
+```bash
+python3 .agents/skills/reconcile-context/scripts/check_tokens.py
+```
+
 If a script is missing locally and exists upstream, include copying it in the
 confirmed change set (layer 1). Note pass/fail in the report.
 `check_links.py` walks tracked files — brand-new files are invisible until
-the operator stages them (`git add -N`); agents never stage.
+the operator stages them (`git add -N`); agents never stage. On new link-check
+breakage, filter consumer-layout false positives first
+(`skills/contribute-upstream/scripts/check_consumer_links.py filter-layout`)
+before treating a break as real.
 
 ### 11. Report and hand off
 
@@ -269,6 +319,7 @@ the operator stages them (`git add -N`); agents never stage.
 
 - link: <pass | N issues>
 - discovery: <pass | N issues>
+- tokens: <pass | N issues>
 
 ### Next
 

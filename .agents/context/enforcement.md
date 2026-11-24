@@ -53,9 +53,7 @@ For any future hook or checker script:
 
 ## Promotion path
 
-Rule (behavioral) → fails 3+ times → mechanical check → failures stop. That is
-how this repo got its checkers: frontmatter drift became `check_frontmatter.py`;
-broken symlink parity became `check_discovery.py` in every reconcile lap. Keep
+Rule (behavioral) → fails 3+ times → mechanical check → failures stop. Keep
 the rule when promoted — the check enforces, the rule explains. Not everything
 can be structural ("answer first" stays behavioral); file writes, directory
 boundaries, and output validation can and should be mechanical.

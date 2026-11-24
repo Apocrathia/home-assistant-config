@@ -29,7 +29,7 @@ Do not open GitHub issues unless the operator explicitly asks.
 
 | Situation                           | File?                                                                                                    |
 | ----------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| Fixable in the current lap          | No — fix it                                                                                              |
+| Fixable in the current lap          | No; fix it                                                                                               |
 | Out of scope for current lap        | Yes — `docs/issues/<slug>.md`                                                                            |
 | Architecture friction               | Yes (`kind: architecture`); see [`architecture-review`](../architecture-review/SKILL.md)                 |
 | Feature or spec-level desired state | **Alignment first** if acceptance unclear; then yes                                                      |

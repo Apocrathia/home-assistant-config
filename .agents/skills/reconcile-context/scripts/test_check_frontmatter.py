@@ -345,6 +345,52 @@ class CheckFrontmatterTest(unittest.TestCase):
             self.assertEqual(0, status, output)
             self.assertNotIn("README.md", output)
 
+    def test_templatized_true_marker_passes(self):
+        with tempfile.TemporaryDirectory() as root:
+            self._skill(
+                root,
+                text=GOOD_SKILL.replace(
+                    "disable-model-invocation: true",
+                    "disable-model-invocation: true\ntemplatized: true",
+                ),
+            )
+
+            status, output = self.run_checker(root, "--strict")
+
+            self.assertEqual(0, status, output)
+            self.assertNotIn("templatized", output)
+
+    def test_templatized_non_true_value_warns(self):
+        with tempfile.TemporaryDirectory() as root:
+            self._skill(
+                root,
+                text=GOOD_SKILL.replace(
+                    "disable-model-invocation: true",
+                    "disable-model-invocation: true\ntemplatized: false",
+                ),
+            )
+
+            status, output = self.run_checker(root)
+
+            self.assertEqual(0, status, output)
+            self.assertIn("WARN [invalid-templatized]", output)
+            self.assertIn("must be exactly 'true' when present", output)
+
+    def test_templatized_non_true_value_fails_under_strict(self):
+        with tempfile.TemporaryDirectory() as root:
+            self._skill(
+                root,
+                text=GOOD_SKILL.replace(
+                    "disable-model-invocation: true",
+                    "disable-model-invocation: true\ntemplatized: yes",
+                ),
+            )
+
+            status, output = self.run_checker(root, "--strict")
+
+            self.assertEqual(1, status, output)
+            self.assertIn("FAIL [invalid-templatized]", output)
+
     def test_nothing_to_check_skips(self):
         with tempfile.TemporaryDirectory() as root:
             os.makedirs(os.path.join(root, "docs"))

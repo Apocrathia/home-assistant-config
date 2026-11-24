@@ -16,8 +16,8 @@ disable-model-invocation: true
 Adapted from [ECC](https://github.com/affaan-m/ECC) (MIT), `skills/change-impact/`.
 
 Read-only. Before a non-trivial change, prove the blast radius from evidence:
-who consumes the thing being changed — code, data, interfaces, tests, docs, and
-steering surfaces — with every consumer cited and unknowns marked `unverified`.
+who consumes the thing being changed; code, data, interfaces, tests, docs, and
+steering surfaces; with every consumer cited and unknowns marked `unverified`.
 After implementation, reconcile the declared impact with the actual diff.
 
 Do not edit files. Report findings; the parent or operator acts on them.
@@ -43,7 +43,7 @@ Do not edit files. Report findings; the parent or operator acts on them.
 - After implementation, when the planned impact must be reconciled with the
   actual diff.
 
-Skip for a single known file with an obvious edit — that is not non-trivial.
+Skip for a single known file with an obvious edit; that is not non-trivial.
 
 ## Blast radius
 
@@ -64,7 +64,7 @@ answers with one line of why; `unverified` is never a silent answer.
 6. **Release.** For deployed or hard-to-reverse changes: deployment order,
    compatibility window, recovery steps, rollback, irreversible effects. For
    migrations, breaking interfaces, or auth changes, a missing rollback or
-   recovery step is a blocker — surface it; never execute rollback yourself.
+   recovery step is a blocker; surface it; never execute rollback yourself.
 
 ## Output
 
@@ -79,7 +79,7 @@ let them choose where.
 After implementation, reconcile:
 
 1. **Declared vs touched.** Compare the actual diff against the declared blast
-   radius. Files touched outside the declared radius are scope drift — flag
+   radius. Files touched outside the declared radius are scope drift; flag
    them and whether they were authorized.
 2. **Untouched-but-in-blast-radius.** Every declared consumer the diff did not
    update: does it still hold, and what verifies that claim?
@@ -103,7 +103,7 @@ delivery response; the verifier judges build and test, not this pass.
 ## Do not
 
 - Infer dependencies from names, paths, or layout intuition
-- Turn the impact report into a second requirements or design document — it
+- Turn the impact report into a second requirements or design document; it
   records consumers and evidence, not intent
 - Treat an `unverified` entry as good enough for a high-risk change; name the
   check that would close each gap

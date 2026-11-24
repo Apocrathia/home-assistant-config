@@ -2,7 +2,7 @@
 name: contribute-upstream
 description: >-
   Push improvements from Home Assistant Homelab's .agents/ tree back to the
-  context-engine core — diff shared rules, skills, and scripts against the core,
+  context-engine core; diff shared rules, skills, and scripts against the core,
   isolate the local delta, extract generic changes, restore {{project_name}}
   tokens, validate, and hand off for the operator to open the PR. Use when the
   user says contribute upstream, port back to the core, push this improvement
@@ -49,12 +49,17 @@ including on the core. Scratch artifacts go under the core's `.scratch/`.
 The consuming project is the **source**; the core's top-level directories are
 the **target**. Direction is the reverse of `integrate-upstream`.
 
-| Layer           | Source (Homelab)                          | Target (core)            | Port rule                                                                                 |
-| --------------- | ----------------------------------------- | ------------------------ | ----------------------------------------------------------------------------------------- |
-| 1 — Rules       | `.agents/rules/*.md`                      | `rules/*.md`             | Diff; port only generic deltas                                                            |
-| 1 — Skills      | `.agents/skills/<name>/**`                | `skills/<name>/**`       | Direct diff; port real deltas                                                             |
-| 2 — Templatized | skills with `{{project_name}}` tokens     | `skills/<name>/SKILL.md` | Diff after substitution; restore tokens                                                   |
-| 3 — Rendered    | `.agents/context/*.md`, `.agents/agents/` | `templates/**`           | **Not a file diff** — author a generic template in the core, never copy the rendered file |
+| Layer          | Source (Homelab)                          | Target (core)            | Port rule                                                                                |
+| -------------- | ----------------------------------------- | ------------------------ | ---------------------------------------------------------------------------------------- |
+| 1; Rules       | `.agents/rules/*.md`                      | `rules/*.md`             | Diff; port only generic deltas                                                           |
+| 1; Skills      | `.agents/skills/<name>/**`                | `skills/<name>/**`       | Direct diff; port real deltas                                                            |
+| 2; Templatized | skills marked `templatized: true`         | `skills/<name>/SKILL.md` | Diff after substitution; restore tokens                                                  |
+| 3; Rendered    | `.agents/context/*.md`, `.agents/agents/` | `templates/**`           | **Not a file diff**: author a generic template in the core, never copy the rendered file |
+
+`contribute-upstream` and `integrate-upstream` themselves are layer 1 even
+though they contain `{{project_name}}`: those mentions document the token
+convention, and the two skills stay byte-identical (issue #32). Templatized
+means the frontmatter says `templatized: true`, never "grep finds a token".
 
 ## Workflow
 
@@ -107,8 +112,12 @@ installed is a deletion candidate, not an omission.
   difference is a candidate.
 - Layer 2: substitute `{{project_name}}` in the `$base` version with
   `Home Assistant Homelab`, then diff. Token-substitution-only difference =
-  aligned, skip. Derive the live templatized list from
-  `git -C "$upstream" show "$base:AGENTS.md"`, not the working tree.
+  aligned, skip. Do **not** run this normalization on `contribute-upstream`
+  or `integrate-upstream`: their token mentions are documentation, not render
+  positions (issue #32). Derive the live templatized list from
+  `git -C "$upstream" show "$base:AGENTS.md"`, not the working tree; accept
+  both labels ("skills with `{{project_name}}` tokens" and "skills marked
+  `templatized: true` in frontmatter").
 - Record diffs; do not port yet.
 
 ### 5. Isolate the local delta (3-way)
@@ -199,6 +208,11 @@ naming two or more source projects (prime-swarm, security-swarm, homelab) is
 the genericness-gate example list, not a leak. Also check the inverse: no
 `{{project_name}}` lost from templatized skills, none gained by byte-identical
 skills.
+
+- **Doc skills keep their token mentions:** `contribute-upstream` and
+  `integrate-upstream` ship with their `{{project_name}}` mentions intact; a
+  consumer copy that substituted the project name into them is corrupted
+  (issue #32); restore it byte-identical before diffing.
 
 ### 10. Hand off
 

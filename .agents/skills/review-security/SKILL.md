@@ -76,7 +76,7 @@ Gate and mis-flag catalog adapted from [ECC](https://github.com/affaan-m/ECC) (M
 `agents/code-reviewer.md`.
 
 A clean review is a valid review. `result: pass` with zero findings is the
-correct output for a diff with no reachable security defect — do not
+correct output for a diff with no reachable security defect; do not
 manufacture findings to justify the run. Theoretical hardening noise drowns the
 signal real findings need.
 
@@ -88,7 +88,7 @@ signal real findings need.
   demotes or drops the finding:
   1. Can I cite the exact line? Vague findings ("the auth layer looks weak")
      are dropped.
-  2. Can I name the concrete attack — who triggers it, with what input, and
+  2. Can I name the concrete attack; who triggers it, with what input, and
      what data or privilege is at stake? A CVE label is not an attack.
   3. Have I traced the trust boundary? Check who reaches the code, what
      validates the input upstream, and what already stops the attack.
@@ -109,7 +109,7 @@ Skip these unless the evidence is specific to this code:
 - Dynamic-code flags on intentional, documented code-loading surfaces (plugin
   systems, templates the project already trusts)
 - Authn/authz/CSRF flags on internal-only surfaces with no untrusted input
-  path — trace reachability before flagging
+  path; trace reachability before flagging
 - Placeholder secrets in tests, fixtures, and examples (obviously fake keys,
   example domains)
 - Universal "missing rate limit / header / CSP" findings raised with no

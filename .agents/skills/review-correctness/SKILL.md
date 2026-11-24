@@ -75,7 +75,7 @@ Gate and false-positive catalog adapted from [ECC](https://github.com/affaan-m/E
 `agents/code-reviewer.md` and `agents/silent-failure-hunter.md`.
 
 A clean review is a valid review. `result: pass` with zero findings is the
-correct output for a sound diff — do not manufacture findings to justify the
+correct output for a sound diff; do not manufacture findings to justify the
 run. Manufactured findings, filler nits, speculative "consider" items, and
 hypothetical edge cases without a trigger are the primary failure mode of LLM
 reviewers.
@@ -87,7 +87,7 @@ reviewers.
   demotes or drops the finding:
   1. Can I cite the exact line? Vague findings ("somewhere in the auth layer")
      are dropped.
-  2. Can I name the concrete failure mode — input, state, bad outcome? If not,
+  2. Can I name the concrete failure mode; input, state, bad outcome? If not,
      you are pattern-matching, not reviewing.
   3. Have I read the surrounding context? Many apparent issues are handled one
      frame up or guarded by a type, caller check, or test.
@@ -106,13 +106,13 @@ senior engineer on this team actually change this in review?
 
 - Error-handling suggestions when the caller or framework already owns the
   error path (upstream handler, middleware, top-level catch)
-- Missing validation on internal functions whose callers already validate —
+- Missing validation on internal functions whose callers already validate:
   trace at least one caller before flagging
 - Magic-number nits on well-known constants (HTTP statuses, timeouts, array
   index `0`/`-1`) or single-use constants whose name states the meaning
 - Length complaints on exhaustive enumerations, config tables, or test
-  fixtures — length is not complexity
-- Null-deref warnings when a guard or type narrowing is in scope — trace the
+  fixtures; length is not complexity
+- Null-deref warnings when a guard or type narrowing is in scope; trace the
   flow instead of pattern-matching on access syntax
 - N+1 / repeated-fetch flags on fixed-cardinality loops or already-batched
   paths

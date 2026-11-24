@@ -1,5 +1,6 @@
 ---
 name: implement-change
+templatized: true
 description: >-
   One change lap for Home Assistant Homelab: scope, edit, validate, hand off
   with a suggested Conventional Commit. Use when implementing a config fix,

@@ -1,5 +1,6 @@
 ---
 name: self-improve
+templatized: true
 description: >-
   Light Home Assistant Homelab work loop: find-work, pick with the operator,
   implement-change, review-loop, ship-work handoff, then STOP. Use when the

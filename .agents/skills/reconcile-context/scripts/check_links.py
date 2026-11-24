@@ -1011,7 +1011,7 @@ def slug(heading: str, refs=None) -> str:
     s = s.strip().lower()
     s = re.sub(r"[^\w\s-]", "", s)
     s = re.sub(r"\s", " ", s)
-    return s.replace(" ", "-").strip("-")
+    return s.replace(" ", "-")
 
 
 def add_github_anchor(anchors, heading, refs=None):
@@ -1029,29 +1029,63 @@ def add_github_anchor(anchors, heading, refs=None):
         anchors.add(explicit.group(1))
 
 
-def tracked_md():
-    try:
-        proc = subprocess.run(
-            ["git", "ls-files", "-z"],
-            cwd=ROOT,
-            check=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
-    except (OSError, subprocess.CalledProcessError) as exc:
-        raise SystemExit(
-            f"could not enumerate tracked files with git ls-files: {exc}"
-        ) from exc
+def _md_paths_from_git():
+    """Return (paths, seen_realpaths) from git ls-files. Raises OSError/CalledProcessError"""
+    proc = subprocess.run(
+        ["git", "ls-files", "-z"],
+        cwd=ROOT,
+        check=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
     # git ls-files reports slash-separated names on every platform; split and
     # rejoin so the paths use the OS separator. Without this, surface() matching
     # on os.sep would miss .agents/context files on Windows.
     paths = []
+    seen = set()
     for path in proc.stdout.split(b"\0"):
         if not path:
             continue
         name = path.decode("utf-8", errors="surrogateescape")
         if is_markdown_target(name):
-            paths.append(os.path.join(ROOT, *name.split("/")))
+            full = os.path.join(ROOT, *name.split("/"))
+            paths.append(full)
+            seen.add(os.path.realpath(full))
+    return paths, seen
+
+
+def _md_paths_from_walk():
+    """Fallback when git is unavailable (e.g. rootless CI images)."""
+    skip_dirs = {
+        ".git",
+        ".worktrees",
+        "node_modules",
+        "__pycache__",
+        ".venv",
+        "vendor",
+    }
+    paths = []
+    seen = set()
+    for dirpath, dirnames, filenames in os.walk(ROOT):
+        dirnames[:] = [d for d in dirnames if d not in skip_dirs]
+        for name in filenames:
+            if not is_markdown_target(name):
+                continue
+            full = os.path.join(dirpath, name)
+            real = os.path.realpath(full)
+            if real not in seen:
+                paths.append(full)
+                seen.add(real)
+    return paths, seen
+
+
+def tracked_md():
+    try:
+        paths, _seen = _md_paths_from_git()
+    except (OSError, subprocess.CalledProcessError):
+        # Rootless runners often ship python images without git and without
+        # permission to install it. Walk the checkout instead.
+        paths, _seen = _md_paths_from_walk()
     return paths
 
 
@@ -1100,7 +1134,17 @@ def safe_markdown_path(path):
     except OSError as exc:
         return False, f"cannot stat file: {exc}"
     if stat.S_ISLNK(st.st_mode):
-        return False, "symlink"
+        # Discovery symlinks (`.cursor/skills` -> `.agents/skills`) are fine when
+        # they resolve to a regular in-repo markdown file.
+        try:
+            rst = os.stat(real)
+        except OSError as exc:
+            return False, f"cannot stat symlink target: {exc}"
+        if not stat.S_ISREG(rst.st_mode):
+            return False, "symlink target not a regular file"
+        if rst.st_size > MAX_MARKDOWN_BYTES:
+            return False, f"larger than {MAX_MARKDOWN_BYTES} bytes"
+        return True, ""
     if not stat.S_ISREG(st.st_mode):
         return False, "not a regular file"
     if st.st_size > MAX_MARKDOWN_BYTES:
@@ -1281,8 +1325,16 @@ def drop_internal_symlinks(surface_files, md_files):
 
 
 def tracked_lookup(md_files):
-    exact = {exact_path_key(path): path for path in md_files}
-    folded = {folded_path_key(path): path for path in md_files}
+    exact = {}
+    folded = {}
+    for path in md_files:
+        real = os.path.realpath(path)
+        # Prefer the real regular file so symlink discovery paths (`.cursor/...`)
+        # do not fail safe_markdown_path's symlink rejection.
+        value = real if within_root(real) and os.path.isfile(real) else path
+        for key_path in (path, real):
+            exact[exact_path_key(key_path)] = value
+            folded[folded_path_key(key_path)] = value
     return exact, folded
 
 
@@ -2155,27 +2207,15 @@ def main():
                 bad.append((f, os.path.relpath(f, ROOT), why))
             continue
         origins.append((f, text))
-    # In --all mode, a tracked symlink whose target is also on the surface
-    # was deduplicated off the surface (the target is scanned on its own),
-    # but the alias is still a link origin: the same content read from the
-    # alias's directory resolves relative links differently. Scan each such
-    # alias with the alias path as the relative-link base. An unreadable
-    # target was already reported above through its surface entry.
-    if check_all:
-        surface_real = {
-            os.path.realpath(f) for f in surface_files if not os.path.islink(f)
-        }
-        for f in md_files:
-            if not os.path.islink(f):
-                continue
-            real = os.path.realpath(f)
-            if real not in surface_real:
-                continue
-            text, _why = read_markdown(real)
-            if text is not None:
-                origins.append((f, text))
+    # Resolve relative links from the real file, not a discovery symlink
+    # path (.cursor/agents/foo.md -> .agents/agents/foo/agent.md). Otherwise
+    # ../../context/constraints.md looks for repo-root context/ and fails.
+    # A tracked symlink whose target is also on the surface is deduplicated
+    # off the surface (the target is scanned on its own); realpath resolution
+    # from the target covers the same alias content without rescanning the
+    # alias path as base, which produced consumer-layout false positives.
     for f, text in origins:
-        base = os.path.dirname(f)
+        base = os.path.dirname(os.path.realpath(f))
         for target in link_targets(text):
             parts = urlsplit(target)
             path = unquote(parts.path)

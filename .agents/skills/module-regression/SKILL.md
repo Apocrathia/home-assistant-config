@@ -16,7 +16,7 @@ disable-model-invocation: true
 Adapted from [ECC](https://github.com/affaan-m/ECC) (MIT), `skills/module-regression/`.
 
 Modules depend on each other. The common failure: verify only the changed
-module, ship, and a downstream consumer breaks silently — surfacing days later
+module, ship, and a downstream consumer breaks silently; surfacing days later
 as a wrong export or aggregate. The remedy is a **regression ledger**
 (`REGRESSION.md`) plus a deterministic audit: after a relevant change, run the
 changed module and every affected downstream acceptance command. Delivery
@@ -30,7 +30,7 @@ change author fixes.
 
 - The repo has **3+ interdependent modules**, or a change to A has already
   broken B once.
-- Below that, do **not** create one — a ledger in a small repo with no
+- Below that, do **not** create one; a ledger in a small repo with no
   cross-module references is ceremony debt.
 - First "A broke B" incident: establish the ledger that day.
 - When tests and reconciliation scripts already exist, adoption is organizing
@@ -50,16 +50,16 @@ Regression acceptance command: `pytest tests/test_03.py && python scripts/reconc
 Propagation rule: external behavior change → run 05 and 07; internal-only change with a green module check → downstream exempt
 ```
 
-| Field                         | Rule                                                                                                                                                                                                                                          |
-| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Downstream consumers          | Derive from the dependency graph or a reproducible import/call scan; record the command that produced the list. Extraction differs by ecosystem — no universal scanner. Mark an edge `unverified` when it cannot be established mechanically. |
-| Regression acceptance command | The core asset: executable proof the module still works — tests, reconciliation scripts, golden-sample diffs. Without it the audit collapses into "the model looked and found no problem". Mark `MISSING`; never treat as pass.               |
-| Propagation rule              | Which downstream modules must rerun after a change, and when an exemption is justified.                                                                                                                                                       |
+| Field                         | Rule                                                                                                                                                                                                                                         |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Downstream consumers          | Derive from the dependency graph or a reproducible import/call scan; record the command that produced the list. Extraction differs by ecosystem; no universal scanner. Mark an edge `unverified` when it cannot be established mechanically. |
+| Regression acceptance command | The core asset: executable proof the module still works; tests, reconciliation scripts, golden-sample diffs. Without it the audit collapses into "the model looked and found no problem". Mark `MISSING`; never treat as pass.               |
+| Propagation rule              | Which downstream modules must rerun after a change, and when an exemption is justified.                                                                                                                                                      |
 
 An affected `unverified` edge blocks an all-green verdict until a human
 confirms its scope or the module is included in the run.
 
-Optional per module: `Related test points` — links into the project's test
+Optional per module: `Related test points`; links into the project's test
 registry or issue tracker. The ledger records which modules and commands rerun
 after a change; business rules and coverage live in the tests and issues
 themselves.
@@ -118,7 +118,7 @@ themselves.
    change is unfinished.
 4. **Every important defect leaves durable evidence.** Fixing a bug must
    create or link a test, lint rule, schema check, or issue that would catch it
-   next time — see [`file-issue`](../file-issue/SKILL.md). Code-only fixes are
+   next time; see [`file-issue`](../file-issue/SKILL.md). Code-only fixes are
    incomplete.
 
 ## Anti-patterns
@@ -131,6 +131,6 @@ themselves.
 
 ## Related
 
-- `.agents/context/build-and-test.md` — whole-repo commands this complements
-- [`review-loop`](../review-loop/SKILL.md) — its verifier runs affected ledger
+- `.agents/context/build-and-test.md`; whole-repo commands this complements
+- [`review-loop`](../review-loop/SKILL.md); its verifier runs affected ledger
   commands when a `REGRESSION.md` exists

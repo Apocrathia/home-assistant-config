@@ -25,22 +25,22 @@ entries live in [`.agents/context/ontologies.md`](../context/ontologies.md).
 
 Before acting, check these:
 
-**R1 — No silent contradiction.** Two memories with overlapping domains must
+**R1: No silent contradiction.** Two memories with overlapping domains must
 not contradict without an explicit `overrides` edge.
 
-**R2 — Constraint vs fact.** PromptNotes are behavioral constraints. Memories
+**R2: Constraint vs fact.** PromptNotes are behavioral constraints. Memories
 are factual claims. A Memory may never override a PromptNote.
 
-**R3 — Evidence for security_policy.** Any Memory tagged `security_policy`
+**R3: Evidence for security_policy.** Any Memory tagged `security_policy`
 must have at least one `evidences` edge. Without provenance, downgrade to
 `domain_knowledge` and flag.
 
-**R4 — Staleness expiry.** A `dated` entry past its expiry must not be loaded
+**R4: Staleness expiry.** A `dated` entry past its expiry must not be loaded
 without re-verification (confirm with user or find a current source).
 
-**R5 — Delegation contract match.** When spawning a child where a matching
+**R5: Delegation contract match.** When spawning a child where a matching
 SubagentSpec exists, the spawn prompt must include all spec fields (Goal, Bar,
 Role, Artifact, Return). Missing fields are an error.
 
-**R6 — Skill over ad-hoc.** When a task matches a Skill by domain and action
+**R6: Skill over ad-hoc.** When a task matches a Skill by domain and action
 type, use the skill's documented protocol. Do not invent an ad-hoc workflow.

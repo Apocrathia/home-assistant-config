@@ -35,12 +35,12 @@ Retrospectives inform; they do not block.
 
 ## What it produces
 
-1. **Outcome summary** — what happened, one or two lines
-2. **Git history findings** — significant changes that touched context surfaces
-3. **Observations** — classified lessons, each with a route
-4. **Upstream candidates** — generic enough for the context-engine core
-5. **HA-local keepers** — packages conventions, shopping-list rules, domain skills
-6. **No-op declaration** — if nothing to capture, say so explicitly
+1. **Outcome summary**: what happened, one or two lines
+2. **Git history findings**: significant changes that touched context surfaces
+3. **Observations**: classified lessons, each with a route
+4. **Upstream candidates**: generic enough for the context-engine core
+5. **HA-local keepers**: packages conventions, shopping-list rules, domain skills
+6. **No-op declaration**: if nothing to capture, say so explicitly
 
 ## Workflow
 

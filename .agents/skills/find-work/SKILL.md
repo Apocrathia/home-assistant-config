@@ -1,5 +1,6 @@
 ---
 name: find-work
+templatized: true
 description: >-
   Orient on Home Assistant Homelab, scout read-only work sources (docs/issues
   + docs/plans, local_todo Issues/Tasks/Ideas ICS, shopping list, docs, TODO

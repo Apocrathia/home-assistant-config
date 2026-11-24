@@ -19,7 +19,7 @@ scratch contents. Promote validated decisions into tracked paths later.
 
 ## Pick a branch
 
-Identify which question is being answered — from the user's prompt, nearby
+Identify which question is being answered; from the user's prompt, nearby
 config, or by asking:
 
 | Question                                    | Shape                                                                                                    |
@@ -30,7 +30,7 @@ config, or by asking:
 
 If the question is ambiguous and the operator isn't reachable, default to the
 logic branch for automations/packages and the look branch for UI/dashboard
-asks — state the assumption at the top of the prototype.
+asks; state the assumption at the top of the prototype.
 
 ## Rules
 
@@ -42,7 +42,7 @@ asks — state the assumption at the top of the prototype.
 3. **One command to run** when there is runnable code (`python path`,
    `bash path`, etc.). Prefer zero-deps scripts.
 4. **No persistence by default.** In-memory or a clearly named scratch file
-   (`PROTOTYPE — wipe me`). Do not write `.storage/` or `.shopping_list.json`.
+   (`PROTOTYPE; wipe me`). Do not write `.storage/` or `.shopping_list.json`.
 5. **Skip the polish.** No tests beyond what makes it runnable, no abstractions.
 6. **Surface the state.** After each action or variant switch, print/show the
    full relevant state so the operator can see what changed.

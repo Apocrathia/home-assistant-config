@@ -1,18 +1,27 @@
 ---
 alwaysApply: true
-description: Scannable reply structure — answer first, evidence second, bulk in files
+description: Ultra-short scannable replies; answer first, bulk in files, no interview walls
 ---
 
 # Response shape
 
-The operator cannot read at agent speed. Default to scannable output.
-Match [`.agents/context/voice.md`](../context/voice.md) and
-[`.agents/context/output.md`](../context/output.md) when writing YAML or docs.
+The operator cannot read at agent speed. Default to scannable output. Full
+reply-shape contract: [`.agents/context/output.md`](../context/output.md);
+voice: [`.agents/context/voice.md`](../context/voice.md).
 
-## Inverted pyramid
+## Non-negotiables
 
-First 1–3 sentences: answer, verdict, or what changed. Supporting detail after,
-only if needed.
+- **Lead with the answer** in 1-3 sentences. No throat-clearing.
+- **Prefer bullets** over paragraphs. Cut restating the task or the prompt.
+- **Half-screen rule:** longer than that → file under `.scratch/` and link.
+  Chat stays the index.
+- **Questions:** [`question-format.md`](./question-format.md). No multi-Ask
+  markdown dumps.
+- **Subagents:** summarize; never paste the full child output.
+- **Structured output** (JSON/YAML/fixed schema): emit the payload only; no
+  prose prepend unless the schema asks for it.
+- **Omit:** tool narration, diff replay, question restatement, announcement
+  sections.
 
 ## Hard caps
 
@@ -43,33 +52,7 @@ action or the open ask. If not, reshape before sending.
 
 Match depth to complexity. A one-line YAML fix does not need five paragraphs.
 
-## Route bulk out of chat
-
-- Plans → plan doc or `docs/`, not a wall of text in the thread
-- Large reviews → numbered findings; detail per finding, not upfront
-- Data-heavy output → canvas or a file when the product supports it
-
-Chat is the index, not the warehouse.
-
-## Parent and subagent synthesis
-
-When subagents return, summarize outcomes for the operator. Do not restate their
-full output. The parent coordinates; it does not hoard context in the reply.
-
-## Structured output overrides shape
-
-When the caller or task requires strict structured output (JSON, YAML, fixed
-schema), follow that format. Do not prepend prose or wrap the payload in
-markdown unless the schema asks for it.
-
 ## After implementation
 
 Summarize what changed and suggest a Conventional Commit message. Do not commit
 ([`operator-owned-git.md`](./operator-owned-git.md)).
-
-## Omit from final replies
-
-- Tool-call narration ("I read X, then grep'd Y…")
-- File-by-file diff replay when a summary suffices
-- Repeated restatement of the user's question
-- Sections that only announce what the next section will say

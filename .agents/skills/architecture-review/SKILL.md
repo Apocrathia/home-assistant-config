@@ -50,10 +50,10 @@ A numbered candidate list. For each pick the operator cares about: **Problem**,
 
 ## Candidate content (per pick)
 
-- **Problem** — packages/modules involved
-- **Proposed direction** — `packages/areas|functions|integrations|projects|routines|system|toys/`
-- **Feedback loop** — `config-validate`, reload, live entity check, automation trace
-- **Suggested next** — alignment / plan / implement-change / file-issue
+- **Problem**: packages/modules involved
+- **Proposed direction**: `packages/areas|functions|integrations|projects|routines|system|toys/`
+- **Feedback loop**: `config-validate`, reload, live entity check, automation trace
+- **Suggested next**: alignment / plan / implement-change / file-issue
 
 ## Orient paths
 

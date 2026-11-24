@@ -14,7 +14,7 @@ summarize outcomes for the operator; do not restate their full output (see
 [`response-shape.md`](./response-shape.md)). Prefer **file handoffs** for
 briefs, reports, and diffs: the spawn prompt names paths; the child writes the
 long form to disk and returns a short status. **Readonly agents** (reviewers,
-verifiers, scouts, `context-steward`) return short status only — no file
+verifiers, scouts, `context-steward`) return short status only; no file
 handoffs. Never paste tool dumps or subagent transcripts into the parent window.
 
 **Main checkout only.** This repo bans worktrees
@@ -68,7 +68,7 @@ Delegate when sub-tasks are independent (fan out in parallel), read across
 files you don't need to keep (keep the answer, not the raw material), or are
 self-contained with goal, constraints, return shape. Stay in the parent when:
 
-- Single known file, single edit, no discovery — parent may edit directly.
+- Single known file, single edit, no discovery; parent may edit directly.
 - User asked you not to delegate.
 - Subagent would need conversation context the prompt cannot carry (rare; write
   a detailed cold-start prompt instead).
@@ -136,6 +136,27 @@ worktrees, confirm before protected paths
 > contract fields when the parent supplies equivalent context inline. Use the
 > full contract for new Task prompts and any multi-agent fan-out.
 
+## Fan-out mandate
+
+When a task has **2+ independent domains** (different files, skills, or research
+areas that do not share write locks), the parent **MUST** launch parallel
+subagents, one agent per domain, rather than serially exploring alone.
+
+**Fan out when:** multi-file harvest; parallel research; independent
+implement/verify; multi-deliverable waves.
+
+**Do not fan out when:** single-file edit; tightly coupled debugging where
+shared state matters; exploratory "what is broken?" before domains are known.
+
+## Parent duties
+
+- Craft self-contained prompts (children lack parent chat context).
+- Summarize children for the operator; never dump full child output.
+- Resolve conflicts across children before reporting.
+
+Return contracts: children lead with 1-3 sentences, then Evidence / Proposed
+edits / Blockers as needed. Parents summarize child output for the operator.
+
 ### Implementer ↔ reviewer pairs
 
 For each **independent** unit of work that needs an independent judge, treat
@@ -154,7 +175,7 @@ implementer → reviewer → pass | gap
   biggest remaining miss).
 - **Implementer never grades itself.** Local smoke checks are not a pass.
 - **Reviewer does not inherit implementer rationale.** Give Goal, Bar,
-  Artifact, constraints — not the implementer's narrative. Hand the reviewer a
+  Artifact, constraints; not the implementer's narrative. Hand the reviewer a
   diff or report file path, not a pasted wall of diff.
 - **Don't pre-judge findings** in the reviewer prompt ("don't flag X", "at most
   Minor"). Let the reviewer raise it; adjudicate after.

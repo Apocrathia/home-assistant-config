@@ -15,7 +15,10 @@ family.
 ## Never without explicit authorization
 
 - `gh pr merge` in any mode (`--merge`, `--squash`, `--rebase`, `--auto`) or
-  the forge web/API equivalent, including merge-queue enqueue
+  the forge web/API equivalent, including merge-queue enqueue. On a non-GitHub
+  forge, the same bar covers its merge command (`glab mr merge`, the GitLab
+  web/API, and equivalents): if the command merges, running it is a merge
+  attempt
 - Approving a PR, or dismissing a submitted review to clear a review decision
 - Pushing to `main` (or any protected branch), or merging a branch you are
   shipping into it, local or remote

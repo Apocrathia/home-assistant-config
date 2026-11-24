@@ -13,10 +13,14 @@ Create a procedural skill in `.agents/skills/<name>/SKILL.md` so the parent can
 invoke a repeatable workflow by name (`/name`) instead of re-deriving the steps
 each session.
 
-Before writing, skim existing Homelab skills and (when available) upstream
-the core's `templates/context/skill-authoring.md.tmpl` (core checkout — ask the operator)
-— conciseness, progressive disclosure, invocation choice, information
+Before writing, skim existing Homelab skills and, when available, the core's
+`templates/context/skill-authoring.md.tmpl` (core checkout; ask the operator)
+for conciseness, progressive disclosure, invocation choice, information
 hierarchy, imperative voice.
+
+**Description as the only trigger:** put trigger phrases in the frontmatter
+`description`; do not duplicate a "When to Use" section in the body. Skill
+selection surfaces read the description; body duplication drifts.
 
 ## When to create a skill
 
@@ -38,7 +42,7 @@ hierarchy, imperative voice.
 
 1. **Name the skill.** Use a verb phrase or noun describing the workflow:
    `find-work`, `review-loop`, `ship-work`. Check `.agents/skills/` **and**
-   `.agents/agents/` — both surface as `/<name>`.
+   `.agents/agents/`; both surface as `/<name>`.
 
 2. **Preflight the protected paths.** A skill writes steering surfaces:
    `.agents/skills/<name>/` and the `AGENTS.md` routing row. Name the exact
@@ -78,14 +82,14 @@ hierarchy, imperative voice.
 
 5. **Write the body.** Structure:
 
-   - **Opening** — one or two sentences: what the skill does and its boundary
+   - **Opening**: one or two sentences: what the skill does and its boundary
      (read-only, no commits, writes files, etc.).
-   - **Steps** — ordered, numbered. Each step ends on a completion criterion the
+   - **Steps**: ordered, numbered. Each step ends on a completion criterion the
      agent can check (done vs not-done).
-   - **Reference** — non-ordered material (tables, pattern catalogs) the agent
+   - **Reference**: non-ordered material (tables, pattern catalogs) the agent
      consults during a step. Keep this in the skill or move to `references/` if
      it is long.
-   - **Return** — what the skill hands back to the parent or operator.
+   - **Return**: what the skill hands back to the parent or operator.
 
 6. **Keep SKILL.md lean.** Move long catalogs and examples to `references/`
    and load them only when the step needs them. The skill body is the
@@ -112,6 +116,6 @@ hierarchy, imperative voice.
 
 Lead with the skill name and one-sentence description. Then:
 
-- **File** — path created
-- **Routing** — whether `AGENTS.md` was updated (and the row added)
-- **Next** — suggest a first invocation to test the skill; operator commits
+- **File**: path created
+- **Routing**: whether `AGENTS.md` was updated (and the row added)
+- **Next**: suggest a first invocation to test the skill; operator commits

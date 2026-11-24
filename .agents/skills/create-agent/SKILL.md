@@ -13,11 +13,10 @@ Create a sub-agent persona in `.agents/agents/` so the parent can delegate a
 recurring role by name (`/name`) instead of hand-writing cold-start prompts each
 time.
 
-Before writing, skim existing personas under `.agents/agents/` and (when
-available) the upstream seed
-the core's `templates/context/agent-personas.md.tmpl` (core checkout — ask the operator)
-plus `templates/agents/*.tmpl` — format, when to create vs reuse, return
-structure.
+Before writing, skim existing personas under `.agents/agents/` and, when the
+core checkout is available (ask the operator), the core's
+`templates/context/agent-personas.md.tmpl` plus `templates/agents/*.tmpl`;
+format, when to create vs reuse, return structure.
 
 ## When to create a persona
 
@@ -38,17 +37,30 @@ structure.
 
 ## Procedure
 
-1. **Name the persona.** Use a role noun, not a verb phrase: `debugger`, not
-   `debug-issues`. One word when possible. Check `.agents/agents/` **and**
-   `.agents/skills/` — both surface as `/<name>`.
+1. **Personas vs skills.** Decide the surface first:
 
-2. **Preflight the protected paths.** A persona writes steering surfaces:
+   |         | Persona                                      | Skill                                         |
+   | ------- | -------------------------------------------- | --------------------------------------------- |
+   | What    | A role charter: who, what, boundaries        | A procedure: steps to follow, in order        |
+   | Runs in | A sub-agent (own context window)             | The parent agent (or a delegated sub-agent)   |
+   | Invoked | `/name` by the parent or operator            | `/name` by the operator or model-invoked      |
+   | Returns | Evidence and findings to the parent          | A completed workflow (report, issue, handoff) |
+   | Lives   | `.agents/agents/<name>/agent.md` (preferred) | `.agents/skills/<name>/SKILL.md`              |
+
+   If the need is "who" (a role with judgment and boundaries), write a persona.
+   If the need is "how" (an ordered procedure), write a skill.
+
+2. **Name the persona.** Use a role noun, not a verb phrase: `debugger`, not
+   `debug-issues`. One word when possible. Check `.agents/agents/` **and**
+   `.agents/skills/`; both surface as `/<name>`.
+
+3. **Preflight the protected paths.** A persona writes steering surfaces:
    `.agents/agents/<name>/agent.md`, the `subagents.md` routing row, and the
    `AGENTS.md` agents table. Name the exact paths and wait for operator
    confirmation unless an approved plan already lists them
    ([`protected-paths.md`](../../rules/protected-paths.md)).
 
-3. **Write the frontmatter:**
+4. **Write the frontmatter:**
 
    ```yaml
    ---
@@ -63,24 +75,51 @@ structure.
    Folded (`>-`) or quoted scalars only: a `: ` inside an unquoted plain
    scalar breaks the frontmatter YAML and the persona.
 
-4. **Write the body.** Structure every persona the same way:
+5. **Write the body.** Structure every persona the same way, sections in
+   order:
 
-   - **Opening line** — one sentence: what the persona is and does.
-   - **Context to load** — which `.agents/context/` modules, skills, or docs to
-     read before working. Link, do not copy.
-   - **Method / focus areas** — what the persona does, as direct commands.
-   - **Repo notes** (optional) — project-specific gotchas, toolchain details,
-     naming conventions.
-   - **Boundaries** — what the persona does not do (edit files, run state-
-     changing commands, etc.).
-   - **Return to parent** — the structured return format. Lead with 1-3 sentences
-     answering the question. Then evidence, not narration.
+   ```markdown
+   ## Identity
 
-5. **Keep it under 60 lines.** A persona is a charter, not a manual. If it
-   grows past 60 lines, the role is too broad — split into two personas or
+   <1-3 sentences of role assumption: who this agent IS. No "you are an AI
+   assistant"; direct role framing.>
+
+   ## Purpose
+
+   <What the persona is for, when to invoke it.>
+
+   ## Context to load
+
+   <Which .agents/context/ modules, skills, or docs to read first. Links only,
+   never copy. Optional; omit if truly self-contained.>
+
+   ## Method
+
+   <How the persona works, as direct commands.>
+
+   ## Boundaries
+
+   <What the persona does not do (edit files, run state-changing commands,
+   etc.).>
+
+   ## Return to parent
+
+   <Structured return format. Lead with 1-3 sentences answering the question,
+   then evidence.>
+
+   ## Continuous Improvement
+
+   <Link the work loop ([`retrospective`](../../skills/retrospective/SKILL.md)
+   and `.agents/context/development-loop.md`) and name the persona's own
+   improvement targets: when the same friction recurs, propose the
+   check/skill/rule update instead of working around it.>
+   ```
+
+6. **Keep it under 60 lines.** A persona is a charter, not a manual. If it
+   grows past 60 lines, the role is too broad; split into two personas or
    move reference content to a linked doc.
 
-6. **Update the routing table.** Add the persona to the `subagents` rule
+7. **Update the routing table.** Add the persona to the `subagents` rule
    (`.agents/rules/subagents.md`) project agents table — and to the
    `AGENTS.md` agents table, which is the router surface:
 
@@ -88,7 +127,7 @@ structure.
    | `/<persona-name>` | <when to delegate to it> |
    ```
 
-7. **Validate.**
+8. **Validate.**
 
    ```bash
    python3 .agents/skills/reconcile-context/scripts/check_frontmatter.py --all
@@ -120,6 +159,6 @@ persona. Do not commit — hand off per
 
 Lead with the persona name and one-sentence description. Then:
 
-- **File** — path created
-- **Routing** — confirm the `subagents` rule was updated
-- **Next** — suggest the first delegation to test the persona
+- **File**: path created
+- **Routing**: confirm the `subagents` rule was updated
+- **Next**: suggest the first delegation to test the persona

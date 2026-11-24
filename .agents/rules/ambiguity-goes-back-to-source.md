@@ -1,6 +1,6 @@
 ---
 alwaysApply: true
-description: Flag ambiguity rather than guessing — use [NEEDS CLARIFICATION] when two reasonable interpretations exist.
+description: Flag ambiguity rather than guessing; use [NEEDS CLARIFICATION] when two reasonable interpretations exist.
 ---
 
 # Ambiguity goes back to source
