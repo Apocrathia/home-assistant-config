@@ -57,8 +57,8 @@ packages:
   safe_mode: github://MallocArray/airgradient_esphome/packages/switch_safe_mode.yaml@${config_version}
 
 ###############################################################################
-# Office Microphone Light Control via Available GPIO Pins
-# Using GPIO pins that should be available on the AirGradient ONE v9
+# Office Microphone Light Control
+# Driven from spare GPIOs on the AirGradient ONE v9
 # https://gatorframeworks.com/products/broadcast-boom-mic-stand-with-led-indicator-light-gfwmicbcbm4000/
 ###############################################################################
 

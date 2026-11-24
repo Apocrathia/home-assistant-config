@@ -1,20 +1,18 @@
 ---
 ### Blinds ###
 
-# This package will define the template behavior for the blinds motors
-# across the house. The goal is to minimize the sun's glare in the afternoon,
-# and improve energy efficiency by not opening the blinds when it's too cold.
+# Template behavior for the blinds motors across the house: minimize
+# afternoon sun glare and improve energy efficiency by not opening the
+# blinds when it is too cold.
 
-# There are 4 primary automations that this package
-# will define:
+# Four primary automations:
 # - Morning (Open)
 # - Afternoon (Close)
 # - Sunset (Open)
 # - Bedtime (Close)
 
-# Additionally, I will group all of the blinds to ensure testing will continue
-# as more blinds motors are installed, eventually branching to automation sets
-# for each area with blinds on the western-facing side of the house.
+# All blinds are grouped so coverage continues as more motors are
+# installed; western-facing areas may eventually get per-area sets.
 
 cover:
   - name: Blinds
@@ -22,12 +20,12 @@ cover:
     entities:
       - cover.office_blinds
 
-# Create an input boolean to centralize some checks for opening the blinds.
+# Centralized check for opening the blinds.
 input_boolean:
   blinds_lock:
     name: Blinds Lock
 
-# And dynamically set the icon
+# Dynamic icon
 homeassistant:
   customize:
     input_boolean.blinds_lock:
@@ -116,10 +114,9 @@ automation:
     triggers:
       - trigger: numeric_state
         entity_id: sun.sun
-        # attrubute: azimuth
         value_template: >
           "{{ state.attributes.azimuth }}"
-        # The intersection of my home's western face.
+        # Azimuth where the sun hits the home's western face.
         above: 150
     actions:
       - alias: 'Afternoon - Close'

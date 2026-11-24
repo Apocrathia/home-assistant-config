@@ -51,17 +51,3 @@ packages:
       - esphome-common/bluetooth-proxy.yaml
 # See https://github.com/ElevatedSensors/sensor-configs/blob/main/bed-presence-mk1/sensor.yaml for a detailed
 # description of available substitutions.
-#
-# substitutions:
-#   trigger_percentile: '0.75'
-#   averaging_window_samples: '5'
-#   fast_delayed_on: '0ms'
-#   fast_delayed_off: '0ms'
-#   standard_delayed_on: '0s'
-#   standard_delayed_off: '1s'
-#   slow_delayed_on: '2s'
-#   slow_delayed_off: '5s'
-#   reporting_delta: '1.0'
-#   reporting_interval_max: '180s'
-#   calibrate_100: '408000'
-#   calibrate_0: '276000'

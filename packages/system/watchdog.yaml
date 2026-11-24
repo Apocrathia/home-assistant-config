@@ -8,9 +8,6 @@
 #   - automation-unavailability breach above the ghost baseline -> one notify
 # Sibling of system_notification_* in this package. No standing sensors that
 # iterate all states; counting happens inside the automations.
-#
-# First deploy fires a few one-time alerts for entities already dark now
-# (accepted by the operator 2026-09-21); it then goes quiet.
 ################################################################################
 
 input_number:
@@ -28,8 +25,8 @@ input_number:
     min: 0
     max: 999
     step: 1
-    # Verified registry-ghost count 2026-09-21. The operator cleans the ghost
-    # registry later; reset this value to the new dead-automation count then.
+    # Registry-ghost count. When the ghost registry is cleaned, reset
+    # this to the new dead-automation count.
     initial: 55
 
 input_boolean:
@@ -40,7 +37,7 @@ input_boolean:
 template:
   - binary_sensor:
       # The only standing template: 2 dependencies, cheap. The UPS dies as a
-      # stuck-zero, not unavailable (NUT source entity absent) - see design.
+      # stuck-zero, not unavailable (NUT source entity absent).
       - name: System Watchdog UPS Metrics Missing
         unique_id: system_watchdog_ups_metrics_missing
         device_class: problem
@@ -249,11 +246,9 @@ automation:
       - trigger: time
         at: '09:00:00'
     variables:
-      # One canonical grouping method (entity-id prefix families, verified
-      # against the live registry; platform is not template-visible).
+      # Entity-id prefix families are the grouping method (platform is
+      # not template-visible).
       families:
-        # rtl433_rf removed 2026-10-22: the dead rtl_433 MQTT fleet was
-        # purged from HA and the broker (operator-directed).
         meshtastic: ['mesh']
         unifi_stale_trackers: ['unifi_default_']
       critical_entities: *watchdog_critical_entities_all

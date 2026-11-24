@@ -58,14 +58,14 @@ The Home Assistant setup consists of several integrated components:
 
 - Weekly maintenance routines for system health
 - Automated certificate renewal via Let's Encrypt
-- Comprehensive backup strategy
+- Backup strategy
 - GitHub Actions for configuration testing
 
 ![My Home Assistant Architecture](images/conceptual_architecture.png)
 
 ## General Information
 
-This configuration controls several key features in my smart home:
+This configuration controls several features in my smart home:
 
 - Alarm Clock using bedroom lights and TV
 - Automated lighting based on sun events

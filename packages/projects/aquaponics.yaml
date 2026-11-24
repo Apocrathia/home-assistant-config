@@ -1,14 +1,11 @@
 ---
 ### Aquaponics ###
 
-# This is the configuration for the aquaponics project. It is a semi-automated system that
-# I am using to grow plants. The system is based on a 10 gallon fish tank with a grow bed.
-# The system is made by AquaSprouts and is called the AquaSprouts Garden. It is a great way
-# to get started with aquaponics. I have added a few things to the system to make it more
-# automated. I have added a Kasa smart power strip that enables me to turn on and off the
-# pump, filter, air pump, and lights.
+# Semi-automated aquaponics: an AquaSprouts Garden (10-gallon tank with a
+# grow bed) on a Kasa smart power strip that switches the pump, filter,
+# air pump, and lights.
 # https://aquasprouts.com/products/10gallonaquaponics
-# I plan on adding a water level sensor to the grow bed, as well as pH and temperature sensors.
+# Planned: grow-bed water level sensor plus pH and temperature sensors.
 # https://microfire.co/hydroponic-kit/
 
 input_number:
@@ -67,8 +64,8 @@ automation:
 
 script:
   ################################################################################
-  # The goal of this script is to emulate the fill/empty cycle that would normally
-  # be facilitated by a bell siphon. The grow bed is filled with water from the
+  # Emulates the fill/empty cycle that would normally be facilitated by a
+  # bell siphon. The grow bed is filled with water from the
   # tank, and then the water is drained back into the tank. The water level is set
   # by standoffs for the main drains. The water level is set to be just above the
   # grow media. After the pump stops, the remaining water drains through a 5mm hole

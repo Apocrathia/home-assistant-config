@@ -1,8 +1,8 @@
 ---
 ### Irrigation ###
 
-# Use HA to blowout my sprinklers with my wimpy 135psi air compressor
-# Jeff has done a great job documenting the process.
+# Use HA to blow out the sprinklers with a wimpy 135psi air compressor.
+# Process reference:
 # https://www.jeffgeerling.com/blog/2015/winterizing-your-irrigation-system-febco-765
 
 input_boolean:

@@ -3,7 +3,7 @@
 # Alarm Clock
 ################################################################################
 
-# A lot of this package has come from the following thread:
+# Design reference:
 # https://community.home-assistant.io/t/creating-a-alarm-clock/410/315
 
 ### Inputs ###
@@ -12,18 +12,15 @@ input_datetime:
     name: Wakeup Time
     has_date: false
     has_time: true
-    # initial: 05:00
   wakeup_time_weekend:
     name: Wakeup Time Weekend
     has_date: false
     has_time: true
-    # initial: '06:00'
 
 input_number:
   wakeup_duration:
     name: Wakeup Duration
     icon: mdi:clock-in
-    # initial: 30
     min: 0
     max: 60
     step: 5
@@ -79,8 +76,8 @@ template:
           {{ (((states.input_datetime.wakeup_time.attributes.timestamp |
               int) - ((states.input_number.wakeup_duration.state |
               int * 60)/2 )) | timestamp_custom("%H:%M",False)) }}
-      # Weekend siblings (2026-09-22): the same start/midpoint math keyed
-      # on the weekend helper instead of the weekday one.
+      # Weekend siblings: the same start/midpoint math keyed on the
+      # weekend helper instead of the weekday one.
       - default_entity_id: sensor.wakeup_alarm_start_time_weekend
         name: Alarm Clock Start Weekend
         state: >
@@ -151,11 +148,11 @@ automation:
           color_temp_kelvin: 3000
           brightness_pct: 100
   ################################################################################
-  # Weekend sibling (added 2026-09-22): the non-workday wake chain. Same
-  # lights sequence and midpoint/duration math (shared
-  # input_number.wakeup_duration), weekend time helper, inverse workday
-  # gate. The time trigger names the input_datetime helper directly: on
-  # 2026.9.2 a time trigger never arms on an HH:MM template sensor.
+  # Weekend sibling: the non-workday wake chain. Same lights sequence and
+  # midpoint/duration math (shared input_number.wakeup_duration), weekend
+  # time helper, inverse workday gate. The time trigger names the
+  # input_datetime helper directly: a time trigger cannot arm on an HH:MM
+  # template sensor.
   - id: function_wakeup_lights_weekend
     alias: 'Function - Wakeup - Lights Weekend'
     triggers:
@@ -230,12 +227,11 @@ automation:
     actions:
       - action: script.function_wakeup_apple_tv
   ################################################################################
-  # Weekend sibling (added 2026-09-22): same TV fire at the weekend
-  # midpoint, inverse workday gate, plus the someone-home guard added
-  # 2026-10-22 (group.people, mirroring the lights automations — the
-  # wake chain fired 5/5 vacant weekdays). The weekend picker's state
-  # rides the script's optional channel field; the weekday automation
-  # passes no data and keeps the weekday-picker default.
+  # Weekend sibling: same TV fire at the weekend midpoint, inverse
+  # workday gate, plus the same someone-home guard as the lights
+  # automations (group.people). The weekend picker's state rides the
+  # script's optional channel field; the weekday automation passes no
+  # data and keeps the weekday-picker default.
   - id: function_wakeup_apple_tv_weekend
     alias: 'Function - Wakeup - Apple TV Weekend'
     triggers:
@@ -324,8 +320,9 @@ automation:
               state: playing
     actions:
       - alias: 'Ensure every member is at 50%'
-        # Set first so a stale 25% (from yesterday's 09:00 drop) doesn't
-        # survive: function_infinite_mix no-ops when already playing.
+        # Set first so a stale 25% doesn't survive: function_play_music
+        # no-ops when the selected playlist is already playing and
+        # preserves volume when switching.
         repeat:
           for_each: '{{ state_attr("media_player.whole_home", "group_members") }}'
           sequence:
@@ -334,8 +331,8 @@ automation:
                 entity_id: '{{ repeat.item }}'
               data:
                 volume_level: 0.5
-      - alias: 'Start Infinite Mix at 50%'
-        action: script.function_infinite_mix
+      - alias: 'Start the selected playlist at 50%'
+        action: script.function_play_music
       - alias: >
           Fade the bedroom TV down to 5% over 30 s
         repeat:
@@ -385,9 +382,9 @@ script:
       input_select.alarm_channel_weekend).
     fields:
       channel:
-        # Channel name from a picker (added 2026-09-22). The default: key
-        # is UI-only on HA 2026.9.2 (never injected into run variables),
-        # so the runtime fallback lives in the alarm_channel variable.
+        # Channel name from a picker. The default: key is UI-only (never
+        # injected into run variables), so the runtime fallback lives in
+        # the alarm_channel variable.
         description: 'Channel name from a picker; defaults to the input_select.alarm_channel state.'
         example: 'Cartoons'
         advanced: false
@@ -413,26 +410,24 @@ script:
         Music: 'vlc-x-callback://stream?url=https%3A%2F%2Ftunarr.gateway.services.apocrathia.com%2Fstream%2Fchannels%2F6beb4ebb-91d8-40a0-afcd-91e10eaa466f%3FstreamMode%3Dhls'
         PBS: 'vlc-x-callback://stream?url=https%3A%2F%2Ftunarr.gateway.services.apocrathia.com%2Fstream%2Fchannels%2Ff2dc893f-c71c-42b0-a818-4b2b7a872ce9%3FstreamMode%3Dhls'
         Trash: 'vlc-x-callback://stream?url=https%3A%2F%2Ftunarr.gateway.services.apocrathia.com%2Fstream%2Fchannels%2Fd525d4f0-5687-443b-8a97-8ed10c071a57%3FstreamMode%3Dhls'
-      # Effective channel (added 2026-09-22): the optional channel field
-      # when a caller passes one, else the weekday picker state. Field
-      # default: is UI-only on HA 2026.9.2, so |default() carries the
-      # fallback at run time. Collision-probed live: channel is no jinja
-      # global (unlike the renamed shuffle_mode).
+      # Effective channel: the optional channel field when a caller
+      # passes one, else the weekday picker state. Field default: is
+      # UI-only, so |default() carries the fallback at run time. channel
+      # is not a jinja global, so shadowing the name is safe.
       alarm_channel: >
         {{ channel | default(states('input_select.alarm_channel')) }}
     # yamllint enable rule:line-length
     sequence:
       - alias: 'Wake the Apple TV'
-        # turn_on does not wake this device (verified live); the wakeup
-        # command wakes the box and HDMI-CEC wakes the TV.
+        # turn_on does not wake this device; the wakeup command wakes
+        # the box and HDMI-CEC wakes the TV.
         action: remote.send_command
         target:
           entity_id: remote.master_bedroom_apple_tv
         data:
           command: wakeup
       - alias: 'Let tvOS settle'
-        # Tune this delay during the manual fire if the deep link lands
-        # on a black screen.
+        # Tune this delay if the deep link lands on a black screen.
         delay:
           seconds: 5
       - alias: 'Set the TV volume for the morning alarm'
@@ -443,8 +438,8 @@ script:
           volume_level: "{{ (states('input_number.wakeup_tv_volume') | float(30)) / 100 }}"
       - alias: 'Deep-link VLC to the selected Tunarr channel'
         # Fire-and-trust: no wait or retry on the TV entity. VLC's
-        # now-playing push info can decay to idle mid-playback
-        # (verified live), so entity state is not a success signal.
+        # now-playing push info can decay to idle mid-playback, so
+        # entity state is not a success signal.
         action: media_player.play_media
         target:
           entity_id: media_player.master_bedroom_apple_tv

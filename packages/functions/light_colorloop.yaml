@@ -19,7 +19,6 @@ script:
         example: 'light.smart_bulb'
         advanced: false
         required: true
-        # default:
         selector:
           entity:
             domain: light

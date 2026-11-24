@@ -62,7 +62,7 @@ script:
               timeout:
                 minutes: 30
             - choose:
-                # Operator pressed Lock now - the ONLY path that locks
+                # The "Lock now" response - the ONLY path that locks
                 - conditions:
                     - condition: template
                       value_template: '{{ wait.trigger is not none and wait.trigger.event.data.action == action_lock }}'

@@ -2,11 +2,11 @@
 ### Back Yard ###
 ################################################################################
 # Michio-safe back door lock handling
-# The reminder script never locks on its own: its only lock.lock call is the
-# operator's "Lock now" button press. One deliberate exception (backlog A41):
-# the auto-lock automation below locks ONLY when all safety conditions
-# positively hold - unlocked >45 min, Michio's collar charging (dog inside),
-# door contact closed, alarm disarmed.
+# The reminder script never locks on its own: its only lock.lock call answers
+# the notification "Lock now" action. The one exception is the auto-lock
+# automation below, which locks ONLY when all safety conditions positively
+# hold - unlocked >45 min, Michio's collar charging (dog inside), door
+# contact closed, alarm disarmed.
 input_number:
   michio_back_door_reminder_delay:
     name: Michio - Back Door - Reminder Delay
@@ -29,8 +29,8 @@ input_boolean:
   michio_outside:
     name: Michio Outside
     icon: mdi:dog-side
-    # Operator model: unlocked back door = she may be out.
-    # Only drives reminder timing - never gates any lock action.
+    # Unlocked back door = she may be out. Only drives reminder timing -
+    # never gates any lock action.
 
 script:
   area_back_yard_michio_back_door_reminder:
@@ -45,8 +45,8 @@ script:
           notification_tag: michio-back-door-reminder
           action_lock: "{{ 'LOCK_BACK_DOOR_' ~ context.id }}"
           action_still_out: "{{ 'STILL_OUT_' ~ context.id }}"
-          # Camera context intentionally omitted (operator decision 2026-09-21):
-          # no camera covers the back door with usable detections.
+          # No camera context: no camera covers the back door with usable
+          # detections.
       - repeat:
           while:
             - condition: state
@@ -106,7 +106,7 @@ script:
               timeout:
                 minutes: 30
             - choose:
-                # Operator confirmed she is in - the ONLY path that locks
+                # The "Lock now" response - the ONLY path that locks
                 - conditions:
                     - condition: template
                       value_template: '{{ wait.trigger is not none and wait.trigger.event.data.action == action_lock }}'
@@ -217,7 +217,7 @@ automation:
   ################################################################################
   # Turn off the string lights when the alarm is turned on
   # This is so that there is a clear indication that the alarm is on
-  # and it's usually a good indication that I'm in bed or it's just late af.
+  # and it's usually a good indication that it's just late af.
   - id: area_back_yard_string_lights_night
     alias: 'Area - Back Yard - String Lights (Night)'
     triggers:

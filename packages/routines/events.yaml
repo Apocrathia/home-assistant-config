@@ -3,10 +3,8 @@
 # Event Routines
 ################################################################################
 
-# This configuration is mainly for automating things around the house for
-# specific events and days. A couple of ideas that I'm working with are:
-# - Party lights for game nights (monthly)
-# - Green lights for St. Patrick's Day
+# Automations for specific events and days.
+# Ideas: green lights for St. Patrick's Day.
 
 automation:
   ################################################################################
@@ -26,12 +24,10 @@ automation:
               and now().day >= 22
               and now().day <= 28 }}
     actions:
-      # I've copied all of the sounds from the iOS app to use across the house
-      # https://github.com/home-assistant/iOS/tree/master/HomeAssistant/Sounds
-      # US-EN-Morgan-Freeman-Starting-Party-Mode.wav
-      # However, it seems like the notify.alexa_media component won't do mp3s
-      # Keeping this note here for later.
-      # - action: script.notification_party_mode
+      # TODO: party-mode sound announcement. Candidate sound:
+      # US-EN-Morgan-Freeman-Starting-Party-Mode.wav from the iOS app sounds
+      # (https://github.com/home-assistant/iOS/tree/master/HomeAssistant/Sounds),
+      # but notify.alexa_media cannot play local sound files.
       - action: input_boolean.turn_on
         target:
           entity_id: input_boolean.party_lights

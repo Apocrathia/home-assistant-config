@@ -14,9 +14,8 @@ automation:
           - condition: state
             entity_id: group.people
             state: 'home'
-            # Because this light is controlled via an RF interface, the actual
-            # state of the light is unknown. However, by checking the HA state
-            # we can try to mitigate the physical state getting flipped.
+            # RF-controlled light: the physical state is unknowable; gating
+            # on the HA state mitigates a flipped physical state.
           - condition: state
             entity_id: light.living_room_ceiling_fan
             state: 'off'
@@ -44,7 +43,8 @@ automation:
             entity_id: light.living_room_ceiling_fan
             state: 'on'
     actions:
-      # Wait a few minutes before shutting the light off in case we're still up.
+      # Wait a few minutes before shutting the light off - arming does not
+      # mean everyone is asleep yet.
       - delay:
           minutes: 5
       - action: light.turn_off
@@ -57,8 +57,8 @@ automation:
   - id: area_living_room_fireplace_blower
     alias: 'Area - Living Room - Fireplace Blower'
     triggers:
-      # Specifying specific state changes from on <-> off because the shelly
-      # that's installed here keeps going 'unavailable' and triggering this.
+      # Pin on <-> off transitions only: this Shelly intermittently reports
+      # 'unavailable', which would retrigger the automation.
       - trigger: state
         entity_id:
           - switch.fireplace
@@ -92,6 +92,5 @@ automation:
                 state: 'off'
               - action: switch.turn_off
                 entity_id: switch.fireplace_blower
-# In case anyone is looking at this and is curious how I set this up:
-# The fireplace is a pretty typical millivolt valve being controlled by a Shelly
-# and the blower switch is just an Inovelli LZW30-SN.
+# Hardware: the fireplace is a millivolt valve switched by a Shelly; the
+# blower switch is an Inovelli LZW30-SN.

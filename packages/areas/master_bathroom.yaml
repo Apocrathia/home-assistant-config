@@ -1,8 +1,6 @@
 ---
 ### Master Bathroom ###
 
-# There are a couple of things in here that I want to make sure I have
-# documented for anyone who may be looking at this.
 # Devices:
 #   - Humidity sensor over shower to detect when the water is on
 #   - Z-wave switches on the bathroom fan and everything else
@@ -14,9 +12,8 @@
 # - Bathroom fan turns on
 # - A stopwatch is started on the clock
 #
-# The clock in the bathroom is an interesting one I found on Amaazon
-# https://smile.amazon.com/gp/product/B07SKTZK6Z
-# It comes with a simple 6-button IR remote
+# The vanity clock is driven by a simple 6-button IR remote
+# (https://smile.amazon.com/gp/product/B07SKTZK6Z)
 #
 # Broadlink b64 (learned on RM mini) and ESPHome raw timings (µs, mark+/space-,
 # 38kHz). Raw arrays decoded from Broadlink via IRTuya's algorithm
@@ -50,7 +47,7 @@
 
 # Inputs
 input_number:
-  # This will be used for the shower automation
+  # Used by the shower automation
   master_bathroom_humidity_threshold:
     name: Master Bathroom Humidity Threshold
     icon: mdi:water-percent

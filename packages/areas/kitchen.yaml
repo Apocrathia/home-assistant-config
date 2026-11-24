@@ -1,8 +1,8 @@
 ---
 ### Kitchen ###
 
-# Runaway-cycle guard for the WashData dishwasher (sensor-noise design
-# 2026-09-21). Incremented on every cycle start, reset at midnight.
+# Runaway-cycle guard for the WashData dishwasher. Incremented on every
+# cycle start, reset at midnight.
 input_number:
   ################################################################################
   kitchen_dishwasher_cycles_today:

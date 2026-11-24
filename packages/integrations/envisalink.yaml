@@ -14,7 +14,6 @@ homeassistant:
       icon: mdi:door
     binary_sensor.garage_door:
       icon: mdi:door
-# From configuration.yaml
 
 # Envisalink
 envisalink:

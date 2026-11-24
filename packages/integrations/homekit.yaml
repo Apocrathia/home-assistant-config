@@ -37,7 +37,7 @@ homekit:
       switch.living_room_tv_action_use_pc:
         name: Living Room TV
   ################################################################################
-  # Moving door locks to separate accessory bridges
+  # Door locks live on separate accessory bridges
   # https://github.com/home-assistant/core/issues/48843#issuecomment-817447652
   - name: Front Door Lock
     mode: accessory
@@ -55,7 +55,7 @@ homekit:
       include_entities:
         - lock.back_door_lock
   ################################################################################
-  # Might as well move any other security devices as well.
+  # Other security devices are also on accessory bridges.
   - name: Alarm Panel
     mode: accessory
     pincode: !secret homekit_pin

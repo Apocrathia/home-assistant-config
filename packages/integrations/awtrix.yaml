@@ -229,8 +229,9 @@ automation:
 
   ################################################################################
   # House-wide app: solar (Solaredge)
-  # GetLiveContext shows no sensor.solaredge_energy_today; using sensor.solaredge_dc_power (current W).
-  # If you add Solaredge API site sensors, sensor.solaredge_energy_today can be used for "kWh today".
+  # sensor.solaredge_energy_today does not exist on this site; current W
+  # comes from sensor.solaredge_dc_power. If Solaredge API site sensors
+  # are added, energy_today can serve as "kWh today".
   ################################################################################
   - id: integration_awtrix_solar_power
     alias: 'Integration - Awtrix - Solar Power Custom App'

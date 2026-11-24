@@ -23,27 +23,21 @@ input_boolean:
   ################################################################################
   vacation_ian:
     name: 'Vacation - Ian'
-    # initial: off
     icon: mdi:beach
   vacation_mode:
     name: 'Vacation Mode'
-    # initial: off
     icon: mdi:beach
   away_ian:
     name: 'Away - Ian'
-    # initial: off
     icon: mdi:walk
   away_mode:
     name: Away Mode
-    # initial: off
     icon: mdi:walk
 ################################################################################
 
 automation:
   ################################################################################
-  # I realize the input boolean seems redundant, but I wanted a simply switch that
-  # I could hit in case I wanted to activate an Away Mode.
-  # There are two triggers here so that the
+  # away_mode is a manual switch alongside the automated presence detection.
   - id: function_presence_detection
     alias: 'Function - Presence - Detection'
     triggers:
@@ -267,8 +261,8 @@ script:
             - select.downstairs_coverage
             - select.upstairs_coverage
           option: standard
-      # Stop any run started while we were out. Matic's stop also sends
-      # the robot home; the dock call matches the quiet-hours pattern.
+      # Stop any run still going. Matic's stop also sends the robot home;
+      # the dock call matches the quiet-hours pattern.
       - alias: 'Stop the vacuums'
         action: vacuum.stop
         target:

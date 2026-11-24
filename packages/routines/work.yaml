@@ -24,18 +24,8 @@ template:
         state: >
           {{ is_state('schedule.routine_work_schedule', 'on') and is_state('binary_sensor.workday', 'on') }}
 
-  # These sensors are defined in integrations/sensor.yaml
-  # Configuration is show here for reference
-  # # Workday
-  # - platform: workday
-  #   name: workday
-  #   country: US
-
-  # # Worknight
-  # - platform: workday
-  #   name: worknight
-  #   country: US
-  #   days_offset: 1
+  # Depends on binary_sensor.workday / binary_sensor.worknight, which are
+  # not defined in this repo's YAML.
 
 # Work Schedule
 schedule:

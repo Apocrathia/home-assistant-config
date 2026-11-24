@@ -8,11 +8,11 @@ input_number:
     min: 0
     max: 100
     step: 10
-  # Bed-presence debounce windows (sensor-noise design 2026-09-21).
+  # Bed-presence debounce windows.
   # settle: raw ON must hold this long before "really in bed".
-  # exit: raw OFF must hold this long before "really out of bed" - the
-  # longest observed mid-night departure is 18 min, so 30 min never
-  # breaks sleep. Tuning these live retunes the stable wrapper below.
+  # exit: raw OFF must hold this long before "really out of bed" - long
+  # enough that mid-night bathroom trips do not break sleep. Tuning
+  # these live retunes the stable wrapper below.
   master_bedroom_bed_settle_minutes:
     name: 'Bed Presence Settle Minutes'
     icon: mdi:bed
@@ -40,8 +40,8 @@ template:
             float(states('input_number.master_bedroom_humidifer_threshold')) ) }}
       # Sleep-grade bed occupancy: debounced view of the raw ESPHome
       # either-bed sensor. The raw sensor stays untouched for instant
-      # consumers (night lights, good morning, alarm clock) - future
-      # sleep-mode logic keys this stable entity instead.
+      # consumers (night lights, good morning, alarm clock); sleep-mode
+      # logic keys this stable entity.
       - name: Master Bedroom Bed Occupied Stable
         unique_id: master_bedroom_bed_occupied_stable
         device_class: occupancy
@@ -54,8 +54,8 @@ template:
           {{ "00:%02d:00" | format(
             states('input_number.master_bedroom_bed_settle_minutes') | int(10)
           ) }}
-        # Bathroom trips (observed 1-18 min) must not break sleep; morning
-        # exit is declared this long after sustained vacancy.
+        # Bathroom trips must not break sleep; morning exit is declared
+        # this long after sustained vacancy.
         delay_off: >
           {{ "00:%02d:00" | format(
             states('input_number.master_bedroom_bed_exit_minutes') | int(30)
@@ -158,17 +158,7 @@ automation:
             attribute_name: on_off
             # Upon release
             value: 1
-    # condition:
     actions:
-      # - alias: "Test"
-      #   action: notify.alexa_media
-      #   data:
-      #     data:
-      #       type: tts
-      #     target:
-      #       - media_player.downstairs_thermostat
-      #       - media_player.upstairs_thermostat
-      #     message: 'The button was pressed.'
       - alias: 'Sound the alarm'
         action: alarm_control_panel.alarm_trigger
         data:

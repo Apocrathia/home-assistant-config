@@ -1,9 +1,8 @@
 ---
 ### Occupancy Simulation ###
 
-# This is something that I have tried to get working via occusim (acockburn/occusim)
-# in the past with little success. However, the following forum post revitalized my
-# my interest: https://community.home-assistant.io/t/random-light-schedule/10135/54
+# Random-light-schedule approach (design reference):
+# https://community.home-assistant.io/t/random-light-schedule/10135/54
 
 # Automation
 automation:

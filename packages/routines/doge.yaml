@@ -1,6 +1,6 @@
 ---
 ### Doge ###
-# Breakfast and dinner meal reminders (lunch removed).
+# Breakfast and dinner meal reminders.
 # Template sensors compute feed / advance / end / relief clock times from helpers.
 
 ### Inputs ###

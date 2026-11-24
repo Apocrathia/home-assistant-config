@@ -3,8 +3,6 @@
 
 # This project uses the DSTIKE WiFiDuck
 # https://github.com/SpacehuhnTech/WiFiDuck
-# Inspired by the following project:
-# https://github.com/jensweimann/esphome_ducky
 
 substitutions:
   friendly_name: 'Living Room WiFi Duck'
@@ -15,13 +13,6 @@ substitutions:
 esphome:
   name: ${unit_name}
   friendly_name: ${friendly_name}
-  # on_boot:
-  #   then:
-  #     # Reset arduino on boot
-  #     - switch.turn_on: arduino_reset
-  #     - delay: 50ms
-  #     - switch.turn_off: arduino_reset
-  #     - delay: 2000ms # Wait for Arduino to boot
 
 esp8266:
   board: esp01_1m

@@ -3,7 +3,7 @@
 # AirGradient ONE - Board v9
 # https://www.airgradient.com/open-airgradient/instructions/overview/
 substitutions:
-  # Hostname is historically master-bedroom-air-quality (not *-sensor)
+  # Name intentionally omits the -sensor suffix; renaming breaks existing HA entity ids
   name: master-bedroom-air-quality
   friendly_name: Master Bedroom Air Quality Sensor
   # renovate: datasource=github-releases depName=MallocArray/airgradient_esphome versioning=semver

@@ -8,8 +8,8 @@
 #       - name: 'Area - Basement - Leak Detected'
 #         identifier: area_basement_leak_detected
 #         actions:
-#           # Until I can install a connected shutoff valve, there's not much
-#           # else that I can do except this.
+#           # No connected shutoff valve, so acknowledge/ignore are the
+#           # only actions.
 #           - identifier: ACKNOWLEDGE_LEAK
 #             title: 'Fuck'
 #             destructive: false

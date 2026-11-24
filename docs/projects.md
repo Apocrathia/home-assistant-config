@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document details the special project integrations in our Home Assistant setup. These projects represent custom solutions for specific use cases, combining various sensors, automations, and integrations.
+Multi-device project integrations, each self-contained under `packages/projects/`.
 
 ## Current Projects
 
@@ -78,32 +78,3 @@ alert:
 4. Include setup instructions
 5. Add monitoring and alerting
 6. Create project-specific dashboard views
-
-## Best Practices
-
-1. Keep project configurations isolated
-2. Include proper error handling
-3. Document all sensors and entities
-4. Implement appropriate safety measures
-5. Include backup procedures
-6. Test thoroughly before deployment
-
-## Monitoring and Maintenance
-
-Each project should include:
-
-- Health check sensors
-- Status indicators
-- Error logging
-- Regular maintenance schedules
-- Backup procedures
-
-## Future Projects
-
-Consider documenting:
-
-- Project ideas
-- Required hardware
-- Implementation plans
-- Expected challenges
-- Resource requirements

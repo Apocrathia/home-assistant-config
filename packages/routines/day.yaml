@@ -9,7 +9,6 @@ input_datetime:
     name: Morning
     has_date: false
     has_time: true
-    # initial: '05:00'
 
   good_morning_earliest:
     name: Good Morning Earliest
@@ -22,7 +21,6 @@ input_number:
   morning_advance:
     name: Morning Advance
     icon: mdi:clock-in
-    # initial: 60
     min: 0
     max: 120
     step: 15
@@ -31,7 +29,6 @@ input_number:
   daytime_lighting_transition:
     name: Day Time Lighting Transition
     icon: mdi:clock-in
-    # initial: 15
     min: 0
     max: 30
     step: 5
@@ -40,14 +37,13 @@ input_number:
   good_morning_bed_empty_delay:
     name: Good Morning Bed Empty Delay
     icon: mdi:bed-empty
-    # Operator-tuned 7 minutes (2026-09-23): covers the 4-night audit's max
-    # in-window stir of 6:48 with margin. After the 2026-09-23 wake rebuild,
-    # this helper's ONLY consumer is the out-of-bed music trigger
-    # (function_wakeup_music_out_of_bed in packages/functions/alarm_clock.yaml,
-    # which renders the live value); the rebuilt weekend disarm uses a
-    # hardcoded 60 s sustain, not this helper. initial seeds only on helper
-    # reload/recreate - restore state pins the live value across restarts
-    # (it read 5.0 live on 2026-09-23 until set to 7).
+    # 7 minutes: covers in-bed stirs with margin, so only a real exit
+    # sustains that long. This helper's only consumer is the out-of-bed
+    # music trigger (function_wakeup_music_out_of_bed in
+    # packages/functions/alarm_clock.yaml, which renders the live value);
+    # the weekend disarm uses a hardcoded 60 s sustain, not this helper.
+    # initial seeds only on helper reload/recreate - restore state pins
+    # the live value across restarts.
     initial: 7
     min: 1
     max: 30
@@ -196,12 +192,11 @@ automation:
       automation (routine_day_good_morning_alarm) then disarms the panel.
     triggers:
       # Sustain is HARDCODED 60 s on purpose - deliberately NOT the shared
-      # input_number.good_morning_bed_empty_delay helper (that helper now
+      # input_number.good_morning_bed_empty_delay helper (that helper
       # carries the music path's multi-minute sustain). This disarm must
-      # beat the operator's observed 87 s manual disarm pace, so it needs
-      # its own 60 s value. ACCEPTED RISK (operator 2026-09-23): a 60 s+
-      # stir could disarm early; mirrors the existing weekday 05:00
-      # auto-disarm precedent (input_datetime.alarm_auto_disarm).
+      # beat a manual disarm, so it needs its own 60 s value. Known
+      # limitation: a 60 s+ stir could disarm early; same posture as the
+      # weekday 05:00 auto-disarm (input_datetime.alarm_auto_disarm).
       - trigger: state
         entity_id: binary_sensor.bed_presence_2bd444_bed_occupied_either
         from: 'on'
@@ -248,8 +243,7 @@ automation:
     mode: single
   ################################################################################
 
-  # I realize this automation will be a little redundant, but it's just in case I
-  # forget to turn shit off, or another automation fails.
+  # Just in case I forget to turn shit off, or another automation fails.
   ################################################################################
   - id: routine_day_lighting_off
     alias: 'Routine - Day - Turn Off Lights After Sunrise'

@@ -3,12 +3,9 @@
 # Function - Security
 ################################################################################
 
-# This is currently very rudimentary, but the goal is to start integrating
-# additional sensors into my alarm system, and provide a better means of
-# monitoring the house when we are away.
 # Ideas:
-# Flash some lights/make some noise when the alarm is tripped
-# integrate external sensors into the alarm
+# - Flash some lights / make some noise when the alarm is tripped
+# - Integrate external sensors into the alarm
 
 ################################################################################
 # Inputs
@@ -32,29 +29,6 @@ input_datetime:
     has_date: false
     has_time: true
     initial: '06:00:00'
-################################################################################
-
-################################################################################
-# iOS Notifications
-################################################################################
-# ios:
-#   push:
-#     categories:
-#       - name: Garage Door
-#         identifier: 'garage_door'
-#         actions:
-#           - identifier: 'garage_close'
-#             title: 'Close'
-#             activationMode: 'background'
-#             authenticationRequired: true
-#             destructive: false
-#             behavior: 'default'
-#           - identifier: 'dismiss'
-#             title: 'Dismiss'
-#             activationMode: 'background'
-#             authenticationRequired: true
-#             destructive: true
-#             behavior: 'default'
 ################################################################################
 
 template:
